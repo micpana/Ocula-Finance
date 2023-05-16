@@ -10,9 +10,23 @@ def get_symbols():
 
     return symbols
 
-# source for training data
+# source for training data ... csv / mt5 / yahoo
+def training_data_source():
+    source = 'csv'
 
-# source for prediction data
+    return source
+
+# source for prediction data ... csv / mt5 / yahoo
+def prediction_data_source():
+    source = 'yahoo'
+
+    return source
+
+# use closing prices only or not
+def use_closing_prices_only():
+    use_closing_prices_only = True
+
+    return use_closing_prices_only
 
 # forecast period
 def get_forecast_period():
