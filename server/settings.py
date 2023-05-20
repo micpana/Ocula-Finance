@@ -53,4 +53,32 @@ def get_data_length_by_intended_purpose(purpose):
     elif purpose == 'prediction':
         data_length = 100
 
-# get folder locations
+# get training price data csvs folder path
+def get_training_price_data_csvs_folder_path():
+    path = 'training csvs/'
+
+    return path
+
+# get training logs folder path
+def get_training_logs_folder_path():
+    path = 'logs/training logs/'
+
+    return path
+
+# get scalers folder path
+def get_scalers_folder_path():
+    path = 'scalers/'
+
+    return path
+
+# get models folder path
+def get_models_folder_path():
+    path = 'models/'
+
+    return path
+
+# get error logs folder path
+def get_error_logs_folder_path():
+    path = 'logs/error logs/'
+
+    return path

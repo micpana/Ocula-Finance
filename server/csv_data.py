@@ -1,10 +1,11 @@
 from pandas import read_csv
+from settings import get_training_logs_folder_path, get_error_logs_folder_path
 
 # get data
 def fetch_data():
 
     # folder and column names
-    folder = 'train_csvs/'
+    folder = get_training_logs_folder_path()
     columns = ['Date', 'Open', 'High', 'Low', 'Close', 'col1', 'col2']
 
     # import daily ohlc data
