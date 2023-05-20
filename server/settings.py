@@ -55,7 +55,7 @@ def get_data_length_by_intended_purpose(purpose):
 
 # get training price data csvs folder path
 def get_training_price_data_csvs_folder_path():
-    path = 'training csvs/'
+    path = 'datasets/'
 
     return path
 
