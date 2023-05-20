@@ -52,3 +52,5 @@ def get_data_length_by_intended_purpose(purpose):
         data_length = 30000 # if available ... if more is available, take all ... else take whats available if reasonable
     elif purpose == 'prediction':
         data_length = 100
+
+# get folder locations
