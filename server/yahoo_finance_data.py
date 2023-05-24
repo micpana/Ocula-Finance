@@ -1,3 +1,3 @@
 # get data
-def fetch_data():
+def yahoo_fetch_data(symbol, timeframes):
     

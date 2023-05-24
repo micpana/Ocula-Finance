@@ -1,3 +1,3 @@
 # get data
-def fetch_data():
+def mt5_fetch_data(symbol, timeframes):
     
