@@ -1,5 +1,12 @@
+import yfinance as yf
+
 # get data
 def yahoo_fetch_data(symbol, timeframes, preferred_minimum_data_count):
+    # returned columns ... Date, Open, High, Low, Close, Volume, Dividends, Stock Splits
+
+    # Set the range and interval
+    start_date = '2022-01-01'
+    end_date = '2022-12-01'
     
     # initialize variables for timeframe 1, timeframe 2, timeframe 3, timeframe 4 data
     timeframe_1 = None
@@ -9,6 +16,30 @@ def yahoo_fetch_data(symbol, timeframes, preferred_minimum_data_count):
 
     # get data for each stated timeframe
     for timeframe in timeframes:
+        # set interval ... valid = 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
+        if timeframe == 'Monthly':
+            interval = '1mo'
+        elif timeframe == 'Weekly':
+            interval = '1wk'
+        elif timeframe == 'Daily':
+            interval = '1d'
+        elif timeframe == 'H4':
+            interval = '4h'
+        elif timeframe == 'H1':
+            interval = '1h'
+        elif timeframe == 'M15':
+            interval = '15m'
+        elif timeframe == 'M5':
+            interval = '5m'
+        elif timeframe == 'M1':
+            interval = '1m'
+        else:
+            print('Timeframe not configured:', timeframe)
+            quit()
+
+        # Get the OHLC data
+        symbol_ticker = yf.Ticker(symbol+'=X')
+        timeframe_ohlc_df = symbol_ticker.history(start=start_date, end=end_date, interval=interval)
 
         # set data to appropriate timeframe variable
         timeframe_number = timeframes.index(timeframe) + 1
