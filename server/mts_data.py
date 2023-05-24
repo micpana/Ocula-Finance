@@ -27,7 +27,7 @@ def mt5_fetch_data(symbol, timeframes, preferred_minimum_data_count):
     if module == 'prediction':
         days_back = 3 # smaller timeframes
     if module == 'backtesting':
-        days_back = 30 # so as to successfully minute candle data due to mt5 limits
+        days_back = 30 # so as to successfully minute candle data due to mt5 limits 
 
     # set data collection date range needed by mt5
     start_date = datetime.now() - timedelta(days=+days_back)
