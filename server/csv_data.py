@@ -8,6 +8,12 @@ def csv_fetch_data(symbol, timeframes):
     folder = get_training_logs_folder_path()
     columns = ['Date', 'Open', 'High', 'Low', 'Close', 'col1', 'col2']
 
+    # initialize variables for timeframe 1, timeframe 2, timeframe 3, timeframe 4 data
+    timeframe_1 = None
+    timeframe_2 = None
+    timeframe_3 = None
+    timeframe_4 = None
+
     # get data for each stated timeframe
     for timeframe in timeframes:
         # import timeframe ohlc data
@@ -18,4 +24,4 @@ def csv_fetch_data(symbol, timeframes):
 
 
     # return data as timeframe 1, timeframe 2, timeframe 3, timeframe 4
-    return
+    return timeframe_1, timeframe_2, timeframe_3, timeframe_4
