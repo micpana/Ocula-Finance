@@ -53,6 +53,12 @@ def get_data_length_by_intended_purpose(purpose):
     elif purpose == 'prediction':
         data_length = 100
 
+# get model bidirectional status ... true / false
+def get_model_bidirectional_status():
+    use_bidirectional_model = True
+
+    return use_bidirectional_model
+
 # get training price data csvs folder path
 def get_training_price_data_csvs_folder_path():
     path = 'datasets/'
