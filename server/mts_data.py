@@ -5,7 +5,7 @@ from datetime import timedelta
 import pytz
 
 # get data
-def mt5_fetch_data(symbol, timeframes, preferred_minimum_data_count):
+def mt5_fetch_data(symbol, timeframes, data_collection_days):
     # display data on the MetaTrader 5 package
     print("MetaTrader5 package author: ", mt5.__author__)
     print("MetaTrader5 package version: ", mt5.__version__)

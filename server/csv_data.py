@@ -1,8 +1,8 @@
 from pandas import read_csv
-from settings import get_training_logs_folder_path, get_error_logs_folder_path
+from settings import get_training_logs_folder_path, get_error_logs_folder_path, get_data_length_by_number_of_days_and_timeframe
 
 # get data
-def csv_fetch_data(symbol, timeframes, preferred_minimum_data_count):
+def csv_fetch_data(symbol, timeframes, data_collection_days):
 
     # folder and column names
     folder = get_training_logs_folder_path()

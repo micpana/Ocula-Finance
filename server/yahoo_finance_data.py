@@ -1,7 +1,7 @@
 import yfinance as yf
 
 # get data
-def yahoo_fetch_data(symbol, timeframes, preferred_minimum_data_count):
+def yahoo_fetch_data(symbol, timeframes, data_collection_days):
     # returned columns ... Date, Open, High, Low, Close, Volume, Dividends, Stock Splits
 
     # Set the range and interval
@@ -24,7 +24,7 @@ def yahoo_fetch_data(symbol, timeframes, preferred_minimum_data_count):
         elif timeframe == 'Daily':
             interval = '1d'
         elif timeframe == 'H4':
-            interval = '4h'
+            interval = '1h' # yfinance has no 4hour timeframe
         elif timeframe == 'H1':
             interval = '1h'
         elif timeframe == 'M15':
@@ -40,6 +40,8 @@ def yahoo_fetch_data(symbol, timeframes, preferred_minimum_data_count):
         # Get the OHLC data
         symbol_ticker = yf.Ticker(symbol+'=X')
         timeframe_ohlc_df = symbol_ticker.history(start=start_date, end=end_date, interval=interval)
+
+        # if timeframe = H4, modify timeframe_ohlc_df into a 4h timeframe, we collected 1h data since yfinance doesn't have 4h
 
         # set data to appropriate timeframe variable
         timeframe_number = timeframes.index(timeframe) + 1

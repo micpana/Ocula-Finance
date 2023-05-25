@@ -46,12 +46,41 @@ def get_timeframes_in_use():
 
     return timeframes_in_use
 
-# get data length by intended purpose
-def get_data_length_by_intended_purpose(purpose):
+# get data collection days by intended purpose
+def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':
-        data_length = 30000 # if available ... if more is available, take all ... else take whats available if reasonable
+        days =  2000 # if available ... if more is available, take all ... else take whats available if reasonable
     elif purpose == 'prediction':
-        data_length = 100
+        days = 5
+
+    return days
+
+# get data length by number of days and timeframe
+def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
+        if timeframe == 'Monthly':
+            data_length = int(days / 30) # a month has around 30 days
+        elif timeframe == 'Weekly':
+            data_length = int(days / 7 ) # a week has 7 days
+        elif timeframe == 'Daily':
+            data_length = int(days * 1) # self
+        elif timeframe == 'H4':
+            data_length = int(days * 6) # 6 4hour segments in a day
+        elif timeframe == 'H1':
+            data_length = int(days * 24) # 24 hours in a day
+        elif timeframe == 'M15':
+            data_length = int(days * 96) # 96 15m segments in a day
+        elif timeframe == 'M5':
+            data_length = int(days * 288) # 288 5min segments in a day
+        elif timeframe == 'M1':
+            data_length = int(days * 1440) # 1140 minutes in a day
+        else:
+            print('Timeframe not configured:', timeframe)
+
+        # handle instances where the days are so little that Monthly and Weekly will be rounded off to 0 during int conversion
+        if data_length == 0:
+            data_length = 1
+        
+        return data_length
 
 # get model bidirectional status ... true / false
 def get_model_bidirectional_status():
