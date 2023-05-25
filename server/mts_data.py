@@ -20,22 +20,11 @@ def mt5_fetch_data(symbol, timeframes, data_collection_days):
     # set time zone to Harare
     timezone = pytz.timezone("Africa/Harare")
 
-    # create 'datetime' objects in Harare time zone to avoid the implementation of a local time zone offset
-    days_back = 3
-    if module == 'training':
-        days_back = 330
-    if module == 'prediction':
-        days_back = 3 # smaller timeframes
-    if module == 'backtesting':
-        days_back = 30 # so as to successfully minute candle data due to mt5 limits 
-
-    # set data collection date range needed by mt5
+    # create 'datetime' range objects in Harare time zone to avoid the implementation of a local time zone offset
+    days_back = data_collection_days
     start_date = datetime.now() - timedelta(days=+days_back)
+    end_date = datetime.now()+ timedelta(minutes=+6) # some additional time to make sure all current data is included
     timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
-    if module == 'prediction':
-        end_date = datetime.now()+ timedelta(minutes=+6)
-    else:
-        end_date = datetime.today() + timedelta(days=+1)
     timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
 
     # initialize variables for timeframe 1, timeframe 2, timeframe 3, timeframe 4 data
