@@ -22,7 +22,7 @@ def prediction_data_source():
 
     return source
 
-# use closing prices only or not
+# use closing prices only or not ... closing prices only / all ohlc prices
 def use_closing_prices_only():
     use_closing_prices_only = True
 
