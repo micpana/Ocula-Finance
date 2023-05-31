@@ -1,3 +1,5 @@
+from datetime import datetime
+
 # list of currency pairs and stocks ... symbols
 def get_symbols():
     currency_pairs = [
@@ -88,32 +90,56 @@ def get_model_bidirectional_status():
 
     return use_bidirectional_model
 
+# get custom system extension for saving objects as files
+def custom_system_extension():
+    extension = '.market_oculus'
+
+    return extension
+
 # get training price data csvs folder path
 def get_training_price_data_csvs_folder_path():
     path = 'datasets/'
 
     return path
 
-# get training logs folder path
-def get_training_logs_folder_path():
-    path = 'logs/training logs/'
+# universal filename append string for model object files
+def universal_filename_append_string(timeframes, features_type, model_type, with_extension):
+    if with_extension == True:
+        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes) + custom_system_extension()
+    else:
+        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes)
+
+    return string
+
+# get training logs path
+def get_training_logs_path(symbol, timeframes, features_type, model_type):
+    path = 'logs/training logs/' + symbol + '-Training Log-' + str(datetime.now()) + universal_filename_append_string(timeframes, features_type, model_type, True)
 
     return path
 
-# get scalers folder path
-def get_scalers_folder_path():
-    path = 'scalers/'
+# get scalers path
+def get_scalers_path(symbol, timeframes, features_type, model_type, scaler_set):
+    if scaler_set == 'x':
+        path = 'scalers/' + symbol + '-X Scaler' + universal_filename_append_string(timeframes, features_type, model_type, True)
+    elif scalers == 'y':
+        path = 'scalers/' + symbol + '-Y Scaler' + universal_filename_append_string(timeframes, features_type, model_type, True)
 
     return path
 
-# get models folder path
-def get_models_folder_path():
-    path = 'models/'
+# get models path
+def get_models_path(symbol, timeframes, features_type, model_type):
+    path = 'models/' + symbol + universal_filename_append_string(timeframes, features_type, model_type, True)
 
     return path
 
-# get error logs folder path
-def get_error_logs_folder_path():
-    path = 'logs/error logs/'
+# get models checkpoints path
+def get_models_checkpoints_path(symbol, timeframes, features_type, model_type):
+    path = 'models checkpoints/' + 'weights' + universal_filename_append_string(timeframes, features_type, model_type, False) + '.best' + '.hdf5' 
+
+    return path
+
+# get error logs path
+def get_error_logs_path(name):
+    path = 'logs/error logs/' + 'Log-' + name + '-' + str(datetime.now()) + '.txt'
 
     return path
