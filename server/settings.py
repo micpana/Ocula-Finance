@@ -150,3 +150,9 @@ def get_error_logs_path(name):
     path = 'logs/error logs/' + 'Log-' + name + '-' + str(datetime.now()) + '.txt'
 
     return path
+
+# get cookies path
+def get_cookies_path(name):
+    path = 'cookies/' + name + custom_system_extension()
+
+    return path
