@@ -90,13 +90,6 @@ def get_model_bidirectional_status():
 
     return use_bidirectional_model
 
-# natural language model choice ... huggingchat 
-def get_natural_language_model_choice():
-    natural_language_model_choice = 'huggingchat'
-
-    return natural_language_model_choice
-
-
 # get custom system extension for saving objects as files
 def custom_system_extension():
     extension = '.ocula_finance'

@@ -1,1 +1,1 @@
-from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, NewsArticles, UpcomingNewsEvents, FinancialReports, Payments
+from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments

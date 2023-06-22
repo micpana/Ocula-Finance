@@ -37,8 +37,11 @@ class UserAccessTokens(Document):
     user_id = StringField(required=True)
     active = BooleanField(required=True)
     signin_date = StringField(required=True)
-    device = StringField(required=True)
-    ip_address = StringField(required=True)
+    user_browsing_agent = StringField(required=True)
+    user_os = StringField(required=True)
+    user_device = StringField(required=True)
+    user_ip_address = StringField(required=True)
+    user_browser = StringField = StringField(required=True)
     last_used_on_date = StringField(required=True)
     expiry_date = StringField(required=True)
 
@@ -58,37 +61,6 @@ class MarketAnalysis(Document):
     asset = StringField(required=True)
     maximum_possible_down_move = FloatField(required=True)
     maximum_possible_up_move = FloatField(required=True)
-    market_overview_by_ai = StringField(required=True)
-    news_ids = StringField(required=True)
-    reports_ids = StringField(required=True)
-    events_ids = StringField(required=True)
-
-class NewsArticles(Document):
-    meta = {'collection': 'newsarticles'}
-    date_released = StringField(required=True)
-    asset = StringField(required=True)
-    source = StringField(required=True)
-    url = StringField(required=True)
-    title = StringField(required=True)
-    date_acquired = StringField(required=True)
-
-class UpcomingNewsEvents(Document):
-    meta = {'collection': 'upcomingnewsevents'}
-    date_released = StringField(required=True)
-    asset = StringField(required=True)
-    source = StringField(required=True)
-    name = StringField(required=True)
-    url = StringField(required=True)
-    date_acquired = StringField(required=True)
-
-class FinancialReports(Document):
-    meta = {'collection': 'financialreports'}
-    date_released = StringField(required=True)
-    asset = StringField(required=True)
-    source = StringField(required=True)
-    url = StringField(required=True)
-    title = StringField(required=True)
-    date_acquired = StringField(required=True)
 
 class Payments(Document):
     meta = {'collection': 'payments'}
