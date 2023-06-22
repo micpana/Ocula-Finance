@@ -45,15 +45,26 @@ def check_user_access_token_validity(request_data):
         # get information on user's browsing device
         user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request_data)
         # check token's validity while trying to retrieve the user's system id
-        user_id = AccessTokens.objects.filter(
+        token_details = AccessTokens.objects.filter(
             id = user_access_token, 
             active = True, 
             user_browsing_agent = user_browsing_agent
-        )[0].user_id
+        )[0]
+        # get user id
+        user_id = token_details.user_id
+        # get access token status
+        if token_details.active == False:
+            access_token_status = 'Access token disabled via signout'
+        elif str(datetime.now()) > token_details.expiry_date:
+            access_token_status = 'Access token expired'
+        else:
+            access_token_status = 'ok'
+            # show that access token was last used now
+            
         # return access_token_status, user_id
         return access_token_status, user_id
     except:
-        return 'Not authorized'
+        return 'Not authorized', None
 
 # user functions ******************************************************************************************************
 @app.route('/signup', methods=['POST'])
