@@ -18,9 +18,10 @@ class Users(Document):
     date_of_registration = StringField(required=True)
     verified = BooleanField(required=True)
     subscribed = BooleanField(required=True)
-    subscription_date = StringField(required=True)
-    subscription_expiry = StringField(required=True)
+    subscription_date = StringField(required=False)
+    subscription_expiry = StringField(required=False)
     role = StringField(required=True)
+    banned = BooleanField(required=True)
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}

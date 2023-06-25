@@ -108,7 +108,14 @@ def signup():
         email = request.form['email'],
         phonenumber = request.form['phonenumber'],
         password = password,
-        country = request.form['country']
+        country = request.form['country'],
+        date_of_registration = str(datetime.now())
+        verified = False,
+        subscribed = False,
+        subscription_date = '',
+        subscription_expiry = '',
+        role = 'User',
+        banned = False
     )
     account_details = user_details.save()
     account_id = account_details.id
@@ -197,6 +204,19 @@ def signin():
         ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
         return 'incorrect details entered'
 
+    # check if account is banned or not
+    if match.banned == True: 
+        # save login trial
+        save_login_trials(
+            match.id, 
+            match.email, 
+            user_device, 
+            user_ip_address, 
+            current_datetime, 
+            False
+        ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+        return 'banned'
+
     # create and return user access token
     def generate_access_token():
         token_length = 32
@@ -239,9 +259,136 @@ def signin():
     
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
+    # search for token
+    token_results = EmailVerifications.objects.filter(id = request.form['token'])
+    if len(token_results) == 0: return 'invalid token'
+    match = token_results[0]
+
+    # check if token has already been used
+    if match.used == True: return 'used'
+
+    # check if token has already expired
+    if str(datetime.now()) > match.expiry_date: return 'expired'
+
+    # verify user account
+    Users.objects(id = match.account_id).update(verified = True)
+
+    return 'ok'
+
+@app.route('/resendEmailVerification', methods=['POST'])
+def resendEmailVerification():
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # calculate verification token expiration date
+    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+
+    # search for account by account id ... also verify validity of given account id
+    match = Users.objects.filter(id = request.form['account_id'])
+    if len(match) == 0: return 'invalid account id'
+    account = match[0]
+
+    # check if email has already been verified
+    if account.verified == True: return 'email already verified'
+
+    # proceed to create email verification token
+    email_verification_details = EmailVerifications(
+        account_id = request.form['account_id'],
+        email = account.email,
+        used = False,
+        device = user_device,
+        ip_address = user_ip_address,
+        date_of_request = current_datetime
+        expiry_date = token_expiration_date
+    )
+    verification_details = email_verification_details.save()
+    email_verification_token = verification_details.id
+
+    # send user email verification
+    send_registration_email_confirmation(
+        account.email, 
+        account.username, 
+        email_verification_token, 
+        token_expiration_date
+    ) # inputs: user_email, username, verification_token, token_expiration_date
+
+    return 'ok'
+
+@app.route('/correctRegistrationEmail', methods=['POST'])
+def correctRegistrationEmail():
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # calculate verification token expiration date
+    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+
+    # search for account by account id ... also verify validity of given account id
+    match = Users.objects.filter(id = request.form['account_id'])
+    if len(match) == 0: return 'invalid account id'
+    account = match[0]
+
+    # check if email has already been verified
+    if account.verified == True: return 'email already verified'
+
+    # notify of email's non availability even if it is not verified
+    if account.verified == False: return 'email already registered'
+
+    # update account email and gather updated account information
+    Users.objects(id = request.form['account_id']).update(email = request.form['email'])
+    account = Users.objects.filter(id = request.form['account_id'])[0]
+
+    # proceed to create email verification token
+    email_verification_details = EmailVerifications(
+        account_id = request.form['account_id'],
+        email = account.email,
+        used = False,
+        device = user_device,
+        ip_address = user_ip_address,
+        date_of_request = current_datetime
+        expiry_date = token_expiration_date
+    )
+    verification_details = email_verification_details.save()
+    email_verification_token = verification_details.id
+
+    # send user email verification
+    send_registration_email_confirmation(
+        account.email, 
+        account.username, 
+        email_verification_token, 
+        token_expiration_date
+    ) # inputs: user_email, username, verification_token, token_expiration_date
+
+    return 'ok'
 
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # calculate verification token expiration date
+    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+
+    # search for account by email
+    match = Users.objects.filter(email = request.form['email'])
+    if len(match) == 0: return 'email not registered'
+    account = match[0]
+
+    # check if account has been banned
+    if account.banned == True: return 'banned'
+
+    # check time of last password recovery request by user
+    requests = PasswordRecoveries.objects.filter(email = request.form['email'])
+    if len(requests) > 0:
+        
 
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
