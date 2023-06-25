@@ -2,11 +2,13 @@
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS, cross_origin
 from user_agents import parse
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 from database import init_db
-from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments
+from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials
 from encryption import encrypt_password, verify_encrypted_password
+from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation
+from settings import verification_token_expiration_minutes, access_token_expiration_days
 
 # Flask stuff
 app = Flask(__name__)
@@ -37,6 +39,20 @@ def information_on_user_browsing_device(request_data):
 
     return user_browsing_agent, user_os, user_device, user_ip_address, user_browser
 
+# function for saving login trials
+def save_login_trials(account_id, email, device, ip_address, date_and_time, status):
+    trial_details = LoginTrials(
+        account_id = account_id,
+        email = email,
+        device = device,
+        ip_address = ip_address,
+        date_and_time = date_and_time,
+        status = status
+    )
+    trial_details.save()
+
+    return 'ok'
+
 # function for checking a user access token's validity
 def check_user_access_token_validity(request_data):
     try:
@@ -52,15 +68,17 @@ def check_user_access_token_validity(request_data):
         )[0]
         # get user id
         user_id = token_details.user_id
+        # get current date and time
+        current_datetime = str(datetime.now())
         # get access token status
         if token_details.active == False:
             access_token_status = 'Access token disabled via signout'
-        elif str(datetime.now()) > token_details.expiry_date:
+        elif current_datetime > token_details.expiry_date:
             access_token_status = 'Access token expired'
         else:
             access_token_status = 'ok'
             # show that access token was last used now
-            
+            AccessTokens.objects(id = user_access_token).update(last_used_on_date = current_datetime)
         # return access_token_status, user_id
         return access_token_status, user_id
     except:
@@ -75,11 +93,14 @@ def signup():
     # check if email is already in use
     if len(Users.objects.filter(email = request.form['email'])) > 0: return 'email in use'
 
+    # check if phonenumber is already in use
+    if len(Users.objects.filter(phonenumber = request.form['phonenumber'])) > 0: return 'phonenumber in use'
+
     # encrypt submitted password
     password = request.form['password']
     password = encrypt_password(password)
     
-    # register new user
+    # register new user and retrieve account id
     user_details = Users(
         firstname = request.form['firstname'],
         lastname = request.form['lastname'],
@@ -89,11 +110,41 @@ def signup():
         password = password,
         country = request.form['country']
     )
-    user_details.save()
+    account_details = user_details.save()
+    account_id = account_details.id
+
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # calculate verification token expiration date
+    token_expiration_date = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
+
+    # create email verification token
+    email_verification_details = EmailVerifications(
+        account_id = account_id,
+        email = request.form['email'],
+        used = False,
+        device = user_device,
+        ip_address = user_ip_address,
+        date_of_request = current_datetime
+        expiry_date = token_expiration_date
+    )
+    verification_details = email_verification_details.save()
+    email_verification_token = verification_details.id
 
     # send user email verification
+    send_registration_email_confirmation(
+        request.form['email'], 
+        request.form['username'], 
+        email_verification_token, 
+        token_expiration_date
+    ) # inputs: user_email, username, verification_token, token_expiration_date
 
-    return 'ok'
+    # return account id
+    return account_id
 
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -101,27 +152,91 @@ def signin():
     email_or_username = request.form['email_or_username']
     password = request.form['password']
 
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # calculate verification token expiration date
+    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+
     # get user with matching email
     matches_by_email = Users.objects.filter(email = email_or_username)
-    if len(matches_by_email) > 0: 
-        match = matches_by_email[0]
+    if len(matches_by_email) > 0: match = matches_by_email[0]
 
     # get user with matching username
     matches_by_username = Users.objects.filter(username = email_or_username)
-    if len(matches_by_username) > 0:
-        match = matches_by_username[0]
+    if len(matches_by_username) > 0: match = matches_by_username[0]
 
     # no matches found
-    if len(matches_by_email) == 0 and len(matches_by_username) == 0:
+    if len(matches_by_email) == 0 and len(matches_by_username) == 0: 
+        # save login trial
+        save_login_trials(
+            'Not registered', 
+            email_or_username, 
+            user_device, 
+            user_ip_address, 
+            current_datetime, 
+            False
+        ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
         return 'email or username not registered'
 
     # see if password is a match
     user_encrypted_password = match.password
     is_password_a_match = verify_encrypted_password(password, user_encrypted_password)
+    if is_password_a_match == False: 
+        # save login trial
+        save_login_trials(
+            match.id, 
+            match.email, 
+            user_device, 
+            user_ip_address, 
+            current_datetime, 
+            False
+        ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+        return 'incorrect details entered'
 
     # create and return user access token
-    
+    def generate_access_token():
+        token_length = 32
+        token_characters = string.ascii_lowercase + string.digits + string.ascii_uppercase 
+        token = "".join(random.choice(token_characters) for _ in range(token_length))
+        return token
+    generated_access_token = generate_access_token()
 
+    # save access token details and modify original token
+    token_details = UserAccessTokens(
+        user_id = match.id,
+        token = generated_access_token,
+        active = True,
+        signin_date = current_datetime,
+        user_browsing_agent = user_browsing_agent,
+        user_os = user_os,
+        user_device = user_device,
+        user_ip_address = user_ip_address,
+        user_browser = user_browser,
+        last_used_on_date = current_datetime,
+        expiry_date = token_expiration_date
+    )
+    saved_token_details = token_details.save()
+    token_id =saved_token_details.id
+    user_access_token = generate_access_token + '.' + token_id
+    UserAccessTokens.objects(id = token_id).update(token = user_access_token)
+
+    # save login trial
+    save_login_trials(
+        match.id, 
+        match.email, 
+        user_device, 
+        user_ip_address, 
+        current_datetime, 
+        False
+    ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+
+    # return user_access_token
+    return user_access_token
+    
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
 

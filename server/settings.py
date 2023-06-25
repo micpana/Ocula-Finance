@@ -1,5 +1,17 @@
 from datetime import datetime
 
+# verification token expiration minutes
+def verification_token_expiration_minutes():
+    expiration_minutes = 15
+
+    return expiration_minutes
+
+# access token expiration days
+def access_token_expiration_days():
+    expiration_days = 90
+
+    return expiration_days
+
 # list of currency pairs and stocks ... symbols
 def get_symbols():
     currency_pairs = [

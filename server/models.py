@@ -24,8 +24,8 @@ class Users(Document):
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}
+    account_id = StringField(required=True)
     email = StringField(required=True)
-    verification_token = StringField(required=True)
     used = BooleanField(required=True)
     device = StringField(required=True)
     ip_address = StringField(required=True)
@@ -35,6 +35,7 @@ class EmailVerifications(Document):
 class UserAccessTokens(Document):
     meta = {'collection': 'accesstokens'}
     user_id = StringField(required=True)
+    token = StringField(required=True)
     active = BooleanField(required=True)
     signin_date = StringField(required=True)
     user_browsing_agent = StringField(required=True)
@@ -48,7 +49,6 @@ class UserAccessTokens(Document):
 class PasswordRecoveries(Document):
     meta = {'collection': 'passwordrecoveries'}
     email = StringField(required=True)
-    recovery_token = StringField(required=True)
     used = StringField(required=True)
     device = StringField(required=True)
     ip_address = StringField(required=True)
@@ -72,3 +72,12 @@ class Payments(Document):
     verified = BooleanField(required=True)
     discount_supplied = FloatField(required=True)
     amount = FloatField(required=True)
+
+class LoginTrials(Document):
+    meta = {'collection': 'logintrials'}
+    account_id = StringField(required=True)
+    email = StringField(required=True)
+    device = StringField(required=True)
+    ip_address = StringField(required=True)
+    date_and_time = StringField(required=True)
+    successful = BooleanField(required=True)
