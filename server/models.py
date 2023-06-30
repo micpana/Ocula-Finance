@@ -27,6 +27,7 @@ class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}
     account_id = StringField(required=True)
     email = StringField(required=True)
+    purpose = StringField(required=True)
     used = BooleanField(required=True)
     device = StringField(required=True)
     ip_address = StringField(required=True)
@@ -39,6 +40,7 @@ class UserAccessTokens(Document):
     token = StringField(required=True)
     active = BooleanField(required=True)
     signin_date = StringField(required=True)
+    signout_date = StringField(required=False)
     user_browsing_agent = StringField(required=True)
     user_os = StringField(required=True)
     user_device = StringField(required=True)
@@ -49,6 +51,7 @@ class UserAccessTokens(Document):
 
 class PasswordRecoveries(Document):
     meta = {'collection': 'passwordrecoveries'}
+    account_id = StringField(required=True)
     email = StringField(required=True)
     used = StringField(required=True)
     device = StringField(required=True)

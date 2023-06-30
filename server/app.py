@@ -2,6 +2,7 @@
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS, cross_origin
 from user_agents import parse
+import json
 from datetime import datetime, timedelta
 import requests
 from database import init_db
@@ -57,11 +58,11 @@ def save_login_trials(account_id, email, device, ip_address, date_and_time, stat
 def check_user_access_token_validity(request_data):
     try:
         # get user access token
-        user_access_token = request.form['user_access_token']
+        user_access_token = request.headers.get('access_token')
         # get information on user's browsing device
         user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request_data)
         # check token's validity while trying to retrieve the user's system id
-        token_details = AccessTokens.objects.filter(
+        token_details = UserAccessTokens.objects.filter(
             id = user_access_token, 
             active = True, 
             user_browsing_agent = user_browsing_agent
@@ -82,33 +83,41 @@ def check_user_access_token_validity(request_data):
         # return access_token_status, user_id
         return access_token_status, user_id
     except:
-        return 'Not authorized', None
+        return 'Invalid token', None
 
 # user functions ******************************************************************************************************
 @app.route('/signup', methods=['POST'])
 def signup():
+    # input field validation
+    try: firstname = request.form['firstname'] except: return 'Firstname field required'
+    try: lastname = request.form['lastname'] except: return 'Lastname field required'
+    try: username = request.form['username'] except: return 'Username field required'
+    try: email = request.form['email'] except: return 'Email field required'
+    try: phonenumber = request.form['phonenumber'] except: return 'Phonenumber field required'
+    try: password = request.form['password'] except: return 'Password field required'
+    try: country = request.form['country'] except: return 'Country field required'
+
     # check if username is already in use
-    if len(Users.objects.filter(username = request.form['username'])) > 0: return 'username in use'
+    if len(Users.objects.filter(username = username)) > 0: return 'username in use'
 
     # check if email is already in use
-    if len(Users.objects.filter(email = request.form['email'])) > 0: return 'email in use'
+    if len(Users.objects.filter(email = email)) > 0: return 'email in use'
 
     # check if phonenumber is already in use
-    if len(Users.objects.filter(phonenumber = request.form['phonenumber'])) > 0: return 'phonenumber in use'
+    if len(Users.objects.filter(phonenumber = phonenumber)) > 0: return 'phonenumber in use'
 
     # encrypt submitted password
-    password = request.form['password']
     password = encrypt_password(password)
     
     # register new user and retrieve account id
     user_details = Users(
-        firstname = request.form['firstname'],
-        lastname = request.form['lastname'],
-        username = request.form['username'],
-        email = request.form['email'],
-        phonenumber = request.form['phonenumber'],
+        firstname = firstname,
+        lastname = lastname,
+        username = username,
+        email = email,
+        phonenumber = phonenumber,
         password = password,
-        country = request.form['country'],
+        country = country,
         date_of_registration = str(datetime.now())
         verified = False,
         subscribed = False,
@@ -133,7 +142,8 @@ def signup():
     # create email verification token
     email_verification_details = EmailVerifications(
         account_id = account_id,
-        email = request.form['email'],
+        email = email,
+        purpose = 'registration email', # registration email / email change 
         used = False,
         device = user_device,
         ip_address = user_ip_address,
@@ -145,8 +155,8 @@ def signup():
 
     # send user email verification
     send_registration_email_confirmation(
-        request.form['email'], 
-        request.form['username'], 
+        email, 
+        username, 
         email_verification_token, 
         token_expiration_date
     ) # inputs: user_email, username, verification_token, token_expiration_date
@@ -156,9 +166,9 @@ def signup():
 
 @app.route('/signin', methods=['POST'])
 def signin():
-    # get submitted details
-    email_or_username = request.form['email_or_username']
-    password = request.form['password']
+    # input field validation
+    try: email_or_username = request.form['email_or_username'] except: return 'Email or username field required'
+    try: password = request.form['password'] except: return 'Password field required'
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -233,6 +243,7 @@ def signin():
         token = generated_access_token,
         active = True,
         signin_date = current_datetime,
+        signout_date = '',
         user_browsing_agent = user_browsing_agent,
         user_os = user_os,
         user_device = user_device,
@@ -243,7 +254,7 @@ def signin():
     )
     saved_token_details = token_details.save()
     token_id =saved_token_details.id
-    user_access_token = generate_access_token + '.' + token_id
+    user_access_token = generated_access_token + '.' + token_id
     UserAccessTokens.objects(id = token_id).update(token = user_access_token)
 
     # save login trial
@@ -272,8 +283,16 @@ def verifyEmail():
     # check if token has already expired
     if str(datetime.now()) > match.expiry_date: return 'expired'
 
-    # verify user account
-    Users.objects(id = match.account_id).update(verified = True)
+    # get token purpose
+    purpose = match.purpose
+
+    # if purpose is registration email, verify user account
+    if purpose == 'registration email':
+        Users.objects(id = match.account_id).update(verified = True)
+
+    # if purpose is email change, change user account email
+    if purpose == 'email change':
+        Users.objects(id = match.account_id).update(email = match.email)
 
     # mark token as used
     EmailVerifications.objects(id = request.form['token']).update(used = True)
@@ -304,6 +323,7 @@ def resendEmailVerification():
     email_verification_details = EmailVerifications(
         account_id = request.form['account_id'],
         email = account.email,
+        purpose = 'registration email', # registration email / email change 
         used = False,
         device = user_device,
         ip_address = user_ip_address,
@@ -354,6 +374,7 @@ def correctRegistrationEmail():
     email_verification_details = EmailVerifications(
         account_id = request.form['account_id'],
         email = account.email,
+        purpose = 'registration email', # registration email / email change 
         used = False,
         device = user_device,
         ip_address = user_ip_address,
@@ -413,6 +434,7 @@ def recoverPassword():
 
     # proceed to create password recovery token
     password_recovery_details = PasswordRecoveries(
+        account_id = account.id,
         email = request.form['email'],
         used = False,
         device = user_device,
@@ -435,36 +457,157 @@ def recoverPassword():
 
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
+    # search for token
+    token_results = PasswordRecoveries.objects.filter(id = request.form['token'])
+    if len(token_results) == 0: return 'invalid token'
+    match = token_results[0]
+
+    # check if token has already been used
+    if match.used == True: return 'used'
+
+    # check if token has already expired
+    if str(datetime.now()) > match.expiry_date: return 'expired'
+
+    # encrypt submitted password
+    password = request.form['password']
+    password = encrypt_password(password)
+
+    # set new password to user account
+    Users.objects(id = match.account_id).update(password = password)
+
+    # mark token as used
+    PasswordRecoveries.objects(id = request.form['token']).update(used = True)
+
+    return 'ok'
 
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
+
+    # get user by user_id
+    user = Users.objects.filter(id = user_id)[0]
+
+    # remove password from details
+    user = json.loads(user.to_json())
+    del user['password']
+
+    # return user object minus password
+    return jsonify(user)
 
 @app.route('/signout', methods=['POST'])
 def signout():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
+
+    # disable used access token
+    token = UserAccessTokens.objects.filter(token = request.headers.get('access_token'))[0]
+    UserAccessTokens.objects(id = token.id).update(active = False, signout_date = str(datetime.now()))
+
+    return 'ok'
 
 @app.route('/editProfile', methods=['POST'])
 def editProfile():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
+    
+    # input field validation
+    try: firstname = request.form['firstname'] except: return 'Firstname field required'
+    try: lastname = request.form['lastname'] except: return 'Lastname field required'
+    try: username = request.form['username'] except: return 'Username field required'
+    try: email = request.form['email'] except: return 'Email field required'
+    try: phonenumber = request.form['phonenumber'] except: return 'Phonenumber field required'
+    try: password = request.form['password'] except: return 'Password field required'
+    try: new_password = request.form['new_password'] except: return 'New password field required'
+    try: country = request.form['country'] except: return 'Country field required'
 
-@app.route('/verifyEmailChangePassword', methods=['POST'])
-def verifyEmailChangePassword():
-    # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # calculate verification token expiration date
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
+    token_expiration_date = str(token_expiration_date_object)
+
+    # get user details
+    user = Users.objects.filter(id = user_id)[0]
+
+    # perform password check
+    user_encrypted_password = user.password
+    is_password_a_match = verify_encrypted_password(password, user_encrypted_password)
+    if is_password_a_match == False: return 'incorrect password'
+
+    # check if username is already in use ... if user has changed field
+    if user.username != username and len(Users.objects.filter(username = username)) > 0: return 'username in use'
+
+    # check if email is already in use ... if user has changed field
+    if user.email != email and len(Users.objects.filter(email = email)) > 0: return 'email in use'
+
+    # check if phonenumber is already in use ... if user has changed field
+    if user.phonenumber != phonenumber and len(Users.objects.filter(phonenumber = phonenumber)) > 0: return 'phonenumber in use'
+
+    # check if new password and existing password are a match
+    new_password_matches_existing = verify_encrypted_password(new_password, user_encrypted_password)
+    if new_password_matches_existing == True: return 'new password matches existing'
+
+    # check if user has changed password ... if so, save new encrypted password to password_to_save
+    if new_password != '' and new_password_matches_existing == False:
+        password_to_save = encrypt_password(new_password)
+    else: password_to_save = user_encrypted_password # no password change
+
+    # update account details
+    Users.objects(id = user_id).update(
+        firstname = firstname,
+        lastname = lastname,
+        username = username,
+        phonenumber = phonenumber,
+        password = password_to_save,
+        country = country,
+    )
+
+    # initialize return string
+    return_string = 'ok'
+
+    # send email verification if user has submitted a new email
+    if user.email != email:
+        # create email verification token
+        email_verification_details = EmailVerifications(
+            account_id = user_id,
+            email = email,
+            purpose = 'email change', # registration email / email change 
+            used = False,
+            device = user_device,
+            ip_address = user_ip_address,
+            date_of_request = current_datetime
+            expiry_date = token_expiration_date
+        )
+        verification_details = email_verification_details.save()
+        email_verification_token = verification_details.id
+
+        # send user email verification
+        send_email_change_confirmation(
+            email, 
+            username, 
+            email_verification_token, 
+            token_expiration_date
+        ) # inputs: user_email, username, verification_token, token_expiration_date
+
+        # add more context to return string
+        return_string = return_string + ', email verification sent.'
+
+    # return return_string
+    return return_string
 
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
     
     
 # market analysis functions *******************************************************************************************
@@ -472,32 +615,32 @@ def getUserPaymentHistory():
 def getMarketAnalysis():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
 
 # admin functions *****************************************************************************************************
 @app.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
 
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
 
 @app.route('/getDailyUserRegistrationChart', methods=['POST'])
 def getDailyUserRegistrationChart():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
 
 @app.route('/getDailySubscribedUserCountChart', methods=['POST'])
 def getDailySubscribedUserCountChart():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request)
-    if access_token_status != 'ok':  access_token_status
+    if access_token_status != 'ok':  return access_token_status
 
 if __name__ == '__main__':
     init_db()
