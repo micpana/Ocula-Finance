@@ -12,6 +12,12 @@ def access_token_expiration_days():
 
     return expiration_days
 
+# token-send on user request retry period in minutes
+def token_send_on_user_request_retry_period_in_minutes():
+    minutes = 2
+
+    return minutes 
+
 # list of currency pairs and stocks ... symbols
 def get_symbols():
     currency_pairs = [

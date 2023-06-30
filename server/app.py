@@ -8,7 +8,7 @@ from database import init_db
 from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation
-from settings import verification_token_expiration_minutes, access_token_expiration_days
+from settings import verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes
 
 # Flask stuff
 app = Flask(__name__)
@@ -127,7 +127,8 @@ def signup():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
+    token_expiration_date = str(token_expiration_date_object)
 
     # create email verification token
     email_verification_details = EmailVerifications(
@@ -166,7 +167,8 @@ def signin():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+    token_expiration_date_object = current_datetime_object + timedelta(days = access_token_expiration_days())
+    token_expiration_date = str(token_expiration_date_object)
 
     # get user with matching email
     matches_by_email = Users.objects.filter(email = email_or_username)
@@ -273,6 +275,9 @@ def verifyEmail():
     # verify user account
     Users.objects(id = match.account_id).update(verified = True)
 
+    # mark token as used
+    EmailVerifications.objects(id = request.form['token']).update(used = True)
+
     return 'ok'
 
 @app.route('/resendEmailVerification', methods=['POST'])
@@ -284,7 +289,8 @@ def resendEmailVerification():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes)
+    token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
     match = Users.objects.filter(id = request.form['account_id'])
@@ -326,7 +332,8 @@ def correctRegistrationEmail():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes)
+    token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
     match = Users.objects.filter(id = request.form['account_id'])
@@ -375,7 +382,12 @@ def recoverPassword():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date = current_datetime_object + timedelta(minutes = access_token_expiration_days())
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes)
+    token_expiration_date = str(token_expiration_date_object)
+    # get retry wait time in minutes
+    retry_wait_minutes = token_send_on_user_request_retry_period_in_minutes()
+    # date format
+    date_format = '%Y-%m-%d %H:%M:%S.%f'
 
     # search for account by email
     match = Users.objects.filter(email = request.form['email'])
@@ -385,10 +397,41 @@ def recoverPassword():
     # check if account has been banned
     if account.banned == True: return 'banned'
 
-    # check time of last password recovery request by user
-    requests = PasswordRecoveries.objects.filter(email = request.form['email'])
+    # check time of last active password recovery request by user
+    requests = PasswordRecoveries.objects.filter(email = request.form['email'], used = False)
     if len(requests) > 0:
-        
+        # get request time
+        request_datetime = requests[0].date_of_request
+        # calculate end-datetime for waiting period
+        retry_wait_ending_time_object = datetime.strptime(request_datetime, date_format) + timedelta(minutes = retry_wait_minutes)
+        # check if last request was made outside of the retry wait period 
+        if retry_wait_ending_time_object > current_datetime_object: 
+            # remaining time in minutes
+            time_difference = retry_wait_ending_time_object - current_datetime_object
+            remaining_time_in_minutes = time_difference.total_seconds() / 60
+            return 'try again in ' + str(remaining_time_in_minutes) + ' minutes.'
+
+    # proceed to create password recovery token
+    password_recovery_details = PasswordRecoveries(
+        email = request.form['email'],
+        used = False,
+        device = user_device,
+        ip_address = user_ip_address,
+        date_of_request = current_datetime,
+        expiry_date = token_expiration_date
+    )
+    recovery_details = password_recovery_details.save()
+    password_recovery_token = recovery_details.id
+
+    # send user's password recovery token
+    send_password_recovery_email(
+        account.email, 
+        account.username, 
+        password_recovery_token, 
+        token_expiration_date
+    ) # inputs: user_email, username, recovery_token, token_expiration_date
+
+    return 'ok'
 
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():

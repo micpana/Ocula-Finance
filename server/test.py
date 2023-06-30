@@ -1,13 +1,13 @@
-import random
-import string
+from datetime import datetime
 
-def generate_access_token():
-  """Generates a random access token."""
-  token_length = 32
-  token_characters = string.ascii_lowercase + string.digits + string.ascii_uppercase 
-  token = "".join(random.choice(token_characters) for _ in range(token_length))
-  return token
+date_format = '%Y-%m-%d %H:%M:%S.%f'
+date_1 = '2023-12-13 14:32:55.45654'
+date_2 = '2023-12-13 14:35:55.45654'
 
-if __name__ == "__main__":
-  access_token = generate_access_token()
-  print(access_token)
+difference = datetime.strptime(date_2, date_format) - datetime.strptime(date_1, date_format)
+print(difference)
+print(difference.total_seconds())
+print(difference.total_seconds() / 60)
+
+if datetime.strptime(date_2, date_format) > datetime.strptime(date_1, date_format):
+  print('yeaaaah!')
