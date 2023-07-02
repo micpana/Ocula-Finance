@@ -124,24 +124,24 @@ def index():
 @app.route('/signup', methods=['POST'])
 def signup():
     # input field validation
-    try: firstname = request.form['firstname'] except: return 'Firstname field required'
-    try: lastname = request.form['lastname'] except: return 'Lastname field required'
-    try: username = request.form['username'] except: return 'Username field required'
-    try: email = request.form['email'] except: return 'Email field required'
-    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
-    try: phonenumber = request.form['phonenumber'] except: return 'Phonenumber field required'
-    try: password = request.form['password'] except: return 'Password field required'
-    if is_password_structure_valid(password) == False: return 'Invalid password structure'
-    try: country = request.form['country'] except: return 'Country field required'
+    try: firstname = request.form['firstname'] except: response = make_response('Firstname field required'); response.status = 400; return response
+    try: lastname = request.form['lastname'] except: response = make_response('Lastname field required'); response.status = 400; return response
+    try: username = request.form['username'] except: response = make_response('Username field required'); response.status = 400; return response
+    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure') ; response.status = 400; return response
+    try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
+    try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
 
     # check if username is already in use
-    if len(Users.objects.filter(username = username)) > 0: return 'username in use'
+    if len(Users.objects.filter(username = username)) > 0: response = make_response('username in use'); response.status = 409; return response
 
     # check if email is already in use
-    if len(Users.objects.filter(email = email)) > 0: return 'email in use'
+    if len(Users.objects.filter(email = email)) > 0: response = make_response('email in use'); response.status = 409; return response
 
     # check if phonenumber is already in use
-    if len(Users.objects.filter(phonenumber = phonenumber)) > 0: return 'phonenumber in use'
+    if len(Users.objects.filter(phonenumber = phonenumber)) > 0: response = make_response('phonenumber in use'); response.status = 409; return response
 
     # encrypt submitted password
     password = encrypt_password(password)
@@ -199,7 +199,7 @@ def signup():
     ) # inputs: user_email, username, verification_token, token_expiration_date
 
     # return account id
-    return account_id
+    return response = make_response(account_id); response.status = 201; return response
 
 @app.route('/signin', methods=['POST'])
 def signin():
