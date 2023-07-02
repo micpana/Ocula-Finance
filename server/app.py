@@ -3,8 +3,8 @@ from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS, cross_origin
 from user_agents import parse
 import json
+import re
 from datetime import datetime, timedelta
-import requests
 from database import init_db
 from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
@@ -90,6 +90,29 @@ def check_user_access_token_validity(request_data, expected_user_role):
     except:
         return 'Invalid token', None
 
+# email structure validation
+def is_email_structure_valid(email):
+    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    if re.match(pattern, email):
+        return True
+    else:
+        return False
+
+# password structure validation ... 8 characters at minimum, with at least 1: uppercase letter, lowercase letter, number, special character
+def is_password_structure_valid(password):
+	if len(password) < 8: # password length
+		return False
+	if not re.search(r"[!@#$%^&*(),.?\":{}|<>/'`~]", password): # special characters
+		return False
+	if not re.search(r'[A-Z]', password): # uppercase letters
+		return False
+	if not re.search(r'[a-z]', password): # lowercase letters
+		return False
+	if not re.search(r'\d', password): # numbers
+		return False
+	# if all conditions are met, password is valid
+	return True
+
 # user functions ******************************************************************************************************
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -98,8 +121,10 @@ def signup():
     try: lastname = request.form['lastname'] except: return 'Lastname field required'
     try: username = request.form['username'] except: return 'Username field required'
     try: email = request.form['email'] except: return 'Email field required'
+    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
     try: phonenumber = request.form['phonenumber'] except: return 'Phonenumber field required'
     try: password = request.form['password'] except: return 'Password field required'
+    if is_password_structure_valid(password) == False: return 'Invalid password structure'
     try: country = request.form['country'] except: return 'Country field required'
 
     # check if username is already in use
@@ -350,6 +375,10 @@ def resendEmailVerification():
 
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
+    # field validation
+    try: email = request.form['email'] except: return 'Email field required'
+    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
+
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
@@ -372,7 +401,7 @@ def correctRegistrationEmail():
     if account.verified == False: return 'email already registered'
 
     # update account email and gather updated account information
-    Users.objects(id = request.form['account_id']).update(email = request.form['email'])
+    Users.objects(id = request.form['account_id']).update(email = email)
     account = Users.objects.filter(id = request.form['account_id'])[0]
 
     # proceed to create email verification token
@@ -401,6 +430,10 @@ def correctRegistrationEmail():
 
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
+    # field validation
+    try: email = request.form['email'] except: return 'Email field required'
+    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
+
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
@@ -416,7 +449,7 @@ def recoverPassword():
     date_format = '%Y-%m-%d %H:%M:%S.%f'
 
     # search for account by email
-    match = Users.objects.filter(email = request.form['email'])
+    match = Users.objects.filter(email = email)
     if len(match) == 0: return 'email not registered'
     account = match[0]
 
@@ -424,10 +457,10 @@ def recoverPassword():
     if account.banned == True: return 'banned'
 
     # check time of last active password recovery request by user
-    requests = PasswordRecoveries.objects.filter(email = request.form['email'], used = False)
-    if len(requests) > 0:
+    recovery_requests = PasswordRecoveries.objects.filter(email = email, used = False)
+    if len(recovery_requests) > 0:
         # get request time
-        request_datetime = requests[0].date_of_request
+        request_datetime = recovery_requests[0].date_of_request
         # calculate end-datetime for waiting period
         retry_wait_ending_time_object = datetime.strptime(request_datetime, date_format) + timedelta(minutes = retry_wait_minutes)
         # check if last request was made outside of the retry wait period 
@@ -440,7 +473,7 @@ def recoverPassword():
     # proceed to create password recovery token
     password_recovery_details = PasswordRecoveries(
         account_id = account.id,
-        email = request.form['email'],
+        email = email,
         used = False,
         device = user_device,
         ip_address = user_ip_address,
@@ -462,6 +495,10 @@ def recoverPassword():
 
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
+    # field validation
+    try: password = request.form['password'] except: return 'Password field required'
+    if is_password_structure_valid(password) == False: return 'Invalid password structure'
+
     # search for token
     token_results = PasswordRecoveries.objects.filter(id = request.form['token'])
     if len(token_results) == 0: return 'invalid token'
@@ -474,7 +511,6 @@ def setNewPassword():
     if str(datetime.now()) > match.expiry_date: return 'expired'
 
     # encrypt submitted password
-    password = request.form['password']
     password = encrypt_password(password)
 
     # set new password to user account
@@ -524,9 +560,11 @@ def editProfile():
     try: lastname = request.form['lastname'] except: return 'Lastname field required'
     try: username = request.form['username'] except: return 'Username field required'
     try: email = request.form['email'] except: return 'Email field required'
+    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
     try: phonenumber = request.form['phonenumber'] except: return 'Phonenumber field required'
     try: password = request.form['password'] except: return 'Password field required'
     try: new_password = request.form['new_password'] except: return 'New password field required'
+    if is_password_structure_valid(new_password) == False: return 'Invalid password structure'
     try: country = request.form['country'] except: return 'Country field required'
 
     # get user browsing device information

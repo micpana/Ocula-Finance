@@ -1,26 +1,16 @@
-from pandas import read_csv
-import pandas as pd
+import re
+def is_password_structure_valid(password):
+	if len(password) < 8: # password length
+		return False
+	if not re.search(r"[!@#$%^&*(),.?\":{}|<>/'`~]", password): # special characters
+		return False
+	if not re.search(r'[A-Z]', password): # uppercase letters
+		return False
+	if not re.search(r'[a-z]', password): # lowercase letters
+		return False
+	if not re.search(r'\d', password): # numbers
+		return False
+	# if all conditions are met, password is valid
+	return True
 
-columns = ['time', 'open', 'high', 'low', 'close', 'col1', 'col2']
-ohlc_file = "datasets/H1.csv"
-ohlc_df = read_csv(ohlc_file, names=columns, encoding='utf-16')
-del ohlc_df['col1']
-del ohlc_df['col2']
-
-print(ohlc_df.head())
-
-# set the datetime index if its not already set
-ohlc_df['time'] = pd.to_datetime(ohlc_df['time'])
-ohlc_df.set_index('time', inplace=True)
-print(ohlc_df.head())
-
-# turn into H4 df
-h4_df = ohlc_df.resample('4H').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
-
-# drop any rows with missing data
-h4_df.dropna(inplace=True)
-
-# reset the indexes if needed
-h4_df.reset_index(inplace=True)
-
-print(h4_df['time'])
+print(is_password_structure_valid('#l.jM1/`,'))
