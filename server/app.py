@@ -532,7 +532,7 @@ def setNewPassword():
 def getUserDetailsByAccessToken():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get user by user_id
     user = Users.objects.filter(id = user_id)[0]
@@ -548,7 +548,7 @@ def getUserDetailsByAccessToken():
 def signout():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # disable used access token
     token = UserAccessTokens.objects.filter(token = request.headers.get('access_token'))[0]
@@ -560,7 +560,7 @@ def signout():
 def editProfile():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
     # input field validation
     try: firstname = request.form['firstname'] except: return 'Firstname field required'
@@ -657,7 +657,7 @@ def editProfile():
 def getUserPaymentHistory():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
@@ -670,7 +670,7 @@ def getUserPaymentHistory():
 def getCurrentMarketAnalysis():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # symbol field validation
     try: symbol = request.form['symbol'] except: return 'Symbol required'
@@ -686,7 +686,7 @@ def getCurrentMarketAnalysis():
 def getAllUsers():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get user list
     all_users = Users.objects.all()
@@ -698,7 +698,7 @@ def getAllUsers():
 def getUserCountryRanking():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get user list
     all_users = Users.objects.all()
@@ -717,7 +717,7 @@ def getUserCountryRanking():
 def getDailyUserRegistrationStatistics():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get user list
     all_users = Users.objects.all()
@@ -736,7 +736,7 @@ def getDailyUserRegistrationStatistics():
 def getDailySubscribedUserCountStatistics():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
-    if access_token_status != 'ok':  return access_token_status
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get subscriptions list
     all_subscriptions = Payments.objects.all(purpose = 'subscription')
