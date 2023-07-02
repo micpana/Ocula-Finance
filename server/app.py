@@ -204,8 +204,8 @@ def signup():
 @app.route('/signin', methods=['POST'])
 def signin():
     # input field validation
-    try: email_or_username = request.form['email_or_username'] except: return 'Email or username field required'
-    try: password = request.form['password'] except: return 'Password field required'
+    try: email_or_username = request.form['email_or_username'] except: response = make_response('Email or username field required'); response.status = 400; return response
+    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -236,7 +236,7 @@ def signin():
             current_datetime, 
             False
         ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
-        return 'email or username not registered'
+        response = make_response('email or username not registered'); response.status = 404; return response
 
     # see if password is a match
     user_encrypted_password = match.password
@@ -251,7 +251,7 @@ def signin():
             current_datetime, 
             False
         ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
-        return 'incorrect details entered'
+        response = make_response('incorrect details entered'); response.status = 401; return response
 
     # check if account is banned or not
     if match.banned == True: 
@@ -264,7 +264,7 @@ def signin():
             current_datetime, 
             False
         ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
-        return 'banned'
+        response = make_response('banned'); response.status = 401; return response
 
     # create and return user access token
     def generate_access_token():
@@ -305,7 +305,7 @@ def signin():
     ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
 
     # return user_access_token
-    return user_access_token
+    response = make_response(user_access_token); response.status = 200; return response
     
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
