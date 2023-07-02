@@ -1,5 +1,5 @@
 # imports
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from user_agents import parse
 import json
@@ -112,6 +112,13 @@ def is_password_structure_valid(password):
 		return False
 	# if all conditions are met, password is valid
 	return True
+
+# index
+@app.route('/', methods=['POST', 'GET'])
+def index():
+    response = make_response('Not authorized')
+    response.status = 401
+    return response
 
 # user functions ******************************************************************************************************
 @app.route('/signup', methods=['POST'])
