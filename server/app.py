@@ -118,6 +118,8 @@ def is_password_structure_valid(password):
 def index():
     response = make_response('Not authorized')
     response.status = 401
+    
+    # return response
     return response
 
 # user functions ******************************************************************************************************
@@ -334,6 +336,7 @@ def verifyEmail():
     # mark token as used
     EmailVerifications.objects(id = request.form['token']).update(used = True)
 
+    # return response
     response = make_response('ok'); response.status = 200; return response
 
 @app.route('/resendEmailVerification', methods=['POST'])
@@ -378,13 +381,14 @@ def resendEmailVerification():
         token_expiration_date
     ) # inputs: user_email, username, verification_token, token_expiration_date
 
+    # return response
     response make_response('ok'); response.status = 200; return response
 
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
     # field validation
-    try: email = request.form['email'] except: return 'Email field required'
-    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
+    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -398,14 +402,14 @@ def correctRegistrationEmail():
 
     # search for account by account id ... also verify validity of given account id
     match = Users.objects.filter(id = request.form['account_id'])
-    if len(match) == 0: return 'invalid account id'
+    if len(match) == 0: response = make_response('invalid account id'); response.status = 400; return response
     account = match[0]
 
     # check if email has already been verified
-    if account.verified == True: return 'email already verified'
+    if account.verified == True: response = make_response('email already verified'); response.status = 409; return response
 
     # notify of email's non availability even if it is not verified
-    if account.verified == False: return 'email already registered'
+    if account.verified == False: response = make_response('email already registered'); response.status = 409; return response
 
     # update account email and gather updated account information
     Users.objects(id = request.form['account_id']).update(email = email)
@@ -433,7 +437,8 @@ def correctRegistrationEmail():
         token_expiration_date
     ) # inputs: user_email, username, verification_token, token_expiration_date
 
-    return 'ok'
+    # return response
+    response = make_response('ok'); response.status = 200; return response
 
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
