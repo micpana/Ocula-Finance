@@ -48,6 +48,23 @@ def yahoo_fetch_data(symbol, timeframes, data_collection_days):
         timeframe_ohlc_df = symbol_ticker.history(start=timezone_from, end=timezone_to, interval=interval)
 
         # if timeframe = H4, modify timeframe_ohlc_df into a 4h timeframe, we collected 1h data since yfinance doesn't have 4h
+        if timeframe == 'H4':
+            # set the datetime index if its not already set
+            timeframe_ohlc_df['time'] = pd.to_datetime(timeframe_ohlc_df['time'])
+            timeframe_ohlc_df.set_index('time', inplace=True)
+            print(timeframe_ohlc_df.head())
+
+            # turn into H4 df
+            h4_df = timeframe_ohlc_df.resample('4H').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
+
+            # drop any rows with missing data
+            h4_df.dropna(inplace=True)
+
+            # reset the indexes if needed
+            h4_df.reset_index(inplace=True)
+
+            # set h4 data to timeframe_ohlc_df
+            timeframe_ohlc_df = h4_df
 
         # set data to appropriate timeframe variable
         timeframe_number = timeframes.index(timeframe) + 1
