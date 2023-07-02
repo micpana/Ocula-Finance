@@ -311,7 +311,7 @@ def signin():
 def verifyEmail():
     # search for token
     token_results = EmailVerifications.objects.filter(id = request.form['token'])
-    if len(token_results) == 0: response = make_response('invalid token'); response.status = 401; return response
+    if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
     match = token_results[0]
 
     # check if token has already been used
