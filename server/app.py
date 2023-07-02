@@ -6,10 +6,10 @@ import json
 from datetime import datetime, timedelta
 import requests
 from database import init_db
-from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials
+from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation
-from settings import verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes
+from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes
 
 # Flask stuff
 app = Flask(__name__)
@@ -22,7 +22,7 @@ app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
 cors = CORS(app)
 
 # frontend url
-frontend_url = 'http://localhost:3000' # development server
+frontend_url = frontend_client_url
 
 # function for getting information on user's browsing device
 def information_on_user_browsing_device(request_data):
@@ -55,7 +55,7 @@ def save_login_trials(account_id, email, device, ip_address, date_and_time, stat
     return 'ok'
 
 # function for checking a user access token's validity
-def check_user_access_token_validity(request_data):
+def check_user_access_token_validity(request_data, expected_user_role):
     try:
         # get user access token
         user_access_token = request.headers.get('access_token')
@@ -69,6 +69,8 @@ def check_user_access_token_validity(request_data):
         )[0]
         # get user id
         user_id = token_details.user_id
+        # get user role
+        user_role = Users.objects.filter(id = user_id)[0].role
         # get current date and time
         current_datetime = str(datetime.now())
         # get access token status
@@ -77,6 +79,9 @@ def check_user_access_token_validity(request_data):
         elif current_datetime > token_details.expiry_date:
             access_token_status = 'Access token expired'
         else:
+            # check if user account's role matches expected user role
+            if user_role != expected_user_role: return 'Not authorized to access this'
+            # proceed since everything checks out
             access_token_status = 'ok'
             # show that access token was last used now
             AccessTokens.objects(id = user_access_token).update(last_used_on_date = current_datetime)
@@ -123,7 +128,7 @@ def signup():
         subscribed = False,
         subscription_date = '',
         subscription_expiry = '',
-        role = 'User',
+        role = 'user',
         banned = False
     )
     account_details = user_details.save()
@@ -483,7 +488,7 @@ def setNewPassword():
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
 
     # get user by user_id
@@ -499,7 +504,7 @@ def getUserDetailsByAccessToken():
 @app.route('/signout', methods=['POST'])
 def signout():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
 
     # disable used access token
@@ -511,7 +516,7 @@ def signout():
 @app.route('/editProfile', methods=['POST'])
 def editProfile():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
     
     # input field validation
@@ -606,41 +611,121 @@ def editProfile():
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
-    
+
+    # collect payment history by user_id
+    user_payment_history = Payments.objects.filter(user_id = user_id)
+
+    # return payment history
+    return user_payment_history.to_json()
     
 # market analysis functions *******************************************************************************************
-@app.route('/getMarketAnalysis', methods=['POST'])
-def getMarketAnalysis():
+@app.route('/getCurrentMarketAnalysis', methods=['POST'])
+def getCurrentMarketAnalysis():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
+
+    # symbol field validation
+    try: symbol = request.form['symbol'] except: return 'Symbol required'
+
+    # get current market analysis ... ie last analysis entry
+    current_market_analysis = MarketAnalysis.objects.filter(symbol = symbol)[-1]
+
+    # return current market analysis
+    return current_market_analysis.to_json()
 
 # admin functions *****************************************************************************************************
 @app.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
+
+    # get user list
+    all_users = Users.objects.all()
+
+    # return user list
+    return all_users.to_json()
 
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
 
-@app.route('/getDailyUserRegistrationChart', methods=['POST'])
-def getDailyUserRegistrationChart():
+    # get user list
+    all_users = Users.objects.all()
+
+    # create user country list
+    processed_countries = []
+    user_country_list = [
+        {'country': i.country, 'users': len([z for z in all_users if z.country == i.country])} 
+        for i in all_users if i.country not in processed_countries and not processed_countries.append(i.country)
+    ]
+
+    # return user country list
+    return jsonify(user_country_list)
+
+@app.route('/getDailyUserRegistrationStatistics', methods=['POST'])
+def getDailyUserRegistrationStatistics():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
 
-@app.route('/getDailySubscribedUserCountChart', methods=['POST'])
-def getDailySubscribedUserCountChart():
+    # get user list
+    all_users = Users.objects.all()
+
+    # create daily user registration statistics
+    processed_days = []
+    daily_user_registration_statistics = [
+        {'date': i.date_of_registration[0:10], 'users': len([z for z in all_users if z.date_of_registration[0:10] == i.date_of_registration[0:10]])}
+        for i in all_users if i.date_of_registration[0:10] not in processed_days and not processed_days.append(i.date_of_registration[0:10])
+    ]
+
+    # return statistics
+    return jsonify(daily_user_registration_statistics)
+
+@app.route('/getDailySubscribedUserCountStatistics', methods=['POST'])
+def getDailySubscribedUserCountStatistics():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request)
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  return access_token_status
+
+    # get subscriptions list
+    all_subscriptions = Payments.objects.all(purpose = 'subscription')
+
+    # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
+    daily_subscribed_user_statistics = []
+    if len(all_subscriptions) == 0: return jsonify(daily_subscribed_user_statistics)
+
+    # date format
+    date_format = '%Y-%m-%d'
+
+    # start and end days
+    start_date = all_subscriptions[0]['date'][0:10] # start with first subscription's date in format yyyy-mm-dd
+    end_date = str(datetime.now())[0:10]
+
+    # difference between dates in days
+    date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
+    date_difference_in_days = date_difference_in_days.days
+    
+    # list of days
+    list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
+
+    # create daily subscribed user statistics
+    daily_subscribed_user_statistics = [
+        {'date': i[0:10], 'users': len([
+            z for z in all_subscriptions if 
+            i >= z.date[0:10] and 
+            i < z.expiry_date
+        ])}
+        for i in list_of_days if True
+    ]
+
+    # return statistics
+    return jsonify(daily_subscribed_user_statistics)
 
 if __name__ == '__main__':
     init_db()

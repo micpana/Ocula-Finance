@@ -76,6 +76,7 @@ class Payments(Document):
     verified = BooleanField(required=True)
     discount_supplied = FloatField(required=True)
     amount = FloatField(required=True)
+    expiry_date = StringField(required=True)
 
 class LoginTrials(Document):
     meta = {'collection': 'logintrials'}

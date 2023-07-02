@@ -1,5 +1,9 @@
 from datetime import datetime
 
+# frontend url
+def frontend_client_url():
+    url = 'https://oculafinance.com'
+
 # verification token expiration minutes
 def verification_token_expiration_minutes():
     expiration_minutes = 15

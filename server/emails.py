@@ -1,3 +1,8 @@
+from settings import frontend_client_url
+
+# get frontend url
+frontend_url = frontend_client_url()
+
 # function for actually sending crafted email
 def send_crafted_email(user_email, email_html, email_text):
 
