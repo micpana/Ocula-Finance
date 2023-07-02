@@ -315,7 +315,7 @@ def verifyEmail():
     match = token_results[0]
 
     # check if token has already been used
-    if match.used == True: response = make_response('used'); response.status = 401; return response
+    if match.used == True: response = make_response('used'); response.status = 409; return response
 
     # check if token has already expired
     if str(datetime.now()) > match.expiry_date: response = make_response('expired'); response.status = 401; return response
@@ -350,11 +350,11 @@ def resendEmailVerification():
 
     # search for account by account id ... also verify validity of given account id
     match = Users.objects.filter(id = request.form['account_id'])
-    if len(match) == 0: return 'invalid account id'
+    if len(match) == 0: response = make_response('invalid account id'); response.status = 404; return response
     account = match[0]
 
     # check if email has already been verified
-    if account.verified == True: return 'email already verified'
+    if account.verified == True: response = make_response('email already verified'); response.status = 409; return response
 
     # proceed to create email verification token
     email_verification_details = EmailVerifications(
@@ -378,7 +378,7 @@ def resendEmailVerification():
         token_expiration_date
     ) # inputs: user_email, username, verification_token, token_expiration_date
 
-    return 'ok'
+    response make_response('ok'); response.status = 200; return response
 
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
