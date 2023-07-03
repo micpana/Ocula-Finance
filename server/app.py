@@ -509,19 +509,19 @@ def recoverPassword():
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
     # field validation
-    try: password = request.form['password'] except: return 'Password field required'
-    if is_password_structure_valid(password) == False: return 'Invalid password structure'
+    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
 
     # search for token
     token_results = PasswordRecoveries.objects.filter(id = request.form['token'])
-    if len(token_results) == 0: return 'invalid token'
+    if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
     match = token_results[0]
 
     # check if token has already been used
-    if match.used == True: return 'used'
+    if match.used == True: response = make_response('used'); response.status = 409; return response
 
     # check if token has already expired
-    if str(datetime.now()) > match.expiry_date: return 'expired'
+    if str(datetime.now()) > match.expiry_date: response = make_response('expired'); response.status = 401; return response
 
     # encrypt submitted password
     password = encrypt_password(password)
@@ -532,7 +532,7 @@ def setNewPassword():
     # mark token as used
     PasswordRecoveries.objects(id = request.form['token']).update(used = True)
 
-    return 'ok'
+    response = make_response('ok'); response.status = 200; return response
 
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
