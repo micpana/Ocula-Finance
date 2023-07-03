@@ -719,7 +719,7 @@ def getUserCountryRanking():
     ]
 
     # return user country list
-    return jsonify(user_country_list)
+    response = make_response(jsonify(user_country_list)); response.status = 200; return response
 
 @app.route('/getDailyUserRegistrationStatistics', methods=['POST'])
 def getDailyUserRegistrationStatistics():
