@@ -751,7 +751,7 @@ def getDailySubscribedUserCountStatistics():
 
     # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
     daily_subscribed_user_statistics = []
-    if len(all_subscriptions) == 0: return jsonify(daily_subscribed_user_statistics)
+    if len(all_subscriptions) == 0: response = make_response(jsonify(daily_subscribed_user_statistics)); response.status = 200; return response
 
     # date format
     date_format = '%Y-%m-%d'
@@ -778,7 +778,7 @@ def getDailySubscribedUserCountStatistics():
     ]
 
     # return statistics
-    return jsonify(daily_subscribed_user_statistics)
+    response = make_response(jsonify(daily_subscribed_user_statistics)); response.status = 200; return response
 
 if __name__ == '__main__':
     init_db()
