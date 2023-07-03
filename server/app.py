@@ -669,7 +669,7 @@ def getUserPaymentHistory():
     user_payment_history = Payments.objects.filter(user_id = user_id)
 
     # return payment history
-    return user_payment_history.to_json()
+    response = make_response(user_payment_history.to_json()); response.status = 200; return response
     
 # market analysis functions *******************************************************************************************
 @app.route('/getCurrentMarketAnalysis', methods=['POST'])
