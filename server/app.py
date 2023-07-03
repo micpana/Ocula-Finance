@@ -548,7 +548,7 @@ def getUserDetailsByAccessToken():
     del user['password']
 
     # return user object minus password
-    return jsonify(user)
+    response = make_response(jsonify(user)); response.status = 200; return response
 
 @app.route('/signout', methods=['POST'])
 def signout():
