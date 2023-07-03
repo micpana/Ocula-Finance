@@ -679,13 +679,13 @@ def getCurrentMarketAnalysis():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # symbol field validation
-    try: symbol = request.form['symbol'] except: return 'Symbol required'
+    try: symbol = request.form['symbol'] except: response = make_response('Symbol required'); response.status = 400; return status
 
     # get current market analysis ... ie last analysis entry
     current_market_analysis = MarketAnalysis.objects.filter(symbol = symbol)[-1]
 
     # return current market analysis
-    return current_market_analysis.to_json()
+    response = make_response(current_market_analysis.to_json()); response.status = 200; return response
 
 # admin functions *****************************************************************************************************
 @app.route('/getAllUsers', methods=['POST'])
