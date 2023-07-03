@@ -532,6 +532,7 @@ def setNewPassword():
     # mark token as used
     PasswordRecoveries.objects(id = request.form['token']).update(used = True)
 
+    # return response
     response = make_response('ok'); response.status = 200; return response
 
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
@@ -560,6 +561,7 @@ def signout():
     token = UserAccessTokens.objects.filter(token = request.headers.get('access_token'))[0]
     UserAccessTokens.objects(id = token.id).update(active = False, signout_date = str(datetime.now()))
 
+    # return response
     response = make_response('ok'); response.status = 200; return response
 
 @app.route('/editProfile', methods=['POST'])
@@ -698,7 +700,7 @@ def getAllUsers():
     all_users = Users.objects.all()
 
     # return user list
-    return all_users.to_json()
+    response = make_response(all_users.to_json()); response.status = 200; return response
 
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
