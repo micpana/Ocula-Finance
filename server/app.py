@@ -569,16 +569,16 @@ def editProfile():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
     # input field validation
-    try: firstname = request.form['firstname'] except: return 'Firstname field required'
-    try: lastname = request.form['lastname'] except: return 'Lastname field required'
-    try: username = request.form['username'] except: return 'Username field required'
-    try: email = request.form['email'] except: return 'Email field required'
-    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
-    try: phonenumber = request.form['phonenumber'] except: return 'Phonenumber field required'
-    try: password = request.form['password'] except: return 'Password field required'
-    try: new_password = request.form['new_password'] except: return 'New password field required'
-    if is_password_structure_valid(new_password) == False: return 'Invalid password structure'
-    try: country = request.form['country'] except: return 'Country field required'
+    try: firstname = request.form['firstname'] except: response = make_response('Firstname field required'); response.status = 400; return response
+    try: lastname = request.form['lastname'] except: response = make_response('Lastname field required'); response.status = 400; return response
+    try: username = request.form['username'] except: response = make_response('Username field required'); response.status = 400; return response
+    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure' ); response.status = 400; return response
+    try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    try: new_password = request.form['new_password'] except: response = make_response('New password field required'); response.status = 400; return response
+    if is_password_structure_valid(new_password) == False: response = make_response('Invalid new password structure'); response.status = 400; return response
+    try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -596,20 +596,20 @@ def editProfile():
     # perform password check
     user_encrypted_password = user.password
     is_password_a_match = verify_encrypted_password(password, user_encrypted_password)
-    if is_password_a_match == False: return 'incorrect password'
+    if is_password_a_match == False: response = make_response('incorrect password'); response.status = 401; return response
 
     # check if username is already in use ... if user has changed field
-    if user.username != username and len(Users.objects.filter(username = username)) > 0: return 'username in use'
+    if user.username != username and len(Users.objects.filter(username = username)) > 0: response = make_response('username in use'); response.status = 409; return response
 
     # check if email is already in use ... if user has changed field
-    if user.email != email and len(Users.objects.filter(email = email)) > 0: return 'email in use'
+    if user.email != email and len(Users.objects.filter(email = email)) > 0: response = make_response('email in use'); response.status = 409; return response
 
     # check if phonenumber is already in use ... if user has changed field
-    if user.phonenumber != phonenumber and len(Users.objects.filter(phonenumber = phonenumber)) > 0: return 'phonenumber in use'
+    if user.phonenumber != phonenumber and len(Users.objects.filter(phonenumber = phonenumber)) > 0: response = make_response('phonenumber in use'); response.status = 409; return response
 
     # check if new password and existing password are a match
     new_password_matches_existing = verify_encrypted_password(new_password, user_encrypted_password)
-    if new_password_matches_existing == True: return 'new password matches existing'
+    if new_password_matches_existing == True: response = make_response('new password matches existing'); response.status = 409; return response
 
     # check if user has changed password ... if so, save new encrypted password to password_to_save
     if new_password != '' and new_password_matches_existing == False:
@@ -657,7 +657,7 @@ def editProfile():
         return_string = return_string + ', email verification sent.'
 
     # return return_string
-    return return_string
+    response = make_response(return_string); response.status = 200; return response
 
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
