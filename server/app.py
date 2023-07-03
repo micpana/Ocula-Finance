@@ -560,7 +560,7 @@ def signout():
     token = UserAccessTokens.objects.filter(token = request.headers.get('access_token'))[0]
     UserAccessTokens.objects(id = token.id).update(active = False, signout_date = str(datetime.now()))
 
-    return 'ok'
+    response = make_response('ok'); response.status = 200; return response
 
 @app.route('/editProfile', methods=['POST'])
 def editProfile():
