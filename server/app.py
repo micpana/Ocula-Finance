@@ -738,7 +738,7 @@ def getDailyUserRegistrationStatistics():
     ]
 
     # return statistics
-    return jsonify(daily_user_registration_statistics)
+    response = make_response(jsonify(daily_user_registration_statistics)); response.status = 200; return response
 
 @app.route('/getDailySubscribedUserCountStatistics', methods=['POST'])
 def getDailySubscribedUserCountStatistics():
