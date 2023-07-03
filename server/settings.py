@@ -1,5 +1,11 @@
 from datetime import datetime
 
+# database selection ... mock / test / live
+def database_selection():
+    selection = 'test'
+
+    return selection
+
 # frontend url
 def frontend_client_url():
     url = 'https://oculafinance.com'
