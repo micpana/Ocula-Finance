@@ -443,8 +443,8 @@ def correctRegistrationEmail():
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
     # field validation
-    try: email = request.form['email'] except: return 'Email field required'
-    if is_email_structure_valid(email) == False: return 'Invalid email structure' 
+    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -462,11 +462,11 @@ def recoverPassword():
 
     # search for account by email
     match = Users.objects.filter(email = email)
-    if len(match) == 0: return 'email not registered'
+    if len(match) == 0: response = make_response('email not registered'); response.status = 404; return response
     account = match[0]
 
     # check if account has been banned
-    if account.banned == True: return 'banned'
+    if account.banned == True: response = make_response('banned'); response.status = 401; return response
 
     # check time of last active password recovery request by user
     recovery_requests = PasswordRecoveries.objects.filter(email = email, used = False)
@@ -480,7 +480,7 @@ def recoverPassword():
             # remaining time in minutes
             time_difference = retry_wait_ending_time_object - current_datetime_object
             remaining_time_in_minutes = time_difference.total_seconds() / 60
-            return 'try again in ' + str(remaining_time_in_minutes) + ' minutes.'
+            response = make_response('try again in ' + str(remaining_time_in_minutes) + ' minutes.'); response.status = 429; return response
 
     # proceed to create password recovery token
     password_recovery_details = PasswordRecoveries(
@@ -503,7 +503,8 @@ def recoverPassword():
         token_expiration_date
     ) # inputs: user_email, username, recovery_token, token_expiration_date
 
-    return 'ok'
+    # return response
+    response = make_response('ok'); response.status = 200; return response
 
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
