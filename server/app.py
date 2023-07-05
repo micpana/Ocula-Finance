@@ -51,7 +51,7 @@ def save_login_trials(account_id, email, username, device, user_os, browser, ip_
         ip_address = ip_address,
         date_and_time = date_and_time,
         successful = successful,
-        description = description
+        description = description # not registered / not verified / incorrect details / banned / authenticated
     )
     trial_details.save()
     
