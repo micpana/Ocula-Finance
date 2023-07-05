@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from database import init_db
 from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
-from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation
+from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
 from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes
 
 # Flask stuff
@@ -41,16 +41,35 @@ def information_on_user_browsing_device(request_data):
     return user_browsing_agent, user_os, user_device, user_ip_address, user_browser
 
 # function for saving login trials
-def save_login_trials(account_id, email, device, ip_address, date_and_time, status):
+def save_login_trials(account_id, email, username, device, user_os, browser, ip_address, date_and_time, status):
     trial_details = LoginTrials(
         account_id = account_id,
         email = email,
         device = device,
+        os = user_os,
+        browser = browser,
         ip_address = ip_address,
         date_and_time = date_and_time,
         status = status
     )
     trial_details.save()
+    
+    # if login trial was a success + device is a new login device by user, notify user via email
+    if status == True:
+        # check if user has used the device before
+        matches = LoginTrials.objects.filter(account_id = account_id, device = device, os = user_os, browser = browser)
+        if len(matches) > 0: used_before = True else: used_before = False
+
+        # if device is new, notify user
+        if used_before == False:
+            send_login_on_new_device_email_notification(
+                email, 
+                username, 
+                user_os, 
+                device, 
+                ip_address, 
+                user_browser
+            ) # inputs: user_email, username, user_os, user_device, user_ip_address, user_browser
 
     return 'ok'
 
@@ -233,11 +252,14 @@ def signin():
         save_login_trials(
             'Not registered', 
             email_or_username, 
+            None,
             user_device, 
+            user_os,
+            user_browser,
             user_ip_address, 
             current_datetime, 
             False
-        ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
         response = make_response('email or username not registered'); response.status = 404; return response
 
     # see if password is a match
@@ -248,11 +270,14 @@ def signin():
         save_login_trials(
             match.id, 
             match.email, 
+            match.username,
             user_device, 
+            user_os,
+            user_browser,
             user_ip_address, 
             current_datetime, 
             False
-        ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
         response = make_response('incorrect details entered'); response.status = 401; return response
 
     # check if account is banned or not
@@ -261,11 +286,14 @@ def signin():
         save_login_trials(
             match.id, 
             match.email, 
+            match.username,
             user_device, 
+            user_os,
+            user_browser,
             user_ip_address, 
             current_datetime, 
             False
-        ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
         response = make_response('banned'); response.status = 401; return response
 
     # create and return user access token
@@ -300,17 +328,23 @@ def signin():
     save_login_trials(
         match.id, 
         match.email, 
+        match.username,
         user_device, 
+        user_os,
+        user_browser,
         user_ip_address, 
         current_datetime, 
-        False
-    ) # input: account_id, email, device, ip_address, date_and_time, successful (bool)
+        True
+    ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
 
     # return user_access_token
     response = make_response(user_access_token); response.status = 200; return response
     
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
+    # get user browsing device information
+    user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
+
     # search for token
     token_results = EmailVerifications.objects.filter(id = request.form['token'])
     if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
@@ -331,7 +365,21 @@ def verifyEmail():
 
     # if purpose is email change, change user account email
     if purpose == 'email change':
+        # get user account
+        user = Users.objects.filter(id = match.account_id)[0]
+
+        # update user account with new email
         Users.objects(id = match.account_id).update(email = match.email)
+
+        # notify user of email change on user's existing email address
+        send_account_email_change_email_notification(
+            user.email, 
+            user.username, 
+            user_os, 
+            user_device, 
+            user_ip_address, 
+            user_browser
+        ) # inputs: existing user_email, username, user_os, user_device, user_ip_address, user_browser
 
     # mark token as used
     EmailVerifications.objects(id = request.form['token']).update(used = True)

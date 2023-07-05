@@ -2,7 +2,7 @@ from datetime import datetime
 
 # database selection ... mock / test / live
 def database_selection():
-    selection = 'test'
+    selection = 'mock'
 
     return selection
 

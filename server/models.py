@@ -83,6 +83,8 @@ class LoginTrials(Document):
     account_id = StringField(required=True)
     email = StringField(required=True)
     device = StringField(required=True)
+    os = StringField(required=True)
+    browser = StringField(required=True)
     ip_address = StringField(required=True)
     date_and_time = StringField(required=True)
     successful = BooleanField(required=True)
