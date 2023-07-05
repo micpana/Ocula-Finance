@@ -88,3 +88,4 @@ class LoginTrials(Document):
     ip_address = StringField(required=True)
     date_and_time = StringField(required=True)
     successful = BooleanField(required=True)
+    description = StringField(required=True)

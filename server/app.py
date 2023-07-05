@@ -41,7 +41,7 @@ def information_on_user_browsing_device(request_data):
     return user_browsing_agent, user_os, user_device, user_ip_address, user_browser
 
 # function for saving login trials
-def save_login_trials(account_id, email, username, device, user_os, browser, ip_address, date_and_time, status):
+def save_login_trials(account_id, email, username, device, user_os, browser, ip_address, date_and_time, successful, description):
     trial_details = LoginTrials(
         account_id = account_id,
         email = email,
@@ -50,7 +50,8 @@ def save_login_trials(account_id, email, username, device, user_os, browser, ip_
         browser = browser,
         ip_address = ip_address,
         date_and_time = date_and_time,
-        status = status
+        successful = successful,
+        description = description
     )
     trial_details.save()
     
@@ -258,9 +259,55 @@ def signin():
             user_browser,
             user_ip_address, 
             current_datetime, 
-            False
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
+            False,
+            'not registered'
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
         response = make_response('email or username not registered'); response.status = 404; return response
+
+    # check if account is verified
+    if match.verified == False:
+        # calculate verification token expiration date
+        token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
+        token_expiration_date = str(token_expiration_date_object)
+
+        # create email verification token
+        email_verification_details = EmailVerifications(
+            account_id = match.id,
+            email = match.email,
+            purpose = 'registration email', # registration email / email change 
+            used = False,
+            device = user_device,
+            ip_address = user_ip_address,
+            date_of_request = current_datetime
+            expiry_date = token_expiration_date
+        )
+        verification_details = email_verification_details.save()
+        email_verification_token = verification_details.id
+
+        # send user email verification
+        send_registration_email_confirmation(
+            match.email, 
+            match.username, 
+            email_verification_token, 
+            token_expiration_date
+        ) # inputs: user_email, username, verification_token, token_expiration_date
+
+        # save login trial
+        save_login_trials(
+            match.id, 
+            match.email, 
+            match.username,
+            user_device, 
+            user_os,
+            user_browser,
+            user_ip_address, 
+            current_datetime, 
+            False,
+            'not verified'
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
+
+        # return response
+        response = make_response('email not verified'); response.status = 401; return response
 
     # see if password is a match
     user_encrypted_password = match.password
@@ -276,8 +323,9 @@ def signin():
             user_browser,
             user_ip_address, 
             current_datetime, 
-            False
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
+            False,
+            'incorrect details'
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
         response = make_response('incorrect details entered'); response.status = 401; return response
 
     # check if account is banned or not
@@ -292,8 +340,9 @@ def signin():
             user_browser,
             user_ip_address, 
             current_datetime, 
-            False
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
+            False,
+            'banned'
+        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
         response = make_response('banned'); response.status = 401; return response
 
     # create and return user access token
@@ -334,8 +383,9 @@ def signin():
         user_browser,
         user_ip_address, 
         current_datetime, 
-        True
-    ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool)
+        True,
+        'authenticated'
+    ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
 
     # return user_access_token
     response = make_response(user_access_token); response.status = 200; return response
