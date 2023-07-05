@@ -17,7 +17,6 @@ class Users(Document):
     country = StringField(required=True)
     date_of_registration = StringField(required=True)
     verified = BooleanField(required=True)
-    subscribed = BooleanField(required=True)
     subscription_date = StringField(required=False)
     subscription_expiry = StringField(required=False)
     role = StringField(required=True)

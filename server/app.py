@@ -179,7 +179,6 @@ def signup():
         country = country,
         date_of_registration = str(datetime.now())
         verified = False,
-        subscribed = False,
         subscription_date = '',
         subscription_expiry = '',
         role = 'user',
@@ -779,7 +778,15 @@ def getCurrentMarketAnalysis():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # symbol field validation
-    try: symbol = request.form['symbol'] except: response = make_response('Symbol required'); response.status = 400; return status
+    try: symbol = request.form['symbol'] except: response = make_response('Symbol required'); response.status = 400; return response
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
+    # user subscription test
+    user_subscription_expiration_date = Users.objects.filter(id = user_id)[0].subscription_expiry
+    if current_datetime > user_subscription_expiration_date: response = make_response('not subscribed'); response.status = 403; return response
 
     # get current market analysis ... ie last analysis entry
     current_market_analysis = MarketAnalysis.objects.filter(symbol = symbol)[-1]
