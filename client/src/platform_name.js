@@ -1,0 +1,1 @@
+export const Platform_Name = 'Ocula Finance'
