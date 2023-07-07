@@ -24,7 +24,8 @@ import {
     ThreeDots,
 } from '@agney/react-loading';
 import { Platform_Name } from '../platform_name';
-import { Backend_Server_Address } from '../backend_server_url'
+import { Backend_Server_Address } from '../backend_server_url';
+import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 
 class EmailVerificationSent extends Component{
     static propTypes = {
@@ -33,16 +34,37 @@ class EmailVerificationSent extends Component{
     constructor(props) { 
         super(props);
         this.state = {
-            loading: false
+            loading: false,
+            input_errors: {}
         };
 
         this.HandleChange = (e) => {
             this.setState({[e.target.name]: e.target.value});
         };
+
+        this.SetInputError = (field, error) => { // error -> required / invalid
+            var new_error = {
+                [field]: error
+            }
+            var updated_input_errors = {
+                ...this.state.input_errors,
+                ...new_error
+            }
+            this.setState({input_errors: updated_input_errors})
+        }
+
+        this.ClearInputErrors = () => {
+            this.setState({input_errors: {}})
+        }
     }
 
     componentDidMount() {
-        
+        // check access token existance
+        const { cookies } = this.props;
+        if(cookies.get(Access_Token_Cookie_Name) != null){
+            let port = (window.location.port ? ':' + window.location.port : '');
+            window.location.href = '//' + window.location.hostname + port + '/dashboard';
+        }
     }
 
     render() {

@@ -38,7 +38,7 @@ class App extends Component {
             <BrowserRouter>
                 <Routes>
                 <Route path='/' element={<Signin />}/>
-                <Route path='/email-verification-sent' element={<EmailVerificationSent />}/>
+                <Route path='/email-verification-sent/account_id' element={<EmailVerificationSent />}/>
                 <Route path='/verify-email/:verification_token' element={<VerifyEmail />}/>
                 <Route path='/forgot-password' element={<ForgotPassword />}/>
                 <Route path='/new-password-on-recovery/:recovery_token' element={<NewPasswordOnRecovery />}/>
