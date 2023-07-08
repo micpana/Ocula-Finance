@@ -36,7 +36,8 @@ class VerifyEmail extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            screen: 'ok' // ok /invalid / used / expired
         };
 
         this.HandleChange = (e) => {
@@ -70,6 +71,14 @@ class VerifyEmail extends Component{
                 duration: 15000
             });
         }
+
+        this.VerifyEmail = () => {
+            this.setState({loading: true})
+
+            var data = new FormData()
+            data.append('token', this.props.match.params.verification_token)
+
+        }
     }
 
     componentDidMount() {
@@ -78,6 +87,8 @@ class VerifyEmail extends Component{
         if(cookies.get(Access_Token_Cookie_Name) != null){
             let port = (window.location.port ? ':' + window.location.port : '');
             window.location.href = '//' + window.location.hostname + port + '/dashboard';
+        }else{
+            this.VerifyEmail()
         }
     }
 

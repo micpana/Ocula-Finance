@@ -38,7 +38,8 @@ class EmailVerificationSent extends Component{
             loading: false,
             input_errors: {},
             email: '',
-            screen: 'sent' // sent / already verified / invalid
+            screen: 'sent', // sent / already verified / invalid 
+            corrected_email: ''
         };
 
         this.HandleChange = (e) => {
@@ -117,6 +118,14 @@ class EmailVerificationSent extends Component{
                 }
                 this.setState({loading: false})
             })
+        }
+
+        this.ResendEmailVerification = () => {
+
+        }
+
+        this.CorrectRegistrationEmail = () => {
+
         }
     }
 
