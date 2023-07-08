@@ -143,6 +143,7 @@ class Signup extends Component{
                 .then((res) => {
                     let result = res.data
                     var account_id = result
+                    // redirect to email verification notice page
                     let port = (window.location.port ? ':' + window.location.port : '')
                     window.location.href = '//' + window.location.hostname + port + '/email-verification-sent/'  + account_id
                 }).catch((error) => {
@@ -150,12 +151,22 @@ class Signup extends Component{
                     if (error.response){ // server responded with a non-2xx status code
                         let status_code = error.response.status
                         let result = error.response.data
-                        this.Notification('Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.', 'error')
+                        var notification_message = ''
+                        if(result === 'email in use'){ notification_message = "The email you've entered is already in use on this platform." }
+                        else if (result === 'invalid email structure'){ notification_message = "The email you've entered does not have a valid structure." }
+                        else if (result === 'invalid password structure'){ notification_message = "The password you've entered does not have a valid structure." }
+                        else if (result === 'phonenumber in use'){ notification_message = "The phonenumber you've entered is already in use on this platform." }
+                        else if (result === 'username in use'){ notification_message = "The username you've entered is already in use on this platform." }
+                        else{
+                            notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        }
+                        this.Notification(notification_message, 'error')
                     }else if (error.request){ // request was made but no response was received ... network error
                         this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
                     }else{ // error occured during request setup ... no network access
                         this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
                     }
+                    this.setState({loading: false})
                 })
             }
         }
