@@ -36,7 +36,9 @@ class EmailVerificationSent extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            email: '',
+            screen: 'sent' // sent / already verified / invalid
         };
 
         this.HandleChange = (e) => {
@@ -78,6 +80,44 @@ class EmailVerificationSent extends Component{
                 duration: 15000
             });
         }
+
+        this.GetUserVerificationEmailByUserId = () => {
+            this.setState({loading: true})
+
+            var data = new FormData()
+            data.append('account_id', this.props.match.params.account_id)
+
+            axios.post(Backend_Server_Address + 'getUserVerificationEmailByUserId', data, { headers: { 'access_token': null }  })
+            .then((res) => {
+                let result = res.data
+                var user_email = result
+                // set user email to state
+                this.setState({email: user_email, loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(result === 'already verified'){ this.setState({screen: 'already verified'}) }
+                    else if (result === 'invalid'){ this.setState({screen: 'invalid'}) }
+                    else if (result === 'redirect to signin'){ 
+                        // redirect to signin
+                        let port = (window.location.port ? ':' + window.location.port : '')
+                        window.location.href = '//' + window.location.hostname + port + '/signin'
+                    }
+                    else{
+                        notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        this.Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                }else{ // error occured during request setup ... no network access
+                    this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                }
+                this.setState({loading: false})
+            })
+        }
     }
 
     componentDidMount() {
@@ -86,6 +126,8 @@ class EmailVerificationSent extends Component{
         if(cookies.get(Access_Token_Cookie_Name) != null){
             let port = (window.location.port ? ':' + window.location.port : '');
             window.location.href = '//' + window.location.hostname + port + '/dashboard';
+        }else{
+            this.GetUserVerificationEmailByUserId()
         }
     }
 

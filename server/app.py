@@ -388,7 +388,32 @@ def signin():
 
     # return user_access_token
     response = make_response(user_access_token); response.status = 200; return response
+
+@app.route('/getUserVerificationEmailByUserId', methods=['POST'])
+def getUserVerificationEmailByUserId():
+    # field validation
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+
+    # search for user by given userid
+    matches = Users.objects.filter(id = account_id)
+    if len(matches) == 0: response = make_response('invalid'); response.status = 404; return response
+
+    # user data
+    user = matches[0]
+
+    # check if user verification status
+    if user.verified == True: response = make_response('already verified'); response.status = 409; return response
+
+    # check if last verification token by user hasn't expired
+    last_user_token = EmailVerifications.objects.filter(account_id = account_id)[-1]
+    if str(datetime.now()) > last_user_token.expiry_date: response = make_response('redirect to signin'); response.status = 401; return response
     
+    # get user email
+    user_email = user.email
+    
+    # return user email
+    response = make_response(user_email); response.status = 200; return response
+
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
     # get user browsing device information
