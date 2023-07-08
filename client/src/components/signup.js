@@ -26,6 +26,7 @@ import {
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
+import { Message, useToaster } from "rsuite";
 
 class Signup extends Component{
     static propTypes = {
@@ -78,7 +79,7 @@ class Signup extends Component{
             var uppercase_regex = /[A-Z]/
             var lowercase_regex = /[a-z]/
             var number_regex = /[0-9]/
-            var special_character_regex = /[`~!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+            var special_character_regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
 
             // check if password contains at least one character from each type
             var has_uppercase = uppercase_regex.test(password)
@@ -88,6 +89,19 @@ class Signup extends Component{
 
             // return true if password has at least 8 characters that include at least 1: number, uppercase letter, lowercase letter, special character
             return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
+        }
+
+        this.Notification = (message, message_type) => { // message type -> info / success / warning / error
+            const toaster = useToaster();
+            
+            // push notification message
+            toaster.push(<Message>{message}</Message>, {
+                placement: 'topCenter',
+                closable: true,
+                type: message_type,
+                showIcon: true,
+                duration: 15000
+            });
         }
 
         this.Signup = () => {
@@ -112,7 +126,7 @@ class Signup extends Component{
 
             // check data collection status
             if (data_checks_out === false){ // user needs to check their input data
-                alert('Check input fields for errors.')
+                this.Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
                 this.setState({loading: true})
 
@@ -136,11 +150,11 @@ class Signup extends Component{
                     if (error.response){ // server responded with a non-2xx status code
                         let status_code = error.response.status
                         let result = error.response.data
-                        alert('Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.')
+                        this.Notification('Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.', 'error')
                     }else if (error.request){ // request was made but no response was received ... network error
-                        alert('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.')
+                        this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
                     }else{ // error occured during request setup ... no network access
-                        alert("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.")
+                        this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
                     }
                 })
             }

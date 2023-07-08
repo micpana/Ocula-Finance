@@ -26,6 +26,7 @@ import {
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
+import { Message, useToaster } from "rsuite";
 
 class Settings extends Component{
     static propTypes = {
@@ -55,6 +56,44 @@ class Settings extends Component{
 
         this.ClearInputErrors = () => {
             this.setState({input_errors: {}})
+        }
+
+        this.IsEmailStructureValid = (email) => {
+            // regex
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // return true if email has proper structure
+            return regex.test(email)
+        }
+
+        this.IsPasswordStructureValid = (password) => {
+            // regex structures
+            var uppercase_regex = /[A-Z]/
+            var lowercase_regex = /[a-z]/
+            var number_regex = /[0-9]/
+            var special_character_regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+
+            // check if password contains at least one character from each type
+            var has_uppercase = uppercase_regex.test(password)
+            var has_lowercase = lowercase_regex.test(password)
+            var has_number = number_regex.test(password)
+            var has_special_character = special_character_regex.test(password)
+
+            // return true if password has at least 8 characters that include at least 1: number, uppercase letter, lowercase letter, special character
+            return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
+        }
+
+        this.Notification = (message, message_type) => { // message type -> info / success / warning / error
+            const toaster = useToaster();
+            
+            // push notification message
+            toaster.push(<Message>{message}</Message>, {
+                placement: 'topCenter',
+                closable: true,
+                type: message_type,
+                showIcon: true,
+                duration: 15000
+            });
         }
     }
 

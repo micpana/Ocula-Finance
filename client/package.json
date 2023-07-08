@@ -15,7 +15,8 @@
         "@agney/react-loading": "^0.1.2",
         "react-icons": "^3.11.0",
         "axios": "^1.4.0",
-        "recharts": "^2.6.2"
+        "recharts": "^2.6.2",
+        "rsuite": "^5.37.0"
     },
     "scripts": {
         "start": "react-scripts start",

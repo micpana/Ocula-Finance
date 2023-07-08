@@ -26,6 +26,7 @@ import {
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
+import { Message, useToaster } from "rsuite";
 
 class AllUsers extends Component{
     static propTypes = {
@@ -55,6 +56,19 @@ class AllUsers extends Component{
 
         this.ClearInputErrors = () => {
             this.setState({input_errors: {}})
+        }
+
+        this.Notification = (message, message_type) => { // message type -> info / success / warning / error
+            const toaster = useToaster();
+            
+            // push notification message
+            toaster.push(<Message>{message}</Message>, {
+                placement: 'topCenter',
+                closable: true,
+                type: message_type,
+                showIcon: true,
+                duration: 15000
+            });
         }
     }
 
