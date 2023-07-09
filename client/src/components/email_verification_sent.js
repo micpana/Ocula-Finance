@@ -38,7 +38,7 @@ class EmailVerificationSent extends Component{
             loading: false,
             input_errors: {},
             email: '',
-            screen: 'sent', // sent / already verified / invalid 
+            screen: 'sent', // sent / already verified / invalid / invalid account id / email already registered / account already verified 
             corrected_email: ''
         };
 
@@ -121,11 +121,86 @@ class EmailVerificationSent extends Component{
         }
 
         this.ResendEmailVerification = () => {
+            this.setState({loading: true})
 
+            var data = new FormData()
+            data.append('account_id', this.props.match.params.account_id)
+
+            axios.post(Backend_Server_Address + 'resendEmailVerification', data, { headers: { 'access_token': null }  })
+            .then((res) => {
+                let result = res.data
+                var user_email = result
+                // change screen to sent
+                this.setState({screen: 'sent', loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(result === 'invalid account id'){ this.setState({screen: 'invalid account id'}) }
+                    else if (result === 'email already verified'){ this.setState({screen: 'email already verified'}) }
+                    else{
+                        notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        this.Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                }else{ // error occured during request setup ... no network access
+                    this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                }
+                this.setState({loading: false})
+            })
         }
 
         this.CorrectRegistrationEmail = () => {
+            // initialize variable to store input validation status
+            var data_checks_out = true
 
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.corrected_email === ''){ this.SetInputError('corrected_email', 'required'); data_checks_out = false }
+            if (this.IsEmailStructureValid(this.state.corrected_email) === false){ this.SetInputError('corrected_email', 'invalid'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                this.Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                this.setState({loading: true})
+
+                var data = new FormData()
+                data.append('account_id', this.props.match.params.account_id)
+                data.append('email', this.state.corrected_email)
+
+                axios.post(Backend_Server_Address + 'correctRegistrationEmail', data, { headers: { 'access_token': null }  })
+                .then((res) => {
+                    let result = res.data
+                    var user_email = result
+                    // set user email to state
+                    this.setState({screen: 'sent', loading: false})
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(result === 'invalid account id'){ this.setState({screen: 'invalid account id'}) }
+                        else if (result === 'email already registered'){ this.setState({screen: 'email already registered'}) }
+                        else if (result === 'account already verified'){ this.setState({screen: 'account already verified'}) }
+                        else{
+                            notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                            this.Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                    }else{ // error occured during request setup ... no network access
+                        this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                    }
+                    this.setState({loading: false})
+                })
+            }
         }
     }
 
