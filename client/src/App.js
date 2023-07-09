@@ -37,14 +37,14 @@ class App extends Component {
         <div className="App" style={{}}>
             <BrowserRouter>
                 <Routes>
-                <Route path='/' element={<Signin />}/>
-                <Route path='/email-verification-sent/account_id' element={<EmailVerificationSent />}/>
-                <Route path='/verify-email/:verification_token' element={<VerifyEmail />}/>
-                <Route path='/forgot-password' element={<ForgotPassword />}/>
-                <Route path='/new-password-on-recovery/:recovery_token' element={<NewPasswordOnRecovery />}/>
-                <Route path='/signup' element={<Signup />}/>
-                <Route path='/dashboard' element={<Dashboard />}/>
-                <Route path="*" element={<PageNotFound />} />
+                    <Route path='/' element={<Signin />}/>
+                    <Route path='/email-verification-sent/account_id' element={<EmailVerificationSent />}/>
+                    <Route path='/verify-email/:verification_token' element={<VerifyEmail />}/>
+                    <Route path='/forgot-password' element={<ForgotPassword />}/>
+                    <Route path='/new-password-on-recovery/:recovery_token' element={<NewPasswordOnRecovery />}/>
+                    <Route path='/signup' element={<Signup />}/>
+                    <Route path='/dashboard' element={<Dashboard />}/>
+                    <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </BrowserRouter>    
         </div>

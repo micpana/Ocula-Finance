@@ -129,7 +129,6 @@ class EmailVerificationSent extends Component{
             axios.post(Backend_Server_Address + 'resendEmailVerification', data, { headers: { 'access_token': null }  })
             .then((res) => {
                 let result = res.data
-                var user_email = result
                 // change screen to sent
                 this.setState({screen: 'sent', loading: false})
             }).catch((error) => {
@@ -177,7 +176,6 @@ class EmailVerificationSent extends Component{
                 axios.post(Backend_Server_Address + 'correctRegistrationEmail', data, { headers: { 'access_token': null }  })
                 .then((res) => {
                     let result = res.data
-                    var user_email = result
                     // set user email to state
                     this.setState({screen: 'sent', loading: false})
                 }).catch((error) => {
