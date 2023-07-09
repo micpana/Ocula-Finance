@@ -36,7 +36,9 @@ class ForgotPassword extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            email: '',
+            screen: 'ok' // ok / email not registered / banned / try again in n minutes
         };
 
         this.HandleChange = (e) => {
@@ -58,21 +60,12 @@ class ForgotPassword extends Component{
             this.setState({input_errors: {}})
         }
 
-        this.IsPasswordStructureValid = (password) => {
-            // regex structures
-            var uppercase_regex = /[A-Z]/
-            var lowercase_regex = /[a-z]/
-            var number_regex = /[0-9]/
-            var special_character_regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+        this.IsEmailStructureValid = (email) => {
+            // regex
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            // check if password contains at least one character from each type
-            var has_uppercase = uppercase_regex.test(password)
-            var has_lowercase = lowercase_regex.test(password)
-            var has_number = number_regex.test(password)
-            var has_special_character = special_character_regex.test(password)
-
-            // return true if password has at least 8 characters that include at least 1: number, uppercase letter, lowercase letter, special character
-            return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
+            // return true if email has proper structure
+            return regex.test(email)
         }
 
         this.Notification = (message, message_type) => { // message type -> info / success / warning / error
@@ -86,6 +79,54 @@ class ForgotPassword extends Component{
                 showIcon: true,
                 duration: 15000
             });
+        }
+
+        this.ForgotPassword = () => {
+            // initialize variable to store input validation status
+            var data_checks_out = true
+
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.email === ''){ this.SetInputError('email', 'required'); data_checks_out = false }
+            if (this.IsEmailStructureValid(this.state.email) === false){ this.SetInputError('email', 'invalid'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                this.Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                this.setState({loading: true})
+
+                var data = new FormData()
+                data.append('email', this.state.email)
+
+                axios.post(Backend_Server_Address + 'recoverPassword', data, { headers: { 'access_token': null }  })
+                .then((res) => {
+                    let result = res.data
+                    // set user email to state
+                    this.setState({screen: 'ok', loading: false})
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(result === 'email not registered'){ this.setState({screen: 'email not registered'}) }
+                        else if (result === 'banned'){ this.setState({screen: 'banned'}) }
+                        else if (result.includes('try again in') === true){ this.setState({screen: result}) }
+                        else{
+                            notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                            this.Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                    }else{ // error occured during request setup ... no network access
+                        this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                    }
+                    this.setState({loading: false})
+                })
+            }
         }
     }
 
