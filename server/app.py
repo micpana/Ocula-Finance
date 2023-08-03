@@ -670,6 +670,8 @@ def getUserDetailsByAccessToken():
     user = json.loads(user.to_json())
     del user['password']
 
+    # add user subscription status to data
+
     # return user object minus password
     response = make_response(jsonify(user)); response.status = 200; return response
 

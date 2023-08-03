@@ -36,7 +36,9 @@ class Subscriptions extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            user_details: {},
+            screen: 'main', // main / network error / no connectivity
         };
 
         this.HandleChange = (e) => {
@@ -70,10 +72,51 @@ class Subscriptions extends Component{
                 duration: 15000
             });
         }
+
+        this.GetUserDetails = () => {
+            const { cookies } = this.props;
+            this.setState({loading: true})
+
+            axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // set loading to false
+                this.setState({loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'Access token disabled via signout' ||
+                        result === 'Access token expired' ||
+                        result === 'Not authorized to access this' ||
+                        result === 'Invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else{
+                        notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        this.Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                    this.setState({screen: 'network error'})
+                }else{ // error occured during request setup ... no network access
+                    this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                    this.setState({screen: 'no connectivity'})
+                }
+                this.setState({loading: false})
+            })
+        }
     }
 
     componentDidMount() {
-        
+        this.GetUserDetails()
     }
 
     render() {

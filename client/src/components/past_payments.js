@@ -36,7 +36,8 @@ class PastPayments extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            screen: 'main', // main / network error / no connectivity
         };
 
         this.HandleChange = (e) => {
@@ -69,6 +70,10 @@ class PastPayments extends Component{
                 showIcon: true,
                 duration: 15000
             });
+        }
+
+        this.GetUserPastPayments = () => {
+            
         }
     }
 

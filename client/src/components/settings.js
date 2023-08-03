@@ -36,7 +36,8 @@ class Settings extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            screen: 'main', // main / network error / no connectivity
         };
 
         this.HandleChange = (e) => {
