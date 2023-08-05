@@ -100,13 +100,13 @@ class Subscriptions extends Component{
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else{
-                        notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         this.Notification(notification_message, 'error')
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                    this.Notification(Network_Error_Message, 'error')
                 }else{ // error occured during request setup ... no network access
-                    this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                    this.Notification(No_Network_Access_Message, 'error')
                 }
                 this.setState({loading: false})
             })
