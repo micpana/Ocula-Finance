@@ -780,7 +780,7 @@ def editProfile():
         ) # inputs: user_email, username, verification_token, token_expiration_date
 
         # add more context to return string
-        return_string = return_string + ', email verification sent.'
+        return_string = return_string + ', email verification sent'
 
     # return return_string
     response = make_response(return_string); response.status = 200; return response
@@ -853,8 +853,8 @@ def getUserCountryRanking():
     # return user country list
     response = make_response(jsonify(user_country_list)); response.status = 200; return response
 
-@app.route('/getDailyUserRegistrationStatistics', methods=['POST'])
-def getDailyUserRegistrationStatistics():
+@app.route('/getUserRegistrationStatistics', methods=['POST'])
+def getUserRegistrationStatistics():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
@@ -862,18 +862,18 @@ def getDailyUserRegistrationStatistics():
     # get user list
     all_users = Users.objects.all()
 
-    # create daily user registration statistics
+    # create user registration statistics
     processed_days = []
-    daily_user_registration_statistics = [
+    user_registration_statistics = [
         {'date': i.date_of_registration[0:10], 'users': len([z for z in all_users if z.date_of_registration[0:10] == i.date_of_registration[0:10]])}
         for i in all_users if i.date_of_registration[0:10] not in processed_days and not processed_days.append(i.date_of_registration[0:10])
     ]
 
     # return statistics
-    response = make_response(jsonify(daily_user_registration_statistics)); response.status = 200; return response
+    response = make_response(jsonify(user_registration_statistics)); response.status = 200; return response
 
-@app.route('/getDailySubscribedUserCountStatistics', methods=['POST'])
-def getDailySubscribedUserCountStatistics():
+@app.route('/getSubscribedUserCountStatistics', methods=['POST'])
+def getSubscribedUserCountStatistics():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
@@ -882,8 +882,8 @@ def getDailySubscribedUserCountStatistics():
     all_subscriptions = Payments.objects.all(purpose = 'subscription')
 
     # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
-    daily_subscribed_user_statistics = []
-    if len(all_subscriptions) == 0: response = make_response(jsonify(daily_subscribed_user_statistics)); response.status = 200; return response
+    subscribed_user_statistics = []
+    if len(all_subscriptions) == 0: response = make_response(jsonify(subscribed_user_statistics)); response.status = 200; return response
 
     # date format
     date_format = '%Y-%m-%d'
@@ -899,8 +899,8 @@ def getDailySubscribedUserCountStatistics():
     # list of days
     list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
 
-    # create daily subscribed user statistics
-    daily_subscribed_user_statistics = [
+    # create subscribed user statistics
+    subscribed_user_statistics = [
         {'date': i[0:10], 'users': len([
             z for z in all_subscriptions if 
             i >= z.date[0:10] and 
@@ -910,7 +910,7 @@ def getDailySubscribedUserCountStatistics():
     ]
 
     # return statistics
-    response = make_response(jsonify(daily_subscribed_user_statistics)); response.status = 200; return response
+    response = make_response(jsonify(subscribed_user_statistics)); response.status = 200; return response
 
 if __name__ == '__main__':
     init_db()

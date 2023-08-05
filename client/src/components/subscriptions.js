@@ -37,8 +37,7 @@ class Subscriptions extends Component{
         this.state = {
             loading: false,
             input_errors: {},
-            user_details: {},
-            screen: 'main', // main / network error / no connectivity
+            user_details: {}
         };
 
         this.HandleChange = (e) => {
@@ -105,10 +104,8 @@ class Subscriptions extends Component{
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
-                    this.setState({screen: 'network error'})
                 }else{ // error occured during request setup ... no network access
                     this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
-                    this.setState({screen: 'no connectivity'})
                 }
                 this.setState({loading: false})
             })
