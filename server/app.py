@@ -147,14 +147,21 @@ def index():
 def signup():
     # input field validation
     try: firstname = request.form['firstname'] except: response = make_response('Firstname field required'); response.status = 400; return response
+    if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
     try: lastname = request.form['lastname'] except: response = make_response('Lastname field required'); response.status = 400; return response
+    if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
     try: username = request.form['username'] except: response = make_response('Username field required'); response.status = 400; return response
+    if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
     try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure') ; response.status = 400; return response
     try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
     try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
     try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
+    if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
 
     # check if username is already in use
     if len(Users.objects.filter(username = username)) > 0: response = make_response('username in use'); response.status = 409; return response
@@ -226,7 +233,9 @@ def signup():
 def signin():
     # input field validation
     try: email_or_username = request.form['email_or_username'] except: response = make_response('Email or username field required'); response.status = 400; return response
+    if email_or_username == '' or email_or_username == None: response = make_response('Email or username cannot be empty'); response.status = 400; return response
     try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -393,6 +402,7 @@ def signin():
 def getUserVerificationEmailByUserId():
     # field validation
     try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # search for user by given userid
     matches = Users.objects.filter(id = account_id)
@@ -416,11 +426,15 @@ def getUserVerificationEmailByUserId():
 
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
+    # field validation
+    try: token = request.form['token'] except: response = make_response('Token field required'); response.status = 400; return response
+    if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
+    
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # search for token
-    token_results = EmailVerifications.objects.filter(id = request.form['token'])
+    token_results = EmailVerifications.objects.filter(id = token)
     if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
     match = token_results[0]
 
@@ -456,13 +470,17 @@ def verifyEmail():
         ) # inputs: existing user_email, username, user_os, user_device, user_ip_address, user_browser
 
     # mark token as used
-    EmailVerifications.objects(id = request.form['token']).update(used = True)
+    EmailVerifications.objects(id = token).update(used = True)
 
     # return response
     response = make_response('ok'); response.status = 200; return response
 
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
+    # field validation
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
@@ -474,7 +492,7 @@ def resendEmailVerification():
     token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
-    match = Users.objects.filter(id = request.form['account_id'])
+    match = Users.objects.filter(id = account_id)
     if len(match) == 0: response = make_response('invalid account id'); response.status = 404; return response
     account = match[0]
 
@@ -483,7 +501,7 @@ def resendEmailVerification():
 
     # proceed to create email verification token
     email_verification_details = EmailVerifications(
-        account_id = request.form['account_id'],
+        account_id = account_id,
         email = account.email,
         purpose = 'registration email', # registration email / email change 
         used = False,
@@ -510,6 +528,7 @@ def resendEmailVerification():
 def correctRegistrationEmail():
     # field validation
     try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
@@ -566,6 +585,7 @@ def correctRegistrationEmail():
 def recoverPassword():
     # field validation
     try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
@@ -632,6 +652,7 @@ def recoverPassword():
 def setNewPassword():
     # field validation
     try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
 
     # search for token
@@ -696,15 +717,21 @@ def editProfile():
     
     # input field validation
     try: firstname = request.form['firstname'] except: response = make_response('Firstname field required'); response.status = 400; return response
+    if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
     try: lastname = request.form['lastname'] except: response = make_response('Lastname field required'); response.status = 400; return response
+    if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
     try: username = request.form['username'] except: response = make_response('Username field required'); response.status = 400; return response
+    if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
     try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure' ); response.status = 400; return response
     try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
     try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
     try: new_password = request.form['new_password'] except: response = make_response('New password field required'); response.status = 400; return response
     if is_password_structure_valid(new_password) == False: response = make_response('Invalid new password structure'); response.status = 400; return response
     try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
+    if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -806,6 +833,7 @@ def getCurrentMarketAnalysis():
 
     # symbol field validation
     try: symbol = request.form['symbol'] except: response = make_response('Symbol required'); response.status = 400; return response
+    if symbol == '' or symbol == None: response = make_response('Symbol cannot be empty'); response.status = 400; return response
 
     # get current datetime
     current_datetime_object = datetime.now()
