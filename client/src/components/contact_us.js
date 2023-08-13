@@ -30,7 +30,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import { Message, useToaster } from "rsuite";
 
-class PageNotFound extends Component{
+class ContactUs extends Component{
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     };
@@ -82,15 +82,19 @@ class PageNotFound extends Component{
         return (
             <div>
                 <Helmet>
-                    <title>Page Not Found | {Platform_Name}</title>
+                    <title>Contact Us | {Platform_Name}</title>
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
                 {
                     this.state.loading == true
                     ? <LoadingScreen />
-                    : <div>
-                        
-                    </div>
+                    : <Container>
+                        <br/><br/><br/>
+                        <h4 style={{fontWeight: 'bold'}}>
+                            Contact us
+                        </h4>
+                        <br/><br/>
+                    </Container>
                 }
                 <br/><br/><br/>
             </div>
@@ -99,4 +103,4 @@ class PageNotFound extends Component{
 
 };
 
-export default withCookies(PageNotFound);
+export default withCookies(ContactUs);

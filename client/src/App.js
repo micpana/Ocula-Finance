@@ -8,7 +8,14 @@ import {
 } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
+import NavBar from './components/navbar';
+import Footer from './components/footer';
 import PageNotFound from './components/page_not_found'
+import Home from './components/home'
+import HowItWorks from './components/how_it_works'
+import Pricing from './components/pricing'
+import AboutUs from './components/about_us'
+import ContactUs from './components/contact_us'
 import Signup from './components/signup'
 import Signin from './components/signin'
 import EmailVerificationSent from './components/email_verification_sent'
@@ -36,16 +43,23 @@ class App extends Component {
         return (
         <div className="App" style={{}}>
             <BrowserRouter>
+                <NavBar />
                 <Routes>
-                    <Route path='/' element={<Signin />}/>
+                    <Route path='/' element={<Home />}/>
+                    <Route path='/how-it-works' element={<HowItWorks />}/>
+                    <Route path='/pricing' element={<Pricing />}/>
+                    <Route path='/about-us' element={<AboutUs />}/>
+                    <Route path='/contact-us' element={<ContactUs />}/>
                     <Route path='/email-verification-sent/account_id' element={<EmailVerificationSent />}/>
                     <Route path='/verify-email/:verification_token' element={<VerifyEmail />}/>
                     <Route path='/forgot-password' element={<ForgotPassword />}/>
                     <Route path='/new-password-on-recovery/:recovery_token' element={<NewPasswordOnRecovery />}/>
                     <Route path='/signup' element={<Signup />}/>
+                    <Route path='/signin' element={<Signin />}/>
                     <Route path='/dashboard' element={<Dashboard />}/>
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>
+                <Footer />
             </BrowserRouter>    
         </div>
         );

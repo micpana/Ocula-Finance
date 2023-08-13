@@ -27,6 +27,7 @@ import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
+import LoadingScreen from './loading_screen';
 import { Message, useToaster } from "rsuite";
 
 class UserCountryRanking extends Component{
@@ -126,12 +127,7 @@ class UserCountryRanking extends Component{
                 </Helmet>
                 {
                     this.state.loading == true
-                    ? <div>
-                        <br/><br/><br/>
-                        <h5 style={{color: '#1faced'}}>Loading...</h5>
-                        <br/><br/><br/>
-                        <TailSpin width='180px' style={{color: '#1faced'}}/>
-                    </div>
+                    ? <LoadingScreen />
                     : <div>
                         
                     </div>
