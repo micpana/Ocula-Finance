@@ -48,9 +48,9 @@ class LoadingScreen extends Component{
         return (
             <div>
                 <br/><br/><br/>
-                <h5 style={{color: '#1faced'}}>Loading...</h5>
+                <h5 style={{color: '#005fc9'}}>Loading...</h5>
                 <br/><br/><br/>
-                <TailSpin width='180px' style={{color: '#1faced'}}/>
+                <TailSpin width='180px' style={{color: '#005fc9'}}/>
             </div>
         );
     }

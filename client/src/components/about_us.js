@@ -29,6 +29,11 @@ import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import { Message, useToaster } from "rsuite";
+import AboutUs1 from '../images/about_us_1.svg'
+import AboutUs2 from '../images/about_us_2.svg'
+import AboutUs3 from '../images/about_us_3.svg'
+import AboutUs4 from '../images/about_us_4.svg'
+import AboutUs5 from '../images/about_us_5.svg'
 
 class AboutUs extends Component{
     static propTypes = {
@@ -94,6 +99,46 @@ class AboutUs extends Component{
                             About us
                         </h4>
                         <br/><br/>
+                        <img src={AboutUs1} style={{width: '100%'}}/>
+                        <br/><br/>
+                        <p style={{textAlign: 'left'}}>
+                            Welcome to {Platform_Name} - Your Intelligence Partner for Forex Trading. We leverage Artificial 
+                            Intelligence to provide deep analysis of the financial markets, particularly focusing on the Forex 
+                            markets.
+                        </p>
+                        <br/><br/><br/>
+                        <img src={AboutUs2} style={{width: '100%'}}/>
+                        <br/><br/>
+                        <p style={{textAlign: 'left'}}>
+                            Our SAAS platform employs sophisticated AI models to predict potential upmoves and downmoves in the 
+                            market over the next 105 minutes. These forecasts are updated every 15 minutes and are designed to 
+                            equip traders with a risk-reward profile for informed trading decisions.
+                        </p>
+                        <br/><br/><br/>
+                        <img src={AboutUs3} style={{width: '100%'}}/>
+                        <br/><br/>
+                        <p style={{textAlign: 'left'}}>
+                            Taking a cue from established statistical models used in financial markets such as VaR and ER, we’ve 
+                            upped the game by implementing deep neural networks. This approach provides more precision in 
+                            predicting the potential percentages to be moved in any direction.
+                        </p>
+                        <br/><br/><br/>
+                        <img src={AboutUs4} style={{width: '100%'}}/>
+                        <br/><br/>
+                        <p style={{textAlign: 'left'}}>
+                            Whether you're deciding to use these metrics as sole guides, or you're integrating them with existing 
+                            trading strategies, our goal remains the same - to simplify complex data and provide powerful metrics. 
+                            Our vision is to aid traders in minimizing risk and maximizing rewards, all in an affordable manner.
+                        </p>
+                        <br/><br/><br/>
+                        <img src={AboutUs5} style={{width: '100%'}}/>
+                        <br/><br/>
+                        <p style={{textAlign: 'left'}}>
+                            Join {Platform_Name} today and optimize your Forex Trading with the ultimate support of AI-powered 
+                            analysis. We believe that technology and analytics should be affordable, simple, and impactful, 
+                            offering each of our users more control over their trades. Welcome to the future of Forex Trading.
+                        </p>
+                        <br/><br/><br/>
                     </Container>
                 }
                 <br/><br/><br/>

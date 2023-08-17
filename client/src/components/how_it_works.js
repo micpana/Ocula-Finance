@@ -190,7 +190,7 @@ class HowItWorks extends Component{
                             <Col sm='4'></Col>
                             <Col sm='4'></Col>
                             <Col sm='4'>
-                                <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#214CA3', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
                                     Sign up
                                 </Button>
                             </Col>

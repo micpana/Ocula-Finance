@@ -93,7 +93,7 @@ class Home extends Component{
                     this.state.loading == true
                     ? <LoadingScreen />
                     : <div>
-                        <Row style={{minHeight: '400px', margin: '0px', backgroundColor: '#214CA3'}}>
+                        <Row style={{minHeight: '400px', margin: '0px', backgroundColor: '#005fc9'}}>
                             <Col sm='4'>
                                 <Container>
                                     <h1 style={{color: '#ffffff', fontWeight: 'bold', marginTop: '100px', textAlign: 'left'}}>
@@ -104,7 +104,7 @@ class Home extends Component{
                                     </h3>
                                     <Row style={{marginRight: '0px', marginTop: '70px', textAlign: 'left'}}>
                                         <Col sm='6'>
-                                            <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#214CA3', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                            <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
                                                 Get started
                                             </Button>
                                             <br/><br/>
@@ -236,7 +236,7 @@ class Home extends Component{
                                 <Col sm='4'></Col>
                                 <Col sm='4'></Col>
                                 <Col sm='4'>
-                                    <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#214CA3', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                    <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
                                         Sign up
                                     </Button>
                                 </Col>

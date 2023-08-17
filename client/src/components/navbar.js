@@ -138,7 +138,7 @@ class NavBar extends Component{
                             </>
                         }   
                         <NavItem>
-                            <NavLink href='/' style={{backgroundColor: 'inherit', border: 'none', color: '#214CA3', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Home
                             </NavLink>
                         </NavItem>
@@ -146,7 +146,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/how-it-works' style={{backgroundColor: 'inherit', border: 'none', color: '#214CA3', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/how-it-works' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 How it works
                             </NavLink>
                         </NavItem>
@@ -154,7 +154,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/pricing' style={{backgroundColor: 'inherit', border: 'none', color: '#214CA3', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/pricing' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Pricing
                             </NavLink>
                         </NavItem>
@@ -162,7 +162,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/about-us' style={{backgroundColor: 'inherit', border: 'none', color: '#214CA3', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/about-us' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 About us
                             </NavLink>
                         </NavItem>
@@ -170,7 +170,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/contact-us' style={{backgroundColor: 'inherit', border: 'none', color: '#214CA3', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/contact-us' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Contact us
                             </NavLink>
                         </NavItem>
