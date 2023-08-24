@@ -28,6 +28,7 @@ import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
+import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
 
 class Settings extends Component{
@@ -56,14 +57,31 @@ class Settings extends Component{
         };
 
         this.SetInputError = (field, error) => { // error -> required / invalid
-            var new_error = {
-                [field]: error
+            // if field error state doesn't already exist
+            if (this.state.input_errors[field] == undefined){
+                // new error
+                var new_error = {
+                    [field]: error
+                }
+
+                // existing errors + new
+                var updated_input_errors = {
+                    ...this.state.input_errors,
+                    ...new_error
+                }
+
+                // update state
+                this.setState({input_errors: updated_input_errors})
+            }else{ // field error state already exists
+                // existing errors
+                var existing_errors = this.state.input_errors
+
+                // existing errors modified
+                existing_errors[field] = error
+
+                // update state
+                this.setState({input_errors: existing_errors})
             }
-            var updated_input_errors = {
-                ...this.state.input_errors,
-                ...new_error
-            }
-            this.setState({input_errors: updated_input_errors})
         }
 
         this.ClearInputErrors = () => {
