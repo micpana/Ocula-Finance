@@ -144,7 +144,7 @@ class Subscriptions extends Component{
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
                 {
-                    this.state.loading == true
+                    this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
                         

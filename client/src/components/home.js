@@ -108,7 +108,7 @@ class Home extends Component{
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
                 {
-                    this.state.loading == true
+                    this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
                         <Row style={{minHeight: '400px', margin: '0px', backgroundColor: '#005fc9'}}>

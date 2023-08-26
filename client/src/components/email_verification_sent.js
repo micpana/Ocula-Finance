@@ -235,6 +235,8 @@ class EmailVerificationSent extends Component{
     }
 
     render() {
+        var screen = this.state.screen
+        
         return (
             <div>
                 <Helmet>
@@ -242,10 +244,104 @@ class EmailVerificationSent extends Component{
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
                 {
-                    this.state.loading == true
+                    this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
-                        
+                        {
+                            screen === 'sent'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    We've sent you a verification email at <span style={{color: '#00539C'}}>{this.state.email}</span>
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    Follow the instructions stated in the email inorder to verify your account and gain access to {Platform_Name}.
+                                </h5>
+                                <h6 style={{marginTop: '100px'}}>
+                                    Did not receive our email? Click the button below to resend.
+                                </h6>
+                                <br/>
+                                <Button onClick={this.ResendEmailVerification} 
+                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Resend verification email
+                                </Button>
+                                <h6 style={{marginTop: '100px'}}>
+                                    Made a typo on your email address? Correct it below.
+                                </h6>
+                                <br/><br/>
+                                <Label>Corrected email <span style={{color: 'red'}}>*</span></Label>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">
+                                        <SelectIcon style={{margin:'10px'}}/>
+                                    </InputGroupAddon>
+                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                        placeholder="Corrected email" name="corrected_email" id="corrected_email"
+                                        value={this.state.corrected_email} onChange={this.HandleChange} type="text" 
+                                    />
+                                </InputGroup>
+                                <InputErrors field_error_state={this.state.input_errors['corrected_email']} field_label='Corrected email' />
+                                <br/><br/><br/>
+                                <Button onClick={this.CorrectRegistrationEmail} 
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Correct registration email
+                                </Button>
+                            </div>
+                            : screen === 'already verified'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    The supplied email address (<span style={{color: '#00539C'}}>{this.state.email}</span>) has already been verified
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                </h5>
+                            </div>
+                            : screen === 'invalid' || screen === 'invalid account id'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    The supplied email verification ID is invalid
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                </h5>
+                            </div>
+                            : screen === 'email already registered'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    The supplied email address (<span style={{color: '#00539C'}}>{this.state.email}</span>) is already registered on this platform
+                                </h3>
+                                <Button onClick={() => this.setState({screen: 'sent'})}
+                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Retry
+                                </Button>
+                            </div>
+                            : screen === 'account already verified'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    The supplied email address (<span style={{color: '#00539C'}}>{this.state.email}</span>) is already in use on this platform
+                                </h3>
+                                <Button onClick={() => this.setState({screen: 'sent'})}
+                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Retry
+                                </Button>
+                            </div>
+                            : <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    An unknown error has occured
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                </h5>
+                            </div>
+                        }
                     </div>
                 }
                 <br/><br/><br/>
