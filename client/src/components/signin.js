@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup,
+    Input, InputGroup, InputGroupAddon,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -30,6 +30,8 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
+import Signin1 from '../images/signin_1.svg'
+import {  } from 'react-icons/fa';
 
 class Signin extends Component{
     static propTypes = {
@@ -198,7 +200,54 @@ class Signin extends Component{
                     this.state.loading == true
                     ? <LoadingScreen />
                     : <div>
-                        
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='6'>
+                                <img src={Signin1} style={{width: '100%'}} />
+                            </Col>
+                            <Col>
+                                <Container>
+                                    <Form onSubmit={this.Signin}>
+                                        <br/>
+                                        <h2 style={{color: '#00539C'}}>Signin</h2>
+                                        <br/><br/>
+                                        <Label>Email or Username <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <SelectIcon style={{margin:'10px'}}/>
+                                            </InputGroupAddon>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Email or Username" name="email_or_username" id="email_or_username"
+                                                value={this.state.email_or_username} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['email_or_username']} field_label='Email or Username' />
+                                        <br/><br/>
+                                        <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <SelectIcon style={{margin:'10px'}}/>
+                                            </InputGroupAddon>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password" name="password" id="password"
+                                                value={this.state.password} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                        <br/><br/>
+                                        <Button type="submit"
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                        >
+                                            Signin
+                                        </Button>
+                                    </Form>
+                                    <br/><br/><br/>
+                                    <a href='/forgot-password' style={{color: '#00539C'}}>
+                                        Forgot your password? Click here to reset it.
+                                    </a>
+                                </Container>
+                                <br/><br/><br/>
+                            </Col>
+                        </Row>
                     </div>
                 }
             </div>

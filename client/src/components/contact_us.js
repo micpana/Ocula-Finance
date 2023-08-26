@@ -196,7 +196,7 @@ class ContactUs extends Component{
                             </InputGroup>
                             <InputErrors field_error_state={this.state.input_errors['message']} field_label='Message' />
                             <br/><br/><br/>
-                            <Button onClick={this.GetInTouch}
+                            <Button type="submit"
                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#00539C', fontWeight: 'bold'}}
                             >
                                 Submit

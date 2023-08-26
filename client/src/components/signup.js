@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup,
+    Input, InputGroup, InputGroupAddon,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -30,6 +30,8 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
+import Signup1 from '../images/signup_1.svg'
+import {  } from 'react-icons/fa';
 
 class Signup extends Component{
     static propTypes = {
@@ -212,12 +214,144 @@ class Signup extends Component{
                     this.state.loading == true
                     ? <LoadingScreen />
                     : <div>
-                        <Row style={{margin: '0px'}}>
+                        <Row>
                             <Col sm='6'>
-
+                                <img src={Signup1} style={{width: '100%'}} />
                             </Col>
                             <Col>
-                            
+                                <Container>
+                                    <br/>
+                                    <h2 style={{color: '#00539C'}}>Signup</h2>
+                                    <br/><br/>
+                                    <Form onSubmit={this.Signup}>
+                                        <Row>
+                                            <Col sm='6'>
+                                                <Label>Firstname <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Firstname" name="firstname" id="firstname"
+                                                        value={this.state.firstname} onChange={this.HandleChange} type="text" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['firstname']} field_label='Firstname' />
+                                                <br/>
+                                            </Col>
+                                            <Col>
+                                                <Label>Lastname <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Lastname" name="lastname" id="lastname"
+                                                        value={this.state.lastname} onChange={this.HandleChange} type="text" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['lastname']} field_label='Lastname' />
+                                                <br/>
+                                            </Col>
+                                        </Row>
+                                        <br/>
+                                        <Row>
+                                            <Col sm='6'>
+                                                <Label>Username <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Username" name="username" id="username"
+                                                        value={this.state.username} onChange={this.HandleChange} type="text" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['username']} field_label='Username' />
+                                                <br/>
+                                            </Col>
+                                            <Col>
+                                                <Label>Email <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Email" name="email" id="email"
+                                                        value={this.state.email} onChange={this.HandleChange} type="text" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['email']} field_label='Email' />
+                                                <br/>
+                                            </Col>
+                                        </Row>
+                                        <br/>
+                                        <Row>
+                                            <Col sm='6'>
+                                                <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Phonenumber" name="phonenumber" id="phonenumber"
+                                                        value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
+                                                <br/>
+                                            </Col>
+                                            <Col>
+                                                <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Password" name="password" id="password"
+                                                        value={this.state.password} onChange={this.HandleChange} type="password" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                                <br/>
+                                            </Col>
+                                        </Row>
+                                        <br/>
+                                        <Row>
+                                            <Col sm='6'>
+                                                <Label>Password Confirmation <span style={{color: 'red'}}>*</span></Label>
+                                                <InputGroup>
+                                                    <InputGroupAddon addonType="prepend">
+                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                    </InputGroupAddon>
+                                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                        placeholder="Password Confirmation" name="password_confirmation" id="password_confirmation"
+                                                        value={this.state.password_confirmation} onChange={this.HandleChange} type="password" 
+                                                    />
+                                                </InputGroup>
+                                                <InputErrors field_error_state={this.state.input_errors['password_confirmation']} field_label='Password Confirmation' />
+                                                <br/>
+                                            </Col>
+                                            <Col>
+
+                                            </Col>
+                                        </Row>
+                                        <br/>
+                                        <h6>
+                                            By signing up, you're agreeing to {Platform_Name}'s <a href='/terms-of-service' target='_blank'>
+                                            Terms of Service</a> and acknowledge its <a href='/privacy-policy' target='_blank'>Privacy Policy</a>.
+                                        </h6>
+                                        <br/>
+                                        <a>Click the highlighted text for further information.</a>
+                                        <br/><br/>
+                                        <Button type="submit"
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                        >
+                                            Signup
+                                        </Button>
+                                    </Form>
+                                </Container>
+                                <br/><br/><br/>
                             </Col>
                         </Row>
                     </div>

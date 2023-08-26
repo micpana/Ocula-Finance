@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup,
+    Input, InputGroup, InputGroupAddon,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { Helmet } from 'react-helmet'

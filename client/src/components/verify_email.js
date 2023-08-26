@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup,
+    Input, InputGroup, InputGroupAddon,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -30,6 +30,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
+import {  } from 'react-icons/fa';
 
 class VerifyEmail extends Component{
     static propTypes = {
