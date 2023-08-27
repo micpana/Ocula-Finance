@@ -43,7 +43,7 @@ class NewPasswordOnRecovery extends Component{
             input_errors: {},
             password: '',
             password_confirmation: '',
-            screen: 'new password' // new password / ok / invalid token / expired / used / invalid password structure
+            screen: 'new password' // new password / ok / invalid token / expired / used 
         };
 
         this.HandleChange = (e) => {
@@ -149,7 +149,7 @@ class NewPasswordOnRecovery extends Component{
                         if(result === 'invalid token'){ this.setState({screen: 'invalid token'}) }
                         else if (result === 'expired'){ this.setState({screen: 'expired'}) }
                         else if (result === 'used'){ this.setState({screen: 'used'}) }
-                        else if (result === 'invalid password structure'){ this.setState({screen: 'invalid password structure'}) }
+                        else if (result === 'invalid password structure'){ notification_message = "The password you've entered does not have a valid structure."; this.Notification(notification_message, 'invalid') }
                         else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             this.Notification(notification_message, 'error')
@@ -184,9 +184,101 @@ class NewPasswordOnRecovery extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
-                    : <div>
-                        
-                    </div>
+                    : <Container>
+                        {
+                            screen === 'new password'
+                            ? <div>
+                                <br/>
+                                <h6>
+                                    Create a new password below
+                                </h6>
+                                <br/><br/>
+                                <Row style={{margin: '0px'}}>
+                                    <Col sm='6'>
+                                        <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <SelectIcon style={{margin:'10px'}}/>
+                                            </InputGroupAddon>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password" name="password" id="password"
+                                                value={this.state.password} onChange={this.HandleChange} type="password" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                    </Col>
+                                    <Col>
+                                        <Label>Password Confirmation<span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <SelectIcon style={{margin:'10px'}}/>
+                                            </InputGroupAddon>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password Confirmation" name="password_confirmation" id="password_confirmation"
+                                                value={this.state.password_confirmation} onChange={this.HandleChange} type="password" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['password_confirmation']} field_label='Password Confirmation' />
+                                    </Col>
+                                </Row>
+                                <br/><br/><br/>
+                                <Button onClick={this.SetNewPassword} 
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Save new password
+                                </Button>
+                            </div>
+                            : screen === 'ok'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    Your password has been reset successfully.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                </h5>
+                            </div>
+                            : screen === 'invalid token'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    Invalid password reset token.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signup' style={{color: 'inherit'}}>Make sure you've followed the instructions stated in the password recovery email you received.</a>
+                                </h5>
+                            </div>
+                            : screen === 'expired'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    This password reset token expired before its use.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/forgot-password' style={{color: 'inherit'}}>Click here to generate another one.</a>
+                                </h5>
+                            </div>
+                            : screen === 'used'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    This password reset token has been used already.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                </h5>
+                            </div>
+                            : <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    An unknown error has occured
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                </h5>
+                            </div>
+                        }
+                    </Container>
                 }
                 <br/><br/><br/>
             </div>
