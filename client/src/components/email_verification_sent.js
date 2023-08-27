@@ -251,7 +251,7 @@ class EmailVerificationSent extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
-                    : <div>
+                    : <Container>
                         {
                             screen === 'sent'
                             ? <div>
@@ -347,7 +347,7 @@ class EmailVerificationSent extends Component{
                                 </h5>
                             </div>
                         }
-                    </div>
+                    </Container>
                 }
                 <br/><br/><br/>
             </div>

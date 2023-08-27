@@ -42,7 +42,7 @@ class ForgotPassword extends Component{
             loading: false,
             input_errors: {},
             email: '',
-            screen: 'ok' // ok / email not registered / banned / try again in n minutes
+            screen: 'email entry' // email entry / ok / email not registered / banned / try again in n minutes
         };
 
         this.HandleChange = (e) => {
@@ -161,6 +161,8 @@ class ForgotPassword extends Component{
     }
 
     render() {
+        var screen = this.state.screen
+
         return (
             <div>
                 <Helmet>
@@ -170,9 +172,103 @@ class ForgotPassword extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
-                    : <div>
-                        
-                    </div>
+                    : <Container>
+                        {
+                            screen === 'email entry'
+                            ? <div>
+                                <br/>
+                                <h6>
+                                    Enter the email address you used during signup
+                                </h6>
+                                <br/><br/>
+                                <Label>Email <span style={{color: 'red'}}>*</span></Label>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="prepend">
+                                        <SelectIcon style={{margin:'10px'}}/>
+                                    </InputGroupAddon>
+                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                        placeholder="Corrected email" name="email" id="email"
+                                        value={this.state.email} onChange={this.HandleChange} type="text" 
+                                    />
+                                </InputGroup>
+                                <InputErrors field_error_state={this.state.input_errors['email']} field_label='Email' />
+                                <br/><br/><br/>
+                                <Button onClick={this.ForgotPassword} 
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Reset Password
+                                </Button>
+                            </div>
+                            : screen === 'ok'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    We've sent you a password reset email at <span style={{color: '#00539C'}}>{this.state.email}</span>
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    Follow the instructions stated in the email inorder to reset your account password.
+                                </h5>
+                                <h6 style={{marginTop: '100px'}}>
+                                    Did not receive our email? Click the button below to resend.
+                                </h6>
+                                <br/>
+                                <Button onClick={this.ForgotPassword} 
+                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Resend recovery email
+                                </Button>
+                                <h6 style={{marginTop: '100px'}}>
+                                    Made a typo on your email address? Click the button below to correct it.
+                                </h6>
+                                <br/>
+                                <Button onClick={() => this.setState({screen: 'email entry'})} 
+                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Correct email
+                                </Button>
+                            </div>
+                            : screen === 'email not registered'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    The email address you've supplied (<span style={{color: '#00539C'}}>{this.state.email}</span>) is not registered on this platform.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signup' style={{color: 'inherit'}}>Click here to signup.</a>
+                                </h5>
+                            </div>
+                            : screen === 'banned'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    The email address you've supplied (<span style={{color: '#00539C'}}>{this.state.email}</span>) belongs to an account that has been 
+                                    banned on this platform. 
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/contact-us' style={{color: 'inherit'}}>If you have no information why, contact our support team to find out.</a>
+                                </h5>
+                            </div>
+                            : screen.includes('try again in') === true
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    You've made multiple requests to our server in a short amount of time.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='' style={{color: 'inherit'}}>{screen}</a>
+                                </h5>
+                            </div>
+                            : <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    An unknown error has occured
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                </h5>
+                            </div>
+                        }
+                    </Container>
                 }
                 <br/><br/><br/>
             </div>

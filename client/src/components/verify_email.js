@@ -139,6 +139,8 @@ class VerifyEmail extends Component{
     }
 
     render() {
+        var screen = this.state.screen
+
         return (
             <div>
                 <Helmet>
@@ -148,9 +150,59 @@ class VerifyEmail extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
-                    : <div>
-                        
-                    </div>
+                    : <Container>
+                        {
+                            screen === 'ok'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    Your email has been verified successfully.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                </h5>
+                            </div>
+                            : screen === 'invalid token'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    Invalid verification token.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Make sure you've completed the signup process and clicked the link we sent to the email address you provided upon signing up.</a>
+                                </h5>
+                            </div>
+                            : screen === 'used'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    This verification token has already been used.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                </h5>
+                            </div>
+                            : screen === 'expired'
+                            ? <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    This verification token expired before its use.
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/signin' style={{color: 'inherit'}}>Click here to attemp a signin and another one will be generated for you.</a>
+                                </h5>
+                            </div>
+                            : <div>
+                                <br/>
+                                <h3 style={{marginTop: '150px'}}>
+                                    An unknown error has occured
+                                </h3>
+                                <h5 style={{marginTop: '50px'}}>
+                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                </h5>
+                            </div>
+                        }
+                    </Container>
                 }
                 <br/><br/><br/>
             </div>
