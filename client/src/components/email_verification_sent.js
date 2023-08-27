@@ -197,8 +197,13 @@ class EmailVerificationSent extends Component{
                 axios.post(Backend_Server_Address + 'correctRegistrationEmail', data, { headers: { 'access_token': null }  })
                 .then((res) => {
                     let result = res.data
-                    // set user email to state
-                    this.setState({screen: 'sent', loading: false})
+                    // set new user email to state
+                    this.setState({
+                        email: this.state.corrected_email,
+                        corrected_email: '',
+                        screen: 'sent', 
+                        loading: false
+                    })
                 }).catch((error) => {
                     console.log(error)
                     if (error.response){ // server responded with a non-2xx status code
