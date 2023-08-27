@@ -206,6 +206,7 @@ class NewPasswordOnRecovery extends Component{
                                             />
                                         </InputGroup>
                                         <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                        <br/>
                                     </Col>
                                     <Col>
                                         <Label>Password Confirmation<span style={{color: 'red'}}>*</span></Label>
@@ -219,9 +220,10 @@ class NewPasswordOnRecovery extends Component{
                                             />
                                         </InputGroup>
                                         <InputErrors field_error_state={this.state.input_errors['password_confirmation']} field_label='Password Confirmation' />
+                                        <br/>
                                     </Col>
                                 </Row>
-                                <br/><br/><br/>
+                                <br/><br/>
                                 <Button onClick={this.SetNewPassword} 
                                     style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                 >
