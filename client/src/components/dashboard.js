@@ -38,7 +38,7 @@ import AllUsers from './all_users'
 import UserCountryRanking from './user_country_ranking'
 import UserRegistrationChart from './user_registation_chart'
 import UserSubscriptionChart from './user_subscription_chart'
-import {  } from 'react-icons/fa';
+import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar } from 'react-icons/fa';
 
 class Dashboard extends Component{
     static propTypes = {
@@ -192,25 +192,25 @@ class Dashboard extends Component{
                             <Button id='analysis' onClick={this.SwitchScreen} 
                                 style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                             >
-                                <SelectIcon id='analysis'/> Analysis
+                                <FaChartLine id='analysis'/> Analysis
                             </Button>
                             <br/><br/>
                             <Button id='subscriptions' onClick={this.SwitchScreen} 
                                 style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                             >
-                                <SelectIcon id='subscriptions'/> Subscriptions
+                                <FaUserPlus id='subscriptions'/> Subscriptions
                             </Button>
                             <br/><br/>
                             <Button id='past payments' onClick={this.SwitchScreen} 
                                 style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                             >
-                                <SelectIcon id='past payments'/> Past payments
+                                <FaMoneyCheckAlt id='past payments'/> Past payments
                             </Button>
                             <br/><br/>
                             <Button id='settings' onClick={this.SwitchScreen} 
                                 style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                             >
-                                <SelectIcon id='settings'/> Settings
+                                <FaCogs id='settings'/> Settings
                             </Button>
                             <br/><br/>
                             {
@@ -219,25 +219,25 @@ class Dashboard extends Component{
                                     <Button id='all users' onClick={this.SwitchScreen} 
                                         style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                                     >
-                                        <SelectIcon id='all users'/> All users
+                                        <FaUsers id='all users'/> All users
                                     </Button>
                                     <br/><br/>
                                     <Button id='user country ranking' onClick={this.SwitchScreen} 
                                         style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                                     >
-                                        <SelectIcon id='user country ranking'/> User country ranking
+                                        <FaFlag id='user country ranking'/> User country ranking
                                     </Button>
                                     <br/><br/>
                                     <Button id='user registration chart' onClick={this.SwitchScreen} 
                                         style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                                     >
-                                        <SelectIcon id='user registration chart'/> User registration chart
+                                        <FaChartBar id='user registration chart'/> User registration chart
                                     </Button>
                                     <br/><br/>
                                     <Button id='user subscription chart' onClick={this.SwitchScreen} 
                                         style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                                     >
-                                        <SelectIcon id='user subscription chart'/> User subscription chart
+                                        <FaRegChartBar id='user subscription chart'/> User subscription chart
                                     </Button>
                                     <br/><br/>
                                 </div>

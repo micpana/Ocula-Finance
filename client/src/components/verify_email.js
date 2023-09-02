@@ -30,7 +30,6 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
-import {  } from 'react-icons/fa';
 
 class VerifyEmail extends Component{
     static propTypes = {

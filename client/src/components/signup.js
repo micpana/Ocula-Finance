@@ -31,7 +31,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
 import Signup1 from '../images/signup_1.svg'
-import {  } from 'react-icons/fa';
+import { FaUserAlt, FaUsers, FaUserAstronaut, FaAt, FaPhoneAlt, FaUserLock, FaKey } from 'react-icons/fa';
 
 class Signup extends Component{
     static propTypes = {
@@ -229,7 +229,7 @@ class Signup extends Component{
                                                 <Label>Firstname <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaUserAlt style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Firstname" name="firstname" id="firstname"
@@ -243,7 +243,7 @@ class Signup extends Component{
                                                 <Label>Lastname <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaUsers style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Lastname" name="lastname" id="lastname"
@@ -260,7 +260,7 @@ class Signup extends Component{
                                                 <Label>Username <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaUserAstronaut style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Username" name="username" id="username"
@@ -274,7 +274,7 @@ class Signup extends Component{
                                                 <Label>Email <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaAt style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Email" name="email" id="email"
@@ -291,7 +291,7 @@ class Signup extends Component{
                                                 <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaPhoneAlt style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Phonenumber" name="phonenumber" id="phonenumber"
@@ -305,7 +305,7 @@ class Signup extends Component{
                                                 <Label>Password <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaUserLock style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Password" name="password" id="password"
@@ -322,7 +322,7 @@ class Signup extends Component{
                                                 <Label>Password Confirmation <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
                                                     <InputGroupAddon addonType="prepend">
-                                                        <SelectIcon style={{margin:'10px'}}/>
+                                                        <FaKey style={{margin:'10px'}}/>
                                                     </InputGroupAddon>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Password Confirmation" name="password_confirmation" id="password_confirmation"

@@ -30,7 +30,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
-import { FaUserAlt, FaEnvelope, FaRegFolderOpen, FaEnvelopeOpenText } from 'react-icons/fa';
+import { FaUserAlt, FaAt, FaRegFolderOpen, FaEnvelopeOpenText } from 'react-icons/fa';
 
 class ContactUs extends Component{
     static propTypes = {
@@ -163,7 +163,7 @@ class ContactUs extends Component{
                             <Label>Email <span style={{color: 'red'}}>*</span></Label>
                             <InputGroup>
                                 <InputGroupAddon addonType="prepend">
-                                    <FaEnvelope style={{margin:'10px'}}/>
+                                    <FaAt style={{margin:'10px'}}/>
                                 </InputGroupAddon>
                                 <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                     placeholder="Email" name="email" id="email"

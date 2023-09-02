@@ -30,7 +30,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
-import {  } from 'react-icons/fa';
+import { FaAt } from 'react-icons/fa';
 
 class ForgotPassword extends Component{
     static propTypes = {
@@ -184,7 +184,7 @@ class ForgotPassword extends Component{
                                 <Label>Email <span style={{color: 'red'}}>*</span></Label>
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend">
-                                        <SelectIcon style={{margin:'10px'}}/>
+                                        <FaAt style={{margin:'10px'}}/>
                                     </InputGroupAddon>
                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                         placeholder="Corrected email" name="email" id="email"

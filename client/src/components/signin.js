@@ -31,7 +31,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
 import Signin1 from '../images/signin_1.svg'
-import {  } from 'react-icons/fa';
+import { FaUserCheck, FaUserLock } from 'react-icons/fa';
 
 class Signin extends Component{
     static propTypes = {
@@ -213,7 +213,7 @@ class Signin extends Component{
                                         <Label>Email or Username <span style={{color: 'red'}}>*</span></Label>
                                         <InputGroup>
                                             <InputGroupAddon addonType="prepend">
-                                                <SelectIcon style={{margin:'10px'}}/>
+                                                <FaUserCheck style={{margin:'10px'}}/>
                                             </InputGroupAddon>
                                             <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                 placeholder="Email or Username" name="email_or_username" id="email_or_username"
@@ -225,7 +225,7 @@ class Signin extends Component{
                                         <Label>Password <span style={{color: 'red'}}>*</span></Label>
                                         <InputGroup>
                                             <InputGroupAddon addonType="prepend">
-                                                <SelectIcon style={{margin:'10px'}}/>
+                                                <FaUserLock style={{margin:'10px'}}/>
                                             </InputGroupAddon>
                                             <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                 placeholder="Password" name="password" id="password"
