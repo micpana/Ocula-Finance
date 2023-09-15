@@ -1,11 +1,11 @@
 from pandas import read_csv
-from settings import get_training_logs_folder_path, get_error_logs_folder_path, get_data_length_by_number_of_days_and_timeframe
+from settings import get_training_price_data_csvs_folder_path, get_error_logs_path, get_data_length_by_number_of_days_and_timeframe
 
 # get data
 def csv_fetch_data(symbol, timeframes, data_collection_days):
 
     # folder and column names
-    folder = get_training_logs_folder_path()
+    folder = get_training_price_data_csvs_folder_path()
     columns = ['time', 'open', 'high', 'low', 'close', 'col1', 'col2']
 
     # initialize variables for timeframe 1, timeframe 2, timeframe 3, timeframe 4 data
