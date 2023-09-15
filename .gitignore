@@ -1,0 +1,11 @@
+# node modules
+node_modules/
+
+# datasets
+*.csv
+
+# Log files
+*.log
+
+# Compiled Python bytecode
+*.py[cod]
