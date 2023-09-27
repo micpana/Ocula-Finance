@@ -141,10 +141,10 @@ class AllUsers extends Component{
         var all_users = this.state.all_users
         var all_users_map = all_users.map((item, index) => {
             return <tr style={{borderBottom: '1px solid grey'}}>
-                <td>{user.firstname}</td>
-                <td>{user.lastname}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
+                <td>{item.firstname}</td>
+                <td>{item.lastname}</td>
+                <td>{item.username}</td>
+                <td>{item.email}</td>
             </tr>
         })
 

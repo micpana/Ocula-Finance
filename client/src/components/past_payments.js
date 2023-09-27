@@ -141,10 +141,10 @@ class PastPayments extends Component{
         var past_payments = this.state.past_payments
         var past_payments_map = past_payments.map((item, index) => {
             return <tr style={{borderBottom: '1px solid grey'}}>
-                <td>{user.date}</td>
-                <td>{user.purpose}</td>
-                <td>{user.payment_method}</td>
-                <td>{user.amount}</td>
+                <td>{item.date}</td>
+                <td>{item.purpose}</td>
+                <td>{item.payment_method}</td>
+                <td>{item.amount}</td>
             </tr>
         })
 

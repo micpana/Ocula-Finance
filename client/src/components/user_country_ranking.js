@@ -137,6 +137,14 @@ class UserCountryRanking extends Component{
     }
 
     render() {
+        var user_country_ranking = this.state.user_country_ranking
+        var user_country_ranking_map = user_country_ranking.map((item, index) => {
+            return <tr style={{borderBottom: '1px solid grey'}}>
+                <td>{item.country}</td>
+                <td>{item.users}</td>
+            </tr>
+        })
+
         return (
             <div>
                 <Helmet>
@@ -152,7 +160,17 @@ class UserCountryRanking extends Component{
                             User Country Ranking
                         </h5>
                         <br/><br/>
-                        
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th width='50%'>Country</th>
+                                    <th width='50%'>Users</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {user_country_ranking_map}
+                            </tbody>
+                        </Table>
                     </div>
                 }
             </div>
