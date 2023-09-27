@@ -11,3 +11,8 @@ node_modules/
 *.py[cod]
 *.pyc
 __pycache__/
+
+# model weights
+
+# system objects
+*.ocula_finance
