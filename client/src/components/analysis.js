@@ -167,7 +167,7 @@ class Analysis extends Component{
                         </h5>
                         <br/><br/>
                         {
-                            this.state.user_subscribed === false
+                            this.state.subscribed === false
                             ? <div>
                                 <br/><br/><br/>
                                 <h5 style={{color: '#005fc9'}}>You're not subscribed</h5>

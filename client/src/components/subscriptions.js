@@ -161,7 +161,7 @@ class Subscriptions extends Component{
                             </Col>
                             <Col>
                                 {
-                                    this.state.user_details.user_subscribed === true
+                                    this.state.user_details.subscribed === true
                                     ? <div>
                                         Subscribed
                                     </div> 
@@ -176,7 +176,7 @@ class Subscriptions extends Component{
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
-                        
+
                     </div>
                 }
             </div>

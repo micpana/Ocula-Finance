@@ -138,6 +138,16 @@ class AllUsers extends Component{
     }
 
     render() {
+        var all_users = this.state.all_users
+        var all_users_map = all_users.map((item, index) => {
+            return <tr style={{borderBottom: '1px solid grey'}}>
+                <td>{user.firstname}</td>
+                <td>{user.lastname}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+            </tr>
+        })
+
         return (
             <div>
                 <Helmet>
@@ -153,7 +163,19 @@ class AllUsers extends Component{
                             All Users
                         </h5>
                         <br/><br/>
-
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th width='25%'>Firstname</th>
+                                    <th width='25%'>Lastname</th>
+                                    <th width='25%'>Username</th>
+                                    <th width='25%'>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {all_users_map}
+                            </tbody>
+                        </Table>
                     </div>
                 }
             </div>
