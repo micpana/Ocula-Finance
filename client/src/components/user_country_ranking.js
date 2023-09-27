@@ -147,6 +147,11 @@ class UserCountryRanking extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
+                        <br/>
+                        <h5 style={{fontWeight: 'bold'}}>
+                            User Country Ranking
+                        </h5>
+                        <br/><br/>
                         
                     </div>
                 }

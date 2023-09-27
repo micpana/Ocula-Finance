@@ -1,6 +1,7 @@
 import React, { Component, useReducer } from 'react';
 import {
     Collapse, 
+    Table, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
     Input, InputGroup, InputGroupAddon,
@@ -147,7 +148,12 @@ class AllUsers extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
-                        
+                        <br/>
+                        <h5 style={{fontWeight: 'bold'}}>
+                            All Users
+                        </h5>
+                        <br/><br/>
+
                     </div>
                 }
             </div>

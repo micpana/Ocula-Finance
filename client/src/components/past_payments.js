@@ -1,6 +1,7 @@
 import React, { Component, useReducer } from 'react';
 import {
     Collapse, 
+    Table, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
     Input, InputGroup, InputGroupAddon,
@@ -137,6 +138,16 @@ class PastPayments extends Component{
     }
 
     render() {
+        var past_payments = this.state.past_payments
+        var past_payments_map = past_payments.map((item, index) => {
+            return<tr style={{borderBottom: '1px solid grey'}}>
+                <td>{user.date}</td>
+                <td>{user.purpose}</td>
+                <td>{user.payment_method}</td>
+                <td>{user.amount}</td>
+            </tr>
+        })
+
         return (
             <div>
                 <Helmet>
@@ -147,7 +158,24 @@ class PastPayments extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
-                        
+                        <br/>
+                        <h5 style={{fontWeight: 'bold'}}>
+                            Past Payments
+                        </h5>
+                        <br/><br/>
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th width='25%'>Date</th>
+                                    <th width='25%'>Purpose</th>
+                                    <th width='25%'>Method</th>
+                                    <th width='25%'>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {past_payments_map}
+                            </tbody>
+                        </Table>
                     </div>
                 }
             </div>

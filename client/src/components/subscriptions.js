@@ -100,7 +100,7 @@ class Subscriptions extends Component{
             .then((res) => {
                 let result = res.data
                 // set loading to false
-                this.setState({loading: false})
+                this.setState({loading: false, user_details: result})
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -147,6 +147,35 @@ class Subscriptions extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
+                        <br/>
+                        <h5 style={{fontWeight: 'bold'}}>
+                            Subscriptions
+                        </h5>
+                        <br/><br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='3'>
+                                <h6 style={{fontWeight: 'bold'}}>
+                                    Your current subscription status:
+                                </h6>
+                                <br/>
+                            </Col>
+                            <Col>
+                                {
+                                    this.state.user_details.user_subscribed === true
+                                    ? <div>
+                                        Subscribed
+                                    </div> 
+                                    : <div>
+                                        Not subscribed
+                                    </div>
+                                }
+                                <br/>
+                            </Col>
+                        </Row>
+                        <br/><br/>
+                        <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
+                            Top up your subscription below
+                        </h6>
                         
                     </div>
                 }

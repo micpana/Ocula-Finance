@@ -42,7 +42,10 @@ class Analysis extends Component{
             input_errors: {},
             symbol: 'EURUSD',
             current_market_analysis: {},
-            user_subscribed: null
+            user_subscribed: null,
+            symbols: [
+                'EURUSD', 'GPBUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR'
+            ]
         };
 
         this.HandleChange = (e) => {
@@ -144,6 +147,10 @@ class Analysis extends Component{
     }
 
     render() {
+        var current_market_analysis = this.state.current_market_analysis
+        var maximum_possible_up_move = current_market_analysis.maximum_possible_up_move
+        var maximum_possible_down_move = current_market_analysis.maximum_possible_down_move
+
         return (
             <div>
                 <Helmet>
@@ -154,7 +161,100 @@ class Analysis extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
-                        
+                        <br/>
+                        <h5 style={{fontWeight: 'bold'}}>
+                            Analysis
+                        </h5>
+                        <br/><br/>
+                        {
+                            this.state.user_subscribed === false
+                            ? <div>
+                                <br/><br/><br/>
+                                <h5 style={{color: '#005fc9'}}>You're not subscribed</h5>
+                                <br/><br/><br/>
+                                <Grid width='180px' style={{color: '#005fc9'}}/>
+                            </div>
+                            : <div>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm='3'>
+                                        <Label style={{fontWeight: 'bold'}}>Symbol:</Label>
+                                        <select name='symbol' value={this.state.symbol} onChange={this.HandleChange}
+                                            style={{border: 'none', width: '100%', backgroundColor: 'inherit', color: 'inherit', outline: 'none'}}
+                                        >
+                                            <option>Select a symbol for analysis</option>
+                                            {
+                                                this.state.symbols.map((item) => {
+                                                    return<option value={item}>{item}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row style={{margin: '0px'}}>
+                                    <h6 style={{fontWeight: 'bold'}}>Last updated:</h6> {current_market_analysis.timestamp}
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <Col sm='6'>
+                                        <Container>
+                                            <div style={{backgroundColor: 'green', height: '150px', width: '150px', borderRadius: '50%'}}>
+                                                <Container style={{paddingTop: '15px'}}>
+                                                    <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%'}}>
+                                                        <h3 style={{'paddingTop': '30px'}}>
+                                                            {maximum_possible_up_move} %
+                                                        </h3>
+                                                        <p>
+                                                            Maximum possible up move
+                                                        </p>
+                                                    </div>
+                                                </Container>
+                                            </div>
+                                        </Container>
+                                        <br/>
+                                    </Col>
+                                    <Col sm='6'>
+                                        <Container>
+                                            <div style={{backgroundColor: 'red', height: '150px', width: '150px', borderRadius: '50%'}}>
+                                                <Container style={{paddingTop: '15px'}}>
+                                                    <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%'}}>
+                                                        <h3 style={{'paddingTop': '30px'}}>
+                                                            {maximum_possible_down_move} %
+                                                        </h3>
+                                                        <p>
+                                                            Maximum possible down move
+                                                        </p>
+                                                    </div>
+                                                </Container>
+                                            </div>
+                                        </Container>
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm='3' style={{fontWeight: 'bold', color: 'green'}}>
+                                        Up-move risk-to-reward ratio:
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        1:{Math.round((maximum_possible_up_move/maximum_possible_down_move) * 1000) / 1000}
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm='3' style={{fontWeight: 'bold', color: 'red'}}>
+                                        Down-move risk-to-reward ratio:
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        1:{Math.round((maximum_possible_down_move/maximum_possible_up_move) * 1000) / 1000}
+                                        <br/>
+                                    </Col>
+                                </Row>
+                            </div>
+                        }
                     </div>
                 }
             </div>

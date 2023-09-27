@@ -147,6 +147,11 @@ class UserRegistrationChart extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
+                    <br/>
+                        <h5 style={{fontWeight: 'bold'}}>
+                            User Registration Chart
+                        </h5>
+                        <br/><br/>
                         
                     </div>
                 }

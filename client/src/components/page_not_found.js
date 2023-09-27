@@ -1,6 +1,7 @@
 import React, { Component, useReducer } from 'react';
 import {
     Collapse, 
+    Table, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
     Input, InputGroup, InputGroupAddon,
