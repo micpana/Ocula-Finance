@@ -313,7 +313,141 @@ class Settings extends Component{
                             Settings
                         </h5>
                         <br/><br/>
-                        
+                        <Form onSubmit={this.EditProfile}>
+                            <Row>
+                                <Col sm='6'>
+                                    <Label>Firstname <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaUserAlt style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Firstname" name="firstname" id="firstname"
+                                            value={this.state.firstname} onChange={this.HandleChange} type="text" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['firstname']} field_label='Firstname' />
+                                    <br/>
+                                </Col>
+                                <Col>
+                                    <Label>Lastname <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaUsers style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Lastname" name="lastname" id="lastname"
+                                            value={this.state.lastname} onChange={this.HandleChange} type="text" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['lastname']} field_label='Lastname' />
+                                    <br/>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col sm='6'>
+                                    <Label>Username <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaUserAstronaut style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Username" name="username" id="username"
+                                            value={this.state.username} onChange={this.HandleChange} type="text" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['username']} field_label='Username' />
+                                    <br/>
+                                </Col>
+                                <Col>
+                                    <Label>Email <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaAt style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Email" name="email" id="email"
+                                            value={this.state.email} onChange={this.HandleChange} type="text" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['email']} field_label='Email' />
+                                    <br/>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col sm='6'>
+                                    <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaPhoneAlt style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Phonenumber" name="phonenumber" id="phonenumber"
+                                            value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
+                                    <br/>
+                                </Col>
+                                <Col>
+                                    <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaUserLock style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Password" name="password" id="password"
+                                            value={this.state.password} onChange={this.HandleChange} type="password" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                    <br/>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <p style={{fontWeight: 'bold'}}>
+                                Use the input fields below only if you wish to change your account password
+                            </p>
+                            <br/>
+                            <Row>
+                                <Col sm='6'>
+                                    <Label>New Password <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaKey style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="New Password" name="new_password" id="new_password"
+                                            value={this.state.new_password} onChange={this.HandleChange} type="password" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['new_password']} field_label='New Password' />
+                                    <br/>
+                                </Col>
+                                <Col>
+                                    <Label>New Password Confirmation <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupAddon addonType="prepend">
+                                            <FaKey style={{margin:'10px'}}/>
+                                        </InputGroupAddon>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="New Password Confirmation" name="new_password_confirmation" id="new_password_confirmation"
+                                            value={this.state.new_password_confirmation} onChange={this.HandleChange} type="password" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['new_password_confirmation']} field_label='New Password Confirmation' />
+                                    <br/>
+                                </Col>
+                            </Row>
+                            <br/><br/><br/>
+                            <Button type="submit"
+                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                            >
+                                Edit Profile
+                            </Button>
+                        </Form>
                     </div>
                 }
             </div>
