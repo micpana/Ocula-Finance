@@ -156,7 +156,7 @@ class UserSubscriptionChart extends Component{
                         <LineChart
                             width={1000}
                             height={300}
-                            data={this.state.user_registration_statistics}
+                            data={this.state.user_subscription_statistics}
                             margin={{
                                 top: 0, right: 0, left: 0, bottom: 0,
                             }}
