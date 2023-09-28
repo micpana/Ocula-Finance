@@ -30,6 +30,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
 
 class UserRegistrationChart extends Component{
     static propTypes = {
@@ -152,7 +153,21 @@ class UserRegistrationChart extends Component{
                             User Registration Chart
                         </h5>
                         <br/><br/>
-                        
+                        <LineChart
+                            width={1000}
+                            height={300}
+                            data={this.state.user_registration_statistics}
+                            margin={{
+                                top: 0, right: 0, left: 0, bottom: 0,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="users" stroke="#00539C" activeDot={{ r: 8 }}/>
+                        </LineChart>
                     </div>
                 }
             </div>
