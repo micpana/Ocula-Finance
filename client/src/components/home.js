@@ -30,10 +30,10 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
-import Jumbotron1 from '../images/jumbotron_1.svg'
-import Home1 from '../images/home_1.svg'
-import Home2 from '../images/home_2.svg'
-import Home3 from '../images/home_3.svg'
+import Jumbotron1 from '../images/jumbotron_1.jpg'
+import Home1 from '../images/home_1.jpg'
+import Home2 from '../images/home_2.jpg'
+import Home3 from '../images/home_3.jpg'
 
 class Home extends Component{
     static propTypes = {
