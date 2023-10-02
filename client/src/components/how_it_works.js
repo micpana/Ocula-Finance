@@ -30,11 +30,11 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
-import HowItWorks1 from '../images/how_it_works_1.svg'
-import HowItWorks2 from '../images/how_it_works_2.svg'
-import HowItWorks3 from '../images/how_it_works_3.svg'
-import HowItWorks4 from '../images/how_it_works_4.svg'
-import HowItWorks5 from '../images/how_it_works_5.svg'
+import HowItWorks1 from '../images/how_it_works_1.jpg'
+import HowItWorks2 from '../images/how_it_works_2.jpg'
+import HowItWorks3 from '../images/how_it_works_3.jpg'
+import HowItWorks4 from '../images/how_it_works_4.jpg'
+import HowItWorks5 from '../images/how_it_works_5.jpg'
 
 class HowItWorks extends Component{
     static propTypes = {
