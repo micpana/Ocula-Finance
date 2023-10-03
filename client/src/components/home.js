@@ -43,7 +43,8 @@ class Home extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            on_mobile: false
         };
 
         this.HandleChange = (e) => {
@@ -97,7 +98,11 @@ class Home extends Component{
     }
 
     componentDidMount() {
-        
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
     }
 
     render() {
@@ -136,17 +141,17 @@ class Home extends Component{
                             <Row style={{margin: '0px', minHeight: '300px'}}>
                                 <Col sm='6'>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <><br/><br/></>
-                                        : <><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/><br/><br/></>
                                     }
                                     <img src={Home1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                 </Col>
                                 <Col>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></>
                                     }
                                     <h6 style={{fontWeight: 'bold'}}>
                                         Analyze, Predict, and Profit.
@@ -158,7 +163,7 @@ class Home extends Component{
                                         and provides you with a potential maximum up-move and down-move for this period.
                                     </p>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <></>
                                         : <><br/><br/><br/><br/></>
                                     }
@@ -166,16 +171,16 @@ class Home extends Component{
                             </Row>
                             <Row style={{margin: '0px', minHeight: '300px'}}>
                                 {
-                                    this.state.on_mobile == true
+                                    this.state.on_mobile === true
                                     ? <Col>
                                         <br/><br/>
-                                        <img src={Home2} style={{width: '100%'}} />
+                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                     </Col>
                                     : <></>
                                 }
                                 <Col sm='6'>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
                                         : <><br/><br/><br/><br/><br/><br/><br/><br/></>
                                     }
@@ -189,7 +194,7 @@ class Home extends Component{
                                         existing strategies to give you a well-rounded trading perspective.
                                     </p>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <></>
                                         : <><br/><br/><br/><br/></>
                                     }
@@ -197,7 +202,7 @@ class Home extends Component{
                                 {
                                     this.state.on_mobile == false
                                     ? <Col>
-                                        <img src={Home2} style={{width: '100%'}} />
+                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                     </Col>
                                     : <></>
                                 }
@@ -205,15 +210,15 @@ class Home extends Component{
                             <Row style={{margin: '0px', minHeight: '300px'}}>
                                 <Col sm='6'>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <><br/><br/></>
                                         : <></>
                                     }
-                                    <img src={Home3} style={{width: '100%'}} />
+                                    <img src={Home3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                 </Col>
                                 <Col>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
                                         : <><br/><br/><br/><br/><br/><br/><br/><br/></>
                                     }
@@ -228,14 +233,14 @@ class Home extends Component{
                                         potential percentage movements in either direction with remarkable precision.
                                     </p>
                                     {
-                                        this.state.on_mobile == true
+                                        this.state.on_mobile === true
                                         ? <></>
                                         : <><br/><br/><br/><br/></>
                                     }
                                 </Col>
                             </Row>
                             {
-                                this.state.on_mobile == true
+                                this.state.on_mobile === true
                                 ? <><br/><br/><br/></>
                                 : <><br/><br/><br/><br/><br/><br/><br/><br/></>
                             }

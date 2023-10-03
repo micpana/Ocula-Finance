@@ -44,7 +44,8 @@ class HowItWorks extends Component{
         super(props);
         this.state = {
             loading: false,
-            input_errors: {}
+            input_errors: {},
+            on_mobile: false
         };
 
         this.HandleChange = (e) => {
@@ -98,7 +99,11 @@ class HowItWorks extends Component{
     }
 
     componentDidMount() {
-        
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
     }
 
     render() {

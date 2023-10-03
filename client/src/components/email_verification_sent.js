@@ -42,6 +42,7 @@ class EmailVerificationSent extends Component{
         this.state = {
             loading: false,
             input_errors: {},
+            on_mobile: false,
             email: '',
             screen: 'sent', // sent / already verified / invalid / invalid account id / email already registered / account already verified 
             corrected_email: ''
@@ -230,6 +231,12 @@ class EmailVerificationSent extends Component{
     }
 
     componentDidMount() {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
+        
         // check access token existance
         const { cookies } = this.props;
         if(cookies.get(Access_Token_Cookie_Name) != null){

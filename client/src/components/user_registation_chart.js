@@ -42,6 +42,7 @@ class UserRegistrationChart extends Component{
         this.state = {
             loading: false,
             input_errors: {},
+            on_mobile: false,
             user_registration_statistics: []
         };
 
@@ -135,6 +136,11 @@ class UserRegistrationChart extends Component{
     }
 
     componentDidMount() {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
         this.GetUserRegistrationStatistics()
     }
 

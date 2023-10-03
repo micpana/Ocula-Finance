@@ -41,6 +41,7 @@ class ContactUs extends Component{
         this.state = {
             loading: false,
             input_errors: {},
+            on_mobile: false,
             name: '',
             email: '',
             subject: '',
@@ -102,7 +103,11 @@ class ContactUs extends Component{
     }
 
     componentDidMount() {
-        
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
     }
 
     render() {

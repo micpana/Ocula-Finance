@@ -50,6 +50,7 @@ class Dashboard extends Component{
         this.state = {
             loading: false,
             input_errors: {},
+            on_mobile: false,
             screen: 'analysis', // analysis / subscriptions / past payments / settings / all users / user country ranking / user registration chart / user subscription chart
             user_details: null
         };
@@ -157,6 +158,12 @@ class Dashboard extends Component{
     }
 
     componentDidMount() {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
+        
         // check access token existance
         const { cookies } = this.props;
         if(cookies.get(Access_Token_Cookie_Name) == null){

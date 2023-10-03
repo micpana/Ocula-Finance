@@ -41,6 +41,7 @@ class VerifyEmail extends Component{
         this.state = {
             loading: false,
             input_errors: {},
+            on_mobile: false,
             screen: 'ok' // ok / invalid token / used / expired
         };
 
@@ -128,6 +129,12 @@ class VerifyEmail extends Component{
     }
 
     componentDidMount() {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            this.setState({
+                on_mobile: true
+            })
+        }
+        
         // check access token existance
         const { cookies } = this.props;
         if(cookies.get(Access_Token_Cookie_Name) != null){
