@@ -58,11 +58,11 @@ class NavBar extends Component{
 
     render() {
         return (
-            <Navbar light expand="md" sticky='top' style={{backgroundColor: '#FFFFFF'}}>
+            <Navbar light expand="md" sticky='top' style={{backgroundColor: '#EEECEC'}}>
                 <NavbarBrand href="/" style={{marginBottom: '0px', height: '', backgroundColor: '', textAlign: 'left', width: '10%'}}>
                     <img src={Logo} style={{width: '100%'}} /> 
                 </NavbarBrand>
-                <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#ffffff'}}/>
+                <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#EEECEC'}}/>
                 <Collapse isOpen={this.state.isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         {
