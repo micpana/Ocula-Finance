@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup, InputGroupAddon,
+    Input, InputGroup, InputGroupText,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -229,9 +229,9 @@ class Signup extends Component{
                                             <Col sm='6'>
                                                 <Label>Firstname <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaUserAlt style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Firstname" name="firstname" id="firstname"
                                                         value={this.state.firstname} onChange={this.HandleChange} type="text" 
@@ -243,9 +243,9 @@ class Signup extends Component{
                                             <Col>
                                                 <Label>Lastname <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaUsers style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Lastname" name="lastname" id="lastname"
                                                         value={this.state.lastname} onChange={this.HandleChange} type="text" 
@@ -260,9 +260,9 @@ class Signup extends Component{
                                             <Col sm='6'>
                                                 <Label>Username <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaUserAstronaut style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Username" name="username" id="username"
                                                         value={this.state.username} onChange={this.HandleChange} type="text" 
@@ -274,9 +274,9 @@ class Signup extends Component{
                                             <Col>
                                                 <Label>Email <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaAt style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Email" name="email" id="email"
                                                         value={this.state.email} onChange={this.HandleChange} type="text" 
@@ -291,9 +291,9 @@ class Signup extends Component{
                                             <Col sm='6'>
                                                 <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaPhoneAlt style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Phonenumber" name="phonenumber" id="phonenumber"
                                                         value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
@@ -305,9 +305,9 @@ class Signup extends Component{
                                             <Col>
                                                 <Label>Password <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaUserLock style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Password" name="password" id="password"
                                                         value={this.state.password} onChange={this.HandleChange} type="password" 
@@ -322,9 +322,9 @@ class Signup extends Component{
                                             <Col sm='6'>
                                                 <Label>Password Confirmation <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
-                                                    <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText addonType="prepend">
                                                         <FaKey style={{margin:'10px'}}/>
-                                                    </InputGroupAddon>
+                                                    </InputGroupText>
                                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                         placeholder="Password Confirmation" name="password_confirmation" id="password_confirmation"
                                                         value={this.state.password_confirmation} onChange={this.HandleChange} type="password" 

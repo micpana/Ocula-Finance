@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup, InputGroupAddon,
+    Input, InputGroup, InputGroupText,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -184,9 +184,9 @@ class ForgotPassword extends Component{
                                 <br/><br/>
                                 <Label>Email <span style={{color: 'red'}}>*</span></Label>
                                 <InputGroup>
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupText addonType="prepend">
                                         <FaAt style={{margin:'10px'}}/>
-                                    </InputGroupAddon>
+                                    </InputGroupText>
                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                         placeholder="Corrected email" name="email" id="email"
                                         value={this.state.email} onChange={this.HandleChange} type="text" 

@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup, InputGroupAddon,
+    Input, InputGroup, InputGroupText,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -150,9 +150,9 @@ class ContactUs extends Component{
                         <Form onSubmit={this.GetInTouch}>
                             <Label>Name <span style={{color: 'red'}}>*</span></Label>
                             <InputGroup>
-                                <InputGroupAddon addonType="prepend">
+                                <InputGroupText addonType="prepend">
                                     <FaUserAlt style={{margin:'10px'}}/>
-                                </InputGroupAddon>
+                                </InputGroupText>
                                 <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                     placeholder="Name" name="name" id="name"
                                     value={this.state.name} onChange={this.HandleChange} type="text" 
@@ -162,9 +162,9 @@ class ContactUs extends Component{
                             <br/><br/>
                             <Label>Email <span style={{color: 'red'}}>*</span></Label>
                             <InputGroup>
-                                <InputGroupAddon addonType="prepend">
+                                <InputGroupText addonType="prepend">
                                     <FaAt style={{margin:'10px'}}/>
-                                </InputGroupAddon>
+                                </InputGroupText>
                                 <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                     placeholder="Email" name="email" id="email"
                                     value={this.state.email} onChange={this.HandleChange} type="text" 
@@ -174,9 +174,9 @@ class ContactUs extends Component{
                             <br/><br/>
                             <Label>Subject <span style={{color: 'red'}}>*</span></Label>
                             <InputGroup>
-                                <InputGroupAddon addonType="prepend">
+                                <InputGroupText addonType="prepend">
                                     <FaRegFolderOpen style={{margin:'10px'}}/>
-                                </InputGroupAddon>
+                                </InputGroupText>
                                 <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                     placeholder="Subject" name="subject" id="subject"
                                     value={this.state.subject} onChange={this.HandleChange} type="text" 
@@ -186,9 +186,9 @@ class ContactUs extends Component{
                             <br/><br/>
                             <Label>Message <span style={{color: 'red'}}>*</span></Label>
                             <InputGroup>
-                                <InputGroupAddon addonType="prepend">
+                                <InputGroupText addonType="prepend">
                                     <FaEnvelopeOpenText style={{margin:'10px'}}/>
-                                </InputGroupAddon>
+                                </InputGroupText>
                                 <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                     placeholder="Message" name="message" id="message"
                                     value={this.state.message} onChange={this.HandleChange} type="textarea" rows={5}

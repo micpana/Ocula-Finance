@@ -3,7 +3,7 @@ import {
     Collapse, 
     Nav, NavItem, NavLink, 
     UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-    Input, InputGroup, InputGroupAddon,
+    Input, InputGroup, InputGroupText,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { withCookies, Cookies } from 'react-cookie';
@@ -198,9 +198,9 @@ class NewPasswordOnRecovery extends Component{
                                     <Col sm='6'>
                                         <Label>Password <span style={{color: 'red'}}>*</span></Label>
                                         <InputGroup>
-                                            <InputGroupAddon addonType="prepend">
+                                            <InputGroupText addonType="prepend">
                                                 <FaUserLock style={{margin:'10px'}}/>
-                                            </InputGroupAddon>
+                                            </InputGroupText>
                                             <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                 placeholder="Password" name="password" id="password"
                                                 value={this.state.password} onChange={this.HandleChange} type="password" 
@@ -212,9 +212,9 @@ class NewPasswordOnRecovery extends Component{
                                     <Col>
                                         <Label>Password Confirmation<span style={{color: 'red'}}>*</span></Label>
                                         <InputGroup>
-                                            <InputGroupAddon addonType="prepend">
+                                            <InputGroupText addonType="prepend">
                                                 <FaKey style={{margin:'10px'}}/>
-                                            </InputGroupAddon>
+                                            </InputGroupText>
                                             <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                 placeholder="Password Confirmation" name="password_confirmation" id="password_confirmation"
                                                 value={this.state.password_confirmation} onChange={this.HandleChange} type="password" 
