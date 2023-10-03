@@ -91,19 +91,6 @@ class ForgotPassword extends Component{
             return regex.test(email)
         }
 
-        this.Notification = (message, message_type) => { // message type -> info / success / warning / error
-            const toaster = useToaster();
-            
-            // push notification message
-            toaster.push(<Message>{message}</Message>, {
-                placement: 'topCenter',
-                closable: true,
-                type: message_type,
-                showIcon: true,
-                duration: 15000
-            });
-        }
-
         this.ForgotPassword = () => {
             // initialize variable to store input validation status
             var data_checks_out = true
@@ -153,13 +140,26 @@ class ForgotPassword extends Component{
         }
     }
 
+    Notification = (message, message_type) => { // message type -> info / success / warning / error
+        const toaster = useToaster();
+        
+        // push notification message
+        toaster.push(<Message>{message}</Message>, {
+            placement: 'topCenter',
+            closable: true,
+            type: message_type,
+            showIcon: true,
+            duration: 15000
+        });
+    }
+
     componentDidMount() {
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             this.setState({
                 on_mobile: true
             })
         }
-        
+
         // check access token existance
         const { cookies } = this.props;
         if(cookies.get(Access_Token_Cookie_Name) != null){

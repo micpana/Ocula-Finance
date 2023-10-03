@@ -115,19 +115,6 @@ class Settings extends Component{
             return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
         }
 
-        this.Notification = (message, message_type) => { // message type -> info / success / warning / error
-            const toaster = useToaster();
-            
-            // push notification message
-            toaster.push(<Message>{message}</Message>, {
-                placement: 'topCenter',
-                closable: true,
-                type: message_type,
-                showIcon: true,
-                duration: 15000
-            });
-        }
-
         this.SplitUserDetailsToIndividualStates = (user_details) => {
             this.setState({
                 firstname: user_details.firstname,
@@ -293,6 +280,19 @@ class Settings extends Component{
                 })
             }
         }
+    }
+
+    Notification = (message, message_type) => { // message type -> info / success / warning / error
+        const toaster = useToaster();
+        
+        // push notification message
+        toaster.push(<Message>{message}</Message>, {
+            placement: 'topCenter',
+            closable: true,
+            type: message_type,
+            showIcon: true,
+            duration: 15000
+        });
     }
 
     componentDidMount() {
