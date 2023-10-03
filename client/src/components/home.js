@@ -113,7 +113,7 @@ class Home extends Component{
                     : <div>
                         <Row style={{color: '#ffffff', height: '550px', margin: '0px'}}>
                             <div style={{height: '550px', overflow: 'hidden', backgroundColor: '#005fc9'}}>
-                                <img src={Jumbotron1} style={{width: '110%', height: '160%', marginLeft: '-30px', opacity: 0.6}}/>
+                                <img src={Jumbotron1} style={{width: '110%', height: '160%', marginLeft: '-30px', opacity: 0.4}}/>
                             </div>
                             <Container style={{position: 'absolute', top: '120px',left: '10px'}}>
                                 <h1 style={{color: '#ffffff', fontWeight: 'bold', marginTop: '100px', textAlign: 'left'}}>
@@ -140,7 +140,7 @@ class Home extends Component{
                                         ? <><br/><br/></>
                                         : <><br/><br/><br/><br/></>
                                     }
-                                    <img src={Home1} style={{width: '100%', border: '1px solid #00539C', borderRadius: '10px'}} />
+                                    <img src={Home1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                 </Col>
                                 <Col>
                                     {
