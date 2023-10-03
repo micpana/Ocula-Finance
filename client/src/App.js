@@ -41,7 +41,7 @@ class App extends Component {
 
     render() {
         return (
-        <div className="App" style={{}}>
+        <div className="App" style={{backgroundColor: '#FAFAFA', color: '#383838'}}>
             <BrowserRouter>
                 <NavBar />
                 <Routes>
