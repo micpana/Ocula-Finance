@@ -59,8 +59,8 @@ class NavBar extends Component{
     render() {
         return (
             <Navbar light expand="md" sticky='top' style={{backgroundColor: '#FFFFFF'}}>
-                <NavbarBrand href="/" style={{marginBottom: '0px', height: '100px', backgroundColor: '', textAlign: 'left', width: '10%'}}>
-                    <img src={Logo} style={{width: '100px'}} /> 
+                <NavbarBrand href="/" style={{marginBottom: '0px', height: '', backgroundColor: '', textAlign: 'left', width: '10%'}}>
+                    <img src={Logo} style={{width: '100%'}} /> 
                 </NavbarBrand>
                 <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#ffffff'}}/>
                 <Collapse isOpen={this.state.isOpen} navbar>
@@ -74,67 +74,7 @@ class NavBar extends Component{
                             </>
                             : <>
                                 <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>  
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>     
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>    
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>             
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>    
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>     
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>    
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem> 
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>   
-                                <NavItem>
-                                    <NavLink></NavLink>
+                                    <NavLink style={{width: '700px'}}></NavLink>
                                 </NavItem> 
                             </>
                         }   

@@ -111,28 +111,26 @@ class Home extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
-                        <Row style={{minHeight: '400px', margin: '0px', backgroundColor: '#005fc9'}}>
-                            <Col sm='4'>
-                                <Container>
-                                    <h1 style={{color: '#ffffff', fontWeight: 'bold', marginTop: '100px', textAlign: 'left'}}>
-                                        Maximize Your Trading Potential with AI-Driven Analysis
-                                    </h1>
-                                    <h3 style={{color: '#FEF6DF', marginTop: '50px', textAlign: 'left'}}>
-                                        Unlock Profitable Trading Opportunities with Accurate Forecasts and Risk-to-Reward Profiles. 
-                                    </h3>
-                                    <Row style={{marginRight: '0px', marginTop: '70px', textAlign: 'left'}}>
-                                        <Col sm='6'>
-                                            <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
-                                                Get started
-                                            </Button>
-                                            <br/><br/>
-                                        </Col>
-                                    </Row>
-                                </Container>
-                            </Col>
-                            <Col>
-                                <img src={Jumbotron1} style={{width: '60%'}} />
-                            </Col>
+                        <Row style={{color: '#ffffff', height: '550px', margin: '0px'}}>
+                            <div style={{height: '550px', overflow: 'hidden', backgroundColor: '#005fc9'}}>
+                                <img src={Jumbotron1} style={{width: '110%', height: '160%', marginLeft: '-30px', opacity: 0.6}}/>
+                            </div>
+                            <Container style={{position: 'absolute', top: '120px',left: '10px'}}>
+                                <h1 style={{color: '#ffffff', fontWeight: 'bold', marginTop: '100px', textAlign: 'left'}}>
+                                    Maximize Your Trading Potential with AI-Driven Analysis
+                                </h1>
+                                <h3 style={{color: '#FEF6DF', marginTop: '50px', textAlign: 'left'}}>
+                                    Unlock Profitable Trading Opportunities with Accurate Forecasts and Risk-to-Reward Profiles. 
+                                </h3>
+                                <Row style={{marginRight: '0px', marginTop: '70px', textAlign: 'left'}}>
+                                    <Col sm='6'>
+                                        <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                            Get started
+                                        </Button>
+                                        <br/><br/>
+                                    </Col>
+                                </Row>
+                            </Container>
                         </Row>
                         <Container>
                             <Row style={{margin: '0px', minHeight: '300px'}}>
@@ -140,9 +138,9 @@ class Home extends Component{
                                     {
                                         this.state.on_mobile == true
                                         ? <><br/><br/></>
-                                        : <></>
+                                        : <><br/><br/><br/><br/></>
                                     }
-                                    <img src={Home1} style={{width: '100%'}} />
+                                    <img src={Home1} style={{width: '100%', border: '1px solid #00539C', borderRadius: '10px'}} />
                                 </Col>
                                 <Col>
                                     {
