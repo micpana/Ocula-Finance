@@ -182,7 +182,7 @@ class Home extends Component{
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></>
                                     }
                                     <h6 style={{fontWeight: 'bold'}}>
                                         Maximise Your Gains, Minimise Your Risks.
@@ -202,6 +202,7 @@ class Home extends Component{
                                 {
                                     this.state.on_mobile == false
                                     ? <Col>
+                                        <br/><br/><br/><br/><br/><br/>
                                         <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                     </Col>
                                     : <></>
@@ -212,7 +213,7 @@ class Home extends Component{
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/></>
-                                        : <></>
+                                        : <><br/><br/><br/><br/><br/><br/></>
                                     }
                                     <img src={Home3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
                                 </Col>
@@ -220,7 +221,7 @@ class Home extends Component{
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></>
                                     }
                                     <h6 style={{fontWeight: 'bold'}}>
                                         Advanced Tools, Simplified Trading.
@@ -242,12 +243,12 @@ class Home extends Component{
                             {
                                 this.state.on_mobile === true
                                 ? <><br/><br/><br/></>
-                                : <><br/><br/><br/><br/><br/><br/><br/><br/></>
+                                : <><br/><br/><br/><br/></>
                             }
                             <h6 style={{fontWeight: 'bold'}}>
                                 Join {Platform_Name} Today.
                             </h6>
-                            <br/><br/>
+                            <br/>
                             <p style={{textAlign: "left"}}>
                                 Gain a competitive edge in the market with our affordable, AI-driven forex market analysis. 
                                 Sign up now and experience the next-level of trading insight.
@@ -255,9 +256,8 @@ class Home extends Component{
                             <Row style={{margin: '0px'}}>
                                 <Col sm='4'></Col>
                                 <Col sm='4'></Col>
-                                <Col sm='4'></Col>
                                 <Col sm='4'>
-                                    <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                    <Button href='/signup' style={{backgroundColor: '#005fc9', color: '#ffffff', fontWeight: 'bold', border: '1px solid #005fc9', width: '180px'}}>
                                         Sign up
                                     </Button>
                                 </Col>
