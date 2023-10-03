@@ -30,11 +30,11 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import { Message, useToaster } from "rsuite";
-import AboutUs1 from '../images/about_us_1.svg'
-import AboutUs2 from '../images/about_us_2.svg'
-import AboutUs3 from '../images/about_us_3.svg'
-import AboutUs4 from '../images/about_us_4.svg'
-import AboutUs5 from '../images/about_us_5.svg'
+import AboutUs1 from '../images/about_us_1.jpg'
+import AboutUs2 from '../images/about_us_2.jpg'
+import AboutUs3 from '../images/about_us_3.jpg'
+import AboutUs4 from '../images/about_us_4.jpg'
+import AboutUs5 from '../images/about_us_5.jpg'
 
 class AboutUs extends Component{
     static propTypes = {
