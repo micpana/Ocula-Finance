@@ -179,7 +179,7 @@ class Dashboard extends Component{
 
     render() {
         var screen = this.state.screen
-        var user_role = this.state.user_details === null ? null : user_details.role
+        var user_role = this.state.user_details === null ? null : this.state.user_details.role
 
         return (
             <div>

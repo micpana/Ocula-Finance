@@ -183,6 +183,8 @@ class NewPasswordOnRecovery extends Component{
     }
 
     render() {
+        var screen = this.state.screen
+        
         return (
             <div>
                 <Helmet>
