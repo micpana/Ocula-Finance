@@ -122,46 +122,56 @@ class AboutUs extends Component{
                             About us
                         </h4>
                         <br/><br/>
-                        <img src={AboutUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
-                        <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Welcome to {Platform_Name} - Your Intelligence Partner for Forex Trading. We leverage Artificial 
                             Intelligence to provide deep analysis of the financial markets, particularly focusing on the Forex 
                             markets.
                         </p>
-                        <br/><br/><br/>
-                        <img src={AboutUs2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                         <br/><br/>
-                        <p style={{textAlign: 'left'}}>
-                            Our SAAS platform employs sophisticated AI models to predict potential upmoves and downmoves in the 
-                            market over the next 105 minutes. These forecasts are updated every 15 minutes and are designed to 
-                            equip traders with a risk-reward profile for informed trading decisions.
-                        </p>
-                        <br/><br/><br/>
-                        <img src={AboutUs3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
-                        <br/><br/>
-                        <p style={{textAlign: 'left'}}>
-                            Taking a cue from established statistical models used in financial markets such as VaR and ER, we’ve 
-                            upped the game by implementing deep neural networks. This approach provides more precision in 
-                            predicting the potential percentages to be moved in any direction.
-                        </p>
-                        <br/><br/><br/>
-                        <img src={AboutUs4} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
-                        <br/><br/>
-                        <p style={{textAlign: 'left'}}>
-                            Whether you're deciding to use these metrics as sole guides, or you're integrating them with existing 
-                            trading strategies, our goal remains the same - to simplify complex data and provide powerful metrics. 
-                            Our vision is to aid traders in minimizing risk and maximizing rewards, all in an affordable manner.
-                        </p>
-                        <br/><br/><br/>
-                        <img src={AboutUs5} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
+                        <Row>
+                            <Col sm='6'>
+                                <img src={AboutUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
+                                <br/><br/><br/>
+                            </Col>
+                            <Col>
+                                <p style={{textAlign: 'left'}}>
+                                    Our SAAS platform employs sophisticated AI models to predict potential upmoves and downmoves in the 
+                                    market over the next 105 minutes. These forecasts are updated every 15 minutes and are designed to 
+                                    equip traders with a risk-reward profile for informed trading decisions.
+                                </p>
+                                <br/>
+                                <p style={{textAlign: 'left'}}>
+                                    Taking a cue from established statistical models used in financial markets such as VaR and ER, we’ve 
+                                    upped the game by implementing deep neural networks. This approach provides more precision in 
+                                    predicting the potential percentages to be moved in any direction.
+                                </p>
+                                <br/>
+                                <p style={{textAlign: 'left'}}>
+                                    Whether you're deciding to use these metrics as sole guides, or you're integrating them with existing 
+                                    trading strategies, our goal remains the same - to simplify complex data and provide powerful metrics. 
+                                    Our vision is to aid traders in minimizing risk and maximizing rewards, all in an affordable manner.
+                                </p>
+                                <br/><br/><br/>
+                            </Col>
+                        </Row>
+                        <h6 style={{fontWeight: 'bold'}}>
+                            Explore {Platform_Name} today and redefine your trading experience. 
+                        </h6>
                         <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Join {Platform_Name} today and optimize your Forex Trading with the ultimate support of AI-powered 
                             analysis. We believe that technology and analytics should be affordable, simple, and impactful, 
                             offering each of our users more control over their trades. Welcome to the future of Forex Trading.
                         </p>
-                        <br/><br/><br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='4'></Col>
+                            <Col sm='4'></Col>
+                            <Col sm='4'>
+                                <Button href='/signup' style={{backgroundColor: '#005fc9', color: '#ffffff', fontWeight: 'bold', border: '1px solid #005fc9', width: '180px'}}>
+                                    Sign up
+                                </Button>
+                            </Col>
+                        </Row>
                     </Container>
                 }
                 <br/><br/><br/>
