@@ -128,20 +128,10 @@ class Pricing extends Component{
                             downmove for the next 1 hour 45 minutes. This precious data creates a risk-reward profile, helping 
                             establish the most advantageous market direction.
                         </p>
-                        <br/>
-                        <p style={{textAlign: 'left'}}>
-                            Our goal is to equip traders with a simple yet powerful tool in an affordable manner, and that’s 
-                            reflected in our pricing structure. {Platform_Name}’s pricing is designed to accommodate traders of all 
-                            scales - from budding enthusiasts to seasoned professionals. We have designed a straightforward and 
-                            transparent pricing system that ensures you get the most out of your trading experience. We invite you 
-                            to explore our versatile pricing options to find a plan that suits your trading needs best. 
-                            Please note that all our pricing plans offer full access to our AI-driven forecasts and risk-to-reward 
-                            profiles.
-                        </p>
                         <br/><br/><br/>
                         <Row style={{margin: '0px'}}>
                             <Col sm='4'>
-                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#F9F9F9', borderRadiusTopLeft: '10px', borderRadiusTopRight: '10px'}}>
+                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#D0DFE9', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
                                     <Container style={{textAlign: 'left'}}>
                                         <br/><br/>
                                         <h6 style={{fontWeight: 'bolder'}}>
@@ -157,32 +147,41 @@ class Pricing extends Component{
                                         <br/><br/>
                                     </Container>
                                 </Row>
-                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#FCFCFC', borderRadiusBottomLeft: '10px', borderRadiusBottomRight: '10px'}}>
-                                    <Container>
-                                        <br/><br/>
-                                        ✅ Potential max upmove and downmove forecasts
-                                        <br/>
-                                        ✅ Risk-to-reward profiles
-                                        <br/>
-                                        ✅ Regular updates every 15 minutes
-                                        <br/>
-                                        ✅ Customer support
-                                        <br/>
-                                        ✅ 
-                                        <br/>
-                                        ✅
-                                        <br/><br/>
-                                        <Button href=''
-                                            style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
-                                        >
-                                            Subscribe now
-                                        </Button>
+                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
+                                    <Container style={{textAlign: 'left'}}>
+                                        <br/><br/><br/>
+                                        <ul>
+                                            <li>
+                                                Potential max upmove and downmove forecasts
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Risk-to-reward profiles
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Regular updates every 15 minutes
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Customer support
+                                            </li>
+                                        </ul>
+                                        <br/><br/><br/>
+                                        <div style={{textAlign: 'center'}}>
+                                            <Button href=''
+                                                style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
+                                            >
+                                                Subscribe now
+                                            </Button>
+                                        </div>
                                         <br/><br/>
                                     </Container>
                                 </Row>
+                                <br/><br/>
                             </Col>
                             <Col sm='4'>
-                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#005fc9', color: '#ffffff', borderRadiusTopLeft: '10px', borderRadiusTopRight: '10px'}}>
+                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#005fc9', color: '#ffffff', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
                                     <Container style={{textAlign: 'left'}}>
                                         <br/><br/>
                                         <h6 style={{fontWeight: 'bolder'}}>
@@ -198,32 +197,41 @@ class Pricing extends Component{
                                         <br/><br/>
                                     </Container>
                                 </Row>
-                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#FCFCFC', borderRadiusBottomLeft: '10px', borderRadiusBottomRight: '10px'}}>
-                                    <Container>
-                                        <br/><br/>
-                                        ✅ Potential max upmove and downmove forecasts
-                                        <br/>
-                                        ✅ Risk-to-reward profiles
-                                        <br/>
-                                        ✅ Regular updates every 15 minutes
-                                        <br/>
-                                        ✅ Customer support
-                                        <br/>
-                                        ✅ 
-                                        <br/>
-                                        ✅
-                                        <br/><br/>
-                                        <Button href=''
-                                            style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#005fc9', color: '#ffffff'}}
-                                        >
-                                            Subscribe now
-                                        </Button>
+                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
+                                    <Container style={{textAlign: 'left'}}>
+                                        <br/><br/><br/>
+                                        <ul>
+                                            <li>
+                                                Potential max upmove and downmove forecasts
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Risk-to-reward profiles
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Regular updates every 15 minutes
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Customer support
+                                            </li>
+                                        </ul>
+                                        <br/><br/><br/>
+                                        <div style={{textAlign: 'center'}}>
+                                            <Button href=''
+                                                style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#005fc9', color: '#ffffff'}}
+                                            >
+                                                Subscribe now
+                                            </Button>
+                                        </div>
                                         <br/><br/>
                                     </Container>
                                 </Row>
+                                <br/><br/>
                             </Col>
                             <Col sm='4'>
-                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#F9F9F9', borderRadiusTopLeft: '10px', borderRadiusTopRight: '10px'}}>
+                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#D0DFE9', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
                                     <Container style={{textAlign: 'left'}}>
                                         <br/><br/>
                                         <h6 style={{fontWeight: 'bolder'}}>
@@ -239,31 +247,50 @@ class Pricing extends Component{
                                         <br/><br/>
                                     </Container>
                                 </Row>
-                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#FCFCFC', borderRadiusBottomLeft: '10px', borderRadiusBottomRight: '10px'}}>
-                                    <Container>
-                                        <br/><br/>
-                                        ✅ Potential max upmove and downmove forecasts
-                                        <br/>
-                                        ✅ Risk-to-reward profiles
-                                        <br/>
-                                        ✅ Regular updates every 15 minutes
-                                        <br/>
-                                        ✅ Customer support
-                                        <br/>
-                                        ✅ 
-                                        <br/>
-                                        ✅
-                                        <br/><br/>
-                                        <Button href=''
-                                            style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
-                                        >
-                                            Subscribe now
-                                        </Button>
+                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
+                                    <Container style={{textAlign: 'left'}}>
+                                        <br/><br/><br/>
+                                        <ul>
+                                            <li>
+                                                Potential max upmove and downmove forecasts
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Risk-to-reward profiles
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Regular updates every 15 minutes
+                                            </li>
+                                            <br/>
+                                            <li>
+                                                Customer support
+                                            </li>
+                                        </ul>
+                                        <br/><br/><br/>
+                                        <div style={{textAlign: 'center'}}>
+                                            <Button href=''
+                                                style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
+                                            >
+                                                Subscribe now
+                                            </Button>
+                                        </div>
                                         <br/><br/>
                                     </Container>
                                 </Row>
+                                <br/><br/>
                             </Col>
                         </Row>
+                        <br/>
+                        <p style={{textAlign: 'left'}}>
+                            Our goal is to equip traders with a simple yet powerful tool in an affordable manner, and that’s 
+                            reflected in our pricing structure. {Platform_Name}’s pricing is designed to accommodate traders of all 
+                            scales - from budding enthusiasts to seasoned professionals. We have designed a straightforward and 
+                            transparent pricing system that ensures you get the most out of your trading experience. We invite you 
+                            to explore our versatile pricing options to find a plan that suits your trading needs best. 
+                            Please note that all our pricing plans offer full access to our AI-driven forecasts and risk-to-reward 
+                            profiles.
+                        </p>
                     </Container>
                 }
                 <br/><br/><br/>
