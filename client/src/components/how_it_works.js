@@ -132,15 +132,21 @@ class HowItWorks extends Component{
                             provides you with comprehensive forecast data for the next 105 minutes, enabling you to create a 
                             balanced risk-to-reward profile for favourable market directions. Here's how our system works.
                         </p>
-                        <br/>
-                        <img src={HowItWorks1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
-                        <br/><br/><br/>
-                        <h6 style={{fontWeight: 'bold'}}>
-                            What We Offer
-                        </h6>
                         <br/><br/>
                         <Row style={{margin: '0px'}}>
                             <Col sm='6'>
+                                <img src={HowItWorks1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
+                            </Col>
+                            <Col>
+                                {
+                                    this.state.on_mobile === true
+                                    ? <><br/><br/></>
+                                    : <><br/><br/></>
+                                }
+                                <h6 style={{fontWeight: 'bold'}}>
+                                    What We Offer
+                                </h6>
+                                <br/><br/>
                                 <p style={{textAlign: 'left'}}>
                                     <ul>
                                         <li>Potential max upmove and downmove forecasts.</li><br/>
@@ -151,11 +157,8 @@ class HowItWorks extends Component{
                                     </ul>
                                 </p>
                             </Col>
-                            <Col>
-                                <img src={HowItWorks2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
-                            </Col>
                         </Row>
-                        <br/><br/><br/>
+                        <br/><br/>
                         <h6 style={{fontWeight: 'bold'}}>
                             Our Distinct Approach 
                         </h6>
@@ -166,26 +169,29 @@ class HowItWorks extends Component{
                             percentages moved in either direction. This crucial difference amplifies the effectiveness of our 
                             platform and the insight users gain. 
                         </p>
-                        <br/>
-                        <img src={HowItWorks3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
-                        <br/><br/><br/>
-                        <h6 style={{fontWeight: 'bold'}}>
-                            Empower Your Trading 
-                        </h6>
                         <br/><br/>
                         <Row style={{margin: '0px'}}>
                             <Col sm='6'>
+                                <img src={HowItWorks2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
+                            </Col>
+                            <Col>
+                                {
+                                    this.state.on_mobile === true
+                                    ? <><br/><br/></>
+                                    : <><br/><br/><br/></>
+                                }
+                                <h6 style={{fontWeight: 'bold'}}>
+                                    Empower Your Trading 
+                                </h6>
+                                <br/><br/>
                                 <p style={{textAlign: 'left'}}>
                                     Whether you're a seasoned trading expert or a newcomer, our metrics can serve as your 
                                     standalone guide or efficiently supplement your existing trading strategy. We aim to minimize 
                                     trading risks while maximizing rewards, all at an affordable price point.
                                 </p>
                             </Col>
-                            <Col>
-                                <img src={HowItWorks4} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
-                            </Col>
                         </Row>
-                        <br/><br/><br/>
+                        <br/><br/>
                         <h6 style={{fontWeight: 'bold'}}>
                             Stay updated 
                         </h6>
@@ -194,13 +200,7 @@ class HowItWorks extends Component{
                             At {Platform_Name}, we understand the dynamic nature of financial markets, which is why we update our 
                             data every 15 minutes. Stay in sync with the latest trends and make data-driven decisions on the go.
                         </p>
-                        <br/>
-                        <img src={HowItWorks5} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
-                        {
-                            this.state.on_mobile == true
-                            ? <><br/><br/><br/></>
-                            : <><br/><br/><br/><br/><br/><br/><br/><br/></>
-                        }
+                        <br/><br/>
                         <h6 style={{fontWeight: 'bold'}}>
                             Explore {Platform_Name} today and redefine your trading experience. 
                         </h6>
