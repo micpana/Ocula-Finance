@@ -145,7 +145,7 @@ class Home extends Component{
                                         ? <><br/><br/></>
                                         : <><br/><br/><br/><br/><br/><br/></>
                                     }
-                                    <img src={Home1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
+                                    <img src={Home1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                                 </Col>
                                 <Col>
                                     {
@@ -174,7 +174,7 @@ class Home extends Component{
                                     this.state.on_mobile === true
                                     ? <Col>
                                         <br/><br/>
-                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
+                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                                     </Col>
                                     : <></>
                                 }
@@ -203,7 +203,7 @@ class Home extends Component{
                                     this.state.on_mobile == false
                                     ? <Col>
                                         <br/><br/><br/><br/><br/><br/>
-                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
+                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                                     </Col>
                                     : <></>
                                 }
@@ -215,7 +215,7 @@ class Home extends Component{
                                         ? <><br/><br/></>
                                         : <><br/><br/><br/><br/><br/><br/></>
                                     }
-                                    <img src={Home3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid silver', borderRadius: '10px'}} />
+                                    <img src={Home3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                                 </Col>
                                 <Col>
                                     {

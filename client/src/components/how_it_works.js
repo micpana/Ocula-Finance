@@ -133,7 +133,7 @@ class HowItWorks extends Component{
                             balanced risk-to-reward profile for favourable market directions. Here's how our system works.
                         </p>
                         <br/>
-                        <img src={HowItWorks1} style={{width: '100%'}} />
+                        <img src={HowItWorks1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                         <br/><br/><br/>
                         <h6 style={{fontWeight: 'bold'}}>
                             What We Offer
@@ -152,7 +152,7 @@ class HowItWorks extends Component{
                                 </p>
                             </Col>
                             <Col>
-                                <img src={HowItWorks2} style={{width: '100%'}} />
+                                <img src={HowItWorks2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                             </Col>
                         </Row>
                         <br/><br/><br/>
@@ -167,7 +167,7 @@ class HowItWorks extends Component{
                             platform and the insight users gain. 
                         </p>
                         <br/>
-                        <img src={HowItWorks3} style={{width: '100%'}} />
+                        <img src={HowItWorks3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                         <br/><br/><br/>
                         <h6 style={{fontWeight: 'bold'}}>
                             Empower Your Trading 
@@ -182,7 +182,7 @@ class HowItWorks extends Component{
                                 </p>
                             </Col>
                             <Col>
-                                <img src={HowItWorks4} style={{width: '100%'}} />
+                                <img src={HowItWorks4} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                             </Col>
                         </Row>
                         <br/><br/><br/>
@@ -195,7 +195,7 @@ class HowItWorks extends Component{
                             data every 15 minutes. Stay in sync with the latest trends and make data-driven decisions on the go.
                         </p>
                         <br/>
-                        <img src={HowItWorks5} style={{width: '100%'}} />
+                        <img src={HowItWorks5} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
                         {
                             this.state.on_mobile == true
                             ? <><br/><br/><br/></>
@@ -211,9 +211,8 @@ class HowItWorks extends Component{
                         <Row style={{margin: '0px'}}>
                             <Col sm='4'></Col>
                             <Col sm='4'></Col>
-                            <Col sm='4'></Col>
                             <Col sm='4'>
-                                <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                <Button href='/signup' style={{backgroundColor: '#005fc9', color: '#ffffff', fontWeight: 'bold', border: '1px solid #005fc9', width: '180px'}}>
                                     Sign up
                                 </Button>
                             </Col>

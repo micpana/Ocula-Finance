@@ -122,7 +122,7 @@ class AboutUs extends Component{
                             About us
                         </h4>
                         <br/><br/>
-                        <img src={AboutUs1} style={{width: '100%'}}/>
+                        <img src={AboutUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                         <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Welcome to {Platform_Name} - Your Intelligence Partner for Forex Trading. We leverage Artificial 
@@ -130,7 +130,7 @@ class AboutUs extends Component{
                             markets.
                         </p>
                         <br/><br/><br/>
-                        <img src={AboutUs2} style={{width: '100%'}}/>
+                        <img src={AboutUs2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                         <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Our SAAS platform employs sophisticated AI models to predict potential upmoves and downmoves in the 
@@ -138,7 +138,7 @@ class AboutUs extends Component{
                             equip traders with a risk-reward profile for informed trading decisions.
                         </p>
                         <br/><br/><br/>
-                        <img src={AboutUs3} style={{width: '100%'}}/>
+                        <img src={AboutUs3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                         <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Taking a cue from established statistical models used in financial markets such as VaR and ER, we’ve 
@@ -146,7 +146,7 @@ class AboutUs extends Component{
                             predicting the potential percentages to be moved in any direction.
                         </p>
                         <br/><br/><br/>
-                        <img src={AboutUs4} style={{width: '100%'}}/>
+                        <img src={AboutUs4} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                         <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Whether you're deciding to use these metrics as sole guides, or you're integrating them with existing 
@@ -154,7 +154,7 @@ class AboutUs extends Component{
                             Our vision is to aid traders in minimizing risk and maximizing rewards, all in an affordable manner.
                         </p>
                         <br/><br/><br/>
-                        <img src={AboutUs5} style={{width: '100%'}}/>
+                        <img src={AboutUs5} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                         <br/><br/>
                         <p style={{textAlign: 'left'}}>
                             Join {Platform_Name} today and optimize your Forex Trading with the ultimate support of AI-powered 
