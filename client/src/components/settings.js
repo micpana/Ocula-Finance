@@ -184,7 +184,9 @@ class Settings extends Component{
             this.setState({user_details: user_details})
         }
 
-        this.EditProfile = () => {
+        this.EditProfile = (e) => {
+            e.preventDefault()
+            
             // initialize variable to store input validation status
             var data_checks_out = true
 

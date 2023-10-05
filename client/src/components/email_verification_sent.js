@@ -130,7 +130,9 @@ class EmailVerificationSent extends Component{
             })
         }
 
-        this.ResendEmailVerification = () => {
+        this.ResendEmailVerification = (e) => {
+            e.preventDefault()
+            
             this.setState({loading: true})
 
             var data = new FormData()
@@ -162,7 +164,9 @@ class EmailVerificationSent extends Component{
             })
         }
 
-        this.CorrectRegistrationEmail = () => {
+        this.CorrectRegistrationEmail = (e) => {
+            e.preventDefault()
+            
             // initialize variable to store input validation status
             var data_checks_out = true
 

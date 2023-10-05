@@ -115,7 +115,9 @@ class Signup extends Component{
             return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
         }
 
-        this.Signup = () => {
+        this.Signup = (e) => {
+            e.preventDefault()
+            
             // initialize variable to store input validation status
             var data_checks_out = true
 

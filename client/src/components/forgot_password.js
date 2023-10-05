@@ -91,7 +91,9 @@ class ForgotPassword extends Component{
             return regex.test(email)
         }
 
-        this.ForgotPassword = () => {
+        this.ForgotPassword = (e) => {
+            e.preventDefault()
+            
             // initialize variable to store input validation status
             var data_checks_out = true
 

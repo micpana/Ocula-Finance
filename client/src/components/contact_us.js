@@ -85,8 +85,8 @@ class ContactUs extends Component{
             this.setState({input_errors: {}})
         }
 
-        this.GetInTouch = () => {
-
+        this.GetInTouch = (e) => {
+            e.preventDefault()
         }
     }
 
