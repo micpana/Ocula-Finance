@@ -302,6 +302,7 @@ class Settings extends Component{
                 on_mobile: true
             })
         }
+        // get user details
         this.GetUserDetails()
     }
 

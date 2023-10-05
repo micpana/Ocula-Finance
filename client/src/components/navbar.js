@@ -6,6 +6,8 @@ import {
     Input, InputGroup, InputGroupText,
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
+import { withCookies, Cookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 import { Helmet } from 'react-helmet'
 import {
     Audio,
@@ -30,11 +32,17 @@ import { Message, useToaster } from "rsuite";
 import Logo from '../images/logo.png'
 
 class NavBar extends Component{
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
     constructor(props) { 
         super(props);
         this.state = {
             isOpen: false,
-            on_mobile: false
+            dropdownOpen: false,
+            on_mobile: false,
+            loading: false,
+            user_details: null
         };    
         
         this.HandleChange = (e) =>{
@@ -46,6 +54,56 @@ class NavBar extends Component{
                 isOpen: !this.state.isOpen
             });
         };
+
+        this.dtoggle = () => {
+            this.setState(prevState => ({
+                dropdownOpen2: !prevState.dropdownOpen
+            }));
+        }
+  
+        this.onMouseEnter = () => {
+            this.setState({dropdownOpen: true});
+        };
+      
+        this.onMouseLeave = () => {
+            this.setState({dropdownOpen: false});
+        };
+
+        this.GetUserDetails = () => {
+            const { cookies } = this.props;
+            this.setState({loading: true})
+
+            axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // set user details to state
+                this.setState({user_details: result, loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'Access token disabled via signout' ||
+                        result === 'Access token expired' ||
+                        result === 'Not authorized to access this' ||
+                        result === 'Invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                    }else{
+                        notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        this.Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    this.Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                }else{ // error occured during request setup ... no network access
+                    this.Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                }
+                this.setState({loading: false})
+            })
+        }
     }
 
     componentDidMount() {
@@ -54,9 +112,15 @@ class NavBar extends Component{
                 on_mobile: true
             })
         }
+        // get user details if an access token is detected
+        const { cookies } = this.props;
+        if (cookies.get(Access_Token_Cookie_Name) != null){
+            this.GetUserDetails()
+        }
     }
 
     render() {
+        var user_details = this.state.user_details
         return (
             <Navbar light expand="md" sticky='top' style={{backgroundColor: '#EEECEC'}}>
                 <NavbarBrand href="/" style={{marginBottom: '0px', height: '', backgroundColor: '', textAlign: 'left', width: '10%'}}>
@@ -74,12 +138,12 @@ class NavBar extends Component{
                             </>
                             : <>
                                 <NavItem>
-                                    <NavLink style={{width: '700px'}}></NavLink>
+                                    <NavLink style={{width: '470px'}}></NavLink>
                                 </NavItem> 
                             </>
                         }   
                         <NavItem>
-                            <NavLink href='/' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Home
                             </NavLink>
                         </NavItem>
@@ -87,7 +151,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/how-it-works' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/how-it-works' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 How it works
                             </NavLink>
                         </NavItem>
@@ -95,7 +159,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/pricing' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/pricing' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Pricing
                             </NavLink>
                         </NavItem>
@@ -103,7 +167,7 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/about-us' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/about-us' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 About us
                             </NavLink>
                         </NavItem>
@@ -111,10 +175,61 @@ class NavBar extends Component{
                             <NavLink></NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href='/contact-us' style={{backgroundColor: 'inherit', border: 'none', color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                            <NavLink href='/contact-us' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Contact us
                             </NavLink>
                         </NavItem>
+                        <NavItem>
+                            <NavLink></NavLink>
+                        </NavItem>
+                        {
+                            user_details === null
+                            ? <>
+                                <NavItem style={{border: '1px solid #005fc9', borderRadius: '20px', width: '100px'}}>
+                                    <NavLink href='/signin' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                                        Signin
+                                    </NavLink>
+                                </NavItem>  
+                                <NavItem>
+                                    <NavLink></NavLink>
+                                </NavItem>
+                                <NavItem  style={{border: '1px solid #005fc9', borderRadius: '20px', width: '100px', backgroundColor: '#005fc9'}}>
+                                    <NavLink href='/signup' style={{color: '#ffffff', fontWeight: 'bold', fontSize: '15px'}}>
+                                        Signup
+                                    </NavLink>
+                                </NavItem>
+                            </>
+                            : <>
+                                <NavItem style={{border: '1px solid #005fc9', borderRadius: '20px', width: '100px'}}>
+                                    <NavLink href='/dashboard' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                                        Dashboard
+                                    </NavLink>
+                                </NavItem> 
+                                <NavItem>
+                                    <NavLink></NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <Dropdown className="d-inline-block" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.dtoggle}>
+                                        <DropdownToggle  style={{marginTop: '', backgroundColor:  'inherit', border: 'none', color: 'inherit', fontSize: '10px'}}>
+                                            <span>{user_details.firstname} {user_details.lastname}</span>
+                                            <br/>
+                                            {
+                                                user_details.subscribed === true
+                                                ? <span style={{fontWeight: 'bold'}}>Subscribed</span>
+                                                : <span style={{fontWeight: 'bold'}}>Not subscribed</span>
+                                            }
+                                        </DropdownToggle>
+                                        <DropdownMenu>
+                                            <DropdownItem  onClick={this.Signout}>
+                                                <NavLink style={{color: 'inherit', backgoundColor: 'inherit', fontWeight: 'bold'}} >
+                                                    Signout
+                                                </NavLink>
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                </NavItem>
+                            </>
+                        }
                         <NavItem>
                             <NavLink></NavLink>
                         </NavItem>
@@ -126,4 +241,4 @@ class NavBar extends Component{
 
 };
 
-export default NavBar;
+export default withCookies(NavBar);

@@ -99,7 +99,7 @@ class Dashboard extends Component{
             .then((res) => {
                 let result = res.data
                 // set loading to false
-                this.setState({loading: false})
+                this.setState({user_details: result, loading: false})
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
