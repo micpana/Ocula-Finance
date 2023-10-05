@@ -197,10 +197,10 @@ class NewPasswordOnRecovery extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <Container>
+                        <br/><br/><br/><br/>
                         {
                             screen === 'new password'
                             ? <div>
-                                <br/>
                                 <h6>
                                     Create a new password below
                                 </h6>
@@ -244,51 +244,46 @@ class NewPasswordOnRecovery extends Component{
                             </div>
                             : screen === 'ok'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     Your password has been reset successfully.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                    <a href='/signin' style={{color: '#00539C'}}>Click here to signin.</a>
                                 </h5>
                             </div>
                             : screen === 'invalid token'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     Invalid password reset token.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signup' style={{color: 'inherit'}}>Make sure you've followed the instructions stated in the password recovery email you received.</a>
+                                    <a style={{color: '#00539C'}}>Make sure you've followed the instructions stated in the password recovery email you received.</a>
                                 </h5>
                             </div>
                             : screen === 'expired'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     This password reset token expired before its use.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/forgot-password' style={{color: 'inherit'}}>Click here to generate another one.</a>
+                                    <a href='/forgot-password' style={{color: '#00539C'}}>Click here to generate another one.</a>
                                 </h5>
                             </div>
                             : screen === 'used'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     This password reset token has been used already.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                    <a href='/signin' style={{color: '#00539C'}}>Click here to signin.</a>
                                 </h5>
                             </div>
                             : <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
-                                    An unknown error has occured
+                                <h3 style={{marginTop: '30px'}}>
+                                    An unknown error has occured.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                    <a href='/' style={{color: '#00539C'}}>Click here to visit our homepage instead.</a>
                                 </h5>
                             </div>
                         }

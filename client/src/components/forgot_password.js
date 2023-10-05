@@ -266,7 +266,7 @@ class ForgotPassword extends Component{
                             </div>
                             : <div>
                                 <h3 style={{marginTop: '30px'}}>
-                                    An unknown error has occured
+                                    An unknown error has occured.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
                                     <a href='/' style={{color: '#00539C'}}>Click here to visit our homepage instead.</a>
