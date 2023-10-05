@@ -183,10 +183,10 @@ class ForgotPassword extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <Container>
+                        <br/><br/><br/><br/>
                         {
                             screen === 'email entry'
                             ? <div>
-                                <br/>
                                 <h6>
                                     Enter the email address you used during signup
                                 </h6>
@@ -211,19 +211,18 @@ class ForgotPassword extends Component{
                             </div>
                             : screen === 'ok'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     We've sent you a password reset email at <span style={{color: '#00539C'}}>{this.state.email}</span>
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
                                     Follow the instructions stated in the email inorder to reset your account password.
                                 </h5>
-                                <h6 style={{marginTop: '100px'}}>
+                                <h6 style={{marginTop: '70px'}}>
                                     Did not receive our email? Click the button below to resend.
                                 </h6>
                                 <br/>
                                 <Button onClick={this.ForgotPassword} 
-                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                 >
                                     Resend recovery email
                                 </Button>
@@ -232,49 +231,45 @@ class ForgotPassword extends Component{
                                 </h6>
                                 <br/>
                                 <Button onClick={() => this.setState({screen: 'email entry'})} 
-                                    style={{marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                 >
                                     Correct email
                                 </Button>
                             </div>
                             : screen === 'email not registered'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     The email address you've supplied (<span style={{color: '#00539C'}}>{this.state.email}</span>) is not registered on this platform.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signup' style={{color: 'inherit'}}>Click here to signup.</a>
+                                    <a href='/signup' style={{color: '#00539C'}}>Click here to signup.</a>
                                 </h5>
                             </div>
                             : screen === 'banned'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     The email address you've supplied (<span style={{color: '#00539C'}}>{this.state.email}</span>) belongs to an account that has been 
                                     banned on this platform. 
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/contact-us' style={{color: 'inherit'}}>If you have no information why, contact our support team to find out.</a>
+                                    <a href='/contact-us' style={{color: '#00539C'}}>If you have no information why, contact our support team to find out.</a>
                                 </h5>
                             </div>
                             : screen.includes('try again in') === true
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     You've made multiple requests to our server in a short amount of time.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='' style={{color: 'inherit'}}>{screen}</a>
+                                    <a style={{color: '#00539C'}}>{screen}</a>
                                 </h5>
                             </div>
                             : <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     An unknown error has occured
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                    <a href='/' style={{color: '#00539C'}}>Click here to visit our homepage instead.</a>
                                 </h5>
                             </div>
                         }
