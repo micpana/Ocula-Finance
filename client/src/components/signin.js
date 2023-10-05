@@ -215,7 +215,7 @@ class Signin extends Component{
                             <Col>
                                 <Container>
                                     <Form onSubmit={this.Signin}>
-                                        <br/>
+                                        <br/><br/><br/><br/>
                                         <h2 style={{color: '#00539C'}}>Signin</h2>
                                         <br/><br/>
                                         <Label>Email or Username <span style={{color: 'red'}}>*</span></Label>
@@ -243,12 +243,12 @@ class Signin extends Component{
                                         <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
                                         <br/><br/>
                                         <Button type="submit"
-                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
                                         >
                                             Signin
                                         </Button>
                                     </Form>
-                                    <br/><br/><br/>
+                                    <br/><br/>
                                     <a href='/forgot-password' style={{color: '#00539C'}}>
                                         Forgot your password? Click here to reset it.
                                     </a>
