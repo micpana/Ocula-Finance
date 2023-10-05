@@ -228,11 +228,11 @@ class Signup extends Component{
                             </Col>
                             <Col>
                                 <Container>
-                                    <br/>
+                                    <br/><br/><br/><br/>
                                     <h2 style={{color: '#00539C'}}>Signup</h2>
                                     <br/><br/>
                                     <Form onSubmit={this.Signup}>
-                                        <Row>
+                                        <Row style={{margin: '0px'}}>
                                             <Col sm='6'>
                                                 <Label>Firstname <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
@@ -263,7 +263,7 @@ class Signup extends Component{
                                             </Col>
                                         </Row>
                                         <br/>
-                                        <Row>
+                                        <Row style={{margin: '0px'}}>
                                             <Col sm='6'>
                                                 <Label>Username <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
@@ -294,7 +294,7 @@ class Signup extends Component{
                                             </Col>
                                         </Row>
                                         <br/>
-                                        <Row>
+                                        <Row style={{margin: '0px'}}>
                                             <Col sm='6'>
                                                 <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
@@ -325,7 +325,7 @@ class Signup extends Component{
                                             </Col>
                                         </Row>
                                         <br/>
-                                        <Row>
+                                        <Row style={{margin: '0px'}}>
                                             <Col sm='6'>
                                                 <Label>Password Confirmation <span style={{color: 'red'}}>*</span></Label>
                                                 <InputGroup>
@@ -353,7 +353,7 @@ class Signup extends Component{
                                         <a>Click the highlighted text for further information.</a>
                                         <br/><br/>
                                         <Button type="submit"
-                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
                                         >
                                             Signup
                                         </Button>
