@@ -50,7 +50,7 @@ class App extends Component {
                     <Route path='/pricing' element={<Pricing />}/>
                     <Route path='/about-us' element={<AboutUs />}/>
                     <Route path='/contact-us' element={<ContactUs />}/>
-                    <Route path='/email-verification-sent/account_id' element={<EmailVerificationSent />}/>
+                    <Route path='/email-verification-sent/:account_id' element={<EmailVerificationSent />}/>
                     <Route path='/verify-email/:verification_token' element={<VerifyEmail />}/>
                     <Route path='/forgot-password' element={<ForgotPassword />}/>
                     <Route path='/new-password-on-recovery/:recovery_token' element={<NewPasswordOnRecovery />}/>
