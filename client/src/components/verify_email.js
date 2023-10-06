@@ -124,7 +124,7 @@ class VerifyEmail extends Component{
             closable: true,
             type: message_type,
             showIcon: true,
-            duration: 15000
+            duration: 3000
         });
     }
 
@@ -158,54 +158,50 @@ class VerifyEmail extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <Container>
+                        <br/><br/><br/><br/>
                         {
                             screen === 'ok'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     Your email has been verified successfully.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                    <a href='/signin' style={{color: '#00539C'}}>Click here to signin.</a>
                                 </h5>
                             </div>
                             : screen === 'invalid token'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     Invalid verification token.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signin' style={{color: 'inherit'}}>Make sure you've completed the signup process and clicked the link we sent to the email address you provided upon signing up.</a>
+                                    <a style={{color: '#00539C'}}>Make sure you've completed the signup process and clicked the link we sent to the email address you provided upon signing up.</a>
                                 </h5>
                             </div>
                             : screen === 'used'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     This verification token has already been used.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signin' style={{color: 'inherit'}}>Click here to signin.</a>
+                                    <a href='/signin' style={{color: '#00539C'}}>Click here to signin.</a>
                                 </h5>
                             </div>
                             : screen === 'expired'
                             ? <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     This verification token expired before its use.
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/signin' style={{color: 'inherit'}}>Click here to attemp a signin and another one will be generated for you.</a>
+                                    <a href='/signin' style={{color: '#00539C'}}>Click here to attemp a signin and another one will be generated for you.</a>
                                 </h5>
                             </div>
                             : <div>
-                                <br/>
-                                <h3 style={{marginTop: '150px'}}>
+                                <h3 style={{marginTop: '30px'}}>
                                     An unknown error has occured
                                 </h3>
                                 <h5 style={{marginTop: '50px'}}>
-                                    <a href='/' style={{color: 'inherit'}}>Click here to visit our homepage instead.</a>
+                                    <a href='/' style={{color: '#00539C'}}>Click here to visit our homepage instead.</a>
                                 </h5>
                             </div>
                         }
