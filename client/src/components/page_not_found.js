@@ -113,9 +113,19 @@ class PageNotFound extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
-                    : <div>
-                        
-                    </div>
+                    : <Container>
+                        <br/>
+                        <h1 style={{marginTop: '120px', fontWeight: 'bold'}}>
+                          404 - Page Not Found
+                        </h1>
+                        <h5 style={{marginTop: '80px'}}>
+                          The page you're looking for has not been found, please check your link and try again
+                        </h5>
+                        <br/><br/>
+                        <a href='/' style={{color: '#00539C'}}>
+                            Click here to visit our homepage instead
+                        </a>
+                    </Container>
                 }
                 <br/><br/><br/>
             </div>
