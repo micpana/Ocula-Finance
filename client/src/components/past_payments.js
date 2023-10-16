@@ -61,6 +61,24 @@ class PastPayments extends Component{
                     purpose: 'subscription',
                     payment_method: 'Paypal',
                     amount: 10
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'VISA',
+                    amount: 10
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Mastercard',
+                    amount: 96
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Paypal',
+                    amount: 10
                 }
             ]
         };
@@ -189,19 +207,21 @@ class PastPayments extends Component{
                             Past Payments
                         </h5>
                         <br/><br/>
-                        <Table>
-                            <thead>
-                                <tr style={{borderBottom: '1px solid silver'}}>
-                                    <th width='25%'>Date</th>
-                                    <th width='25%'>Purpose</th>
-                                    <th width='25%'>Method</th>
-                                    <th width='25%'>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {past_payments_map}
-                            </tbody>
-                        </Table>
+                        <div style={{maxHeight: '450px', overflowY: 'scroll'}}>
+                            <Table>
+                                <thead>
+                                    <tr style={{borderBottom: '1px solid silver'}}>
+                                        <th width='25%'>Date</th>
+                                        <th width='25%'>Purpose</th>
+                                        <th width='25%'>Method</th>
+                                        <th width='25%'>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {past_payments_map}
+                                </tbody>
+                            </Table>
+                        </div>
                     </div>
                 }
             </div>
