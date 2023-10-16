@@ -137,7 +137,7 @@ class Dashboard extends Component{
 
             // make button color highlight switch between current screen and selected screen
             document.getElementById(current_screen).style.color = '#ffffff'
-            document.getElementById(selected_screen).style.color = '#00539C'
+            document.getElementById(selected_screen).style.color = '#F2B027'
 
             // switch screen to selected
             this.setState({screen: selected_screen})
