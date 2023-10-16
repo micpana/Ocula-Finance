@@ -42,7 +42,10 @@ class Subscriptions extends Component{
             loading: false,
             input_errors: {},
             on_mobile: false,
-            user_details: {}
+            user_details: {
+                subscribed: true,
+                subscription_expiry: '14/11/2023 11:15am'
+            }
         };
 
         this.HandleChange = (e) => {
@@ -140,7 +143,7 @@ class Subscriptions extends Component{
                 on_mobile: true
             })
         }
-        this.GetUserDetails()
+        // this.GetUserDetails()
     }
 
     render() {
@@ -159,8 +162,8 @@ class Subscriptions extends Component{
                             Subscriptions
                         </h5>
                         <br/><br/>
-                        <Row style={{margin: '0px'}}>
-                            <Col sm='3'>
+                        <Row style={{margin: '0px', textAlign: 'left'}}>
+                            <Col sm='4'>
                                 <h6 style={{fontWeight: 'bold'}}>
                                     Your current subscription status:
                                 </h6>
@@ -169,13 +172,35 @@ class Subscriptions extends Component{
                             <Col>
                                 {
                                     this.state.user_details.subscribed === true
-                                    ? <div>
+                                    ? <div style={{fontWeight: 'bold', color: 'green'}}>
                                         Subscribed
                                     </div> 
-                                    : <div>
+                                    : <div style={{fontWeight: 'bold', color: 'red'}}>
                                         Not subscribed
                                     </div>
                                 }
+                                <br/>
+                            </Col>
+                        </Row>
+                        <Row style={{margin: '0px', textAlign: 'left'}}>
+                            <Col sm='4'>
+                                <h6 style={{fontWeight: 'bold'}}>
+                                    Subscription expiry date:
+                                </h6>
+                                <br/>
+                            </Col>
+                            <Col>
+                                <div style={{fontWeight: 'bold', color: '#00539C'}}>
+                                    {
+                                        this.state.user_details.subscription_expiry === ''
+                                        ? <>
+                                            You've never subscribed before
+                                        </>
+                                        : <>
+                                            {this.state.user_details.subscription_expiry}
+                                        </>
+                                    }
+                                </div>
                                 <br/>
                             </Col>
                         </Row>

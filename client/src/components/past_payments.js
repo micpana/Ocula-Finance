@@ -43,7 +43,26 @@ class PastPayments extends Component{
             loading: false,
             input_errors: {},
             on_mobile: false,
-            past_payments: []
+            past_payments: [
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'VISA',
+                    amount: 10
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Mastercard',
+                    amount: 96
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Paypal',
+                    amount: 10
+                }
+            ]
         };
 
         this.HandleChange = (e) => {
@@ -141,17 +160,17 @@ class PastPayments extends Component{
                 on_mobile: true
             })
         }
-        this.GetUserPastPayments()
+        // this.GetUserPastPayments()
     }
 
     render() {
         var past_payments = this.state.past_payments
         var past_payments_map = past_payments.map((item, index) => {
-            return <tr style={{borderBottom: '1px solid grey'}}>
+            return <tr style={{borderBottom: '1px solid silver'}}>
                 <td>{item.date}</td>
                 <td>{item.purpose}</td>
                 <td>{item.payment_method}</td>
-                <td>{item.amount}</td>
+                <td>$ {item.amount}</td>
             </tr>
         })
 
@@ -172,7 +191,7 @@ class PastPayments extends Component{
                         <br/><br/>
                         <Table>
                             <thead>
-                                <tr>
+                                <tr style={{borderBottom: '1px solid silver'}}>
                                     <th width='25%'>Date</th>
                                     <th width='25%'>Purpose</th>
                                     <th width='25%'>Method</th>
