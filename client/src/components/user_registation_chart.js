@@ -43,7 +43,20 @@ class UserRegistrationChart extends Component{
             loading: false,
             input_errors: {},
             on_mobile: false,
-            user_registration_statistics: []
+            user_registration_statistics: [
+                {
+                    date: '14/11/2023',
+                    users: 30
+                },
+                {
+                    date: '15/11/2023',
+                    users: 300
+                },
+                {
+                    date: '16/11/2023',
+                    users: 120
+                }
+            ]
         };
 
         this.HandleChange = (e) => {
@@ -141,7 +154,7 @@ class UserRegistrationChart extends Component{
                 on_mobile: true
             })
         }
-        this.GetUserRegistrationStatistics()
+        // this.GetUserRegistrationStatistics()
     }
 
     render() {
@@ -155,26 +168,28 @@ class UserRegistrationChart extends Component{
                     this.state.loading === true
                     ? <LoadingScreen />
                     : <div>
-                    <br/>
+                        <br/>
                         <h5 style={{fontWeight: 'bold'}}>
                             User Registration Chart
                         </h5>
-                        <br/><br/>
-                        <LineChart
-                            width={1000}
-                            height={300}
-                            data={this.state.user_registration_statistics}
-                            margin={{
-                                top: 0, right: 0, left: 0, bottom: 0,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Line type="monotone" dataKey="users" stroke="#00539C" activeDot={{ r: 8 }}/>
-                        </LineChart>
+                        <br/><br/><br/><br/>
+                        <div style={{width: '100%', overflowX: 'scroll'}}>
+                            <LineChart
+                                width={1000}
+                                height={300}
+                                data={this.state.user_registration_statistics}
+                                margin={{
+                                    top: 0, right: 0, left: 0, bottom: 0,
+                                }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="users" stroke="#00539C" activeDot={{ r: 8 }}/>
+                            </LineChart>
+                        </div>
                     </div>
                 }
             </div>
