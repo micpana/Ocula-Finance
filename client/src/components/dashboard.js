@@ -173,7 +173,9 @@ class Dashboard extends Component{
             // check token's validity
             // this.CheckAccessTokenValidity()
             // highlight current screen's button
-            document.getElementById(this.state.screen).style.color = '#F2B027'
+            if (this.state.loading === false){
+                document.getElementById(this.state.screen).style.color = '#F2B027'
+            }
         }
     }
 
