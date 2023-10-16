@@ -42,7 +42,11 @@ class NavBar extends Component{
             dropdownOpen: false,
             on_mobile: false,
             loading: false,
-            user_details: null
+            user_details: {
+                firstname: 'Michael Panashe',
+                lastname: 'Mudimbu',
+                subscribed: true
+            }
         };    
         
         this.HandleChange = (e) =>{
@@ -120,28 +124,19 @@ class NavBar extends Component{
     }
 
     render() {
+        // navbar
+        var navbar_brand_width = this.state.on_mobile === true ? '40%' : '10%'
+        // user
         var user_details = this.state.user_details
+
         return (
             <Navbar light expand="md" sticky='top' style={{backgroundColor: '#EEECEC'}}>
-                <NavbarBrand href="/" style={{marginBottom: '0px', height: '', backgroundColor: '', textAlign: 'left', width: '10%'}}>
+                <NavbarBrand href="/" style={{marginBottom: '0px', height: '', backgroundColor: '', textAlign: 'left', width: navbar_brand_width}}>
                     <img src={Logo} style={{width: '100%'}} /> 
                 </NavbarBrand>
                 <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#EEECEC'}}/>
                 <Collapse isOpen={this.state.isOpen} navbar>
-                    <Nav className="ml-auto" navbar>
-                        {
-                            this.state.on_mobile == true
-                            ? <>
-                                <NavItem>
-                                    <NavLink></NavLink>
-                                </NavItem>  
-                            </>
-                            : <>
-                                <NavItem>
-                                    <NavLink style={{width: '470px'}}></NavLink>
-                                </NavItem> 
-                            </>
-                        }   
+                    <Nav className="ml-auto" navbar style={{position: 'absolute', right: 0, top: '15px', backgroundColor: '#EEECEC'}}>
                         <NavItem>
                             <NavLink href='/' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Home
@@ -200,7 +195,7 @@ class NavBar extends Component{
                                 </NavItem>
                             </>
                             : <>
-                                <NavItem style={{border: '1px solid #005fc9', borderRadius: '20px', width: '100px'}}>
+                                <NavItem style={{border: '1px solid #005fc9', borderRadius: '20px', maxHeight: '45px'}}>
                                     <NavLink href='/dashboard' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                         Dashboard
                                     </NavLink>
@@ -210,13 +205,13 @@ class NavBar extends Component{
                                 </NavItem>
                                 <NavItem>
                                     <Dropdown className="d-inline-block" onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.dtoggle}>
-                                        <DropdownToggle  style={{marginTop: '', backgroundColor:  'inherit', border: 'none', color: 'inherit', fontSize: '10px'}}>
-                                            <span>{user_details.firstname} {user_details.lastname}</span>
+                                        <DropdownToggle  style={{marginTop: '', backgroundColor:  'inherit', border: 'none', color: 'inherit'}}>
+                                            <span style={{fontSize: '10px', color: '#005fc9', fontWeight: 'bold'}}>{user_details.firstname} {user_details.lastname}</span>
                                             <br/>
                                             {
                                                 user_details.subscribed === true
-                                                ? <span style={{fontWeight: 'bold'}}>Subscribed</span>
-                                                : <span style={{fontWeight: 'bold'}}>Not subscribed</span>
+                                                ? <span style={{fontWeight: 'bold', fontSize: '10px'}}>Subscribed</span>
+                                                : <span style={{fontWeight: 'bold', fontSize: '10px'}}>Not subscribed</span>
                                             }
                                         </DropdownToggle>
                                         <DropdownMenu>
