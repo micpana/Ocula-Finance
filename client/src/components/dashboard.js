@@ -166,14 +166,14 @@ class Dashboard extends Component{
 
         // check access token existance
         const { cookies } = this.props;
-        if(cookies.get(Access_Token_Cookie_Name) == null){
+        if(cookies.get(Access_Token_Cookie_Name) != null){
             let port = (window.location.port ? ':' + window.location.port : '');
             window.location.href = '//' + window.location.hostname + port + '/signin';
         }else{ 
             // check token's validity
-            this.CheckAccessTokenValidity()
+            // this.CheckAccessTokenValidity()
             // highlight current screen's button
-            document.getElementById(this.state.selected_screen).style.color = '#F2B027'
+            document.getElementById(this.state.screen).style.color = '#F2B027'
         }
     }
 
@@ -224,6 +224,10 @@ class Dashboard extends Component{
                             {
                                 user_role === 'admin'
                                 ? <div>
+                                    <h6 style={{color: 'inherit', marginTop: '13px'}}>
+                                        Admin Access
+                                    </h6>
+                                    <br/>
                                     <Button id='all users' onClick={this.SwitchScreen} 
                                         style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', fontSize: '18px', textAlign: 'left'}}
                                     >
