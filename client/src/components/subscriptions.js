@@ -167,7 +167,6 @@ class Subscriptions extends Component{
                                 <h6 style={{fontWeight: 'bold'}}>
                                     Your current subscription status:
                                 </h6>
-                                <br/>
                             </Col>
                             <Col>
                                 {
@@ -179,15 +178,14 @@ class Subscriptions extends Component{
                                         Not subscribed
                                     </div>
                                 }
-                                <br/>
                             </Col>
                         </Row>
+                        <br/>
                         <Row style={{margin: '0px', textAlign: 'left'}}>
                             <Col sm='4'>
                                 <h6 style={{fontWeight: 'bold'}}>
                                     Subscription expiry date:
                                 </h6>
-                                <br/>
                             </Col>
                             <Col>
                                 <div style={{fontWeight: 'bold', color: '#00539C'}}>
@@ -201,10 +199,9 @@ class Subscriptions extends Component{
                                         </>
                                     }
                                 </div>
-                                <br/>
                             </Col>
                         </Row>
-                        <br/><br/>
+                        <br/><br/><br/>
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
