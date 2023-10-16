@@ -224,7 +224,7 @@ class Dashboard extends Component{
                             </Button>
                             <br/><br/>
                             {
-                                user_role === 'admin'
+                                user_role === null
                                 ? <div>
                                     <h6 style={{color: 'inherit', marginTop: '13px'}}>
                                         Admin Access
@@ -279,10 +279,10 @@ class Dashboard extends Component{
                                     : screen === 'user subscription chart'
                                     ? <UserSubscriptionChart />
                                     : <div>
-                                        <br/>
-                                        <h3 style={{marginTop: '150px'}}>
-                                            An unknown error has occured
-                                        </h3>
+                                        <br/><br/><br/>
+                                        <h5 style={{color: '#005fc9'}}>Something went wrong.</h5>
+                                        <br/><br/><br/>
+                                        <Grid width='180px' style={{color: '#005fc9'}}/>
                                     </div>
                                 }
                                 <br/><br/><br/>
