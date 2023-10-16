@@ -43,7 +43,24 @@ class UserCountryRanking extends Component{
             loading: false,
             input_errors: {},
             on_mobile: false,
-            user_country_ranking: []
+            user_country_ranking: [
+                {
+                    country: 'South Africa',
+                    users: 1200
+                },
+                {
+                    country: 'Zimbabwe',
+                    users: 600
+                },
+                {
+                    country: 'United Kingdom',
+                    users: 550
+                },
+                {
+                    country: 'United States of America',
+                    users: 400
+                }
+            ]
         };
 
         this.HandleChange = (e) => {
@@ -141,13 +158,13 @@ class UserCountryRanking extends Component{
                 on_mobile: true
             })
         }
-        this.GetUserCountryRanking()
+        // this.GetUserCountryRanking()
     }
 
     render() {
         var user_country_ranking = this.state.user_country_ranking
         var user_country_ranking_map = user_country_ranking.map((item, index) => {
-            return <tr style={{borderBottom: '1px solid grey'}}>
+            return <tr style={{borderBottom: '1px solid silver'}}>
                 <td>{item.country}</td>
                 <td>{item.users}</td>
             </tr>
@@ -170,12 +187,12 @@ class UserCountryRanking extends Component{
                         <br/><br/>
                         <Table>
                             <thead>
-                                <tr>
+                                <tr style={{borderBottom: '1px solid silver'}}>
                                     <th width='50%'>Country</th>
                                     <th width='50%'>Users</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style={{textAlign: 'left'}}>
                                 {user_country_ranking_map}
                             </tbody>
                         </Table>

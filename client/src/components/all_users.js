@@ -208,7 +208,7 @@ class AllUsers extends Component{
                                                 <th width='25%'>Email</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody style={{textAlign: 'left'}}>
                                             {all_users_map}
                                         </tbody>
                                     </Table>

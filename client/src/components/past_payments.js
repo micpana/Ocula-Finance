@@ -217,7 +217,7 @@ class PastPayments extends Component{
                                         <th width='25%'>Amount</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style={{textAlign: 'left'}}>
                                     {past_payments_map}
                                 </tbody>
                             </Table>
