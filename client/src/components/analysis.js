@@ -65,7 +65,8 @@ class Analysis extends Component{
             user_subscribed: null,
             symbols: [
                 'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR'
-            ]
+            ],
+            user_last_m15_close: null
         };
 
         this.HandleChange = (e) => {
@@ -227,6 +228,11 @@ class Analysis extends Component{
         var up_reward = Math.round((maximum_possible_up_move/maximum_possible_down_move) * 1000) / 1000
         var down_reward = Math.round((maximum_possible_down_move/maximum_possible_up_move) * 1000) / 1000
 
+        // price based analysis
+        var user_last_m15_close = this.state.user_last_m15_close
+        var up_move_possible_maximum_price = user_last_m15_close - -1 * ((maximum_possible_up_move / 100) * user_last_m15_close)
+        var down_move_possible_maximum_price = user_last_m15_close - ((maximum_possible_down_move / 100) * user_last_m15_close)
+
         return (
             <div>
                 <Helmet>
@@ -271,8 +277,12 @@ class Analysis extends Component{
                                         <br/>
                                     </Col>
                                 </Row>
-                                <span style={{fontWeight: 'bold'}}>Last updated:</span> {current_market_analysis.timestamp}
-                                <br/><br/><br/>
+                                <span style={{fontWeight: 'bold'}}>Last updated: </span> <span style={{color: '#005fc9'}}>{current_market_analysis.timestamp}</span>
+                                <br/><br/>
+                                <h6>
+                                    Predictions for the next 105 minutes (seven 15 minute candles)
+                                </h6>
+                                <br/><br/>
                                 <Row>
                                     <Col sm='6'>
                                         <Container>
@@ -330,6 +340,66 @@ class Analysis extends Component{
                                     <Col>
                                         <span style={{fontWeight: 'bold'}}>1:{down_reward} </span>
                                         <span style={{fontSize: '13px'}}>(Risk: 1, Reward: {down_reward})</span>
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/><br/>
+                                <h6 style={{fontWeight: 'bold'}}>
+                                    Price based analysis:
+                                </h6>
+                                <br/><br/>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm='6' style={{fontWeight: 'bold', color: '#005fc9'}}>
+                                        Recent 15 minute close:
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Your broker's most recent 15 minute closing price" name="user_last_m15_close" id="user_last_m15_close"
+                                            value={this.state.user_last_m15_close} onChange={this.HandleChange} type="number" 
+                                        />
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm='6' style={{fontWeight: 'bold', color: 'green'}}>
+                                        Up-move possible max price:
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        <span style={{fontWeight: 'bold'}}>
+                                            {
+                                                this.state.user_last_m15_close === null || this.state.user_last_m15_close === 0
+                                                ? <>
+                                                    Waiting for price input
+                                                </>
+                                                : <>
+                                                    {up_move_possible_maximum_price}
+                                                </>
+                                            }    
+                                        </span>
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm='6' style={{fontWeight: 'bold', color: 'red'}}>
+                                        Down-move possible max price:
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        <span style={{fontWeight: 'bold'}}>
+                                            {
+                                                this.state.user_last_m15_close === null
+                                                ? <>
+                                                    Waiting for price input
+                                                </>
+                                                : <>
+                                                    {down_move_possible_maximum_price}
+                                                </>
+                                            }    
+                                        </span>
                                         <br/>
                                     </Col>
                                 </Row>
