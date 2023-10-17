@@ -44,7 +44,7 @@ class Footer extends Component{
             <div  style={{minHeight: '250px', backgroundColor: '#EEECEC'}}>
                 <Container>
                     <Row style={{textAlign: 'left', color: ''}}>
-                        <Col sm='3'>
+                        <Col sm='4'>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold', color: '#000000'}}>Get In Touch</h6>
                             <br/>
@@ -58,7 +58,7 @@ class Footer extends Component{
                                 Harare, Zimbabwe
                             </a>
                         </Col>
-                        <Col>
+                        <Col sm='3'>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold', color: '#000000'}}>Quick Links</h6>
                             <br/>
