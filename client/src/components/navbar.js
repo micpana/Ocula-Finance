@@ -136,7 +136,7 @@ class NavBar extends Component{
                 </NavbarBrand>
                 <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#EEECEC'}}/>
                 <Collapse isOpen={this.state.isOpen} navbar>
-                    <Nav className="ml-auto" navbar style={{position: 'absolute', right: 0, top: '15px', backgroundColor: '#EEECEC'}}>
+                    <Nav className="ml-auto" navbar style={{position: 'absolute', right: 0, backgroundColor: '#EEECEC'}}>
                         <NavItem>
                             <NavLink href='/' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
                                 Home
