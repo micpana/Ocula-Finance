@@ -184,11 +184,11 @@ class Analysis extends Component{
             if(symbol === 'LTCUSD'){ base = LTC; quote = USD }
             if(symbol === 'XRPUSD'){ base = XRP; quote = USD }
 
-            return <Row>
-                <Col>
+            return <Row style={{margin: '0px'}}>
+                <Col xs='6'>
                     <img src={base} style={{width: '50px', height: '50px'}} />
                 </Col>
-                <Col>
+                <Col xs='6'>
                     <img src={quote} style={{width: '50px', height: '50px'}} />
                 </Col>
             </Row>
@@ -266,7 +266,7 @@ class Analysis extends Component{
                                         <br/>
                                     </Col>
                                     <Col><br/></Col>
-                                    <Col sm='2' style={{textAlign: 'right'}}>
+                                    <Col sm='4' style={{textAlign: 'right'}}>
                                         <this.GetSymbolIcons/>
                                         <br/>
                                     </Col>
