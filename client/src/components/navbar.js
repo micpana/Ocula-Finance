@@ -124,14 +124,12 @@ class NavBar extends Component{
     }
 
     render() {
-        // navbar
-        var navbar_brand_width = this.state.on_mobile === true ? '40%' : '10%'
         // user
         var user_details = this.state.user_details
 
         return (
             <Navbar light expand="md" sticky='top' style={{backgroundColor: '#EEECEC'}}>
-                <NavbarBrand href="/" style={{marginBottom: '0px', height: '', backgroundColor: '', textAlign: 'left', width: navbar_brand_width}}>
+                <NavbarBrand href="/" style={{marginBottom: '0px', height: '70px', width: '150px', marginLeft: '10px'}}>
                     <img src={Logo} style={{width: '100%'}} /> 
                 </NavbarBrand>
                 <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#EEECEC'}}/>
