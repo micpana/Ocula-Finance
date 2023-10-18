@@ -115,7 +115,7 @@ class Signin extends Component{
 
             // check data collection status
             if (data_checks_out === false){ // user needs to check their input data
-                this.Notification('Check input fields for errors.', 'error')
+                Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
                 this.setState({loading: true})
 
@@ -150,11 +150,11 @@ class Signin extends Component{
                         else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         }
-                        this.Notification(notification_message, 'error')
+                        Notification(notification_message, 'error')
                     }else if (error.request){ // request was made but no response was received ... network error
-                        this.Notification(Network_Error_Message, 'error')
+                        Notification(Network_Error_Message, 'error')
                     }else{ // error occured during request setup ... no network access
-                        this.Notification(No_Network_Access_Message, 'error')
+                        Notification(No_Network_Access_Message, 'error')
                     }
                     this.setState({loading: false})
                 })
@@ -163,16 +163,16 @@ class Signin extends Component{
     }
 
     Notification = (message, message_type) => { // message type -> info / success / warning / error
-        // const toaster = useToaster();
+        const toaster = useToaster();
         
-        // // push notification message
-        // toaster.push(<Message>{message}</Message>, {
-        //     placement: 'topCenter',
-        //     closable: true,
-        //     type: message_type,
-        //     showIcon: true,
-        //     duration: 15000
-        // });
+        // push notification message
+        toaster.push(<Message>{message}</Message>, {
+            placement: 'topCenter',
+            closable: true,
+            type: message_type,
+            showIcon: true,
+            duration: 15000
+        });
     }
 
     componentDidMount() {
