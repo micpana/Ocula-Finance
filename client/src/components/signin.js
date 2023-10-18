@@ -191,8 +191,6 @@ class Signin extends Component{
     }
 
     render() {
-        console.log(this.state.input_errors['tik_tak'])
-        console.log(this.state.input_errors)
         return (
             <div>
                 <Helmet>
