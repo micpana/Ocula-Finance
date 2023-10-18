@@ -36,7 +36,7 @@ class InputErrors extends Component{
     constructor(props) { 
         super(props);
         this.state = {
-            field_error_state: this.props.field_error_state
+            
         };
     }
 
