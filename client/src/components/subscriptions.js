@@ -53,35 +53,26 @@ class Subscriptions extends Component{
         };
 
         this.SetInputError = (field, error) => { // error -> required / invalid
-            // if field error state doesn't already exist
-            if (this.state.input_errors[field] == undefined){
-                // new error
-                var new_error = {
-                    [field]: error
-                }
+            // existing errors
+            var existing_errors = this.state.input_errors
 
-                // existing errors + new
-                var updated_input_errors = {
-                    ...this.state.input_errors,
-                    ...new_error
-                }
+            // existing errors modified
+            existing_errors[field] = error
 
-                // update state
-                this.setState({input_errors: updated_input_errors})
-            }else{ // field error state already exists
-                // existing errors
-                var existing_errors = this.state.input_errors
-
-                // existing errors modified
-                existing_errors[field] = error
-
-                // update state
-                this.setState({input_errors: existing_errors})
-            }
+            // update state
+            this.setState({input_errors: existing_errors})
         }
 
         this.ClearInputErrors = () => {
-            this.setState({input_errors: {}})
+            // existing errors
+            var existing_errors = this.state.input_errors
+            // array of existing error field names
+            var existing_error_fields = Object.keys(existing_errors)
+            // set existing error fields to undefined, clearing them
+            existing_error_fields.map((item, index) => {
+                existing_errors[item] = undefined
+            })
+            this.setState({input_errors: existing_errors})
         }
 
         this.GetUserDetails = () => {
