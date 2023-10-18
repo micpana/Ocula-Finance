@@ -64,7 +64,15 @@ class Signin extends Component{
         }
 
         this.ClearInputErrors = () => {
-            this.setState({input_errors: {}})
+            // existing errors
+            var existing_errors = this.state.input_errors
+            // array of existing error field names
+            var existing_error_fields = Object.keys(existing_errors)
+            // set existing error fields to undefined, clearing them
+            existing_error_fields.map((item, index) => {
+                existing_errors[item] = undefined
+            })
+            this.setState({input_errors: existing_errors})
         }
 
         this.IsEmailStructureValid = (email) => {
@@ -183,6 +191,8 @@ class Signin extends Component{
     }
 
     render() {
+        console.log(this.state.input_errors['tik_tak'])
+        console.log(this.state.input_errors)
         return (
             <div>
                 <Helmet>
