@@ -53,31 +53,14 @@ class Signin extends Component{
         };
 
         this.SetInputError = (field, error) => { // error -> required / invalid
-            // if field error state doesn't already exist
-            if (this.state.input_errors[field] == undefined){
-                // new error
-                var new_error = {
-                    [field]: error
-                }
+            // existing errors
+            var existing_errors = this.state.input_errors
 
-                // existing errors + new
-                var updated_input_errors = {
-                    ...this.state.input_errors,
-                    ...new_error
-                }
+            // existing errors modified
+            existing_errors[field] = error
 
-                // update state
-                this.setState({input_errors: updated_input_errors})
-            }else{ // field error state already exists
-                // existing errors
-                var existing_errors = this.state.input_errors
-
-                // existing errors modified
-                existing_errors[field] = error
-
-                // update state
-                this.setState({input_errors: existing_errors})
-            }
+            // update state
+            this.setState({input_errors: existing_errors})
         }
 
         this.ClearInputErrors = () => {
@@ -172,16 +155,16 @@ class Signin extends Component{
     }
 
     Notification = (message, message_type) => { // message type -> info / success / warning / error
-        const toaster = useToaster();
+        // const toaster = useToaster();
         
-        // push notification message
-        toaster.push(<Message>{message}</Message>, {
-            placement: 'topCenter',
-            closable: true,
-            type: message_type,
-            showIcon: true,
-            duration: 15000
-        });
+        // // push notification message
+        // toaster.push(<Message>{message}</Message>, {
+        //     placement: 'topCenter',
+        //     closable: true,
+        //     type: message_type,
+        //     showIcon: true,
+        //     duration: 15000
+        // });
     }
 
     componentDidMount() {

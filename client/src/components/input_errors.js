@@ -45,7 +45,7 @@ class InputErrors extends Component{
     }
 
     render() {
-        var field_error_state = this.state.field_error_state
+        var field_error_state = this.props.field_error_state
         var field_label = this.props.field_label
 
         return (
@@ -54,7 +54,7 @@ class InputErrors extends Component{
                     field_error_state != undefined
                     ? <div> 
                         {
-                            field_error_state == 'required'
+                            field_error_state === 'required'
                             ? <h6 style={{color: 'red'}}>{field_label} is required</h6>
                             : <h6 style={{color: 'red'}}>{field_label} is invalid</h6>
                         }
