@@ -7,7 +7,7 @@ export const IsEmailStructureValid = (email) => {
 }
 
 export const IsPasswordStructureValid = (password) => {
-    // regex structures
+    // regex structures`
     var uppercase_regex = /[A-Z]/
     var lowercase_regex = /[a-z]/
     var number_regex = /[0-9]/
@@ -20,5 +20,5 @@ export const IsPasswordStructureValid = (password) => {
     var has_special_character = special_character_regex.test(password)
 
     // return true if password has at least 8 characters that include at least 1: number, uppercase letter, lowercase letter, special character
-    return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
+    return password.length >= 8 && has_uppercase && has_lowercase && has_number && has_special_character
 }
