@@ -7,7 +7,7 @@ export const IsEmailStructureValid = (email) => {
 }
 
 export const IsPasswordStructureValid = (password) => {
-    // regex structures`
+    // regex structures
     var uppercase_regex = /[A-Z]/
     var lowercase_regex = /[a-z]/
     var number_regex = /[0-9]/
