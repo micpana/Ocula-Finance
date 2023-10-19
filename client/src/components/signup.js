@@ -31,6 +31,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import Signup1 from '../images/signup_1.svg'
 import { FaUserAlt, FaUsers, FaUserAstronaut, FaAt, FaPhoneAlt, FaUserLock, FaKey } from 'react-icons/fa';
 
@@ -81,31 +82,6 @@ class Signup extends Component{
             this.setState({input_errors: existing_errors})
         }
 
-        this.IsEmailStructureValid = (email) => {
-            // regex
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            // return true if email has proper structure
-            return regex.test(email)
-        }
-
-        this.IsPasswordStructureValid = (password) => {
-            // regex structures
-            var uppercase_regex = /[A-Z]/
-            var lowercase_regex = /[a-z]/
-            var number_regex = /[0-9]/
-            var special_character_regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
-
-            // check if password contains at least one character from each type
-            var has_uppercase = uppercase_regex.test(password)
-            var has_lowercase = lowercase_regex.test(password)
-            var has_number = number_regex.test(password)
-            var has_special_character = special_character_regex.test(password)
-
-            // return true if password has at least 8 characters that include at least 1: number, uppercase letter, lowercase letter, special character
-            return password.length > 8 && has_uppercase && has_lowercase && has_number && has_special_character
-        }
-
         this.Signup = (e) => {
             e.preventDefault()
             
@@ -120,10 +96,10 @@ class Signup extends Component{
             if (this.state.lastname === ''){ this.SetInputError('lastname', 'required'); data_checks_out = false }
             if (this.state.username === ''){ this.SetInputError('username', 'required'); data_checks_out = false }
             if (this.state.email === ''){ this.SetInputError('email', 'required'); data_checks_out = false }
-            if (this.IsEmailStructureValid(this.state.email) === false){ this.SetInputError('email', 'invalid'); data_checks_out = false }
+            if (IsEmailStructureValid(this.state.email) === false){ this.SetInputError('email', 'invalid'); data_checks_out = false }
             if (this.state.phonenumber === ''){ this.SetInputError('phonenumber', 'required'); data_checks_out = false }
             if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
-            if (this.IsPasswordStructureValid(this.state.password) === false){ this.SetInputError('password', 'invalid'); data_checks_out = false }
+            if (IsPasswordStructureValid(this.state.password) === false){ this.SetInputError('password', 'invalid'); data_checks_out = false }
             if (this.state.password_confirmation === ''){ this.SetInputError('password_confirmation', 'required'); data_checks_out = false }
             if (this.state.password != this.state.password_confirmation){ this.SetInputError('password_mismatch', 'invalid'); data_checks_out = false }
             if (this.state.country === ''){ this.SetInputError('country', 'required'); data_checks_out = false }

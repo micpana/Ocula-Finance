@@ -31,6 +31,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import { FaAt } from 'react-icons/fa';
 
 class ForgotPassword extends Component{
@@ -74,14 +75,6 @@ class ForgotPassword extends Component{
             this.setState({input_errors: existing_errors})
         }
 
-        this.IsEmailStructureValid = (email) => {
-            // regex
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            // return true if email has proper structure
-            return regex.test(email)
-        }
-
         this.ForgotPassword = (e) => {
             e.preventDefault()
             
@@ -93,7 +86,7 @@ class ForgotPassword extends Component{
 
             // validate input data
             if (this.state.email === ''){ this.SetInputError('email', 'required'); data_checks_out = false }
-            if (this.IsEmailStructureValid(this.state.email) === false){ this.SetInputError('email', 'invalid'); data_checks_out = false }
+            if (IsEmailStructureValid(this.state.email) === false){ this.SetInputError('email', 'invalid'); data_checks_out = false }
 
             // check data collection status
             if (data_checks_out === false){ // user needs to check their input data

@@ -32,6 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 
 class PageNotFound extends Component{
     static propTypes = {
