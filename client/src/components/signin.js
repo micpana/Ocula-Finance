@@ -30,7 +30,7 @@ import axios from 'axios';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
-import { Message, useToaster } from "rsuite";
+import Notification from './notification_alert';
 import Signin1 from '../images/signin_1.svg'
 import { FaUserCheck, FaUserLock } from 'react-icons/fa';
 
@@ -160,19 +160,6 @@ class Signin extends Component{
                 })
             }
         }
-    }
-
-    Notification = (message, message_type) => { // message type -> info / success / warning / error
-        const toaster = useToaster();
-        
-        // push notification message
-        toaster.push(<Message>{message}</Message>, {
-            placement: 'topCenter',
-            closable: true,
-            type: message_type,
-            showIcon: true,
-            duration: 15000
-        });
     }
 
     componentDidMount() {

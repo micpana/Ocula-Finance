@@ -30,7 +30,7 @@ import axios from 'axios';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
-import { Message, useToaster } from "rsuite";
+import Notification from './notification_alert';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
 
 class UserSubscriptionChart extends Component{
@@ -114,29 +114,16 @@ class UserSubscriptionChart extends Component{
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        this.Notification(notification_message, 'error')
+                        Notification(notification_message, 'error')
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    this.Notification(Network_Error_Message, 'error')
+                    Notification(Network_Error_Message, 'error')
                 }else{ // error occured during request setup ... no network access
-                    this.Notification(No_Network_Access_Message, 'error')
+                    Notification(No_Network_Access_Message, 'error')
                 }
                 this.setState({loading: false})
             })
         }
-    }
-
-    Notification = (message, message_type) => { // message type -> info / success / warning / error
-        const toaster = useToaster();
-        
-        // push notification message
-        toaster.push(<Message>{message}</Message>, {
-            placement: 'topCenter',
-            closable: true,
-            type: message_type,
-            showIcon: true,
-            duration: 15000
-        });
     }
 
     componentDidMount() {

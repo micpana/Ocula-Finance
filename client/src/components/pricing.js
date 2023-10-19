@@ -29,7 +29,7 @@ import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
-import { Message, useToaster } from "rsuite";
+import Notification from './notification_alert';
 
 class Pricing extends Component{
     static propTypes = {
@@ -69,19 +69,6 @@ class Pricing extends Component{
             })
             this.setState({input_errors: existing_errors})
         }
-    }
-
-    Notification = (message, message_type) => { // message type -> info / success / warning / error
-        const toaster = useToaster();
-        
-        // push notification message
-        toaster.push(<Message>{message}</Message>, {
-            placement: 'topCenter',
-            closable: true,
-            type: message_type,
-            showIcon: true,
-            duration: 15000
-        });
     }
 
     componentDidMount() {
