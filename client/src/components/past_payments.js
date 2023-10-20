@@ -24,6 +24,7 @@ import {
     TailSpin,
     ThreeDots,
 } from '@agney/react-loading';
+import { ToastContainer, toast } from 'react-toastify';
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
@@ -176,6 +177,7 @@ class PastPayments extends Component{
                     <title>Past Payments | {Platform_Name}</title>
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
+                <ToastContainer />
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
