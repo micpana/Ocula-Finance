@@ -33,6 +33,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
+import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
 class UserSubscriptionChart extends Component{
     static propTypes = {
@@ -44,6 +45,10 @@ class UserSubscriptionChart extends Component{
             loading: false,
             input_errors: {},
             on_mobile: false,
+            start_date: '',
+            end_date: '',
+            category: 'Daily', // Daily / Monthly / Yearly
+            categories: ['Daily', 'Monthly', 'Yearly'],
             user_subscription_statistics: [
                 {
                     date: '14/11/2023',
@@ -91,7 +96,12 @@ class UserSubscriptionChart extends Component{
             const { cookies } = this.props;
             this.setState({loading: true})
 
-            axios.post(Backend_Server_Address + 'getSubscribedUserCountStatistics', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            var data = new FormData()
+            data.append('start_date', this.state.start_date)
+            data.append('end_date', this.state.end_date)
+            data.append('category', this.state.category)
+
+            axios.post(Backend_Server_Address + 'getSubscribedUserCountStatistics', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set users to state
@@ -152,7 +162,57 @@ class UserSubscriptionChart extends Component{
                         <h5 style={{fontWeight: 'bold'}}>
                             User Subscription Chart
                         </h5>
-                        <br/><br/><br/><br/>
+                        <br/><br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
+                                <Label style={{fontWeight: 'bold'}}>Category:</Label>
+                                <select name='category' value={this.state.category} onChange={this.HandleChange}
+                                    style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                >
+                                    {
+                                        this.state.categories.map((item) => {
+                                            return<option value={item}>{item}</option>
+                                        })
+                                    }
+                                </select>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
+                                <Label style={{color: '#00539C'}}>Start Date</Label>
+                                <InputGroup>
+                                    <InputGroupText addonType="prepend">
+                                        <FaCalendarDay style={{margin:'10px'}}/>
+                                    </InputGroupText>
+                                    <Input style={{border: 'none', color: 'inherit', backgroundColor: 'inherit'}}
+                                        name="start_date" id="start_date"
+                                        value={this.state.start_date} onChange={this.HandleChange} type="date" 
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col sm='3' style={{textAlign: 'left', marginRight: '30px'}}>
+                                <Label style={{color: '#00539C'}}>End Date</Label>
+                                <InputGroup>
+                                    <InputGroupText addonType="prepend">
+                                        <FaCalendarWeek style={{margin:'10px'}}/>
+                                    </InputGroupText>
+                                    <Input style={{border: 'none', color: 'inherit', backgroundColor: 'inherit'}}
+                                        name="end_date" id="end_date"
+                                        value={this.state.end_date} onChange={this.HandleChange} type="date"  
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col sm='3'>
+                                <br/>
+                                <Button onClick={this.GetUserSubscriptionStatistics} 
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    View
+                                </Button>
+                            </Col>
+                        </Row>
+                        <br/><br/><br/>
                         <div style={{width: '100%', overflowX: 'scroll'}}>
                             <LineChart
                                 width={1000}
