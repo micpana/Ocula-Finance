@@ -33,6 +33,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import { FaMoneyCheckAlt, FaSearch } from 'react-icons/fa';
 
 class AllUsers extends Component{
     static propTypes = {
@@ -45,6 +46,8 @@ class AllUsers extends Component{
             input_errors: {},
             on_mobile: false,
             screen: 'users', // users / user
+            to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified'],
+            users_showing: 'All', // All / Subscribed / Not subscribed / Banned / Verified / Not verified
             all_users: [
                 {
                     firstname: 'Michael',
@@ -62,7 +65,11 @@ class AllUsers extends Component{
                     banned: false
                 }
             ],
-            user: null
+            user: null,
+            user_payments: [
+
+            ],
+            search_query: ''
         };
 
         this.HandleChange = (e) => {
@@ -130,6 +137,90 @@ class AllUsers extends Component{
                 this.setState({loading: false})
             })
         }
+
+        this.GetSelectedUserPayments = (user_id) => {
+            const { cookies } = this.props;
+            this.setState({loading: true})
+
+            var data = new FormData()
+            data.append('account_id', user_id)
+
+            axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // set users to state
+                this.setState({user_payments: result, loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'Access token disabled via signout' ||
+                        result === 'Access token expired' ||
+                        result === 'Not authorized to access this' ||
+                        result === 'Invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.setState({loading: false})
+            })
+        }
+
+        this.SearchForUser = () => {
+            const { cookies } = this.props;
+            this.setState({loading: true})
+
+            var data = new FormData()
+            data.append('search_query', this.state.search_query)
+
+            axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // set users to state
+                this.setState({all_users: result, loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'Access token disabled via signout' ||
+                        result === 'Access token expired' ||
+                        result === 'Not authorized to access this' ||
+                        result === 'Invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.setState({loading: false})
+            })
+        } 
     }
     
     componentDidMount() {
@@ -158,6 +249,15 @@ class AllUsers extends Component{
         })
         // user
         var user = this.state.user
+        var user_payments = this.state.user_payments
+        var user_payments_map = user_payments.map((item, index) => {
+            return <tr style={{borderBottom: '1px solid silver'}}>
+                <td>{item.date}</td>
+                <td>{item.purpose}</td>
+                <td>{item.payment_method}</td>
+                <td>$ {item.amount}</td>
+            </tr>
+        })
 
         return (
             <div>
@@ -174,6 +274,38 @@ class AllUsers extends Component{
                         <h5 style={{fontWeight: 'bold'}}>
                             All Users
                         </h5>
+                        <br/><br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
+                                <Label style={{fontWeight: 'bold'}}>Users to view:</Label>
+                                <select name='users_showing' value={this.state.users_showing} onChange={this.HandleChange}
+                                    style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                >
+                                    {
+                                        this.state.to_show_list.map((item) => {
+                                            return<option value={item}>{item}</option>
+                                        })
+                                    }
+                                </select>
+                            </Col>
+                            <Col style={{textAlign: 'left', marginRight: '30px'}}>
+                                <Form onSubmit={this.Signin}>
+                                    <Label style={{color: '#00539C'}}>Search users</Label>
+                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                        placeholder="Search using user's email / username / names / phonenumber" name="search_query" id="search_query"
+                                        value={this.state.search_query} onChange={this.HandleChange} type="text" 
+                                    />
+                                </Form>
+                            </Col>
+                            <Col sm='3'>
+                                <br/>
+                                <Button onClick={this.SearchForUser} 
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Search <FaSearch />
+                                </Button>
+                            </Col>
+                        </Row>
                         <br/><br/>
                         {
                             screen === 'users'
@@ -370,7 +502,50 @@ class AllUsers extends Component{
                                         </div>
                                     </Col>
                                     <Col>
-                                    
+                                        <div style={{border: '1px solid grey', borderRadius: '20px', maxHeight: '450px', overflow: 'scroll'}}>
+                                            <br/>
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid); this.setState({screen: 'selected user payments'})}}
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
+                                            >
+                                                <FaMoneyCheckAlt /> View user payments
+                                            </Button>
+                                            <br/>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </>
+                            : screen === 'selected user payments'
+                            ? <>
+                                <div style={{textAlign: 'left'}}>
+                                    <Button onClick={() => this.setState({screen: 'users', user: null})}
+                                        style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
+                                    >
+                                        {'<<<'} Back
+                                    </Button>
+                                </div>
+                                <br/><br/>
+                                <Row style={{margin: '0px'}}>
+                                    <Col>
+                                        <div style={{border: '1px solid grey', borderRadius: '20px', minHeight: '100px', maxHeight: '450px', overflowY: 'scroll'}}>
+                                            <br/>
+                                            <h6 style={{fontWeight: 'bold', color: '#00539C'}}>
+                                                {user.firstname} {user.lastname}'s Payments
+                                            </h6>
+                                            <br/>
+                                            <Table>
+                                                <thead>
+                                                    <tr style={{borderBottom: '1px solid silver'}}>
+                                                        <th width='25%'>Date</th>
+                                                        <th width='25%'>Purpose</th>
+                                                        <th width='25%'>Method</th>
+                                                        <th width='25%'>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style={{textAlign: 'left'}}>
+                                                    {user_payments_map}
+                                                </tbody>
+                                            </Table>
+                                        </div>
                                     </Col>
                                 </Row>
                             </>
