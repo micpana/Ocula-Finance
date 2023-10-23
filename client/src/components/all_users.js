@@ -290,11 +290,15 @@ class AllUsers extends Component{
         // users
         var to_show = this.state.users_showing
         var all_users = this.state.all_users
-        // All / Subscribed / Not subscribed / Banned / Verified / Not verified
+        
         var users_to_show = []
         if (to_show === 'All'){ users_to_show = all_users }
         if (to_show === 'Subscribed'){ users_to_show = all_users.filter(item => item.subscribed === true) }
-        
+        if (to_show === 'Not subscribed'){ users_to_show = all_users.filter(item => item.subscribed === false) }
+        if (to_show === 'Banned'){ users_to_show = all_users.filter(item => item.banned === true) }
+        if (to_show === 'Verified'){ users_to_show = all_users.filter(item => item.verified === true) }
+        if (to_show === 'Not verified'){ users_to_show = all_users.filter(item => item.verified === false) }
+
         var users_to_show_map = users_to_show.map((item, index) => {
             return <tr onClick={() => this.setState({user: item, screen: 'user'})}
                 style={{borderBottom: '1px solid silver', cursor: 'pointer'}}
