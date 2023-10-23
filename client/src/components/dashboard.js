@@ -40,7 +40,8 @@ import AllUsers from './all_users'
 import UserCountryRanking from './user_country_ranking'
 import UserRegistrationChart from './user_registation_chart'
 import UserSubscriptionChart from './user_subscription_chart'
-import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar } from 'react-icons/fa';
+import UserCountChart from './user_count_chart'
+import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar, FaUserFriends } from 'react-icons/fa';
 
 class Dashboard extends Component{
     static propTypes = {
@@ -272,6 +273,12 @@ class Dashboard extends Component{
                                             <FaRegChartBar id='user subscription chart'/> User subscription chart
                                         </Button>
                                         <br/><br/>
+                                        <Button id='user count chart' onClick={this.SwitchScreen} 
+                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                        >
+                                            <FaUserFriends id='user subscription chart'/> User count chart
+                                        </Button>
+                                        <br/><br/>
                                     </div>
                                     : <div></div>
                                 }
@@ -297,6 +304,8 @@ class Dashboard extends Component{
                                     ? <UserRegistrationChart />
                                     : screen === 'user subscription chart'
                                     ? <UserSubscriptionChart />
+                                    : screen === 'user count chart'
+                                    ? <UserCountChart />
                                     : <div>
                                         <br/><br/><br/>
                                         <h5 style={{color: '#005fc9'}}>Something went wrong.</h5>
