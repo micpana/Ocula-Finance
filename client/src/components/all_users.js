@@ -50,6 +50,7 @@ class AllUsers extends Component{
             users_showing: 'All', // All / Subscribed / Not subscribed / Banned / Verified / Not verified
             all_users: [
                 {
+                    _id: {'$oid': 'shgugudyufhbdfu'},
                     firstname: 'Michael',
                     lastname: 'Mudimbu',
                     username: 'micpana',
@@ -67,7 +68,42 @@ class AllUsers extends Component{
             ],
             user: null,
             user_payments: [
-
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'VISA',
+                    amount: 10
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Mastercard',
+                    amount: 96
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Paypal',
+                    amount: 10
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'VISA',
+                    amount: 10
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Mastercard',
+                    amount: 96
+                },
+                {
+                    date: '14/10/2023 11:15am',
+                    purpose: 'subscription',
+                    payment_method: 'Paypal',
+                    amount: 10
+                }
             ],
             search_query: ''
         };
@@ -180,46 +216,62 @@ class AllUsers extends Component{
             })
         }
 
-        this.SearchForUser = () => {
-            const { cookies } = this.props;
-            this.setState({loading: true})
+        this.SearchForUser = (e) => {
+            e.preventDefault()
+            
+            // initialize variable to store input validation status
+            var data_checks_out = true
 
-            var data = new FormData()
-            data.append('search_query', this.state.search_query)
+            // clear existing input errors if any
+            this.ClearInputErrors()
 
-            axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
-            .then((res) => {
-                let result = res.data
-                // set users to state
-                this.setState({all_users: result, loading: false})
-            }).catch((error) => {
-                console.log(error)
-                if (error.response){ // server responded with a non-2xx status code
-                    let status_code = error.response.status
-                    let result = error.response.data
-                    var notification_message = ''
-                    if(
-                        result === 'Access token disabled via signout' ||
-                        result === 'Access token expired' ||
-                        result === 'Not authorized to access this' ||
-                        result === 'Invalid token'
-                    ){ 
-                        // delete token from user cookies
-                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
-                        // redirect to sign in
-                        let port = (window.location.port ? ':' + window.location.port : '');
-                        window.location.href = '//' + window.location.hostname + port + '/signin';
-                    }else{
-                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        Notification(notification_message, 'error')
+            // validate input data
+            if (this.state.search_query === ''){ this.SetInputError('search_query', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                const { cookies } = this.props;
+                this.setState({loading: true})
+
+                var data = new FormData()
+                data.append('search_query', this.state.search_query)
+
+                axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    // set users to state
+                    this.setState({all_users: result, loading: false})
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'Access token disabled via signout' ||
+                            result === 'Access token expired' ||
+                            result === 'Not authorized to access this' ||
+                            result === 'Invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
                     }
-                }else if (error.request){ // request was made but no response was received ... network error
-                    Notification(Network_Error_Message, 'error')
-                }else{ // error occured during request setup ... no network access
-                    Notification(No_Network_Access_Message, 'error')
-                }
-                this.setState({loading: false})
-            })
+                    this.setState({loading: false})
+                })
+            }
         } 
     }
     
@@ -236,8 +288,14 @@ class AllUsers extends Component{
         // active screen
         var screen = this.state.screen
         // users
+        var to_show = this.state.users_showing
         var all_users = this.state.all_users
-        var all_users_map = all_users.map((item, index) => {
+        // All / Subscribed / Not subscribed / Banned / Verified / Not verified
+        var users_to_show = []
+        if (to_show === 'All'){ users_to_show = all_users }
+        if (to_show === 'Subscribed'){ users_to_show = all_users.filter(item => item.subscribed === true) }
+        
+        var users_to_show_map = users_to_show.map((item, index) => {
             return <tr onClick={() => this.setState({user: item, screen: 'user'})}
                 style={{borderBottom: '1px solid silver', cursor: 'pointer'}}
             >
@@ -275,41 +333,40 @@ class AllUsers extends Component{
                             All Users
                         </h5>
                         <br/><br/>
-                        <Row style={{margin: '0px'}}>
-                            <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
-                                <Label style={{fontWeight: 'bold'}}>Users to view:</Label>
-                                <select name='users_showing' value={this.state.users_showing} onChange={this.HandleChange}
-                                    style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
-                                >
-                                    {
-                                        this.state.to_show_list.map((item) => {
-                                            return<option value={item}>{item}</option>
-                                        })
-                                    }
-                                </select>
-                            </Col>
-                            <Col style={{textAlign: 'left', marginRight: '30px'}}>
-                                <Form onSubmit={this.Signin}>
-                                    <Label style={{color: '#00539C'}}>Search users</Label>
-                                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
-                                        placeholder="Search using user's email / username / names / phonenumber" name="search_query" id="search_query"
-                                        value={this.state.search_query} onChange={this.HandleChange} type="text" 
-                                    />
-                                </Form>
-                            </Col>
-                            <Col sm='3'>
-                                <br/>
-                                <Button onClick={this.SearchForUser} 
-                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
-                                >
-                                    Search <FaSearch />
-                                </Button>
-                            </Col>
-                        </Row>
-                        <br/><br/>
                         {
                             screen === 'users'
                             ? <>
+                                <Row style={{margin: '0px'}}>
+                                    <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
+                                        <Label style={{fontWeight: 'bold'}}>Users to view:</Label>
+                                        <select name='users_showing' value={this.state.users_showing} onChange={this.HandleChange}
+                                            style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                        >
+                                            {
+                                                this.state.to_show_list.map((item) => {
+                                                    return<option value={item}>{item}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </Col>
+                                    <Col style={{textAlign: 'left', marginRight: '30px'}}>
+                                        <Label style={{color: '#00539C'}}>Search for user</Label>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="Search using user's email / username / names / phonenumber" name="search_query" id="search_query"
+                                            value={this.state.search_query} onChange={this.HandleChange} type="text" 
+                                        />
+                                        <InputErrors field_error_state={this.state.input_errors['search_query']} field_label='Search Query' />
+                                    </Col>
+                                    <Col sm='3'>
+                                        <br/>
+                                        <Button onClick={this.SearchForUser} 
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                        >
+                                            Search <FaSearch style={{marginLeft: '20px'}}/>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                <br/><br/><br/>
                                 <div style={{maxHeight: '450px', overflowY: 'scroll'}}>
                                     <Table>
                                         <thead>
@@ -321,7 +378,7 @@ class AllUsers extends Component{
                                             </tr>
                                         </thead>
                                         <tbody style={{textAlign: 'left'}}>
-                                            {all_users_map}
+                                            {users_to_show_map}
                                         </tbody>
                                     </Table>
                                 </div>
@@ -505,11 +562,11 @@ class AllUsers extends Component{
                                         <div style={{border: '1px solid grey', borderRadius: '20px', maxHeight: '450px', overflow: 'scroll'}}>
                                             <br/>
                                             <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid); this.setState({screen: 'selected user payments'})}}
-                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 <FaMoneyCheckAlt /> View user payments
                                             </Button>
-                                            <br/>
+                                            <br/><br/>
                                         </div>
                                     </Col>
                                 </Row>
@@ -517,7 +574,7 @@ class AllUsers extends Component{
                             : screen === 'selected user payments'
                             ? <>
                                 <div style={{textAlign: 'left'}}>
-                                    <Button onClick={() => this.setState({screen: 'users', user: null})}
+                                    <Button onClick={() => this.setState({screen: 'user'})}
                                         style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
                                     >
                                         {'<<<'} Back
@@ -545,6 +602,7 @@ class AllUsers extends Component{
                                                     {user_payments_map}
                                                 </tbody>
                                             </Table>
+                                            <br/>
                                         </div>
                                     </Col>
                                 </Row>
