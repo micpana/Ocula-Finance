@@ -35,7 +35,7 @@ import Notification from './notification_alert';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
 import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
-class UserRegistrationChart extends Component{
+class NewUserRegistrationChart extends Component{
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     };
@@ -150,7 +150,7 @@ class UserRegistrationChart extends Component{
         return (
             <div>
                 <Helmet>
-                    <title>User Registration Chart | {Platform_Name}</title>
+                    <title>New User Registration Chart | {Platform_Name}</title>
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
                 <ToastContainer />
@@ -160,7 +160,7 @@ class UserRegistrationChart extends Component{
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>
-                            User Registration Chart
+                            New User Registration Chart
                         </h5>
                         <br/><br/>
                         <Row style={{margin: '0px'}}>
@@ -238,4 +238,4 @@ class UserRegistrationChart extends Component{
 
 };
 
-export default withCookies(UserRegistrationChart);
+export default withCookies(NewUserRegistrationChart);

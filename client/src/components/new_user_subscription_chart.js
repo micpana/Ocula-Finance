@@ -35,7 +35,7 @@ import Notification from './notification_alert';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
 import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
-class UserSubscriptionChart extends Component{
+class NewUserSubscriptionChart extends Component{
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     };
@@ -150,7 +150,7 @@ class UserSubscriptionChart extends Component{
         return (
             <div>
                 <Helmet>
-                    <title>User Subscription Chart | {Platform_Name}</title>
+                    <title>New User Subscription Chart | {Platform_Name}</title>
                     {/* <meta name="description" content="" /> */}
                 </Helmet>
                 <ToastContainer />
@@ -160,7 +160,7 @@ class UserSubscriptionChart extends Component{
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>
-                            User Subscription Chart
+                            New User Subscription Chart
                         </h5>
                         <br/><br/>
                         <Row style={{margin: '0px'}}>
@@ -238,4 +238,4 @@ class UserSubscriptionChart extends Component{
 
 };
 
-export default withCookies(UserSubscriptionChart);
+export default withCookies(NewUserSubscriptionChart);

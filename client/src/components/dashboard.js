@@ -38,8 +38,8 @@ import PastPayments from './past_payments'
 import Settings from './settings'
 import AllUsers from './all_users'
 import UserCountryRanking from './user_country_ranking'
-import UserRegistrationChart from './user_registation_chart'
-import UserSubscriptionChart from './user_subscription_chart'
+import NewUserRegistrationChart from './new_user_registation_chart'
+import NewUserSubscriptionChart from './new_user_subscription_chart'
 import UserCountChart from './user_count_chart'
 import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar, FaUserFriends } from 'react-icons/fa';
 
@@ -261,22 +261,22 @@ class Dashboard extends Component{
                                             <FaFlag id='user country ranking'/> User country ranking
                                         </Button>
                                         <br/><br/>
-                                        <Button id='user registration chart' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaChartBar id='user registration chart'/> User registration chart
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='user subscription chart' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaRegChartBar id='user subscription chart'/> User subscription chart
-                                        </Button>
-                                        <br/><br/>
                                         <Button id='user count chart' onClick={this.SwitchScreen} 
                                             style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
                                         >
-                                            <FaUserFriends id='user subscription chart'/> User count chart
+                                            <FaUserFriends id='user count chart'/> User count chart
+                                        </Button>
+                                        <br/><br/>
+                                        <Button id='new user registration chart' onClick={this.SwitchScreen} 
+                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                        >
+                                            <FaChartBar id='new user registration chart'/> New user registration chart
+                                        </Button>
+                                        <br/><br/>
+                                        <Button id='new user subscription chart' onClick={this.SwitchScreen} 
+                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                        >
+                                            <FaRegChartBar id='new user subscription chart'/> New user subscription chart
                                         </Button>
                                         <br/><br/>
                                     </div>
@@ -300,10 +300,10 @@ class Dashboard extends Component{
                                     ? <AllUsers />
                                     : screen === 'user country ranking'
                                     ? <UserCountryRanking />
-                                    : screen === 'user registration chart'
-                                    ? <UserRegistrationChart />
-                                    : screen === 'user subscription chart'
-                                    ? <UserSubscriptionChart />
+                                    : screen === 'new user registration chart'
+                                    ? <NewUserRegistrationChart />
+                                    : screen === 'new user subscription chart'
+                                    ? <NewUserSubscriptionChart />
                                     : screen === 'user count chart'
                                     ? <UserCountChart />
                                     : <div>
