@@ -268,7 +268,7 @@ class Dashboard extends Component{
                                             <FaUserFriends id='user count chart'/> User count chart
                                         </Button>
                                         <br/><br/>
-                                        <Button id='user count chart' onClick={this.SwitchScreen} 
+                                        <Button id='subscribed users chart' onClick={this.SwitchScreen} 
                                             style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
                                         >
                                             <FaUserCheck id='subscribed users chart'/> Subscribed users chart
