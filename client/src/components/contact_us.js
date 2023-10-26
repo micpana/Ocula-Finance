@@ -79,6 +79,27 @@ class ContactUs extends Component{
 
         this.GetInTouch = (e) => {
             e.preventDefault()
+            
+            // initialize variable to store input validation status
+            var data_checks_out = true
+
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.name === ''){ this.SetInputError('name', 'required'); data_checks_out = false }
+            if (this.state.email === ''){ this.SetInputError('email', 'required'); data_checks_out = false }
+            if (IsEmailStructureValid(this.state.email) === false){ this.SetInputError('email', 'invalid'); data_checks_out = false }
+            if (this.state.subject === ''){ this.SetInputError('subject', 'required'); data_checks_out = false }
+            if (this.state.message === ''){ this.SetInputError('message', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                this.setState({loading: true})
+
+            }
         }
     }
 
