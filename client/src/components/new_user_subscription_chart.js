@@ -32,7 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
 class NewUserSubscriptionChart extends Component{
@@ -53,6 +53,46 @@ class NewUserSubscriptionChart extends Component{
                 {
                     date: '14/11/2023',
                     users: 30
+                },
+                {
+                    date: '15/11/2023',
+                    users: 300
+                },
+                {
+                    date: '16/11/2023',
+                    users: 120
+                },
+                {
+                    date: '15/11/2023',
+                    users: 300
+                },
+                {
+                    date: '16/11/2023',
+                    users: 120
+                },
+                {
+                    date: '15/11/2023',
+                    users: 300
+                },
+                {
+                    date: '16/11/2023',
+                    users: 120
+                },
+                {
+                    date: '15/11/2023',
+                    users: 300
+                },
+                {
+                    date: '16/11/2023',
+                    users: 120
+                },
+                {
+                    date: '15/11/2023',
+                    users: 300
+                },
+                {
+                    date: '16/11/2023',
+                    users: 120
                 },
                 {
                     date: '15/11/2023',
@@ -214,7 +254,7 @@ class NewUserSubscriptionChart extends Component{
                         </Row>
                         <br/><br/><br/>
                         <div style={{width: '100%', overflowX: 'scroll'}}>
-                            <LineChart
+                            <BarChart
                                 width={1000}
                                 height={300}
                                 data={this.state.user_subscription_statistics}
@@ -227,8 +267,8 @@ class NewUserSubscriptionChart extends Component{
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="users" stroke="#00539C" activeDot={{ r: 8 }}/>
-                            </LineChart>
+                                <Bar dataKey="users" fill="#F2B027" />
+                            </BarChart>
                         </div>
                     </div>
                 }
