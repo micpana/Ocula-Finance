@@ -105,7 +105,15 @@ class AllUsers extends Component{
                     amount: 10
                 }
             ],
-            search_query: ''
+            search_query: '',
+            user_metrics: {
+                all_users: 10000,
+                subscribed_users: 9700,
+                users_not_subscribed: 300,
+                banned_users: 20,
+                verified_users: 9900,
+                users_not_verified: 100
+            }
         };
 
         this.HandleChange = (e) => {
@@ -273,6 +281,45 @@ class AllUsers extends Component{
                 })
             }
         } 
+
+        this.GetUserMetrics = () => {
+            const { cookies } = this.props;
+            this.setState({loading: true})
+
+            axios.post(Backend_Server_Address + 'getUserMetrics', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // set users to state
+                this.setState({user_metrics: result, loading: false})
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'Access token disabled via signout' ||
+                        result === 'Access token expired' ||
+                        result === 'Not authorized to access this' ||
+                        result === 'Invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.setState({loading: false})
+            })
+        }
     }
     
     componentDidMount() {
@@ -282,6 +329,7 @@ class AllUsers extends Component{
             })
         }
         // this.GetAllUsers()
+        // this.GetUserMetrics()
     }
 
     render() {
@@ -320,6 +368,8 @@ class AllUsers extends Component{
                 <td>$ {item.amount}</td>
             </tr>
         })
+        // users metrics
+        var user_metrics = this.state.user_metrics
 
         return (
             <div>
@@ -340,6 +390,28 @@ class AllUsers extends Component{
                         {
                             screen === 'users'
                             ? <>
+                                <h6 style={{color: '#00539C', textAlign: 'left'}}>User metrics:</h6>
+                                <Row style={{margin: '0px', textAlign: 'left'}}>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>All:</span> {user_metrics.all_users}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Subscribed:</span> {user_metrics.subscribed_users}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Not subscribed:</span> {user_metrics.users_not_subscribed}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Banned:</span> {user_metrics.banned_users}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Verified:</span> {user_metrics.verified_users}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Not verified:</span> {user_metrics.users_not_verified}
+                                    </Col>
+                                </Row>
+                                <br/><br/>
                                 <Row style={{margin: '0px'}}>
                                     <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
                                         <Label style={{fontWeight: 'bold'}}>Users to view:</Label>
