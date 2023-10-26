@@ -41,7 +41,8 @@ import UserCountryRanking from './user_country_ranking'
 import NewUserRegistrationChart from './new_user_registation_chart'
 import NewUserSubscriptionChart from './new_user_subscription_chart'
 import UserCountChart from './user_count_chart'
-import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar, FaUserFriends } from 'react-icons/fa';
+import SubscribedUsersChart from './subscribed_users_chart'
+import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar, FaUserFriends, FaUserCheck } from 'react-icons/fa';
 
 class Dashboard extends Component{
     static propTypes = {
@@ -267,6 +268,12 @@ class Dashboard extends Component{
                                             <FaUserFriends id='user count chart'/> User count chart
                                         </Button>
                                         <br/><br/>
+                                        <Button id='user count chart' onClick={this.SwitchScreen} 
+                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                        >
+                                            <FaUserCheck id='subscribed users chart'/> Subscribed users chart
+                                        </Button>
+                                        <br/><br/>
                                         <Button id='new user registration chart' onClick={this.SwitchScreen} 
                                             style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
                                         >
@@ -300,12 +307,14 @@ class Dashboard extends Component{
                                     ? <AllUsers />
                                     : screen === 'user country ranking'
                                     ? <UserCountryRanking />
+                                    : screen === 'user count chart'
+                                    ? <UserCountChart />
+                                    : screen === 'subscribed users chart'
+                                    ? <SubscribedUsersChart />
                                     : screen === 'new user registration chart'
                                     ? <NewUserRegistrationChart />
                                     : screen === 'new user subscription chart'
                                     ? <NewUserSubscriptionChart />
-                                    : screen === 'user count chart'
-                                    ? <UserCountChart />
                                     : <div>
                                         <br/><br/><br/>
                                         <h5 style={{color: '#005fc9'}}>Something went wrong.</h5>
