@@ -158,6 +158,7 @@ def index():
     return response
 
 # user functions ******************************************************************************************************
+# 1
 @app.route('/signup', methods=['POST'])
 def signup():
     # input field validation
@@ -244,6 +245,7 @@ def signup():
     # return account id
     return response = make_response(account_id); response.status = 201; return response
 
+# 2
 @app.route('/signin', methods=['POST'])
 def signin():
     # input field validation
@@ -413,6 +415,7 @@ def signin():
     # return user_access_token
     response = make_response(user_access_token); response.status = 200; return response
 
+# 17
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
 def getUserVerificationEmailByUserId():
     # field validation
@@ -439,6 +442,7 @@ def getUserVerificationEmailByUserId():
     # return user email
     response = make_response(user_email); response.status = 200; return response
 
+# 3
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
     # field validation
@@ -490,6 +494,7 @@ def verifyEmail():
     # return response
     response = make_response('ok'); response.status = 200; return response
 
+# 4
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
     # field validation
@@ -539,6 +544,7 @@ def resendEmailVerification():
     # return response
     response make_response('ok'); response.status = 200; return response
 
+# 5
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
     # field validation
@@ -596,6 +602,7 @@ def correctRegistrationEmail():
     # return response
     response = make_response('ok'); response.status = 200; return response
 
+# 6
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
     # field validation
@@ -663,6 +670,7 @@ def recoverPassword():
     # return response
     response = make_response('ok'); response.status = 200; return response
 
+# 7
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
     # field validation
@@ -693,6 +701,7 @@ def setNewPassword():
     # return response
     response = make_response('ok'); response.status = 200; return response
 
+# 8
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
     # check user access token's validity
@@ -709,6 +718,7 @@ def getUserDetailsByAccessToken():
     # return user object minus password
     response = make_response(jsonify(user)); response.status = 200; return response
 
+# 9
 @app.route('/signout', methods=['POST'])
 def signout():
     # check user access token's validity
@@ -722,6 +732,7 @@ def signout():
     # return response
     response = make_response('ok'); response.status = 200; return response
 
+# 10
 @app.route('/editProfile', methods=['POST'])
 def editProfile():
     # check user access token's validity
@@ -825,6 +836,7 @@ def editProfile():
     # return return_string
     response = make_response(return_string); response.status = 200; return response
 
+# 12
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
     # check user access token's validity
@@ -836,8 +848,9 @@ def getUserPaymentHistory():
 
     # return payment history
     response = make_response(user_payment_history.to_json()); response.status = 200; return response
-    
+
 # market analysis functions *******************************************************************************************
+# 11
 @app.route('/getCurrentMarketAnalysis', methods=['POST'])
 def getCurrentMarketAnalysis():
     # check user access token's validity
@@ -863,6 +876,7 @@ def getCurrentMarketAnalysis():
     response = make_response(current_market_analysis.to_json()); response.status = 200; return response
 
 # admin functions *****************************************************************************************************
+# 13
 @app.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
     # check user access token's validity
@@ -883,6 +897,7 @@ def getAllUsers():
     # return user list
     response = make_response(jsonify(all_users)); response.status = 200; return response
 
+# 14
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
     # check user access token's validity
@@ -902,6 +917,7 @@ def getUserCountryRanking():
     # return user country list
     response = make_response(jsonify(user_country_list)); response.status = 200; return response
 
+# 15
 @app.route('/getNewUserRegistrationStatistics', methods=['POST'])
 def getNewUserRegistrationStatistics():
     # check user access token's validity
@@ -948,6 +964,7 @@ def getNewUserRegistrationStatistics():
     # return statistics
     response = make_response(jsonify(new_user_registration_statistics)); response.status = 200; return response
 
+# 16
 @app.route('/getNewSubscribedUserCountStatistics', methods=['POST'])
 def getNewSubscribedUserCountStatistics():
     # check user access token's validity
@@ -994,6 +1011,7 @@ def getNewSubscribedUserCountStatistics():
     # return statistics
     response = make_response(jsonify(new_subscribed_user_statistics)); response.status = 200; return response
 
+# 18
 @app.route('/getUserPaymentHistoryByAccountId', methods=['POST'])
 def getUserPaymentHistoryByAccountId():
     # check user access token's validity
@@ -1010,6 +1028,7 @@ def getUserPaymentHistoryByAccountId():
     # return payment history
     response = make_response(user_payment_history.to_json()); response.status = 200; return response
 
+# 19
 @app.route('/searchForUser', methods=['POST'])
 def searchForUser():
     # check user access token's validity
@@ -1044,6 +1063,7 @@ def searchForUser():
     # return user list
     response = make_response(jsonify(user_results)); response.status = 200; return response
 
+# 20
 @app.route('/getUserCount', methods=['POST'])
 def getUserCount():
     # check user access token's validity
@@ -1090,6 +1110,7 @@ def getUserCount():
     # return statistics
     response = make_response(jsonify(user_count_statistics)); response.status = 200; return response
 
+# 21
 @app.route('/getUserSubscriptionStatistics', methods=['POST'])
 def getUserSubscriptionStatistics():
     # check user access token's validity
@@ -1136,7 +1157,8 @@ def getUserSubscriptionStatistics():
 
     # return statistics
     response = make_response(jsonify(subscribed_user_statistics)); response.status = 200; return response
-    
+
+# 22
 @app.route('/getUserMetrics', methods=['POST'])
 def getUserMetrics():
     # check user access token's validity
