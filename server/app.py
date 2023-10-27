@@ -133,6 +133,21 @@ def is_password_structure_valid(password):
 	# if all conditions are met, password is valid
 	return True
 
+# function for user object password deletion and subscription check
+def user_object_modification(user, current_datetime):
+    # delete password
+    del user['password']
+
+    # subcription check
+    subscription_expiry = user['subscription_expiry']
+    if current_datetime > subscription_expiry: 
+        user['subscribed'] = False 
+    else:
+        user['subscribed'] = True
+
+    # return modified user object
+    return user
+
 # index
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -687,11 +702,9 @@ def getUserDetailsByAccessToken():
     # get user by user_id
     user = Users.objects.filter(id = user_id)[0]
 
-    # remove password from details
+    # modify user object... delete password, add subscription status
     user = json.loads(user.to_json())
-    del user['password']
-
-    # add user subscription status to data
+    user = user_object_modification(user, current_datetime)
 
     # return user object minus password
     response = make_response(jsonify(user)); response.status = 200; return response
@@ -856,11 +869,19 @@ def getAllUsers():
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
     # get user list
     all_users = Users.objects.all()
 
+    # modify user objects... delete passwords, add subscription status
+    all_users = json.loads(all_users.to_json())
+    all_users = [user_object_modification(i, current_datetime) for i in all_users]
+
     # return user list
-    response = make_response(all_users.to_json()); response.status = 200; return response
+    response = make_response(jsonify(all_users)); response.status = 200; return response
 
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
@@ -881,31 +902,206 @@ def getUserCountryRanking():
     # return user country list
     response = make_response(jsonify(user_country_list)); response.status = 200; return response
 
-@app.route('/getUserRegistrationStatistics', methods=['POST'])
-def getUserRegistrationStatistics():
+@app.route('/getNewUserRegistrationStatistics', methods=['POST'])
+def getNewUserRegistrationStatistics():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # input field validation
+    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    
+    # get user list
+    all_users = Users.objects.all()
+
+    # return empty list if there are no users yet ... inorder to avoid errors by indexing empty list
+    new_user_registration_statistics = []
+    if len(all_users) == 0: response = make_response(jsonify(new_user_registration_statistics)); response.status = 200; return response
+
+    # start and end days if they were'nt given on as input
+    if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
+        start_date = all_users[0]['date_of_registration'][0:10] # start with first user's registration date in format yyyy-mm-dd
+        end_date = str(datetime.now())[0:10]
+
+    # date format
+    date_format = '%Y-%m-%d'
+
+    # difference between dates in days
+    date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
+    date_difference_in_days = date_difference_in_days.days
+    
+    # list of days
+    list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
+
+    # create new user registration statistics
+    new_user_registration_statistics = [
+        {'date': i[0:10], 'users': len([
+            z for z in all_users if 
+            i == z.date_of_registration[0:10]
+        ])}
+        for i in list_of_days if True
+    ]
+
+    # return statistics
+    response = make_response(jsonify(new_user_registration_statistics)); response.status = 200; return response
+
+@app.route('/getNewSubscribedUserCountStatistics', methods=['POST'])
+def getNewSubscribedUserCountStatistics():
+    # check user access token's validity
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # input field validation
+    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    
+    # get subscriptions list
+    all_subscriptions = Payments.objects.all(purpose = 'subscription')
+
+    # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
+    new_subscribed_user_statistics = []
+    if len(all_subscriptions) == 0: response = make_response(jsonify(new_subscribed_user_statistics)); response.status = 200; return response
+
+    # start and end days if they were'nt given on as input
+    if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
+        start_date = all_subscriptions[0]['date'][0:10] # start with first subscription's date in format yyyy-mm-dd
+        end_date = str(datetime.now())[0:10]
+
+    # date format
+    date_format = '%Y-%m-%d'
+
+    # difference between dates in days
+    date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
+    date_difference_in_days = date_difference_in_days.days
+    
+    # list of days
+    list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
+
+    # create new subscribed user statistics
+    new_subscribed_user_statistics = [
+        {'date': i[0:10], 'users': len([
+            z for z in all_subscriptions if 
+            i == z.date[0:10]
+        ])}
+        for i in list_of_days if True
+    ]
+
+    # return statistics
+    response = make_response(jsonify(new_subscribed_user_statistics)); response.status = 200; return response
+
+@app.route('/getUserPaymentHistoryByAccountId', methods=['POST'])
+def getUserPaymentHistoryByAccountId():
+    # check user access token's validity
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # input field validation
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+
+    # collect payment history by user_id
+    user_payment_history = Payments.objects.filter(user_id = account_id)
+
+    # return payment history
+    response = make_response(user_payment_history.to_json()); response.status = 200; return response
+
+@app.route('/searchForUser', methods=['POST'])
+def searchForUser():
+    # check user access token's validity
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # input field validation
+    try: search_query = request.form['search_query'] except: response = make_response('Search query field required'); response.status = 400; return response
+    if search_query == '' or search_query == None: response = make_response('Search query cannot be empty'); response.status = 400; return response
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
 
     # get user list
     all_users = Users.objects.all()
 
-    # create user registration statistics
-    processed_days = []
-    user_registration_statistics = [
-        {'date': i.date_of_registration[0:10], 'users': len([z for z in all_users if z.date_of_registration[0:10] == i.date_of_registration[0:10]])}
-        for i in all_users if i.date_of_registration[0:10] not in processed_days and not processed_days.append(i.date_of_registration[0:10])
+    # modify user objects... delete passwords, add subscription status
+    all_users = json.loads(all_users.to_json())
+    all_users = [user_object_modification(i, current_datetime) for i in all_users]
+
+    # perform search
+    user_results = [
+        i for i in all_users if 
+        search_query.lower() in i['email'].lower() or 
+        search_query.lower() in i['username'].lower() or 
+        search_query.lower() in i['firstname'].lower() or 
+        search_query.lower() in i['lastname'].lower() or 
+        search_query.lower() in i['phonenumber'].lower()
     ]
 
-    # return statistics
-    response = make_response(jsonify(user_registration_statistics)); response.status = 200; return response
+    # return user list
+    response = make_response(jsonify(user_results)); response.status = 200; return response
 
-@app.route('/getSubscribedUserCountStatistics', methods=['POST'])
-def getSubscribedUserCountStatistics():
+@app.route('/getUserCount', methods=['POST'])
+def getUserCount():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
+    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    
+    # get user list
+    all_users = Users.objects.all()
+
+    # return empty list if there are no users yet ... inorder to avoid errors by indexing empty list
+    user_count_statistics = []
+    if len(all_users) == 0: response = make_response(jsonify(user_count_statistics)); response.status = 200; return response
+
+    # start and end days if they were'nt given on as input
+    if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
+        start_date = all_users[0]['date_of_registration'][0:10] # start with first user's registration date in format yyyy-mm-dd
+        end_date = str(datetime.now())[0:10]
+
+    # date format
+    date_format = '%Y-%m-%d'
+
+    # difference between dates in days
+    date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
+    date_difference_in_days = date_difference_in_days.days
+    
+    # list of days
+    list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
+
+    # create user count statistics
+    user_count_statistics = [
+        {'date': i[0:10], 'users': len([
+            z for z in all_users if 
+            i <= z.date_of_registration[0:10]
+        ])}
+        for i in list_of_days if True
+    ]
+
+    # return statistics
+    response = make_response(jsonify(user_count_statistics)); response.status = 200; return response
+
+@app.route('/getUserSubscriptionStatistics', methods=['POST'])
+def getUserSubscriptionStatistics():
+    # check user access token's validity
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # input field validation
+    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    
     # get subscriptions list
     all_subscriptions = Payments.objects.all(purpose = 'subscription')
 
@@ -913,12 +1109,13 @@ def getSubscribedUserCountStatistics():
     subscribed_user_statistics = []
     if len(all_subscriptions) == 0: response = make_response(jsonify(subscribed_user_statistics)); response.status = 200; return response
 
+    # start and end days if they were'nt given on as input
+    if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
+        start_date = all_subscriptions[0]['date'][0:10] # start with first subscription's date in format yyyy-mm-dd
+        end_date = str(datetime.now())[0:10]
+
     # date format
     date_format = '%Y-%m-%d'
-
-    # start and end days
-    start_date = all_subscriptions[0]['date'][0:10] # start with first subscription's date in format yyyy-mm-dd
-    end_date = str(datetime.now())[0:10]
 
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
@@ -939,6 +1136,32 @@ def getSubscribedUserCountStatistics():
 
     # return statistics
     response = make_response(jsonify(subscribed_user_statistics)); response.status = 200; return response
+    
+@app.route('/getUserMetrics', methods=['POST'])
+def getUserMetrics():
+    # check user access token's validity
+    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # get user list
+    all_users = Users.objects.all()
+
+    # modify user objects... delete passwords, add subscription status
+    all_users = json.loads(all_users.to_json())
+    all_users = [user_object_modification(i, current_datetime) for i in all_users]
+
+    # get user metrics
+    user_metrics = {
+        'all_users': len(all_users),
+        'subscribed_users': len([i for i in all_users if i['subscribed'] == True]),
+        'users_not_subscribed': len([i for i in all_users if i['subscribed'] == False]),
+        'banned_users': len([i for i in all_users if i['banned'] == True]),
+        'verified_users': len([i for i in all_users if i['verified'] == True]),
+        'users_not_verified': len([i for i in all_users if i['verified'] == False])
+    }
+
+    # return statistics
+    response = make_response(jsonify(user_metrics)); response.status = 200; return response
 
 if __name__ == '__main__':
     init_db()
