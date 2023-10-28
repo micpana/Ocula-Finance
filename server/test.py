@@ -1,21 +1,7 @@
-ls = [
-    {'item': 'this'},
-    {'item': 'this'},
-    {'item': 'this'},
-    {'item': 'this'},
-    {'item': 'this'},
-    {'item': 'this'}
-]
+role = 'admi'
+roles = 'admin/support/user'
 
-def delete_password(item):
-    del item['item']
-    yes = 'NOW'
-    item['yes'] = yes.lower()
-    item['no'] = item['yes'].upper()
-    return item
-
-ls = [
-    delete_password(i) for i in ls if True
-]
-
-print(ls)
+if role in roles.split('/'):
+    print('yes')
+else:
+    print('no')

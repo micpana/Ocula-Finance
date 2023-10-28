@@ -27,14 +27,14 @@ frontend_url = frontend_client_url
 # function for getting information on user's browsing device
 def information_on_user_browsing_device(request_data):
     # get user's browsing agent
-    user_browsing_agent = request.headers.get('User-Agent')
+    user_browsing_agent = request_data.headers.get('User-Agent')
     user_agent_parsed = parse(user_browsing_agent)
     # get user's operating system
     user_os = user_agent_parsed.os.family
     # get user's device
     user_device = user_agent_parsed.device.family
     # get user's ip address
-    user_ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
+    user_ip_address = request_data.headers.get('X-Forwarded-For', request_data.remote_addr)
     # get user's browser
     user_browser = user_agent_parsed.browser.family
 
@@ -78,7 +78,7 @@ def save_login_trials(account_id, email, username, device, user_os, browser, ip_
 def check_user_access_token_validity(request_data, expected_user_role):
     try:
         # get user access token
-        user_access_token = request.headers.get('access_token')
+        user_access_token = request_data.headers.get('access_token')
         # get information on user's browsing device
         user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request_data)
         # check token's validity while trying to retrieve the user's system id
@@ -100,13 +100,13 @@ def check_user_access_token_validity(request_data, expected_user_role):
             access_token_status = 'Access token expired'
         else:
             # check if user account's role matches expected user role
-            if user_role != expected_user_role: return 'Not authorized to access this'
+            if user_role not in expected_user_role.split('/'): return 'Not authorized to access this'
             # proceed since everything checks out
             access_token_status = 'ok'
             # show that access token was last used now
             AccessTokens.objects(id = user_access_token).update(last_used_on_date = current_datetime)
-        # return access_token_status, user_id
-        return access_token_status, user_id
+        # return access_token_status, user_id, user_role
+        return access_token_status, user_id, user_role
     except:
         return 'Invalid token', None
 
@@ -260,7 +260,7 @@ def signin():
     # get current datetime
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
-    # calculate verification token expiration date
+    # calculate access token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(days = access_token_expiration_days())
     token_expiration_date = str(token_expiration_date_object)
 
@@ -289,7 +289,7 @@ def signin():
         ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
         response = make_response('email or username not registered'); response.status = 404; return response
 
-    # check if account is verified
+    # check if account is verified, if not, resend email verification
     if match.verified == False:
         # calculate verification token expiration date
         token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
@@ -419,7 +419,7 @@ def signin():
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
 def getUserVerificationEmailByUserId():
     # field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = account_id except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # search for user by given userid
@@ -498,7 +498,7 @@ def verifyEmail():
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
     # field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = account_id except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
@@ -508,7 +508,7 @@ def resendEmailVerification():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes)
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
     token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
@@ -548,6 +548,8 @@ def resendEmailVerification():
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
     # field validation
+    try: account_id = account_id except: response = make_response('Account ID required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
     try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
@@ -559,11 +561,11 @@ def correctRegistrationEmail():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes)
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
     token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
-    match = Users.objects.filter(id = request.form['account_id'])
+    match = Users.objects.filter(id = account_id)
     if len(match) == 0: response = make_response('invalid account id'); response.status = 400; return response
     account = match[0]
 
@@ -574,12 +576,12 @@ def correctRegistrationEmail():
     if account.verified == False: response = make_response('email already registered'); response.status = 409; return response
 
     # update account email and gather updated account information
-    Users.objects(id = request.form['account_id']).update(email = email)
-    account = Users.objects.filter(id = request.form['account_id'])[0]
+    Users.objects(id = account_id).update(email = email)
+    account = Users.objects.filter(id = account_id)[0]
 
     # proceed to create email verification token
     email_verification_details = EmailVerifications(
-        account_id = request.form['account_id'],
+        account_id = account_id,
         email = account.email,
         purpose = 'registration email', # registration email / email change 
         used = False,
@@ -617,7 +619,7 @@ def recoverPassword():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
-    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes)
+    token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
     token_expiration_date = str(token_expiration_date_object)
     # get retry wait time in minutes
     retry_wait_minutes = token_send_on_user_request_retry_period_in_minutes()
@@ -635,8 +637,8 @@ def recoverPassword():
     # check time of last active password recovery request by user
     recovery_requests = PasswordRecoveries.objects.filter(email = email, used = False)
     if len(recovery_requests) > 0:
-        # get request time
-        request_datetime = recovery_requests[0].date_of_request
+        # get last request's time
+        request_datetime = recovery_requests[-1].date_of_request
         # calculate end-datetime for waiting period
         retry_wait_ending_time_object = datetime.strptime(request_datetime, date_format) + timedelta(minutes = retry_wait_minutes)
         # check if last request was made outside of the retry wait period 
@@ -674,12 +676,14 @@ def recoverPassword():
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
     # field validation
+    try: token = request.form['token'] except: response = make_response('Password field required'); response.status = 400; return response
+    if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
     try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
 
     # search for token
-    token_results = PasswordRecoveries.objects.filter(id = request.form['token'])
+    token_results = PasswordRecoveries.objects.filter(id = token)
     if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
     match = token_results[0]
 
@@ -696,7 +700,7 @@ def setNewPassword():
     Users.objects(id = match.account_id).update(password = password)
 
     # mark token as used
-    PasswordRecoveries.objects(id = request.form['token']).update(used = True)
+    PasswordRecoveries.objects(id = token).update(used = True)
 
     # return response
     response = make_response('ok'); response.status = 200; return response
@@ -705,7 +709,7 @@ def setNewPassword():
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
@@ -726,7 +730,7 @@ def getUserDetailsByAccessToken():
 @app.route('/signout', methods=['POST'])
 def signout():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # disable used access token
@@ -740,7 +744,7 @@ def signout():
 @app.route('/editProfile', methods=['POST'])
 def editProfile():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
     # input field validation
@@ -756,8 +760,9 @@ def editProfile():
     try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
     try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     try: new_password = request.form['new_password'] except: response = make_response('New password field required'); response.status = 400; return response
-    if is_password_structure_valid(new_password) == False: response = make_response('Invalid new password structure'); response.status = 400; return response
+    if new_password != '' and new_password != None and is_password_structure_valid(new_password) == False: response = make_response('Invalid new password structure'); response.status = 400; return response
     try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
 
@@ -788,14 +793,16 @@ def editProfile():
     # check if phonenumber is already in use ... if user has changed field
     if user.phonenumber != phonenumber and len(Users.objects.filter(phonenumber = phonenumber)) > 0: response = make_response('phonenumber in use'); response.status = 409; return response
 
-    # check if new password and existing password are a match
-    new_password_matches_existing = verify_encrypted_password(new_password, user_encrypted_password)
-    if new_password_matches_existing == True: response = make_response('new password matches existing'); response.status = 409; return response
+    # check if user has supplied a new password
+    if new_password != '' and new_password != None:
+        # check if new password and existing password are a match
+        new_password_matches_existing = verify_encrypted_password(new_password, user_encrypted_password)
+        if new_password_matches_existing == True: response = make_response('new password matches existing'); response.status = 409; return response
 
-    # check if user has changed password ... if so, save new encrypted password to password_to_save
-    if new_password != '' and new_password_matches_existing == False:
+        # proceed to save new encrypted password to password_to_save
         password_to_save = encrypt_password(new_password)
-    else: password_to_save = user_encrypted_password # no password change
+    else: # user has not supplied a new password, save existing password to password_to_save
+        password_to_save = user_encrypted_password
 
     # update account details
     Users.objects(id = user_id).update(
@@ -844,7 +851,7 @@ def editProfile():
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # collect payment history by user_id
@@ -858,7 +865,7 @@ def getUserPaymentHistory():
 @app.route('/getCurrentMarketAnalysis', methods=['POST'])
 def getCurrentMarketAnalysis():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # symbol field validation
@@ -869,11 +876,16 @@ def getCurrentMarketAnalysis():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
 
-    # user subscription test
-    user_subscription_expiration_date = Users.objects.filter(id = user_id)[0].subscription_expiry
-    if current_datetime > user_subscription_expiration_date: response = make_response('not subscribed'); response.status = 403; return response
+    # administration exceptions
+    administration_exceptions = ['admin']
 
-    # get current market analysis ... ie last analysis entry
+    # exempt administration exceptions from subscription checks
+    if user_role not in administration_exceptions:
+        # user subscription test
+        user_subscription_expiration_date = Users.objects.filter(id = user_id)[0].subscription_expiry
+        if current_datetime > user_subscription_expiration_date: response = make_response('not subscribed'); response.status = 403; return response
+
+    # proceed to get current market analysis ... ie last analysis entry
     current_market_analysis = MarketAnalysis.objects.filter(symbol = symbol)[-1]
 
     # return current market analysis
@@ -884,7 +896,7 @@ def getCurrentMarketAnalysis():
 @app.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
@@ -905,7 +917,7 @@ def getAllUsers():
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get user list
@@ -925,7 +937,7 @@ def getUserCountryRanking():
 @app.route('/getNewUserRegistrationStatistics', methods=['POST'])
 def getNewUserRegistrationStatistics():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
@@ -960,7 +972,7 @@ def getNewUserRegistrationStatistics():
     new_user_registration_statistics = [
         {'date': i[0:10], 'users': len([
             z for z in all_users if 
-            i == z.date_of_registration[0:10]
+            i[0:10] == z.date_of_registration[0:10]
         ])}
         for i in list_of_days if True
     ]
@@ -972,7 +984,7 @@ def getNewUserRegistrationStatistics():
 @app.route('/getNewSubscribedUserCountStatistics', methods=['POST'])
 def getNewSubscribedUserCountStatistics():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
@@ -1007,7 +1019,7 @@ def getNewSubscribedUserCountStatistics():
     new_subscribed_user_statistics = [
         {'date': i[0:10], 'users': len([
             z for z in all_subscriptions if 
-            i == z.date[0:10]
+            i[0:10] == z.date[0:10]
         ])}
         for i in list_of_days if True
     ]
@@ -1019,11 +1031,11 @@ def getNewSubscribedUserCountStatistics():
 @app.route('/getUserPaymentHistoryByAccountId', methods=['POST'])
 def getUserPaymentHistoryByAccountId():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = account_id except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # collect payment history by user_id
@@ -1036,7 +1048,7 @@ def getUserPaymentHistoryByAccountId():
 @app.route('/searchForUser', methods=['POST'])
 def searchForUser():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
@@ -1071,7 +1083,7 @@ def searchForUser():
 @app.route('/getUserCount', methods=['POST'])
 def getUserCount():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
@@ -1106,7 +1118,7 @@ def getUserCount():
     user_count_statistics = [
         {'date': i[0:10], 'users': len([
             z for z in all_users if 
-            i <= z.date_of_registration[0:10]
+            i[0:10] <= z.date_of_registration[0:10]
         ])}
         for i in list_of_days if True
     ]
@@ -1118,7 +1130,7 @@ def getUserCount():
 @app.route('/getUserSubscriptionStatistics', methods=['POST'])
 def getUserSubscriptionStatistics():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
@@ -1153,8 +1165,8 @@ def getUserSubscriptionStatistics():
     subscribed_user_statistics = [
         {'date': i[0:10], 'users': len([
             z for z in all_subscriptions if 
-            i >= z.date[0:10] and 
-            i < z.expiry_date
+            i[0:10] >= z.date[0:10] and 
+            i[0:10] < z.expiry_date[0:10]
         ])}
         for i in list_of_days if True
     ]
@@ -1166,7 +1178,7 @@ def getUserSubscriptionStatistics():
 @app.route('/getUserMetrics', methods=['POST'])
 def getUserMetrics():
     # check user access token's validity
-    access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
