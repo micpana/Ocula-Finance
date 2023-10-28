@@ -419,7 +419,7 @@ def signin():
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
 def getUserVerificationEmailByUserId():
     # field validation
-    try: account_id = account_id except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # search for user by given userid
@@ -498,7 +498,7 @@ def verifyEmail():
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
     # field validation
-    try: account_id = account_id except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
@@ -548,7 +548,7 @@ def resendEmailVerification():
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
     # field validation
-    try: account_id = account_id except: response = make_response('Account ID required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
     try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
@@ -1035,7 +1035,7 @@ def getUserPaymentHistoryByAccountId():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: account_id = account_id except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # collect payment history by user_id
