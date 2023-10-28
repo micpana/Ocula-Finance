@@ -708,6 +708,10 @@ def getUserDetailsByAccessToken():
     access_token_status, user_id = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
     # get user by user_id
     user = Users.objects.filter(id = user_id)[0]
 
@@ -1164,6 +1168,10 @@ def getUserMetrics():
     # check user access token's validity
     access_token_status, user_id = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
 
     # get user list
     all_users = Users.objects.all()
