@@ -1,7 +1,14 @@
-role = 'admi'
-roles = 'admin/support/user'
+def getText(username):
+    text = """
+yes {username}
+now now
 
-if role in roles.split('/'):
-    print('yes')
-else:
-    print('no')
+nice
+    """.format(username = 'micpana', lastname = 'Mudimbu')
+    print(username)
+    return text
+
+txt = getText('james')
+print(txt)
+txt = txt.replace('\n', '<br/>')
+print(txt)
