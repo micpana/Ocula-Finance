@@ -32,6 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import { FaUserAlt, FaUsers, FaUserAstronaut, FaAt, FaPhoneAlt, FaUserLock, FaKey } from 'react-icons/fa';
 
@@ -43,6 +44,9 @@ class Settings extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             user_details: {},
@@ -84,6 +88,22 @@ class Settings extends Component{
             this.setState({input_errors: existing_errors})
         }
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
         this.SplitUserDetailsToIndividualStates = (user_details) => {
             this.setState({
                 firstname: user_details.firstname,
@@ -97,13 +117,15 @@ class Settings extends Component{
 
         this.GetUserDetails = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user details to state
-                this.setState({user_details: result, loading: false})
+                this.setState({user_details: result})
+                this.LoadingOff()
                 // split user details to individual states
                 this.SplitUserDetailsToIndividualStates(result)
             }).catch((error) => {
@@ -126,13 +148,16 @@ class Settings extends Component{
                     }else{
                         notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetUserDetails)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    Notification('Oops! It seems there was a problem with the network while processing your request. Please check your internet connection and try again.', 'error')
+                    Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserDetails)
                 }else{ // error occured during request setup ... no network access
-                    Notification("We're sorry but it appears that you don't have an active internet connection. Please connect to the internet and try again.", 'error')
+                    Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserDetails)
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
 
@@ -182,7 +207,7 @@ class Settings extends Component{
                 Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
                 const { cookies } = this.props;
-                this.setState({loading: true})
+                this.LoadingOn()
 
                 var data = new FormData()
                 data.append('firstname', this.state.firstname)
@@ -206,7 +231,7 @@ class Settings extends Component{
                     // update user details state to new information ... without sending another request to the server
                     this.UpdateUserDetailsStateToNewInformation()
                     // set loading to false
-                    this.setState({loading: false})
+                    this.LoadingOff()
                     // check result and notify user of successful request accordingly
                     if (result === 'ok'){
                         Notification('Profile edit successful.', 'success')
@@ -247,7 +272,7 @@ class Settings extends Component{
                     }else{ // error occured during request setup ... no network access
                         Notification(No_Network_Access_Message, 'error')
                     }
-                    this.setState({loading: false})
+                    this.LoadingOff()
                 })
             }
         }
@@ -274,6 +299,8 @@ class Settings extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>

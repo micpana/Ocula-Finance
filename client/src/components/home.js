@@ -31,6 +31,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import Jumbotron1 from '../images/jumbotron_1.jpg'
 import Home1 from '../images/home_1.jpg'
 import Home2 from '../images/home_2.jpg'
@@ -44,6 +45,9 @@ class Home extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false
         };
@@ -74,6 +78,22 @@ class Home extends Component{
             })
             this.setState({input_errors: existing_errors})
         }
+
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
     }
 
     componentDidMount() {
@@ -95,6 +115,8 @@ class Home extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <Row style={{color: '#ffffff', height: '550px', margin: '0px'}}>
                             <div style={{height: '550px', overflow: 'hidden', backgroundColor: '#005fc9'}}>

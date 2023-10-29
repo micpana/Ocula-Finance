@@ -32,6 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import Analysis from './analysis'
 import Subscriptions from './subscriptions'
 import PastPayments from './past_payments'
@@ -53,6 +54,9 @@ class Dashboard extends Component{
         this.state = {
             isOpen: true,
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             screen: 'analysis', // analysis / subscriptions / past payments / settings / all users / user country ranking / user registration chart / user subscription chart
@@ -99,15 +103,33 @@ class Dashboard extends Component{
             this.setState({input_errors: existing_errors})
         }
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
         this.CheckAccessTokenValidity = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set loading to false
-                this.setState({user_details: result, loading: false})
+                // set user details to state
+                this.setState({user_details: result})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -128,13 +150,16 @@ class Dashboard extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.CheckAccessTokenValidity)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.CheckAccessTokenValidity)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.CheckAccessTokenValidity)
                 }
-                // this.setState({loading: false})
+                this.LoadingOff()
             })
         }
 
@@ -193,6 +218,8 @@ class Dashboard extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <Row style={{margin: '0px'}}>
                         <Col id='dashboard_menu' sm='2' style={{minHeight: '550px', backgroundColor: '#00539C', color: '#ffffff'}}>
                             <br/>

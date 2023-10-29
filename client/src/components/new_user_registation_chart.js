@@ -32,6 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
@@ -43,13 +44,16 @@ class NewUserRegistrationChart extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             start_date: '',
             end_date: '',
             category: 'Daily', // Daily / Monthly / Yearly
             categories: ['Daily', 'Monthly', 'Yearly'],
-            user_registration_statistics: [
+            new_user_registration_statistics: [
                 {
                     date: '14/11/2023',
                     users: 30
@@ -132,20 +136,38 @@ class NewUserRegistrationChart extends Component{
             this.setState({input_errors: existing_errors})
         }
 
-        this.GetUserRegistrationStatistics = () => {
-            const { cookies } = this.props;
+        this.LoadingOn = () => {
             this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
+        this.GetNewUserRegistrationStatistics = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             var data = new FormData()
             data.append('start_date', this.state.start_date)
             data.append('end_date', this.state.end_date)
             data.append('category', this.state.category)
 
-            axios.post(Backend_Server_Address + 'getUserRegistrationStatistics', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getNewUserRegistrationStatistics', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set user registration statistics to state
-                this.setState({user_registration_statistics: result, loading: false})
+                // set new user registration statistics to state
+                this.setState({new_user_registration_statistics: result})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -166,13 +188,16 @@ class NewUserRegistrationChart extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetNewUserRegistrationStatistics)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetNewUserRegistrationStatistics)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetNewUserRegistrationStatistics)
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
     }
@@ -183,7 +208,7 @@ class NewUserRegistrationChart extends Component{
                 on_mobile: true
             })
         }
-        // this.GetUserRegistrationStatistics()
+        // this.GetNewUserRegistrationStatistics()
     }
 
     render() {
@@ -197,6 +222,8 @@ class NewUserRegistrationChart extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>
@@ -245,7 +272,7 @@ class NewUserRegistrationChart extends Component{
                             </Col>
                             <Col sm='3'>
                                 <br/>
-                                <Button onClick={this.GetUserRegistrationStatistics} 
+                                <Button onClick={this.GetNewUserRegistrationStatistics} 
                                     style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                 >
                                     View
@@ -257,7 +284,7 @@ class NewUserRegistrationChart extends Component{
                             <BarChart
                                 width={1000}
                                 height={300}
-                                data={this.state.user_registration_statistics}
+                                data={this.state.new_user_registration_statistics}
                                 margin={{
                                     top: 0, right: 0, left: 0, bottom: 0,
                                 }}

@@ -32,6 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import { FaUserLock, FaKey } from 'react-icons/fa';
 
@@ -43,6 +44,9 @@ class NewPasswordOnRecovery extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             password: '',
@@ -77,6 +81,22 @@ class NewPasswordOnRecovery extends Component{
             this.setState({input_errors: existing_errors})
         }
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
         this.SetNewPassword = (e) => {
             e.preventDefault()
             
@@ -96,7 +116,7 @@ class NewPasswordOnRecovery extends Component{
             if (data_checks_out === false){ // user needs to check their input data
                 Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
-                this.setState({loading: true})
+                this.LoadingOn()
 
                 var data = new FormData()
                 data.append('token', this.props.match.params.recovery_token)
@@ -105,8 +125,9 @@ class NewPasswordOnRecovery extends Component{
                 axios.post(Backend_Server_Address + 'setNewPassword', data, { headers: { 'access_token': null }  })
                 .then((res) => {
                     let result = res.data
-                    // set user email to state
-                    this.setState({screen: 'ok', loading: false})
+                    // set screen to ok
+                    this.setState({screen: 'ok'})
+                    this.LoadingOff()
                 }).catch((error) => {
                     console.log(error)
                     if (error.response){ // server responded with a non-2xx status code
@@ -126,7 +147,7 @@ class NewPasswordOnRecovery extends Component{
                     }else{ // error occured during request setup ... no network access
                         Notification(No_Network_Access_Message, 'error')
                     }
-                    this.setState({loading: false})
+                    this.LoadingOff()
                 })
             }
         }
@@ -160,6 +181,8 @@ class NewPasswordOnRecovery extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <Container>
                         <br/><br/><br/><br/>
                         {

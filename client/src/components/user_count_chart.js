@@ -32,6 +32,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell} from 'recharts';
 import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
@@ -43,6 +44,9 @@ class UserCountChart extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             start_date: '',
@@ -92,9 +96,26 @@ class UserCountChart extends Component{
             this.setState({input_errors: existing_errors})
         }
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
         this.GetUserCountStatistics = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             var data = new FormData()
             data.append('start_date', this.state.start_date)
@@ -104,8 +125,9 @@ class UserCountChart extends Component{
             axios.post(Backend_Server_Address + 'getUserCountStatistics', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set users to state
-                this.setState({user_count_statistics: result, loading: false})
+                // set user count statistics to state
+                this.setState({user_count_statistics: result})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -126,13 +148,16 @@ class UserCountChart extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetUserCountStatistics)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserCountStatistics)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserCountStatistics)
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
     }
@@ -157,6 +182,8 @@ class UserCountChart extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>

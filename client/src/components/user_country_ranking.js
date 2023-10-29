@@ -33,6 +33,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 
 class UserCountryRanking extends Component{
     static propTypes = {
@@ -42,6 +43,9 @@ class UserCountryRanking extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             user_country_ranking: [
@@ -91,15 +95,33 @@ class UserCountryRanking extends Component{
             this.setState({input_errors: existing_errors})
         }
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
         this.GetUserCountryRanking = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             axios.post(Backend_Server_Address + 'getUserCountryRanking', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user country ranking to state
-                this.setState({user_country_ranking: result, loading: false})
+                this.setState({user_country_ranking: result})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -120,13 +142,16 @@ class UserCountryRanking extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetUserCountryRanking)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserCountryRanking)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserCountryRanking)
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
     }
@@ -159,6 +184,8 @@ class UserCountryRanking extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>

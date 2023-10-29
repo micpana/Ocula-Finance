@@ -33,6 +33,7 @@ import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Messa
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
+import NetworkErrorScreen from './network_error_screen';
 import { FaMoneyCheckAlt, FaSearch } from 'react-icons/fa';
 
 class AllUsers extends Component{
@@ -43,6 +44,9 @@ class AllUsers extends Component{
         super(props);
         this.state = {
             loading: false,
+            network_error_screen: false,
+            network_error_message: '',
+            retry_function: null,
             input_errors: {},
             on_mobile: false,
             screen: 'users', // users / user
@@ -143,15 +147,34 @@ class AllUsers extends Component{
             this.setState({input_errors: existing_errors})
         }
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
+        this.NetworkErrorScreenOn = (error_message, retry_function) => {
+            this.setState({network_error_screen: true, network_error_message: error_message, retry_function: retry_function})
+        }
+
+        this.NetworkErrorScreenOff = () => {
+            this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
+        }
+
         this.GetAllUsers = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             axios.post(Backend_Server_Address + 'getAllUsers', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set users to state
-                this.setState({all_users: result, loading: false})
+                this.setState({all_users: result})
+                this.LoadingOff()
+                this.GetUserMetrics()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -172,19 +195,22 @@ class AllUsers extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetAllUsers)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetAllUsers)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetAllUsers)
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
 
         this.GetSelectedUserPayments = (user_id) => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
 
             var data = new FormData()
             data.append('account_id', user_id)
@@ -192,8 +218,9 @@ class AllUsers extends Component{
             axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set users to state
-                this.setState({user_payments: result, loading: false})
+                // set user payments to state and switch to user payments screen
+                this.setState({user_payments: result, screen: 'selected user payments'})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -220,7 +247,7 @@ class AllUsers extends Component{
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
 
@@ -241,7 +268,7 @@ class AllUsers extends Component{
                 Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
                 const { cookies } = this.props;
-                this.setState({loading: true})
+                this.LoadingOn()
 
                 var data = new FormData()
                 data.append('search_query', this.state.search_query)
@@ -249,8 +276,9 @@ class AllUsers extends Component{
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
-                    // set users to state
-                    this.setState({all_users: result, loading: false})
+                    // set user results to state
+                    this.setState({all_users: result})
+                    this.LoadingOff()
                 }).catch((error) => {
                     console.log(error)
                     if (error.response){ // server responded with a non-2xx status code
@@ -277,20 +305,22 @@ class AllUsers extends Component{
                     }else{ // error occured during request setup ... no network access
                         Notification(No_Network_Access_Message, 'error')
                     }
-                    this.setState({loading: false})
+                    this.LoadingOff()
                 })
             }
         } 
 
         this.GetUserMetrics = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             axios.post(Backend_Server_Address + 'getUserMetrics', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set users to state
-                this.setState({user_metrics: result, loading: false})
+                this.setState({user_metrics: result})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -311,13 +341,16 @@ class AllUsers extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetAllUsers)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetAllUsers)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetAllUsers)
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
         }
     }
@@ -329,7 +362,6 @@ class AllUsers extends Component{
             })
         }
         // this.GetAllUsers()
-        // this.GetUserMetrics()
     }
 
     render() {
@@ -381,6 +413,8 @@ class AllUsers extends Component{
                 {
                     this.state.loading === true
                     ? <LoadingScreen />
+                    : this.state.network_error_screen === true
+                    ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <br/>
                         <h5 style={{fontWeight: 'bold'}}>
@@ -637,7 +671,7 @@ class AllUsers extends Component{
                                     <Col>
                                         <div style={{border: '1px solid grey', borderRadius: '20px', maxHeight: '450px', overflow: 'scroll'}}>
                                             <br/>
-                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid); this.setState({screen: 'selected user payments'})}}
+                                            <Button onClick={() => this.GetSelectedUserPayments(user._id.$oid)}
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 <FaMoneyCheckAlt /> View user payments
