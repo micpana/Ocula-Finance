@@ -1,16 +1,12 @@
-def getTex(username):
-    text = """
-yes {username}
-now now
+text = 'a b c'
 
-nice
-    """.format(username = 'micpana', lastname = 'Mudimbu')
-    print(username)
-    return text
+ls = [['a','A'], ['b','B'], ['c','C']]
 
-getText = getTex
-print(getText)
-txt = getText('james')
-print(txt)
-txt = txt.replace('\n', '<br/>')
-print(txt)
+new = text
+for item in ls:
+    tag = item[0]
+    replacement = item[1]
+
+    new = new.replace(tag, replacement)
+
+print(new)
