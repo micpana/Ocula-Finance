@@ -29,7 +29,7 @@ import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import { Message, useToaster } from "rsuite";
 
-class NetworkErrorScreens extends Component{
+class NetworkErrorScreen extends Component{
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     };
@@ -50,11 +50,18 @@ class NetworkErrorScreens extends Component{
 
         return (
             <div>
-                
+                <h3 style={{marginTop: '30px'}}>
+                    {error_message}
+                </h3>
+                <Button onClick={retryFunction}
+                    style={{width: '180px', marginTop: '50px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                >
+                    Retry
+                </Button>
             </div>
         );
     }
 
 };
 
-export default withCookies(NetworkErrorScreens);
+export default withCookies(NetworkErrorScreen);
