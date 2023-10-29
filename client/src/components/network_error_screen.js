@@ -50,6 +50,7 @@ class NetworkErrorScreen extends Component{
 
         return (
             <div>
+                <br/><br/><br/><br/>
                 <h3 style={{marginTop: '30px'}}>
                     {error_message}
                 </h3>
@@ -58,6 +59,7 @@ class NetworkErrorScreen extends Component{
                 >
                     Retry
                 </Button>
+                <br/><br/><br/>
             </div>
         );
     }
