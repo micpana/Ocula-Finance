@@ -49,7 +49,7 @@ class AllUsers extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
-            screen: 'users', // users / user
+            screen: 'users', // users / user / selected user payments
             to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified'],
             users_showing: 'All', // All / Subscribed / Not subscribed / Banned / Verified / Not verified
             all_users: [
