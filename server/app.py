@@ -41,7 +41,7 @@ def information_on_user_browsing_device(request_data):
     return user_browsing_agent, user_os, user_device, user_ip_address, user_browser
 
 # function for saving login trials
-def save_login_trials(account_id, email, username, device, user_os, browser, ip_address, date_and_time, successful, description):
+def save_login_trials(account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description):
     trial_details = LoginTrials(
         account_id = account_id,
         email = email,
@@ -66,11 +66,13 @@ def save_login_trials(account_id, email, username, device, user_os, browser, ip_
             send_login_on_new_device_email_notification(
                 email, 
                 username, 
+                firstname, 
+                lastname, 
                 user_os, 
                 device, 
                 ip_address, 
                 user_browser
-            ) # inputs: user_email, username, user_os, user_device, user_ip_address, user_browser
+            ) # inputs: user_email, username, firstname, lastname, user_os, user_device, user_ip_address, user_browser
 
     return 'ok'
 
@@ -238,9 +240,11 @@ def signup():
     send_registration_email_confirmation(
         email, 
         username, 
+        firstname, 
+        lastname, 
         email_verification_token, 
         token_expiration_date
-    ) # inputs: user_email, username, verification_token, token_expiration_date
+    ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
     # return account id
     return response = make_response(account_id); response.status = 201; return response
@@ -278,6 +282,8 @@ def signin():
         save_login_trials(
             'Not registered', 
             email_or_username, 
+            None, 
+            None, 
             None,
             user_device, 
             user_os,
@@ -286,7 +292,7 @@ def signin():
             current_datetime, 
             False,
             'not registered'
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
+        ) # input: account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description
         response = make_response('email or username not registered'); response.status = 404; return response
 
     # check if account is verified, if not, resend email verification
@@ -313,15 +319,19 @@ def signin():
         send_registration_email_confirmation(
             match.email, 
             match.username, 
+            match.firstname, 
+            match.lastname, 
             email_verification_token, 
             token_expiration_date
-        ) # inputs: user_email, username, verification_token, token_expiration_date
+        ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
         # save login trial
         save_login_trials(
             match.id, 
             match.email, 
             match.username,
+            match.firstname, 
+            match.lastname, 
             user_device, 
             user_os,
             user_browser,
@@ -329,7 +339,7 @@ def signin():
             current_datetime, 
             False,
             'not verified'
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
+        ) # input: account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description
 
         # return response
         response = make_response('email not verified'); response.status = 401; return response
@@ -343,6 +353,8 @@ def signin():
             match.id, 
             match.email, 
             match.username,
+            match.firstname, 
+            match.lastname, 
             user_device, 
             user_os,
             user_browser,
@@ -350,7 +362,7 @@ def signin():
             current_datetime, 
             False,
             'incorrect details'
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
+        ) # input: account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description
         response = make_response('incorrect details entered'); response.status = 401; return response
 
     # check if account is banned or not
@@ -360,6 +372,8 @@ def signin():
             match.id, 
             match.email, 
             match.username,
+            match.firstname, 
+            match.lastname, 
             user_device, 
             user_os,
             user_browser,
@@ -367,7 +381,7 @@ def signin():
             current_datetime, 
             False,
             'banned'
-        ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
+        ) # input: account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description
         response = make_response('banned'); response.status = 401; return response
 
     # create and return user access token
@@ -403,6 +417,8 @@ def signin():
         match.id, 
         match.email, 
         match.username,
+        match.firstname, 
+        match.lastname, 
         user_device, 
         user_os,
         user_browser,
@@ -410,7 +426,7 @@ def signin():
         current_datetime, 
         True,
         'authenticated'
-    ) # input: account_id, email, username, device, ip_address, date_and_time, successful (bool), description
+    ) # input: account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description
 
     # return user_access_token
     response = make_response(user_access_token); response.status = 200; return response
@@ -482,11 +498,13 @@ def verifyEmail():
         send_account_email_change_email_notification(
             user.email, 
             user.username, 
+            user.firstname, 
+            user.lastname, 
             user_os, 
             user_device, 
             user_ip_address, 
             user_browser
-        ) # inputs: existing user_email, username, user_os, user_device, user_ip_address, user_browser
+        ) # inputs: existing user_email, username, firstname, lastname, user_os, user_device, user_ip_address, user_browser
 
     # mark token as used
     EmailVerifications.objects(id = token).update(used = True)
@@ -537,9 +555,11 @@ def resendEmailVerification():
     send_registration_email_confirmation(
         account.email, 
         account.username, 
+        account.firstname, 
+        account.lastname, 
         email_verification_token, 
         token_expiration_date
-    ) # inputs: user_email, username, verification_token, token_expiration_date
+    ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
     # return response
     response make_response('ok'); response.status = 200; return response
@@ -597,9 +617,11 @@ def correctRegistrationEmail():
     send_registration_email_confirmation(
         account.email, 
         account.username, 
+        account.firstname, 
+        account.lastname, 
         email_verification_token, 
         token_expiration_date
-    ) # inputs: user_email, username, verification_token, token_expiration_date
+    ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
     # return response
     response = make_response('ok'); response.status = 200; return response
@@ -665,9 +687,11 @@ def recoverPassword():
     send_password_recovery_email(
         account.email, 
         account.username, 
+        account.firstname, 
+        account.lastname, 
         password_recovery_token, 
         token_expiration_date
-    ) # inputs: user_email, username, recovery_token, token_expiration_date
+    ) # inputs: user_email, username, firstname, lastname, recovery_token, token_expiration_date
 
     # return response
     response = make_response('ok'); response.status = 200; return response
@@ -837,9 +861,11 @@ def editProfile():
         send_email_change_confirmation(
             email, 
             username, 
+            firstname, 
+            lastname, 
             email_verification_token, 
             token_expiration_date
-        ) # inputs: user_email, username, verification_token, token_expiration_date
+        ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
         # add more context to return string
         return_string = return_string + ', email verification sent'
