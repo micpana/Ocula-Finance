@@ -1,7 +1,20 @@
-from settings import frontend_client_url
+from settings import platform_name, frontend_client_url
+
+# get platform name
+platform_brand_name = platform_name()
 
 # get frontend url
 frontend_url = frontend_client_url()
+
+# get user's link to follow
+def get_link_to_follow(purpose, token): # purpose: verification / password recovery / signin / contact us
+    link = ''
+    if purpose == 'verification': link = frontend_url + '/verify-email/' + token
+    if purpose == 'password recovery': link = frontend_url + '/new-password-on-recovery/' + token
+    if purpose == 'signin': link = frontend_url + '/signin'
+    if purpose == 'contact us': link = frontend_url + '/contact-us'
+
+    return link
 
 # function for actually sending crafted email ************************************************************************************
 def send_crafted_email(user_email, email_content_html, email_content_text):
@@ -12,13 +25,23 @@ def send_crafted_email(user_email, email_content_html, email_content_text):
 def send_registration_email_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
     # email html content
     email_content_html = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
+Hi {firstname}, <br/><br/>
+Thank you for registering with us. Use the following link to verify your email address. <br/>
+<a href='{link}'>{link}</a> (Link expires: {token_expiration_date}). <br/>
+If you did not signup on {platform_brand_name} please ignore this message. <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('verification', verification_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
     
     # email text content
     email_content_text = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
+Hi {firstname}, \n\n
+Thank you for registering with us. Use the following link to verify your email address. \n
+{link} (Link expires: {token_expiration_date}). \n
+If you did not signup on {platform_brand_name} please ignore this message. \n\n
+Regards, \n\n
+{platform_brand_name} Team \n\n
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('verification', verification_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
 
     # send crafted email
     send_crafted_email(user_email, email_content_html, email_content_text)
@@ -27,13 +50,23 @@ def send_registration_email_confirmation(user_email, username, firstname, lastna
 def send_password_recovery_email(user_email, username, firstname, lastname, recovery_token, token_expiration_date):
     # email content html
     email_content_html = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, recovery_token = recovery_token, token_expiration_date = token_expiration_date)
+Hi {firstname}, <br/><br/>
+You recently requested a password reset, use the following link to reset your password. <br/>
+<a href='{link}'>{link}</a> (Link expires: {token_expiration_date}). <br/>
+If you did not request a password reset please ignore this message. <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('password recovery', recovery_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, recovery_token = recovery_token, token_expiration_date = token_expiration_date)
     
     # email content text
     email_content_text = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, recovery_token = recovery_token, token_expiration_date = token_expiration_date)
+Hi {firstname}, \n\n
+You recently requested a password reset, use the following link to reset your password. \n
+{link} (Link expires: {token_expiration_date}). \n
+If you did not request a password reset please ignore this message. \n\n
+Regards, \n\n
+{platform_brand_name} Team \n\n
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('password recovery', recovery_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, recovery_token = recovery_token, token_expiration_date = token_expiration_date)
 
     # send crafted email
     send_crafted_email(user_email, email_content_html, email_content_text)
@@ -42,28 +75,50 @@ def send_password_recovery_email(user_email, username, firstname, lastname, reco
 def send_email_change_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
     # email content html
     email_content_html = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
+Hi {firstname}, <br/><br/>
+You recently requested an email change, use the following link to verify your new email address. <br/>
+<a href='{link}'>{link}</a> (Link expires: {token_expiration_date}). <br/>
+If you did not request an email change please ignore this message. <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('verification', verification_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
 
     # email content text
     email_content_text = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
+Hi {firstname}, \n\n
+You recently requested an email change, use the following link to verify your new email address. \n
+{link} (Link expires: {token_expiration_date}). \n
+If you did not request an email change please ignore this message. \n\n
+Regards, \n\n
+{platform_brand_name} Team \n\n
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('verification', verification_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
 
     # send crafted email
     send_crafted_email(user_email, email_content_html, email_content_text)
 
 # login on new device email notification *****************************************************************************************
-def send_login_on_new_device_email_notification(user_email, username, firstname, lastname, user_os, user_device, user_ip_address, user_browser):
+def send_login_on_new_device_email_notification(user_email, username, firstname, lastname, date_and_time, user_os, user_device, user_ip_address, user_browser):
     # email content html
     email_content_html = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
+Hi {firstname}, <br/><br/>
+We detected a login into your account from a new device on {date_and_time}. <br/>
+Device used: {user_device}, {user_browser}, {user_os}. <br/>
+IP address: {user_ip_address}. <br/>
+If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard. <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('contact us', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, date_and_time = date_and_time, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
     
     # email content text
     email_content_text = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
+Hi {firstname}, \n\n
+We detected a login into your account from a new device on {date_and_time}. \n
+Device used: {user_device}, {user_browser}, {user_os}. \n
+IP address: {user_ip_address}. \n
+If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard. \n\n
+Regards, \n\n
+{platform_brand_name} Team \n\n
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('contact us', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, date_and_time = date_and_time, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
 
     # send crafted email
     send_crafted_email(user_email, email_content_html, email_content_text)
@@ -72,13 +127,21 @@ def send_login_on_new_device_email_notification(user_email, username, firstname,
 def send_account_email_change_email_notification(user_email, username, firstname, lastname, user_os, user_device, user_ip_address, user_browser):
     # email content html
     email_content_html = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
+Hi {firstname}, <br/><br/>
+Your account's new email address has been verified successfully, use the following link to access your account. <br/>
+<a href='{link}'>{link}</a>. <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('signin', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
     
     # email content text
     email_content_text = """
-
-    """.format(user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
+Hi {firstname}, \n\n
+Your account's new email address has been verified successfully, use the following link to access your account. \n
+{link} \n\n
+Regards, \n\n
+{platform_brand_name} Team \n\n
+    """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('signin', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
 
     # send crafted email
     send_crafted_email(user_email, email_content_html, email_content_text)

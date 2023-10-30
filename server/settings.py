@@ -1,14 +1,22 @@
 from datetime import datetime
 
+# platform name
+def platform_name():
+    name = 'Ocula Finance'
+
+    return name
+
+# frontend url
+def frontend_client_url():
+    url = 'https://oculafinance.com'
+
+    return url
+
 # database selection ... mock / test / live
 def database_selection():
     selection = 'mock'
 
     return selection
-
-# frontend url
-def frontend_client_url():
-    url = 'https://oculafinance.com'
 
 # verification token expiration minutes
 def verification_token_expiration_minutes():
