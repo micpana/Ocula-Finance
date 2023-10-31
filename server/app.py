@@ -818,6 +818,9 @@ def editProfile():
     # check if phonenumber is already in use ... if user has changed field
     if user.phonenumber != phonenumber and len(Users.objects.filter(phonenumber = phonenumber)) > 0: response = make_response('phonenumber in use'); response.status = 409; return response
 
+    # initialize return string
+    return_string = 'ok'
+
     # check if user has supplied a new password
     if new_password != '' and new_password != None:
         # check if new password and existing password are a match
@@ -826,6 +829,14 @@ def editProfile():
 
         # proceed to save new encrypted password to password_to_save
         password_to_save = encrypt_password(new_password)
+
+        # since password has been changed, log out all logged in devices for this user
+        all_active_tokens = UserAccessTokens.objects.filter(user_id = user_id, active = True)
+        signouts = [
+            UserAccessTokens.objects(id = i.id).update(active = False, signout_date = str(datetime.now()) 
+            for i in all_active_tokens if True
+        ]
+        return_string = return_string + ', password has been changed'
     else: # user has not supplied a new password, save existing password to password_to_save
         password_to_save = user_encrypted_password
 
@@ -838,9 +849,6 @@ def editProfile():
         password = password_to_save,
         country = country,
     )
-
-    # initialize return string
-    return_string = 'ok'
 
     # send email verification if user has submitted a new email
     if user.email != email:

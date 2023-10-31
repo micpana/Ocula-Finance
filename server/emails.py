@@ -104,7 +104,8 @@ Hi {firstname}, <br/><br/>
 We detected a login into your account from a new device on {date_and_time}. <br/>
 Device used: {user_device}, {user_browser}, {user_os}. <br/>
 IP address: {user_ip_address}. <br/>
-If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard. <br/><br/>
+If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard, 
+this will also log out all devices currently logged into your account. <br/><br/>
 Regards, <br/><br/>
 {platform_brand_name} Team <br/><br/>
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('contact us', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, date_and_time = date_and_time, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
@@ -115,7 +116,8 @@ Hi {firstname}, \n\n
 We detected a login into your account from a new device on {date_and_time}. \n
 Device used: {user_device}, {user_browser}, {user_os}. \n
 IP address: {user_ip_address}. \n
-If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard. \n\n
+If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard, 
+this will also log out all devices currently logged into your account. \n\n
 Regards, \n\n
 {platform_brand_name} Team \n\n
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('contact us', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, date_and_time = date_and_time, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
