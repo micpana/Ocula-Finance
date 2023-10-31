@@ -35,6 +35,8 @@ import NetworkErrorScreen from './network_error_screen';
 import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import ContactUs1 from '../images/contact_us_1.svg'
 import { FaUserAlt, FaAt, FaRegFolderOpen, FaEnvelopeOpenText } from 'react-icons/fa';
+import * as emailjs from 'emailjs-com'
+import { EmailJsServiceID, EmailJsTemplateID, EmailJsAPIKey } from '../credentials'
 
 class ContactUs extends Component{
     static propTypes = {
@@ -119,6 +121,34 @@ class ContactUs extends Component{
                 Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
                 this.LoadingOn()
+
+                // get message and replace new line characters with line breaks
+                let message = this.state.message.replace('\n', '<br/>')
+        
+                // template parameters
+                let templateParams = {
+                    from_name: this.state.firstname + ' ' + this.state.lastname,
+                    to_name: {Platform_Name},
+                    reply_to: this.state.email,
+                    subject: this.state.subject,
+                    message_html: message,
+                }
+        
+                // send email
+                try{
+                    emailjs.send(
+                        EmailJsServiceID,
+                        EmailJsTemplateID,
+                        templateParams,
+                        EmailJsAPIKey
+                    )
+                    Notification('Your message has been submitted successfully.', 'success')
+                    window.location.reload()
+                }catch(err){
+                    console.log(err)
+                    Notification('Something went wrong while trying to submit your message. Please try again.', 'error')
+                }
+                this.LoadingOff()
             }
         }
     }
