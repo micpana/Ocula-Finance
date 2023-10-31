@@ -148,8 +148,7 @@ def user_object_modification(user, current_datetime):
     subscription_expiry = user['subscription_expiry']
     if current_datetime > subscription_expiry: 
         user['subscribed'] = False 
-    
-    
+    else:
         user['subscribed'] = True
 
     # return modified user object
@@ -169,21 +168,28 @@ def index():
 @app.route('/signup', methods=['POST'])
 def signup():
     # input field validation
-    try: firstname = request.form['firstname'] except: response = make_response('Firstname field required'); response.status = 400; return response
+    try: firstname = request.form['firstname'] 
+    except: response = make_response('Firstname field required'); response.status = 400; return response
     if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
-    try: lastname = request.form['lastname'] except: response = make_response('Lastname field required'); response.status = 400; return response
+    try: lastname = request.form['lastname'] 
+    except: response = make_response('Lastname field required'); response.status = 400; return response
     if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
-    try: username = request.form['username'] except: response = make_response('Username field required'); response.status = 400; return response
+    try: username = request.form['username'] 
+    except: response = make_response('Username field required'); response.status = 400; return response
     if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
-    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    try: email = request.form['email'] 
+    except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure') ; response.status = 400; return response
-    try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    try: phonenumber = request.form['phonenumber'] 
+    except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
-    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
-    try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
+    try: country = request.form['country'] 
+    except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
 
     # check if username is already in use
@@ -258,9 +264,11 @@ def signup():
 @app.route('/signin', methods=['POST'])
 def signin():
     # input field validation
-    try: email_or_username = request.form['email_or_username'] except: response = make_response('Email or username field required'); response.status = 400; return response
+    try: email_or_username = request.form['email_or_username'] 
+    except: response = make_response('Email or username field required'); response.status = 400; return response
     if email_or_username == '' or email_or_username == None: response = make_response('Email or username cannot be empty'); response.status = 400; return response
-    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
@@ -440,7 +448,8 @@ def signin():
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
 def getUserVerificationEmailByUserId():
     # field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # search for user by given userid
@@ -467,7 +476,8 @@ def getUserVerificationEmailByUserId():
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
     # field validation
-    try: token = request.form['token'] except: response = make_response('Token field required'); response.status = 400; return response
+    try: token = request.form['token'] 
+    except: response = make_response('Token field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
     
     # get user browsing device information
@@ -521,7 +531,8 @@ def verifyEmail():
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
     # field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
@@ -573,9 +584,11 @@ def resendEmailVerification():
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
     # field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account ID required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
-    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    try: email = request.form['email'] 
+    except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
 
@@ -635,7 +648,8 @@ def correctRegistrationEmail():
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
     # field validation
-    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    try: email = request.form['email'] 
+    except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
 
@@ -705,9 +719,11 @@ def recoverPassword():
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
     # field validation
-    try: token = request.form['token'] except: response = make_response('Password field required'); response.status = 400; return response
+    try: token = request.form['token'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
-    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
 
@@ -777,22 +793,30 @@ def editProfile():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
     # input field validation
-    try: firstname = request.form['firstname'] except: response = make_response('Firstname field required'); response.status = 400; return response
+    try: firstname = request.form['firstname'] 
+    except: response = make_response('Firstname field required'); response.status = 400; return response
     if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
-    try: lastname = request.form['lastname'] except: response = make_response('Lastname field required'); response.status = 400; return response
+    try: lastname = request.form['lastname'] 
+    except: response = make_response('Lastname field required'); response.status = 400; return response
     if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
-    try: username = request.form['username'] except: response = make_response('Username field required'); response.status = 400; return response
+    try: username = request.form['username'] 
+    except: response = make_response('Username field required'); response.status = 400; return response
     if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
-    try: email = request.form['email'] except: response = make_response('Email field required'); response.status = 400; return response
+    try: email = request.form['email'] 
+    except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('Invalid email structure' ); response.status = 400; return response
-    try: phonenumber = request.form['phonenumber'] except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    try: phonenumber = request.form['phonenumber'] 
+    except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
-    try: password = request.form['password'] except: response = make_response('Password field required'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
-    try: new_password = request.form['new_password'] except: response = make_response('New password field required'); response.status = 400; return response
+    try: new_password = request.form['new_password'] 
+    except: response = make_response('New password field required'); response.status = 400; return response
     if new_password != '' and new_password != None and is_password_structure_valid(new_password) == False: response = make_response('Invalid new password structure'); response.status = 400; return response
-    try: country = request.form['country'] except: response = make_response('Country field required'); response.status = 400; return response
+    try: country = request.form['country'] 
+    except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
 
     # get user browsing device information
@@ -909,7 +933,8 @@ def getCurrentMarketAnalysis():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # symbol field validation
-    try: symbol = request.form['symbol'] except: response = make_response('Symbol required'); response.status = 400; return response
+    try: symbol = request.form['symbol'] 
+    except: response = make_response('Symbol required'); response.status = 400; return response
     if symbol == '' or symbol == None: response = make_response('Symbol cannot be empty'); response.status = 400; return response
 
     # get current datetime
@@ -981,9 +1006,12 @@ def getNewUserRegistrationStatistics():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
-    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
-    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] 
+    except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     
     # get user list
@@ -1028,9 +1056,12 @@ def getNewSubscribedUserCountStatistics():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
-    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
-    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] 
+    except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     
     # get subscriptions list
@@ -1075,7 +1106,8 @@ def getUserPaymentHistoryByAccountId():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: account_id = request.form['account_id'] except: response = make_response('Account ID field required'); response.status = 400; return response
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # collect payment history by user_id
@@ -1092,7 +1124,8 @@ def searchForUser():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: search_query = request.form['search_query'] except: response = make_response('Search query field required'); response.status = 400; return response
+    try: search_query = request.form['search_query'] 
+    except: response = make_response('Search query field required'); response.status = 400; return response
     if search_query == '' or search_query == None: response = make_response('Search query cannot be empty'); response.status = 400; return response
 
     # get current datetime
@@ -1127,9 +1160,12 @@ def getUserCount():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
-    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
-    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] 
+    except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     
     # get user list
@@ -1174,9 +1210,12 @@ def getUserSubscriptionStatistics():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation
-    try: start_date = request.form['start_date'] except: response = make_response('Start date field required'); response.status = 400; return response
-    try: end_date = request.form['end_date'] except: response = make_response('End date field required'); response.status = 400; return response
-    try: category = request.form['category'] except: response = make_response('Category field required'); response.status = 400; return response
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+    try: category = request.form['category'] 
+    except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     
     # get subscriptions list
