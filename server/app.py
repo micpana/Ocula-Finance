@@ -59,7 +59,8 @@ def save_login_trials(account_id, email, username, firstname, lastname, device, 
     if status == True:
         # check if user has used the device before
         matches = LoginTrials.objects.filter(account_id = account_id, device = device, os = user_os, browser = browser)
-        if len(matches) > 0: used_before = True else: used_before = False
+        if len(matches) > 0: used_before = True 
+        else: used_before = False
 
         # if device is new, notify user
         if used_before == False:
@@ -101,7 +102,8 @@ def check_user_access_token_validity(request_data, expected_user_role):
             access_token_status = 'Access token disabled via signout'
         elif current_datetime > token_details.expiry_date:
             access_token_status = 'Access token expired'
-        else:
+        
+        
             # check if user account's role matches expected user role
             if user_role not in expected_user_role.split('/'): return 'Not authorized to access this'
             # proceed since everything checks out
@@ -118,7 +120,8 @@ def is_email_structure_valid(email):
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     if re.match(pattern, email):
         return True
-    else:
+    
+    
         return False
 
 # password structure validation ... 8 characters at minimum, with at least 1: uppercase letter, lowercase letter, number, special character
@@ -145,7 +148,8 @@ def user_object_modification(user, current_datetime):
     subscription_expiry = user['subscription_expiry']
     if current_datetime > subscription_expiry: 
         user['subscribed'] = False 
-    else:
+    
+    
         user['subscribed'] = True
 
     # return modified user object
@@ -837,7 +841,8 @@ def editProfile():
             for i in all_active_tokens if True
         ]
         return_string = return_string + ', password has been changed'
-    else: # user has not supplied a new password, save existing password to password_to_save
+    
+     # user has not supplied a new password, save existing password to password_to_save
         password_to_save = user_encrypted_password
 
     # update account details
