@@ -111,14 +111,14 @@ class NavBar extends Component{
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else{
                         // notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        // this.Notification(notification_message, 'error')
+                        // Notification(notification_message, 'error')
                         this.GetUserDetails()
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    // this.Notification(Network_Error_Message, 'error')
+                    // Notification(Network_Error_Message, 'error')
                         this.GetUserDetails()
                 }else{ // error occured during request setup ... no network access
-                    // this.Notification(No_Network_Access_Message, 'error')
+                    // Notification(No_Network_Access_Message, 'error')
                         this.GetUserDetails()
                 }
                 this.LoadingOff()
@@ -156,12 +156,12 @@ class NavBar extends Component{
                             window.location.href = '//' + window.location.hostname + port + '/signin';
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                            this.Notification(notification_message, 'error')
+                            Notification(notification_message, 'error')
                         }
                     }else if (error.request){ // request was made but no response was received ... network error
-                        this.Notification(Network_Error_Message, 'error')
+                        Notification(Network_Error_Message, 'error')
                     }else{ // error occured during request setup ... no network access
-                        this.Notification(No_Network_Access_Message, 'error')
+                        Notification(No_Network_Access_Message, 'error')
                     }
                     this.LoadingOff()
                 });
