@@ -10,6 +10,7 @@ from settings import database_selection
 # get live database credentials from environment variables
 live_db_username = os.environ.get('LIVE_DB_USERNAME')
 live_db_password = os.environ.get('LIVE_DB_PASSWORD')
+live_db_url = os.environ.get('LIVE_DB_URL')
 
 # get test database credentials from environment variables
 test_db_username = os.environ.get('TEST_DB_USERNAME')
