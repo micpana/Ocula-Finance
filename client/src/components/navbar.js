@@ -28,6 +28,7 @@ import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import axios from 'axios';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
+import Notification from './notification_alert';
 import { Message, useToaster } from "rsuite";
 import Logo from '../images/logo.png'
 
@@ -53,6 +54,14 @@ class NavBar extends Component{
             this.setState({[e.target.name]: e.target.value});
         };
 
+        this.LoadingOn = () => {
+            this.setState({loading: true})
+        }
+
+        this.LoadingOff = () => {
+            this.setState({loading: false})
+        }
+
         this.toggle = () => {
             this.setState({
                 isOpen: !this.state.isOpen
@@ -75,13 +84,14 @@ class NavBar extends Component{
 
         this.GetUserDetails = () => {
             const { cookies } = this.props;
-            this.setState({loading: true})
+            this.LoadingOn()
 
             axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user details to state
-                this.setState({user_details: result, loading: false})
+                this.setState({user_details: result})
+                this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
                 if (error.response){ // server responded with a non-2xx status code
@@ -111,8 +121,51 @@ class NavBar extends Component{
                     // this.Notification(No_Network_Access_Message, 'error')
                         this.GetUserDetails()
                 }
-                this.setState({loading: false})
+                this.LoadingOff()
             })
+
+            this.Signout = () => {
+                const { cookies } = this.props;
+                this.LoadingOn()
+        
+                axios.post(Backend_Server_Address + 'signout', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then(res => { 
+                    let result = res.data
+                    // delete token from user cookies
+                    cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                    // redirect to sign in
+                    let port = (window.location.port ? ':' + window.location.port : '');
+                    window.location.href = '//' + window.location.hostname + port + '/signin';
+                })
+                .catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'Access token disabled via signout' ||
+                            result === 'Access token expired' ||
+                            result === 'Not authorized to access this' ||
+                            result === 'Invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            this.Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        this.Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        this.Notification(No_Network_Access_Message, 'error')
+                    }
+                    this.LoadingOff()
+                });
+            }
         }
     }
 
