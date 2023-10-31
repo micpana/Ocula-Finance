@@ -237,6 +237,13 @@ class Settings extends Component{
                         Notification('Profile edit successful.', 'success')
                     }else if (result === 'ok, email verification sent'){
                         Notification("Profile edit successful. We've sent you an email at " + this.state.email + " to verify if its truly yours. Follow its instructions to verify your new email.", 'success')
+                    }else if (result === 'ok, password has been changed'){
+                        Notification("Profile edit successful. Your password has been changed and all your active logins have now been disabled. You'll be redirected to the signin page to login using your new password.", 'success')
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
                     }
                 }).catch((error) => {
                     console.log(error)
