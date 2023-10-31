@@ -1,8 +1,8 @@
-from models import  users
+from models import Users
 from mongoengine import connect
 import dns
 import urllib
-from encrypt import encrypt_password, check_encrypted_password
+from encryption import encrypt_password, verify_encrypted_password
 from datetime import datetime
 import os
 from settings import database_selection

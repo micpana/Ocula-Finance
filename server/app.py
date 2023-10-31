@@ -1,12 +1,13 @@
 # imports
 from flask import Flask, request, send_file, jsonify, make_response
 from flask_cors import CORS, cross_origin
-from user_agents import parse
+# from user_agents import parse
+parse = None # replacement, just to get server up until user_agents is installed
 import json
 import re
 from datetime import datetime, timedelta
 from database import init_db
-from models import  Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysisPayments, LoginTrials, Payments
+from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
 from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes
@@ -213,7 +214,7 @@ def signup():
         phonenumber = phonenumber,
         password = password,
         country = country,
-        date_of_registration = str(datetime.now())
+        date_of_registration = str(datetime.now()),
         verified = False,
         subscription_date = '',
         subscription_expiry = '',
@@ -241,7 +242,7 @@ def signup():
         used = False,
         device = user_device,
         ip_address = user_ip_address,
-        date_of_request = current_datetime
+        date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
     verification_details = email_verification_details.save()
@@ -258,7 +259,7 @@ def signup():
     ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
     # return account id
-    return response = make_response(account_id); response.status = 201; return response
+    response = make_response(account_id); response.status = 201; return response
 
 # 2
 @app.route('/signin', methods=['POST'])
@@ -322,7 +323,7 @@ def signin():
             used = False,
             device = user_device,
             ip_address = user_ip_address,
-            date_of_request = current_datetime
+            date_of_request = current_datetime,
             expiry_date = token_expiration_date
         )
         verification_details = email_verification_details.save()
@@ -561,7 +562,7 @@ def resendEmailVerification():
         used = False,
         device = user_device,
         ip_address = user_ip_address,
-        date_of_request = current_datetime
+        date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
     verification_details = email_verification_details.save()
@@ -578,7 +579,7 @@ def resendEmailVerification():
     ) # inputs: user_email, username, firstname, lastname, verification_token, token_expiration_date
 
     # return response
-    response make_response('ok'); response.status = 200; return response
+    response = make_response('ok'); response.status = 200; return response
 
 # 5
 @app.route('/correctRegistrationEmail', methods=['POST'])
@@ -625,7 +626,7 @@ def correctRegistrationEmail():
         used = False,
         device = user_device,
         ip_address = user_ip_address,
-        date_of_request = current_datetime
+        date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
     verification_details = email_verification_details.save()
@@ -861,7 +862,7 @@ def editProfile():
         # since password has been changed, log out all logged in devices for this user
         all_active_tokens = UserAccessTokens.objects.filter(user_id = user_id, active = True)
         signouts = [
-            UserAccessTokens.objects(id = i.id).update(active = False, signout_date = str(datetime.now()) 
+            UserAccessTokens.objects(id = i.id).update(active = False, signout_date = str(datetime.now()))
             for i in all_active_tokens if True
         ]
         return_string = return_string + ', password has been changed'
@@ -889,7 +890,7 @@ def editProfile():
             used = False,
             device = user_device,
             ip_address = user_ip_address,
-            date_of_request = current_datetime
+            date_of_request = current_datetime,
             expiry_date = token_expiration_date
         )
         verification_details = email_verification_details.save()

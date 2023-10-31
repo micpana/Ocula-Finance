@@ -34,7 +34,7 @@ class EmailVerifications(Document):
     expiry_date = StringField(required=True)
 
 class UserAccessTokens(Document):
-    meta = {'collection': 'accesstokens'}
+    meta = {'collection': 'useraccesstokens'}
     user_id = StringField(required=True)
     token = StringField(required=True)
     active = BooleanField(required=True)
@@ -44,7 +44,7 @@ class UserAccessTokens(Document):
     user_os = StringField(required=True)
     user_device = StringField(required=True)
     user_ip_address = StringField(required=True)
-    user_browser = StringField = StringField(required=True)
+    user_browser = StringField(required=True)
     last_used_on_date = StringField(required=True)
     expiry_date = StringField(required=True)
 

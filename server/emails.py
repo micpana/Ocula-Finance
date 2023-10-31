@@ -18,8 +18,7 @@ def get_link_to_follow(purpose, token): # purpose: verification / password recov
 
 # function for actually sending crafted email ************************************************************************************
 def send_crafted_email(user_email, email_content_html, email_content_text):
-
-
+    return ''
 
 # email confirmations on registration ********************************************************************************************
 def send_registration_email_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
