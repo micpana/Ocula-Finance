@@ -815,7 +815,7 @@ def editProfile():
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     try: new_password = request.form['new_password'] 
     except: response = make_response('New password field required'); response.status = 400; return response
-    if new_password != '' and new_password != None and is_password_structure_valid(new_password) == False: response = make_response('Invalid new password structure'); response.status = 400; return response
+    if new_password != '' and new_password != None and is_password_structure_valid(new_password) == False: response = make_response('invalid password structure'); response.status = 400; return response
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
