@@ -269,7 +269,7 @@ class Settings extends Component{
                         else if (result === 'username in use'){ notification_message = "The username you've entered is already in use on this platform." }
                         else if (result === 'phonenumber in use'){ notification_message = "The phonenumber you've entered is already in use on this platform." }
                         else if (result === 'invalid email structure'){ notification_message = "The email you've entered does not have a valid structure." }
-                        else if (result === 'invalid password structure'){ notification_message = "The password you've entered does not have a valid structure." }
+                        else if (result === 'invalid password structure'){ notification_message = "The new password you've entered does not have a valid structure." }
                         else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         }
