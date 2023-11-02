@@ -137,7 +137,7 @@ class NewPasswordOnRecovery extends Component{
                         if(result === 'invalid token'){ this.setState({screen: 'invalid token'}) }
                         else if (result === 'expired'){ this.setState({screen: 'expired'}) }
                         else if (result === 'used'){ this.setState({screen: 'used'}) }
-                        else if (result === 'invalid password structure'){ notification_message = "The password you've entered does not have a valid structure."; Notification(notification_message, 'invalid') }
+                        else if (result === 'Invalid password structure'){ notification_message = "The password you've entered does not have a valid structure."; Notification(notification_message, 'invalid') }
                         else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')

@@ -154,8 +154,8 @@ class Signup extends Component{
                         let result = error.response.data
                         var notification_message = ''
                         if(result === 'email in use'){ notification_message = "The email you've entered is already in use on this platform." }
-                        else if (result === 'invalid email structure'){ notification_message = "The email you've entered does not have a valid structure." }
-                        else if (result === 'invalid password structure'){ notification_message = "The password you've entered does not have a valid structure." }
+                        else if (result === 'Invalid email structure'){ notification_message = "The email you've entered does not have a valid structure." }
+                        else if (result === 'Invalid password structure'){ notification_message = "The password you've entered does not have a valid structure." }
                         else if (result === 'phonenumber in use'){ notification_message = "The phonenumber you've entered is already in use on this platform." }
                         else if (result === 'username in use'){ notification_message = "The username you've entered is already in use on this platform." }
                         else{
