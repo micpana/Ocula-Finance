@@ -100,13 +100,11 @@ def check_user_access_token_validity(request_data, expected_user_role):
         current_datetime = str(datetime.now())
         # get access token status
         if token_details.active == False:
-            access_token_status = 'Access token disabled via signout'
+            access_token_status = 'access token disabled via signout'
         elif current_datetime > token_details.expiry_date:
-            access_token_status = 'Access token expired'
-        
-        
+            access_token_status = 'access token expired'
             # check if user account's role matches expected user role
-            if user_role not in expected_user_role.split('/'): return 'Not authorized to access this'
+            if user_role not in expected_user_role.split('/'): return 'not authorized to access this'
             # proceed since everything checks out
             access_token_status = 'ok'
             # show that access token was last used now
@@ -114,7 +112,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
     except:
-        return 'Invalid token', None
+        return 'invalid token', None
 
 # email structure validation
 def is_email_structure_valid(email):
@@ -181,14 +179,14 @@ def signup():
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
-    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure') ; response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('invalid email structure') ; response.status = 400; return response
     try: phonenumber = request.form['phonenumber'] 
     except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
-    if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
+    if is_password_structure_valid(password) == False: response = make_response('invalid password structure'); response.status = 400; return response
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
@@ -591,7 +589,7 @@ def correctRegistrationEmail():
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
-    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -652,7 +650,7 @@ def recoverPassword():
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
-    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure'); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -726,7 +724,7 @@ def setNewPassword():
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
-    if is_password_structure_valid(password) == False: response = make_response('Invalid password structure'); response.status = 400; return response
+    if is_password_structure_valid(password) == False: response = make_response('invalid password structure'); response.status = 400; return response
 
     # search for token
     token_results = PasswordRecoveries.objects.filter(id = token)
@@ -806,7 +804,7 @@ def editProfile():
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
-    if is_email_structure_valid(email) == False: response = make_response('Invalid email structure' ); response.status = 400; return response
+    if is_email_structure_valid(email) == False: response = make_response('invalid email structure' ); response.status = 400; return response
     try: phonenumber = request.form['phonenumber'] 
     except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response

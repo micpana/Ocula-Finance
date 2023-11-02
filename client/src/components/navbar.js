@@ -99,10 +99,10 @@ class NavBar extends Component{
                     let result = error.response.data
                     var notification_message = ''
                     if(
-                        result === 'Access token disabled via signout' ||
-                        result === 'Access token expired' ||
-                        result === 'Not authorized to access this' ||
-                        result === 'Invalid token'
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
                     ){ 
                         // delete token from user cookies
                         cookies.remove(Access_Token_Cookie_Name, { path: '/' });
@@ -144,10 +144,10 @@ class NavBar extends Component{
                         let result = error.response.data
                         var notification_message = ''
                         if(
-                            result === 'Access token disabled via signout' ||
-                            result === 'Access token expired' ||
-                            result === 'Not authorized to access this' ||
-                            result === 'Invalid token'
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
                         ){ 
                             // delete token from user cookies
                             cookies.remove(Access_Token_Cookie_Name, { path: '/' });
