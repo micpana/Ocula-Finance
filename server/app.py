@@ -441,7 +441,7 @@ def signin():
     ) # input: account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description
 
     # return user_access_token
-    response = make_response(user_access_token); response.status = 200; return response
+    response = make_response(user_access_token); response.status = 202; return response
 
 # 17
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
