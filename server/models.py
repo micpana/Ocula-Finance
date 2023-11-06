@@ -20,7 +20,13 @@ class Users(Document):
     subscription_date = StringField(required=False)
     subscription_expiry = StringField(required=False)
     role = StringField(required=True)
+    role_issued_by = StringField(required=True)
     banned = BooleanField(required=True)
+    banned_by = StringField(required=False)
+    ban_reason = StringField(required=False)
+    unbanned_by = StringField(required=False)
+    ban_time = StringField(required=False)
+    unban_time = StringField(required=False)
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}
@@ -76,6 +82,7 @@ class Payments(Document):
     discount_supplied = FloatField(required=True)
     amount = FloatField(required=True)
     expiry_date = StringField(required=True)
+    entered_by = StringField(required=True)
 
 class LoginTrials(Document):
     meta = {'collection': 'logintrials'}

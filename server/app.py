@@ -217,7 +217,13 @@ def signup():
         subscription_date = '',
         subscription_expiry = '',
         role = 'user',
-        banned = False
+        role_issued_by = 'system',
+        banned = False,
+        banned_by = '',
+        ban_reason = '',
+        unbanned_by = '',
+        ban_time = '',
+        unban_time = ''
     )
     account_details = user_details.save()
     account_id = account_details.id
@@ -1282,6 +1288,244 @@ def getUserMetrics():
 
     # return statistics
     response = make_response(jsonify(user_metrics)); response.status = 200; return response
+
+# 23
+@app.route('/banUser', methods=['POST'])
+def banUser():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account id field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    try: ban_reason = request.form['ban_reason'] 
+    except: response = make_response('Ban reason field required'); response.status = 400; return response
+    if ban_reason == '' or ban_reason == None: response = make_response('Ban reason cannot be empty'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
+    # check if admin password is correct
+    admin = Users.objects.filter(id = user_id)[0]
+    admin_encrypted_password = admin.password
+    is_password_a_match = verify_encrypted_password(password, admin_encrypted_password)
+    if is_password_a_match == False: 
+        response = make_response('incorrect password'); response.status = 401; return response
+
+    # proceed to get admin name and username
+    admin_name_and_username = admin.firstname + ' ' + admin.lastname + ' (' + admin.username + ')'
+
+    # check if user account exists and ban user
+    try:
+        # ban user
+        Users.objects(id = account_id).update(
+            banned = True,
+            banned_by = admin_name_and_username,
+            ban_reason = ban_reason,
+            ban_time = current_datetime
+        )
+
+        # return response
+        response = make_response('ok'); response.status = 200; return response
+    except:
+        response = make_response('invalid account id'); response.status = 404; return response
+
+# 24
+@app.route('/unbanUser', methods=['POST'])
+def unbanUser():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account id field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
+    # check if admin password is correct
+    admin = Users.objects.filter(id = user_id)[0]
+    admin_encrypted_password = admin.password
+    is_password_a_match = verify_encrypted_password(password, admin_encrypted_password)
+    if is_password_a_match == False: 
+        response = make_response('incorrect password'); response.status = 401; return response
+
+    # proceed to get admin name and username
+    admin_name_and_username = admin.firstname + ' ' + admin.lastname + ' (' + admin.username + ')'
+
+    # check if user account exists and unban user
+    try:
+        # unban user
+        Users.objects(id = account_id).update(
+            banned = False,
+            unbanned_by = admin_name_and_username,
+            unban_time = current_datetime
+        )
+
+        # return response
+        response = make_response('ok'); response.status = 200; return response
+    except:
+        response = make_response('invalid account id'); response.status = 404; return response
+
+# 25
+@app.route('/changeUserRole', methods=['POST'])
+def changeUserRole():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account id field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    try: new_role = request.form['new_role'] 
+    except: response = make_response('New role field required'); response.status = 400; return response
+    if new_role == '' or new_role == None: response = make_response('New role cannot be empty'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
+    # check if admin password is correct
+    admin = Users.objects.filter(id = user_id)[0]
+    admin_encrypted_password = admin.password
+    is_password_a_match = verify_encrypted_password(password, admin_encrypted_password)
+    if is_password_a_match == False: 
+        response = make_response('incorrect password'); response.status = 401; return response
+
+    # proceed to get admin name and username
+    admin_name_and_username = admin.firstname + ' ' + admin.lastname + ' (' + admin.username + ')'
+
+    # check if user account exists and change user role
+    try:
+        # change user role
+        Users.objects(id = account_id).update(
+            role = new_role,
+            role_issued_by  = admin_name_and_username
+        )
+
+        # return response
+        response = make_response('ok'); response.status = 200; return response
+    except:
+        response = make_response('invalid account id'); response.status = 404; return response
+
+# 26
+@app.route('/manuallyEnterUserPayment', methods=['POST'])
+def manuallyEnterUserPayment():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    try: account_id = request.form['account_id'] 
+    except: response = make_response('Account id field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    try: purpose = request.form['purpose']
+    except: response = make_response('Purpose field required'); response.status = 400; return response
+    if purpose == '' or purpose == None: response = make_response('Purpose cannot be empty'); response.status = 400; return response
+    try: payment_method = request.form['payment_method']
+    except: response = make_response('Payment method field required'); response.status = 400; return response
+    if payment_method == '' or payment_method == None: response = make_response('Payment method cannot be empty'); response.status = 400; return response
+    try: transaction_id = request.form['transaction_id']
+    except: response = make_response('Transaction id field required'); response.status = 400; return response
+    if transaction_id == '' or transaction_id == None: response = make_response('Transaction id cannot be empty'); response.status = 400; return response
+    try: verified = request.form['verified']
+    except: response = make_response('Verified field required'); response.status = 400; return response
+    if verified == '' or verified == None: response = make_response('Verified cannot be empty'); response.status = 400; return response
+    try: discount_applied = request.form['discount_applied']
+    except: response = make_response('Discount applied field required'); response.status = 400; return response
+    if discount_applied == '' or discount_applied == None: response = make_response('Discount applied cannot be empty'); response.status = 400; return response
+    try: amount = request.form['amount']
+    except: response = make_response('Amount field required'); response.status = 400; return response
+    if amount == '' or amount == None: response = make_response('Amount cannot be empty'); response.status = 400; return response
+    try: password = request.form['password'] 
+    except: response = make_response('Password field required'); response.status = 400; return response
+    if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+    # date format
+    date_format = '%Y-%m-%d %H:%M:%S.%f'
+
+    # check if admin password is correct
+    admin = Users.objects.filter(id = user_id)[0]
+    admin_encrypted_password = admin.password
+    is_password_a_match = verify_encrypted_password(password, admin_encrypted_password)
+    if is_password_a_match == False: 
+        response = make_response('incorrect password'); response.status = 401; return response
+
+    # proceed to get admin name and username
+    admin_name_and_username = admin.firstname + ' ' + admin.lastname + ' (' + admin.username + ')'
+
+    # check if user account exists
+    user = None
+    try:
+        # check if user account exists
+        user = Users.objects.filter(id = account_id)[0]
+    except:
+        response = make_response('invalid account id'); response.status = 404; return response
+
+    # if purpose == subscription
+    expiry_date = ''
+    if purpose == 'subscription':
+        # check if amount is sufficient
+        if amount < 10 or amount % 10 != 0 and amount != 86:
+            response = make_response('enter sufficient amount for a subscription'); response.status = 404; return response
+        
+        # check if amount does not exceed max subscription package
+        if amount > 86:
+            response = make_response('subscription amount cannot be more than max subscription'); response.status = 404; return response
+
+        # get subscription months by amount
+        if amount == 86:
+            subscription_months = 12
+        else:
+            subscription_months = amount / 10
+
+        # get subscription weeks
+        subscription_weeks = subscription_months * 4
+
+        # check if user has an active subscription and calculate subscription expiry date
+        if current_datetime > user.subscription_expiry: # no active subscription
+            expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
+        elif current_datetime <= user.subscription_expiry: # active subscription
+            expiry_date = str(datetime.strptime(user.subscription_expiry, date_format) + timedelta(weeks = subscription_weeks))
+        
+        # set user subscription status to true... set subscription date and subscription expiry
+        Users.objects(id = account_id).update(
+            subscription_date = current_datetime,
+            subscription_expiry = expiry_date
+        )
+
+    # add user payment
+    payment_details = Payments(
+        date = current_datetime,
+        user_id = account_id,
+        purpose = purpose,
+        payment_method = payment_method,
+        transaction_id = transaction_id,
+        verified = verified,
+        discount_applied = discount_applied,
+        amount = amount,
+        expiry_date = expiry_date,
+        entered_by = admin_name_and_username
+    )
+    payment_details.save()
+
+    # return response
+    response = make_response('ok'); response.status = 200; return response
 
 if __name__ == '__main__':
     init_db()
