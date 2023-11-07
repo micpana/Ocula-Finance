@@ -126,7 +126,8 @@ class AllUsers extends Component{
             transaction_id: '',
             verified: false,
             discount_applied: 0,
-            amount: 0
+            amount: 0,
+            roles: ['user', 'admin']
         };
 
         this.HandleChange = (e) => {
@@ -854,7 +855,7 @@ class AllUsers extends Component{
                                 <br/><br/>
                                 <Row style={{margin: '0px'}}>
                                     <Col sm='6'>
-                                        <div style={{border: '1px solid grey', borderRadius: '20px', minHeight: '100px'}}>
+                                        <div style={{border: '1px solid grey', borderRadius: '20px', minHeight: '100px', maxHeight: '700px', overflow: 'scroll'}}>
                                             <br/>
                                             <h6 style={{fontWeight: 'bold', color: '#00539C'}}>
                                                 User Information
@@ -1018,14 +1019,81 @@ class AllUsers extends Component{
                                         </div>
                                     </Col>
                                     <Col>
-                                        <div style={{border: '1px solid grey', borderRadius: '20px', maxHeight: '450px', overflow: 'scroll'}}>
+                                        <div style={{border: '1px solid grey', borderRadius: '20px', maxHeight: '700px', overflow: 'scroll'}}>
+                                            <br/>
+                                            <h6 style={{fontWeight: 'bold', color: '#00539C'}}>User Payments</h6>
                                             <br/>
                                             <Button onClick={() => this.GetSelectedUserPayments(user._id.$oid)}
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 <FaMoneyCheckAlt /> View user payments
                                             </Button>
-                                            <br/><br/>
+                                            <br/><br/><br/>
+                                            <h6 style={{fontWeight: 'bold', color: '#00539C'}}>Ban User</h6>
+                                            <br/>
+                                            <Label>Ban Reason <span style={{color: 'red'}}>*</span></Label>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Ban reason" name="ban_reason" id="ban_reason"
+                                                value={this.state.ban_reason} onChange={this.HandleChange} type="textarea" rows={3} 
+                                            />
+                                            <InputErrors field_error_state={this.state.input_errors['ban_reason']} field_label='Ban Reason' />
+                                            <br/>
+                                            <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password" name="password" id="password"
+                                                value={this.state.password} onChange={this.HandleChange} type="password" 
+                                            />
+                                            <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                            <br/>
+                                            <Button onClick={this.BanUser}
+                                                style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Ban user
+                                            </Button>
+                                            <br/><br/><br/>
+                                            <h6 style={{fontWeight: 'bold', color: '#00539C'}}>Unban User</h6>
+                                            <br/>
+                                            <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password" name="password" id="password"
+                                                value={this.state.password} onChange={this.HandleChange} type="password" 
+                                            />
+                                            <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                            <br/>
+                                            <Button onClick={this.UnbanUser}
+                                                style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Unban user
+                                            </Button>
+                                            <br/><br/><br/>
+                                            <h6 style={{fontWeight: 'bold', color: '#00539C'}}>Change User Role</h6>
+                                            <br/>
+                                            <Label style={{fontWeight: 'bold'}}>New role:</Label>
+                                            <select name='symbol' value={this.state.new_role} onChange={this.HandleChange}
+                                                style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                            >
+                                                <option value=''>Select new user role</option>
+                                                {
+                                                    this.state.roles.map((item) => {
+                                                        return<option value={item}>{item}</option>
+                                                    })
+                                                }
+                                            </select>
+                                            <InputErrors field_error_state={this.state.input_errors['new_role']} field_label='New Role' />
+                                            <br/>
+                                            <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password" name="password" id="password"
+                                                value={this.state.password} onChange={this.HandleChange} type="password" 
+                                            />
+                                            <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                            <br/>
+                                            <Button onClick={this.ChangeUserRole}
+                                                style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Change user role
+                                            </Button>
+                                            <br/><br/><br/>
                                         </div>
                                     </Col>
                                 </Row>
