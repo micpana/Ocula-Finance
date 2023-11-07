@@ -34,7 +34,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
-import { FaMoneyCheckAlt, FaSearch } from 'react-icons/fa';
+import { FaEdit, FaKey, FaMoneyBill, FaMoneyCheckAlt, FaNotesMedical, FaSearch } from 'react-icons/fa';
 
 class AllUsers extends Component{
     static propTypes = {
@@ -127,7 +127,9 @@ class AllUsers extends Component{
             verified: false,
             discount_applied: 0,
             amount: 0,
-            roles: ['user', 'admin']
+            roles: ['user', 'admin'],
+            purposes: ['subscription'],
+            payment_methods: ['Cash', 'Innbucks', 'Ecocash USD', 'Paypal', 'Bitcoin', 'Ethereum']
         };
 
         this.HandleChange = (e) => {
@@ -221,7 +223,7 @@ class AllUsers extends Component{
         this.GetSelectedUserPayments = (user_id) => {
             const { cookies } = this.props;
             this.LoadingOn()
-
+            this.setState({screen: 'selected user payments'})
             var data = new FormData()
             data.append('account_id', user_id)
 
@@ -628,7 +630,7 @@ class AllUsers extends Component{
             if (this.state.transaction_id === ''){ this.SetInputError('transaction_id', 'required'); data_checks_out = false }
             if (this.state.verified === ''){ this.SetInputError('verified', 'required'); data_checks_out = false }
             if (this.state.discount_applied === null){ this.SetInputError('discount_applied', 'required'); data_checks_out = false }
-            if (this.state.discount_applied < 0){ this.SetInputError('discount_applied', 'invalid'); data_checks_out = false }
+            if (this.state.discount_applied < 0 || this.state.discount_applied > 100){ this.SetInputError('discount_applied', 'invalid'); data_checks_out = false }
             if (this.state.amount === 0 || this.state.amount === null){ this.SetInputError('amount', 'required'); data_checks_out = false }
             if (this.state.amount < 0){ this.SetInputError('amount', 'invalid'); data_checks_out = false }
             if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
@@ -1003,6 +1005,17 @@ class AllUsers extends Component{
                                             <br/>
                                             <Row style={{margin: '0px', textAlign: 'left'}}>
                                                 <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Role issued by:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.role_issued_by}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
                                                     Banned:
                                                     <br/>
                                                 </Col>
@@ -1016,6 +1029,61 @@ class AllUsers extends Component{
                                                 </Col>
                                             </Row>
                                             <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Banned by:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.banned_by}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Ban reason:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.ban_reason}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Unbanned by:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.unbanned_by}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Ban time:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.ban_time}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Unban time:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.unban_time}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/><br/><br/>
                                         </div>
                                     </Col>
                                     <Col>
@@ -1068,9 +1136,9 @@ class AllUsers extends Component{
                                             <br/><br/><br/>
                                             <h6 style={{fontWeight: 'bold', color: '#00539C'}}>Change User Role</h6>
                                             <br/>
-                                            <Label style={{fontWeight: 'bold'}}>New role:</Label>
+                                            <Label>New role: <span style={{color: 'red'}}>*</span></Label>
                                             <select name='symbol' value={this.state.new_role} onChange={this.HandleChange}
-                                                style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                                style={{marginTop: '28px', border: 'none', borderBottom: '1px solid #828884', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
                                             >
                                                 <option value=''>Select new user role</option>
                                                 {
@@ -1133,6 +1201,129 @@ class AllUsers extends Component{
                                         </div>
                                     </Col>
                                 </Row>
+                                <br/><br/><br/>
+                                <h6 style={{fontWeight: 'bold', color: '#00539C'}}>
+                                    Manually Enter Payment For: {user.firstname} {user.lastname}
+                                </h6>
+                                <br/><br/>
+                                <Row>
+                                    <Col sm='6'>
+                                        <Label>Purpose <span style={{color: 'red'}}>*</span></Label>
+                                        <select name='purpose' value={this.state.purpose} onChange={this.HandleChange}
+                                            style={{marginTop: '28px', border: 'none', borderBottom: '1px solid #828884', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                        >
+                                            <option value=''>Select purpose</option>
+                                            {
+                                                this.state.purposes.map((item) => {
+                                                    return<option value={item}>{item}</option>
+                                                })
+                                            }
+                                        </select>
+                                        <InputErrors field_error_state={this.state.input_errors['purpose']} field_label='Purpose' />
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        <Label>Payment Method <span style={{color: 'red'}}>*</span></Label>
+                                        <select name='payment_method' value={this.state.payment_method} onChange={this.HandleChange}
+                                            style={{marginTop: '28px', border: 'none', borderBottom: '1px solid #828884', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                        >
+                                            <option value=''>Select payment method</option>
+                                            {
+                                                this.state.payment_methods.map((item) => {
+                                                    return<option value={item}>{item}</option>
+                                                })
+                                            }
+                                        </select>
+                                        <InputErrors field_error_state={this.state.input_errors['payment_method']} field_label='Payment Method' />
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <Col sm='6'>
+                                        <Label>Transaction ID <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText addonType="prepend">
+                                                <FaEdit style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Transaction ID" name="transaction_id" id="transaction_id"
+                                                value={this.state.transaction_id} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['transaction_id']} field_label='Transaction ID' />
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        <Label>Verified <span style={{color: 'red'}}>*</span></Label>
+                                        <select name='verified' value={this.state.verified} onChange={this.HandleChange}
+                                            style={{marginTop: '28px', border: 'none', borderBottom: '1px solid #828884', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                        >
+                                            <option value={false}>False</option>
+                                            <option value={true}>True</option>
+                                        </select>
+                                        <InputErrors field_error_state={this.state.input_errors['verified']} field_label='Verified' />
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <Col sm='6'>
+                                        <Label>Discount Applied <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText addonType="prepend">
+                                                <FaMoneyCheckAlt style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="% Discount applied" name="discount_applied" id="discount_applied"
+                                                value={this.state.discount_applied} onChange={this.HandleChange} type="number" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['discount_applied']} field_label='Discount Applied' />
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                        <Label>Amount <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText addonType="prepend">
+                                                <FaMoneyBill style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Amount" name="amount" id="amount"
+                                                value={this.state.amount} onChange={this.HandleChange} type="number" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['amount']} field_label='Amount' />
+                                        <br/>
+                                    </Col>
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <Col sm='6'>
+                                        <Label>Password <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText addonType="prepend">
+                                                <FaKey style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="Password" name="password" id="password"
+                                                value={this.state.password} onChange={this.HandleChange} type="password"
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
+                                        <br/>
+                                    </Col>
+                                    <Col>
+                                            
+                                    </Col>
+                                </Row>
+                                <br/><br/><br/>
+                                <Button onClick={this.ManuallyEnterUserPayment}
+                                    style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    Add User Payment
+                                </Button>
+                                <br/><br/><br/>
                             </>
                             : <>
                                 <br/><br/><br/>
