@@ -117,7 +117,16 @@ class AllUsers extends Component{
                 banned_users: 20,
                 verified_users: 9900,
                 users_not_verified: 100
-            }
+            },
+            password: '',
+            ban_reason: '',
+            new_role: '',
+            purpose: '',
+            payment_method: '',
+            transaction_id: '',
+            verified: false,
+            discount_applied: 0,
+            amount: 0
         };
 
         this.HandleChange = (e) => {
@@ -352,6 +361,346 @@ class AllUsers extends Component{
                 }
                 this.LoadingOff()
             })
+        }
+
+        this.BanUser = (e) => {
+            e.preventDefault()
+            
+            // initialize variable to store input validation status
+            var data_checks_out = true
+
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.ban_reason === ''){ this.SetInputError('ban_reason', 'required'); data_checks_out = false }
+            if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                const { cookies } = this.props;
+                this.LoadingOn()
+
+                var data = new FormData()
+                data.append('account_id', this.state.user._id.$oid)
+                data.append('ban_reason', this.state.ban_reason)
+                data.append('password', this.state.password)
+
+                axios.post(Backend_Server_Address + 'banUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    // clear password and ban reason in state
+                    this.setState({
+                        ban_reason: '',
+                        password: ''
+                    })
+                    // update user details in state
+                    var all_users = this.state.all_users
+                    all_users.map((item, index) => {
+                        if (item._id.$oid === this.state.user._id.$oid){
+                            // update user details
+                            var user = item
+                            user['banned'] = true
+                            // modify user details in main list
+                            all_users[index] = user
+                            // set modified list to state
+                            this.setState({
+                                all_users: all_users
+                            })
+                        }
+                    })
+                    // success notification + loading off
+                    Notification('User ban successful.', 'success')
+                    this.LoadingOff()
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'incorrect password'){
+                            Notification("You've entered an incorrect password.", 'error')
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
+                    }
+                    this.LoadingOff()
+                })
+            }
+        }
+
+        this.UnbanUser = (e) => {
+            e.preventDefault()
+            
+            // initialize variable to store input validation status
+            var data_checks_out = true
+
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                const { cookies } = this.props;
+                this.LoadingOn()
+
+                var data = new FormData()
+                data.append('account_id', this.state.user._id.$oid)
+                data.append('password', this.state.password)
+
+                axios.post(Backend_Server_Address + 'unbanUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    // clear password in state
+                    this.setState({
+                        password: ''
+                    })
+                    // update user details in state
+                    var all_users = this.state.all_users
+                    all_users.map((item, index) => {
+                        if (item._id.$oid === this.state.user._id.$oid){
+                            // update user details
+                            var user = item
+                            user['banned'] = false
+                            // modify user details in main list
+                            all_users[index] = user
+                            // set modified list to state
+                            this.setState({
+                                all_users: all_users
+                            })
+                        }
+                    })
+                    // success notification + loading off
+                    Notification('User unban successful.', 'success')
+                    this.LoadingOff()
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'incorrect password'){
+                            Notification("You've entered an incorrect password.", 'error')
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
+                    }
+                    this.LoadingOff()
+                })
+            }
+        }
+
+        this.ChangeUserRole = (e) => {
+            e.preventDefault()
+            
+            // initialize variable to store input validation status
+            var data_checks_out = true
+
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.new_role === ''){ this.SetInputError('new_role', 'required'); data_checks_out = false }
+            if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                const { cookies } = this.props;
+                this.LoadingOn()
+
+                var data = new FormData()
+                data.append('account_id', this.state.user._id.$oid)
+                data.append('new_role', this.state.new_role)
+                data.append('password', this.state.password)
+
+                axios.post(Backend_Server_Address + 'changeUserRole', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    // clear password and new_role in state
+                    this.setState({
+                        new_role: '',
+                        password: ''
+                    })
+                    // update user details in state
+                    var all_users = this.state.all_users
+                    all_users.map((item, index) => {
+                        if (item._id.$oid === this.state.user._id.$oid){
+                            // update user details
+                            var user = item
+                            user['role'] = this.state.new_role
+                            // modify user details in main list
+                            all_users[index] = user
+                            // set modified list to state
+                            this.setState({
+                                all_users: all_users
+                            })
+                        }
+                    })
+                    // success notification + loading off
+                    Notification('User role change successful.', 'success')
+                    this.LoadingOff()
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'incorrect password'){
+                            Notification("You've entered an incorrect password.", 'error')
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
+                    }
+                    this.LoadingOff()
+                })
+            }
+        }
+
+        this.ManuallyEnterUserPayment = (e) => {
+            e.preventDefault()
+            
+            // initialize variable to store input validation status
+            var data_checks_out = true
+
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.purpose === ''){ this.SetInputError('purpose', 'required'); data_checks_out = false }
+            if (this.state.payment_method === ''){ this.SetInputError('payment_method', 'required'); data_checks_out = false }
+            if (this.state.transaction_id === ''){ this.SetInputError('transaction_id', 'required'); data_checks_out = false }
+            if (this.state.verified === ''){ this.SetInputError('verified', 'required'); data_checks_out = false }
+            if (this.state.discount_applied === null){ this.SetInputError('discount_applied', 'required'); data_checks_out = false }
+            if (this.state.discount_applied < 0){ this.SetInputError('discount_applied', 'invalid'); data_checks_out = false }
+            if (this.state.amount === 0 || this.state.amount === null){ this.SetInputError('amount', 'required'); data_checks_out = false }
+            if (this.state.amount < 0){ this.SetInputError('amount', 'invalid'); data_checks_out = false }
+            if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                const { cookies } = this.props;
+                this.LoadingOn()
+
+                var data = new FormData()
+                data.append('account_id', this.state.user._id.$oid)
+                data.append('purpose', this.state.purpose)
+                data.append('payment_method', this.state.payment_method)
+                data.append('transaction_id', this.state.transaction_id)
+                data.append('verified', this.state.verified)
+                data.append('discount_applied', this.state.discount_applied)
+                data.append('amount', this.state.amount)
+                data.append('password', this.state.password)
+
+                axios.post(Backend_Server_Address + 'manuallyEnterUserPayment', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    // clear request related data in state... alse set screen to 'user', so that payments have to be reloaded to view them again
+                    this.setState({
+                        purpose: '',
+                        payment_method: '',
+                        transaction_id: '',
+                        verified: false,
+                        discount_applied: 0,
+                        amount: 0,
+                        password: '',
+                        screen: 'user'
+                    })
+                    // success notification + loading off
+                    Notification('Payment addition successful.', 'success')
+                    this.LoadingOff()
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'enter sufficient amount for a subscription'){
+                            Notification("Enter a sufficient amount for a subscription.", 'error')
+                        }else if(result === 'subscription amount cannot be more than max subscription'){
+                            Notification("The subscription amount cannot be more than the max subscription amount.", 'error')
+                        }else if(result === 'incorrect password'){
+                            Notification("You've entered an incorrect password.", 'error')
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
+                    }
+                    this.LoadingOff()
+                })
+            }
         }
     }
     
