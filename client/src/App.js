@@ -23,6 +23,8 @@ import VerifyEmail from './components/verify_email'
 import ForgotPassword from './components/forgot_password'
 import NewPasswordOnRecovery from './components/new_password_on_recovery'
 import Dashboard from './components/dashboard'
+import TermsOfService from './components/terms_of_service'
+import PrivacyPolicy from './components/privacy_policy'
 
 class App extends Component {
     static propTypes = {
@@ -56,6 +58,8 @@ class App extends Component {
                     <Route path='/new-password-on-recovery/:recovery_token' element={<NewPasswordOnRecovery />}/>
                     <Route path='/signup' element={<Signup />}/>
                     <Route path='/signin' element={<Signin />}/>
+                    <Route path='/terms-of-service' element={<TermsOfService />}/>
+                    <Route path='/privacy-policy' element={<PrivacyPolicy />}/>
                     <Route path='/dashboard' element={<Dashboard />}/>
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>

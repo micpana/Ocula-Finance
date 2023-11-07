@@ -81,6 +81,14 @@ class Footer extends Component{
                             <a href='/contact-us' style={{color: 'inherit'}}>
                                 Contact us
                             </a>
+                            <br/><br/>
+                            <a href='/signin' style={{color: 'inherit'}}>
+                                Signin
+                            </a>
+                            <br/><br/>
+                            <a href='/signup' style={{color: 'inherit'}}>
+                                Signup
+                            </a>
                         </Col>
                         <Col>
                             <br/><br/>
@@ -94,8 +102,17 @@ class Footer extends Component{
                                 Instagram
                             </a>
                         </Col>
-                        <Col sm='4'>
-                            
+                        <Col sm=''>
+                            <br/><br/>
+                            <h6 style={{fontWeight: 'bold', color: '#000000'}}>Terms and Privacy Policy</h6>
+                            <br/>
+                            <a href='/terms-of-service' style={{color: 'inherit'}}>
+                                Terms of Service
+                            </a>
+                            <br/><br/>
+                            <a href='/privacy-policy' style={{color: 'inherit'}}>
+                                Privacy Policy
+                            </a>
                         </Col>
                     </Row>
                     <br/>

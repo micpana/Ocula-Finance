@@ -223,7 +223,7 @@ class AllUsers extends Component{
         this.GetSelectedUserPayments = (user_id) => {
             const { cookies } = this.props;
             this.LoadingOn()
-            this.setState({screen: 'selected user payments'})
+            
             var data = new FormData()
             data.append('account_id', user_id)
 
