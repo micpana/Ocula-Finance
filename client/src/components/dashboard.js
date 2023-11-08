@@ -43,7 +43,9 @@ import NewUserRegistrationChart from './new_user_registation_chart'
 import NewUserSubscriptionChart from './new_user_subscription_chart'
 import UserCountChart from './user_count_chart'
 import SubscribedUsersChart from './subscribed_users_chart'
-import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar, FaUserFriends, FaUserCheck } from 'react-icons/fa';
+import EarningsReport from './earnings_report'
+import PaymentsList from './payments_list';
+import { FaChartLine, FaUserPlus, FaMoneyCheckAlt, FaCogs, FaUsers, FaFlag, FaChartBar, FaRegChartBar, FaUserFriends, FaUserCheck, FaCoins, FaCashRegister } from 'react-icons/fa';
 
 class Dashboard extends Component{
     static propTypes = {
@@ -178,6 +180,8 @@ class Dashboard extends Component{
             // collaspse dashboard menu if on mobile
             if (this.state.on_mobile === true){
                 this.ToggleDashboard()
+            }else{ // if not on mobile scroll to the top of the page
+                window.scrollTo(0, 0)
             }
         }
     }
@@ -313,6 +317,18 @@ class Dashboard extends Component{
                                             <FaRegChartBar id='new user subscription chart'/> New user subscription chart
                                         </Button>
                                         <br/><br/>
+                                        <Button id='earnings report' onClick={this.SwitchScreen} 
+                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                        >
+                                            <FaCoins id='earnings report'/> Earnings report
+                                        </Button>
+                                        <br/><br/>
+                                        <Button id='payments list' onClick={this.SwitchScreen} 
+                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                        >
+                                            <FaCashRegister id='payments list'/> Payments list
+                                        </Button>
+                                        <br/><br/>
                                     </div>
                                     : <div></div>
                                 }
@@ -342,6 +358,10 @@ class Dashboard extends Component{
                                     ? <NewUserRegistrationChart />
                                     : screen === 'new user subscription chart'
                                     ? <NewUserSubscriptionChart />
+                                    : screen === 'earnings report'
+                                    ? <EarningsReport />
+                                    : screen === 'payments list'
+                                    ? <PaymentsList />
                                     : <div>
                                         <br/><br/><br/>
                                         <h5 style={{color: '#005fc9'}}>Something went wrong.</h5>

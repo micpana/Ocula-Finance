@@ -732,7 +732,7 @@ class AllUsers extends Component{
         if (to_show === 'Not verified'){ users_to_show = all_users.filter(item => item.verified === false) }
 
         var users_to_show_map = users_to_show.map((item, index) => {
-            return <tr onClick={() => this.setState({user: item, screen: 'user'})}
+            return <tr onClick={() => {this.setState({user: item, screen: 'user'}); window.scrollTo(0, 0)}}
                 style={{borderBottom: '1px solid silver', cursor: 'pointer'}}
             >
                 <td>{item.firstname}</td>
@@ -848,7 +848,7 @@ class AllUsers extends Component{
                             : screen === 'user'
                             ? <>
                                 <div style={{textAlign: 'left'}}>
-                                    <Button onClick={() => this.setState({screen: 'users', user: null})}
+                                    <Button onClick={() => {this.setState({screen: 'users', user: null}); window.scrollTo(0, 0)}}
                                         style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
                                     >
                                         {'<<<'} Back
@@ -1091,7 +1091,7 @@ class AllUsers extends Component{
                                             <br/>
                                             <h6 style={{fontWeight: 'bold', color: '#00539C'}}>User Payments</h6>
                                             <br/>
-                                            <Button onClick={() => this.GetSelectedUserPayments(user._id.$oid)}
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid); window.scrollTo(0, 0)}}
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 <FaMoneyCheckAlt /> View user payments
@@ -1169,7 +1169,7 @@ class AllUsers extends Component{
                             : screen === 'selected user payments'
                             ? <>
                                 <div style={{textAlign: 'left'}}>
-                                    <Button onClick={() => this.setState({screen: 'user'})}
+                                    <Button onClick={() => {this.setState({screen: 'user'}); window.scrollTo(0, 0)}}
                                         style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C', width: '180px'}}
                                     >
                                         {'<<<'} Back
