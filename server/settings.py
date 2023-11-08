@@ -48,6 +48,34 @@ def get_symbols():
 
     return symbols
 
+# list of user roles
+def get_user_roles():
+    user_roles = [
+        'user', 'admin'
+    ]
+
+    return user_roles
+
+# list of payment purposes
+def get_payment_purposes():
+    payment_purposes = ['subscription']
+
+    return payment_purposes
+
+# list of payment methods
+def get_payment_methods():
+    payment_methods = [
+        'Cash', 'Innbucks', 'Ecocash USD', 'Paypal', 'Bitcoin', 'Ethereum'
+    ]
+
+    return payment_methods
+
+# increment number for client load more feature
+def get_client_load_more_increment():
+    client_load_more_increment = 50
+
+    return client_load_more_increment
+
 # source for training data ... csv / mt5 / yahoo
 def training_data_source():
     source = 'csv'

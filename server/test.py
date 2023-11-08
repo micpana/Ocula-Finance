@@ -1,8 +1,13 @@
-from datetime import datetime, timedelta
+ls = [10, 5, 7, 8, 9, 60, 10, 300, 40, 40, 40, 70, 70, 100, 100]
 
-subscription_months = 1
+lss = ls[0:5]
 
-current_datetime_object = datetime.now()
-expiry_date = str(current_datetime_object + timedelta(weeks = (subscription_months * 4)))
+print(lss)
 
-print(expiry_date)
+increment = 5
+start_index = len(lss); end_index = start_index + increment
+print(start_index, end_index)
+
+lss = ls[start_index:end_index]
+
+print(lss)

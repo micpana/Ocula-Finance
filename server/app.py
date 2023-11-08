@@ -10,7 +10,7 @@ from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes
+from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment
 
 # Flask stuff
 app = Flask(__name__)
@@ -1070,7 +1070,7 @@ def getNewSubscribedUserCountStatistics():
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     
     # get subscriptions list
-    all_subscriptions = Payments.objects.all(purpose = 'subscription')
+    all_subscriptions = Payments.objects.filter(purpose = 'subscription')
 
     # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
     new_subscribed_user_statistics = []
@@ -1224,7 +1224,7 @@ def getUserSubscriptionStatistics():
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     
     # get subscriptions list
-    all_subscriptions = Payments.objects.all(purpose = 'subscription')
+    all_subscriptions = Payments.objects.filter(purpose = 'subscription')
 
     # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
     subscribed_user_statistics = []
@@ -1526,6 +1526,159 @@ def manuallyEnterUserPayment():
 
     # return response
     response = make_response('ok'); response.status = 200; return response
+
+# 27
+@app.route('/getEarningsReport', methods=['POST'])
+def getEarningsReport():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+
+    # get all payments
+    all_payments = Payments.objects.all()
+
+    # initialize earnings report variable
+    earnings_report = {}
+
+    # if no dates have been given
+    if (start_date == '' or start_date == None) and (end_date == '' or end_date == None):
+        # total earnings
+        total_earnings = sum([i.amount for i in all_payments if True])
+        earnings_report['total_earnings'] = total_earnings
+
+        # subscriptions
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription'])
+        earnings_report['subscriptions'] = subscriptions
+
+        # payment methods
+        payment_methods = get_payment_methods()
+        for payment_method in payment_methods:
+            earnings_report[payment_method] = sum([i.amount for i in all_payments if i.payment_method == payment_method])
+
+    # if only start date has been given
+    if (start_date != '' and start_date != None) and (end_date == '' or end_date == None):
+        # total earnings
+        total_earnings = sum([i.amount for i in all_payments if i.date >= start_date])
+        earnings_report['total_earnings'] = total_earnings
+
+        # subscriptions
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date >= start_date])
+        earnings_report['subscriptions'] = subscriptions
+
+        # payment methods
+        payment_methods = get_payment_methods()
+        for payment_method in payment_methods:
+            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date >= start_date])
+            earnings_report[payment_method] = method_earnings
+
+    # if only end date has been given
+    if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
+        # total earnings
+        total_earnings = sum([i.amount for i in all_payments if i.date <= end_date])
+        earnings_report['total_earnings'] = total_earnings
+
+        # subscriptions
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date <= end_date])
+        earnings_report['subscriptions'] = subscriptions
+
+        # payment methods
+        payment_methods = get_payment_methods()
+        for payment_method in payment_methods:
+            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date <= end_date])
+            earnings_report[payment_method] = method_earnings
+
+    # if both dates have been given
+    if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
+        # total earnings
+        total_earnings = sum([i.amount for i in all_payments if i.date >= start_date and i.date <= end_date])
+        earnings_report['total_earnings'] = total_earnings
+
+        # subscriptions
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription'and i.date >= start_date and i.date <= end_date])
+        earnings_report['subscriptions'] = subscriptions
+
+        # payment methods
+        payment_methods = get_payment_methods()
+        for payment_method in payment_methods:
+            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date >= start_date and i.date <= end_date])
+            earnings_report[payment_method] = method_earnings
+
+    # return response
+    response = make_response(jsonify(earnings_report)); response.status = 200; return response
+
+# 28
+@app.route('/getPaymentList', methods=['POST'])
+def getPaymentList():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+    try: entered_by = request.form['entered_by'] 
+    except: response = make_response('Entered by field required'); response.status = 400; return response
+    try: length_of_data_received = request.form['length_of_data_received'] 
+    except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now()
+    current_datetime = str(current_datetime_object)
+
+    # get all payments
+    all_payments = Payments.objects.all()
+    all_payments = json.loads(all_payments.to_json()
+
+    # if entered by has been given
+    if entered_by != '' and entered_by != None:
+        all_payments = [i for i in all_payments if entered_by.lower() in i['entered_by'].lower()]
+
+    # if no dates have been given
+    if (start_date == '' or start_date == None) and (end_date == '' or end_date == None):
+        all_payments = [i for i in all_payments if True]
+
+    # if only start date has been given
+    if (start_date != '' and start_date != None) and (end_date == '' or end_date == None):
+        all_payments = [i for i in all_payments if i.date >= start_date]
+
+    # if only end date has been given
+    if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
+        all_payments = [i for i in all_payments if i.date <= end_date]
+
+    # if both dates have been given
+    if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
+        all_payments = [i for i in all_payments if i.date >= start_date]
+
+    # if client has already received some data
+    if length_of_data_received != 0:
+        # current length of all data
+        length_of_all_data = len(all_payments)
+
+        # length difference between all data and data received by client
+        data_length_difference = length_of_all_data - length_of_data_received
+
+        # if length difference is 0, it means client has received all available data
+        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+
+        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+
+        # get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
+        # only return payments client hasn't received yet
+        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+        all_payments = all_payments[start_index:end_index]
+
+    # return response
+    response = make_response(jsonify(all_payments)); response.status = 200; return response
 
 if __name__ == '__main__':
     init_db()
