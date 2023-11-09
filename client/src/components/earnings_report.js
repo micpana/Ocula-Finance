@@ -159,6 +159,7 @@ class EarningsReport extends Component{
                 on_mobile: true
             })
         }
+        // this.GetEarningsReport()
     }
 
     render() {

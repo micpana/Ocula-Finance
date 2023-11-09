@@ -34,7 +34,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
-import { User_Roles, Payment_Purposes, Payment_Methods} from './lists'
+import { User_Roles, Payment_Purposes, Payment_Methods } from './lists'
 import { FaEdit, FaKey, FaMoneyBill, FaMoneyCheckAlt, FaNotesMedical, FaSearch } from 'react-icons/fa';
 
 class AllUsers extends Component{

@@ -113,187 +113,194 @@ class Pricing extends Component{
                     ? <LoadingScreen />
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
-                    : <Container>
-                        <br/><br/><br/>
-                        <h4 style={{fontWeight: 'bold'}}>
-                            Pricing
-                        </h4>
-                        <br/><br/>
-                        <h5>Uncover the Value of {Platform_Name}</h5>
-                        <br/>
-                        <h6>Discover our affordable plan that positions your trading decisions for success.</h6>
-                        <br/><br/>
-                        <p style={{textAlign: 'left'}}>
-                            Welcome to the {Platform_Name} pricing page. Our advanced AI-powered platform provides pivotal market 
-                            information at cost-effective rates, empowering traders to enhance their trading strategy with 
-                            decisive data. Analyzing mostly forex markets, our system details the potential max upmove and max 
-                            downmove for the next 1 hour 45 minutes. This precious data creates a risk-reward profile, helping 
-                            establish the most advantageous market direction.
-                        </p>
-                        <br/><br/><br/>
-                        <Row style={{margin: '0px'}}>
-                            <Col sm='4'>
-                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#D0DFE9', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
-                                    <Container style={{textAlign: 'left'}}>
-                                        <br/><br/>
-                                        <h6 style={{fontWeight: 'bolder'}}>
-                                            FREE TRIAL
-                                        </h6>
-                                        <br/>
-                                        <Row style={{margin: '0px'}}>
-                                            <h3 style={{fontWeight: 'bold'}}>
-                                                $ 0.00
-                                            </h3>
-                                            For only 14 days
-                                        </Row>
-                                        <br/><br/>
-                                    </Container>
-                                </Row>
-                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
-                                    <Container style={{textAlign: 'left'}}>
-                                        <br/><br/><br/>
-                                        <ul>
-                                            <li>
-                                                Potential max upmove and downmove forecasts
-                                            </li>
+                    : <div>
+                        <div style={{backgroundColor: '#005fc9', position: 'relative'}}>
+                            <div style={{backgroundColor: 'grey', opacity: 0.7, minHeight: '200px'}}></div>
+                            <div style={{color: '#ffffff', position: 'absolute', top: 0, left: 0, right: 0}}>
+                                <br/><br/><br/>
+                                <h3 style={{fontWeight: 'bold'}}>
+                                    Pricing
+                                </h3>
+                                <br/>
+                                <h5>Uncover the Value of {Platform_Name}</h5>
+                            </div>
+                        </div>
+                        <Container>
+                            <br/><br/>
+                            <h6>Discover our affordable plans that position your trading decisions for success.</h6>
+                            <br/><br/>
+                            <p style={{textAlign: 'left'}}>
+                                Welcome to the {Platform_Name} pricing page. Our advanced AI-powered platform provides pivotal market 
+                                information at cost-effective rates, empowering traders to enhance their trading strategy with 
+                                decisive data. Analyzing mostly forex markets, our system details the potential max upmove and max 
+                                downmove for the next 1 hour 45 minutes. This precious data creates a risk-reward profile, helping 
+                                establish the most advantageous market direction.
+                            </p>
+                            <br/><br/><br/>
+                            <Row style={{margin: '0px'}}>
+                                <Col sm='4'>
+                                    <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#D0DFE9', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
+                                        <Container style={{textAlign: 'left'}}>
+                                            <br/><br/>
+                                            <h6 style={{fontWeight: 'bolder'}}>
+                                                FREE TRIAL
+                                            </h6>
                                             <br/>
-                                            <li>
-                                                Risk-to-reward profiles
-                                            </li>
+                                            <Row style={{margin: '0px'}}>
+                                                <h3 style={{fontWeight: 'bold'}}>
+                                                    $ 0.00
+                                                </h3>
+                                                For only 14 days
+                                            </Row>
+                                            <br/><br/>
+                                        </Container>
+                                    </Row>
+                                    <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
+                                        <Container style={{textAlign: 'left'}}>
+                                            <br/><br/><br/>
+                                            <ul>
+                                                <li>
+                                                    Potential max upmove and downmove forecasts
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Risk-to-reward profiles
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Regular updates every 15 minutes
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Customer support
+                                                </li>
+                                            </ul>
+                                            <br/><br/><br/>
+                                            <div style={{textAlign: 'center'}}>
+                                                <Button href=''
+                                                    style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
+                                                >
+                                                    Subscribe now
+                                                </Button>
+                                            </div>
+                                            <br/><br/>
+                                        </Container>
+                                    </Row>
+                                    <br/><br/>
+                                </Col>
+                                <Col sm='4'>
+                                    <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#005fc9', color: '#ffffff', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
+                                        <Container style={{textAlign: 'left'}}>
+                                            <br/><br/>
+                                            <h6 style={{fontWeight: 'bolder'}}>
+                                                MONTHLY
+                                            </h6>
                                             <br/>
-                                            <li>
-                                                Regular updates every 15 minutes
-                                            </li>
+                                            <Row style={{margin: '0px'}}>
+                                                <h3 style={{fontWeight: 'bold'}}>
+                                                    $ 10.00
+                                                </h3>
+                                                /Month
+                                            </Row>
+                                            <br/><br/>
+                                        </Container>
+                                    </Row>
+                                    <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
+                                        <Container style={{textAlign: 'left'}}>
+                                            <br/><br/><br/>
+                                            <ul>
+                                                <li>
+                                                    Potential max upmove and downmove forecasts
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Risk-to-reward profiles
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Regular updates every 15 minutes
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Customer support
+                                                </li>
+                                            </ul>
+                                            <br/><br/><br/>
+                                            <div style={{textAlign: 'center'}}>
+                                                <Button href=''
+                                                    style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#005fc9', color: '#ffffff'}}
+                                                >
+                                                    Subscribe now
+                                                </Button>
+                                            </div>
+                                            <br/><br/>
+                                        </Container>
+                                    </Row>
+                                    <br/><br/>
+                                </Col>
+                                <Col sm='4'>
+                                    <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#D0DFE9', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
+                                        <Container style={{textAlign: 'left'}}>
+                                            <br/><br/>
+                                            <h6 style={{fontWeight: 'bolder'}}>
+                                                YEARLY
+                                            </h6>
                                             <br/>
-                                            <li>
-                                                Customer support
-                                            </li>
-                                        </ul>
-                                        <br/><br/><br/>
-                                        <div style={{textAlign: 'center'}}>
-                                            <Button href=''
-                                                style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
-                                            >
-                                                Subscribe now
-                                            </Button>
-                                        </div>
-                                        <br/><br/>
-                                    </Container>
-                                </Row>
-                                <br/><br/>
-                            </Col>
-                            <Col sm='4'>
-                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#005fc9', color: '#ffffff', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
-                                    <Container style={{textAlign: 'left'}}>
-                                        <br/><br/>
-                                        <h6 style={{fontWeight: 'bolder'}}>
-                                            MONTHLY
-                                        </h6>
-                                        <br/>
-                                        <Row style={{margin: '0px'}}>
-                                            <h3 style={{fontWeight: 'bold'}}>
-                                                $ 10.00
-                                            </h3>
-                                            /Month
-                                        </Row>
-                                        <br/><br/>
-                                    </Container>
-                                </Row>
-                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
-                                    <Container style={{textAlign: 'left'}}>
-                                        <br/><br/><br/>
-                                        <ul>
-                                            <li>
-                                                Potential max upmove and downmove forecasts
-                                            </li>
-                                            <br/>
-                                            <li>
-                                                Risk-to-reward profiles
-                                            </li>
-                                            <br/>
-                                            <li>
-                                                Regular updates every 15 minutes
-                                            </li>
-                                            <br/>
-                                            <li>
-                                                Customer support
-                                            </li>
-                                        </ul>
-                                        <br/><br/><br/>
-                                        <div style={{textAlign: 'center'}}>
-                                            <Button href=''
-                                                style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#005fc9', color: '#ffffff'}}
-                                            >
-                                                Subscribe now
-                                            </Button>
-                                        </div>
-                                        <br/><br/>
-                                    </Container>
-                                </Row>
-                                <br/><br/>
-                            </Col>
-                            <Col sm='4'>
-                                <Row style={{margin: '0px', minHeight: '178px', backgroundColor: '#D0DFE9', borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
-                                    <Container style={{textAlign: 'left'}}>
-                                        <br/><br/>
-                                        <h6 style={{fontWeight: 'bolder'}}>
-                                            YEARLY
-                                        </h6>
-                                        <br/>
-                                        <Row style={{margin: '0px'}}>
-                                            <h3 style={{fontWeight: 'bold'}}>
-                                                $ 96.00
-                                            </h3>
-                                            /Year
-                                        </Row>
-                                        <br/><br/>
-                                    </Container>
-                                </Row>
-                                <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
-                                    <Container style={{textAlign: 'left'}}>
-                                        <br/><br/><br/>
-                                        <ul>
-                                            <li>
-                                                Potential max upmove and downmove forecasts
-                                            </li>
-                                            <br/>
-                                            <li>
-                                                Risk-to-reward profiles
-                                            </li>
-                                            <br/>
-                                            <li>
-                                                Regular updates every 15 minutes
-                                            </li>
-                                            <br/>
-                                            <li>
-                                                Customer support
-                                            </li>
-                                        </ul>
-                                        <br/><br/><br/>
-                                        <div style={{textAlign: 'center'}}>
-                                            <Button href=''
-                                                style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
-                                            >
-                                                Subscribe now
-                                            </Button>
-                                        </div>
-                                        <br/><br/>
-                                    </Container>
-                                </Row>
-                                <br/><br/>
-                            </Col>
-                        </Row>
-                        <br/>
-                        <p style={{textAlign: 'left'}}>
-                            Our goal is to equip traders with a simple yet powerful tool in an affordable manner, and that’s 
-                            reflected in our pricing structure. {Platform_Name}’s pricing is designed to accommodate traders of all 
-                            scales - from budding enthusiasts to seasoned professionals. We have designed a straightforward and 
-                            transparent pricing system that ensures you get the most out of your trading experience. We invite you 
-                            to explore our versatile pricing options to find a plan that suits your trading needs best. 
-                            Please note that all our pricing plans offer full access to our AI-driven forecasts and risk-to-reward 
-                            profiles.
-                        </p>
-                    </Container>
+                                            <Row style={{margin: '0px'}}>
+                                                <h3 style={{fontWeight: 'bold'}}>
+                                                    $ 96.00
+                                                </h3>
+                                                /Year
+                                            </Row>
+                                            <br/><br/>
+                                        </Container>
+                                    </Row>
+                                    <Row style={{margin: '0px', minHeight: '437px', backgroundColor: '#EEECEC', borderBottomLeftRadius: '20px', borderBottomRightRadius: '20px'}}>
+                                        <Container style={{textAlign: 'left'}}>
+                                            <br/><br/><br/>
+                                            <ul>
+                                                <li>
+                                                    Potential max upmove and downmove forecasts
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Risk-to-reward profiles
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Regular updates every 15 minutes
+                                                </li>
+                                                <br/>
+                                                <li>
+                                                    Customer support
+                                                </li>
+                                            </ul>
+                                            <br/><br/><br/>
+                                            <div style={{textAlign: 'center'}}>
+                                                <Button href=''
+                                                    style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
+                                                >
+                                                    Subscribe now
+                                                </Button>
+                                            </div>
+                                            <br/><br/>
+                                        </Container>
+                                    </Row>
+                                    <br/><br/>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <p style={{textAlign: 'left'}}>
+                                Our goal is to equip traders with a simple yet powerful tool in an affordable manner, and that’s 
+                                reflected in our pricing structure. {Platform_Name}’s pricing is designed to accommodate traders of all 
+                                scales - from budding enthusiasts to seasoned professionals. We have designed a straightforward and 
+                                transparent pricing system that ensures you get the most out of your trading experience. We invite you 
+                                to explore our versatile pricing options to find a plan that suits your trading needs best. 
+                                Please note that all our pricing plans offer full access to our AI-driven forecasts and risk-to-reward 
+                                profiles.
+                            </p>
+                        </Container>
+                    </div>
                 }
                 <br/><br/><br/>
             </div>

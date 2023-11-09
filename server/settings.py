@@ -39,7 +39,7 @@ def token_send_on_user_request_retry_period_in_minutes():
 # list of currency pairs and stocks ... symbols
 def get_symbols():
     currency_pairs = [
-        'EURUSD', 'USDJPY', 'GBPUSD', 'USDCHF'
+        'EURUSD', 'USDJPY', 'GBPUSD', 'USDCHF', 'USDZAR'
     ]
     stocks = [
 

@@ -33,6 +33,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
+import { Symbols } from './lists'
 import USD from '../images/usd_flag.png'
 import EUR from '../images/eur_flag.png'
 import JPY from '../images/jpy_flag.png'
@@ -64,13 +65,10 @@ class Analysis extends Component{
             symbol: 'EURUSD',
             current_market_analysis: {
                 timestamp: '16/10/2023 11:30am',
-                maximum_possible_down_move: 0.5,
-                maximum_possible_up_move: 1.5
+                maximum_possible_down_move: 0.57876,
+                maximum_possible_up_move: 1.58987
             },
             user_subscribed: null,
-            symbols: [
-                'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR'
-            ],
             user_last_m15_close: null
         };
 
@@ -78,7 +76,7 @@ class Analysis extends Component{
             this.setState({[e.target.name]: e.target.value});
 
             // check if value is a symbol, if so load data for selected symbol
-            if (this.state.symbols.includes(e.target.value)){
+            if (Symbols.includes(e.target.value)){
                 this.GetCurrentMarketAnalysis(e.target.value)
             }
         };
@@ -271,7 +269,7 @@ class Analysis extends Component{
                                             style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
                                         >
                                             {
-                                                this.state.symbols.map((item) => {
+                                                Symbols.map((item) => {
                                                     return<option value={item}>{item}</option>
                                                 })
                                             }
@@ -284,79 +282,88 @@ class Analysis extends Component{
                                         <br/>
                                     </Col>
                                 </Row>
-                                <span style={{fontWeight: 'bold'}}>Last updated: </span> <span style={{color: '#005fc9'}}>{current_market_analysis.timestamp}</span>
-                                <br/><br/>
-                                <h6>
+                                <br/>
+                                <h6 style={{fontWeight: 'bold', textAlign: 'left'}}>
+                                    Last updated: <span style={{color: '#005fc9'}}>{current_market_analysis.timestamp}</span>
+                                </h6>
+                                <br/>
+                                <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                     Predictions for the next 105 minutes (seven 15 minute candles)
                                 </h6>
-                                <br/><br/>
-                                <Row>
+                                <br/><br/><br/>
+                                <Row style={{margin: '0px'}}>
                                     <Col sm='6'>
-                                        <Container>
-                                            <div style={{backgroundColor: 'green', height: '150px', width: '150px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                <Container style={{paddingTop: '14px'}}>
-                                                    <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                        <h3 style={{'paddingTop': '10px'}}>
-                                                            {maximum_possible_up_move} %
-                                                        </h3>
-                                                        <p style={{fontSize: '13px'}}>
-                                                            Maximum possible up move
-                                                        </p>
+                                        <Row>
+                                            <Col sm='6'>
+                                                <Container>
+                                                    <div style={{backgroundColor: 'green', height: '150px', width: '150px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
+                                                        <Container style={{paddingTop: '14px'}}>
+                                                            <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
+                                                                <h5 style={{'paddingTop': '25px'}}>
+                                                                    {maximum_possible_up_move} %
+                                                                </h5>
+                                                                <p style={{fontSize: '13px'}}>
+                                                                    Maximum possible up move
+                                                                </p>
+                                                            </div>
+                                                        </Container>
                                                     </div>
                                                 </Container>
-                                            </div>
-                                        </Container>
-                                        <br/>
-                                    </Col>
-                                    <Col sm='6'>
-                                        <Container>
-                                            <div style={{backgroundColor: 'red', height: '150px', width: '150px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                <Container style={{paddingTop: '14px'}}>
-                                                    <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                        <h3 style={{'paddingTop': '10px'}}>
-                                                            {maximum_possible_down_move} %
-                                                        </h3>
-                                                        <p style={{fontSize: '13px'}}>
-                                                            Maximum possible down move
-                                                        </p>
+                                                <br/>
+                                            </Col>
+                                            <Col sm='6'>
+                                                <Container>
+                                                    <div style={{backgroundColor: 'red', height: '150px', width: '150px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
+                                                        <Container style={{paddingTop: '14px'}}>
+                                                            <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
+                                                                <h5 style={{'paddingTop': '25px'}}>
+                                                                    {maximum_possible_down_move} %
+                                                                </h5>
+                                                                <p style={{fontSize: '13px'}}>
+                                                                    Maximum possible down move
+                                                                </p>
+                                                            </div>
+                                                        </Container>
                                                     </div>
                                                 </Container>
-                                            </div>
-                                        </Container>
-                                        <br/>
-                                    </Col>
-                                </Row>
-                                <br/>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6' style={{fontWeight: 'bold', color: 'green'}}>
-                                        Up-move risk-to-reward ratio:
+                                                <br/>
+                                            </Col>
+                                        </Row>
                                         <br/>
                                     </Col>
                                     <Col>
-                                        <span style={{fontWeight: 'bold'}}>1:{up_reward} </span>
-                                        <span style={{fontSize: '13px'}}>(Risk: 1, Reward: : {up_reward})</span>
+                                        <Row style={{margin: '0px', textAlign: 'left'}}>
+                                            <Col sm='6' style={{fontWeight: 'bold', color: 'green'}}>
+                                                Up-move risk-to-reward ratio:
+                                                <br/>
+                                            </Col>
+                                            <Col>
+                                                <span style={{fontWeight: 'bold'}}>1:{up_reward} </span>
+                                                <span style={{fontSize: '13px'}}>(Risk: 1, Reward: : {up_reward})</span>
+                                                <br/>
+                                            </Col>
+                                        </Row>
                                         <br/>
-                                    </Col>
-                                </Row>
-                                <br/>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6' style={{fontWeight: 'bold', color: 'red'}}>
-                                        Down-move risk-to-reward ratio:
-                                        <br/>
-                                    </Col>
-                                    <Col>
-                                        <span style={{fontWeight: 'bold'}}>1:{down_reward} </span>
-                                        <span style={{fontSize: '13px'}}>(Risk: 1, Reward: {down_reward})</span>
-                                        <br/>
+                                        <Row style={{margin: '0px', textAlign: 'left'}}>
+                                            <Col sm='6' style={{fontWeight: 'bold', color: 'red'}}>
+                                                Down-move risk-to-reward ratio:
+                                                <br/>
+                                            </Col>
+                                            <Col>
+                                                <span style={{fontWeight: 'bold'}}>1:{down_reward} </span>
+                                                <span style={{fontSize: '13px'}}>(Risk: 1, Reward: {down_reward})</span>
+                                                <br/>
+                                            </Col>
+                                        </Row>
                                     </Col>
                                 </Row>
                                 <br/><br/>
-                                <h6 style={{fontWeight: 'bold'}}>
+                                <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
                                     Price based analysis:
                                 </h6>
                                 <br/><br/>
                                 <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6' style={{fontWeight: 'bold', color: '#005fc9'}}>
+                                    <Col sm='6' style={{fontWeight: 'bold'}}>
                                         Recent 15 minute close:
                                         <br/>
                                     </Col>
@@ -377,7 +384,7 @@ class Analysis extends Component{
                                     <Col>
                                         <span style={{fontWeight: 'bold'}}>
                                             {
-                                                this.state.user_last_m15_close === null || this.state.user_last_m15_close === 0
+                                                this.state.user_last_m15_close === null || this.state.user_last_m15_close == 0 || this.state.user_last_m15_close === ''
                                                 ? <>
                                                     Waiting for price input
                                                 </>
@@ -398,7 +405,7 @@ class Analysis extends Component{
                                     <Col>
                                         <span style={{fontWeight: 'bold'}}>
                                             {
-                                                this.state.user_last_m15_close === null
+                                                this.state.user_last_m15_close === null || this.state.user_last_m15_close == 0 || this.state.user_last_m15_close === ''
                                                 ? <>
                                                     Waiting for price input
                                                 </>

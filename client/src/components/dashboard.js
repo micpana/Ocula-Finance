@@ -54,7 +54,6 @@ class Dashboard extends Component{
     constructor(props) { 
         super(props);
         this.state = {
-            isOpen: true,
             loading: false,
             network_error_screen: false,
             network_error_message: '',
@@ -67,19 +66,6 @@ class Dashboard extends Component{
 
         this.HandleChange = (e) => {
             this.setState({[e.target.name]: e.target.value});
-        };
-
-        this.ToggleDashboard = () => {
-            this.setState({
-                isOpen: !this.state.isOpen
-            });
-
-            // adjust column height according to dashboard menu status
-            if (!this.state.isOpen === true){ // open
-                document.getElementById('dashboard_menu').style.minHeight = '550px'
-            }else{ // collapse
-                document.getElementById('dashboard_menu').style.minHeight = ''
-            }
         };
 
         this.SetInputError = (field, error) => { // error -> required / invalid
@@ -177,12 +163,8 @@ class Dashboard extends Component{
             // switch screen to selected
             this.setState({screen: selected_screen})
 
-            // collaspse dashboard menu if on mobile
-            if (this.state.on_mobile === true){
-                this.ToggleDashboard()
-            }else{ // if not on mobile scroll to the top of the page
-                window.scrollTo(0, 0)
-            }
+            // scroll to screens container, for easy access on mobile
+            document.getElementById('dashboard_screens_top').scrollIntoView()
         }
     }
 
@@ -225,117 +207,101 @@ class Dashboard extends Component{
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <Row style={{margin: '0px'}}>
-                        <Col id='dashboard_menu' sm='2' style={{minHeight: '550px', backgroundColor: '#00539C', color: '#ffffff'}}>
+                        <Col sm='2' style={{minHeight: '550px', backgroundColor: '#00539C', color: '#ffffff'}}>
                             <br/>
-                            {
-                                this.state.on_mobile === true
-                                ? <div onClick={() => this.ToggleDashboard()}
-                                    style={{textAlign: 'right', fontSize: '13px', cursor: 'pointer', color: '#F2B027', fontWeight: 'bold'}}
-                                >
-                                    {
-                                        this.state.isOpen === true
-                                        ? <>
-                                            Collapse menu
-                                        </>
-                                        : <>
-                                            Show menu
-                                        </>
-                                    }
-                                    <br/>
-                                </div>
-                                : <div></div>
-                            }
                             <h6>
                                 Dashboard
                             </h6>
                             <br/>
-                            <Collapse isOpen={this.state.isOpen}>
-                                <Button id='analysis' onClick={this.SwitchScreen} 
-                                    style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                >
-                                    <FaChartLine id='analysis'/> Analysis
-                                </Button>
-                                <br/><br/>
-                                <Button id='subscriptions' onClick={this.SwitchScreen} 
-                                    style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                >
-                                    <FaUserPlus id='subscriptions'/> Subscriptions
-                                </Button>
-                                <br/><br/>
-                                <Button id='past payments' onClick={this.SwitchScreen} 
-                                    style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                >
-                                    <FaMoneyCheckAlt id='past payments'/> Past payments
-                                </Button>
-                                <br/><br/>
-                                <Button id='settings' onClick={this.SwitchScreen} 
-                                    style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                >
-                                    <FaCogs id='settings'/> Settings
-                                </Button>
-                                <br/><br/>
-                                {
-                                    user_role === null
-                                    ? <div>
-                                        <h6 style={{color: 'inherit', marginTop: '13px'}}>
-                                            Admin Access
-                                        </h6>
-                                        <br/>
-                                        <Button id='all users' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaUsers id='all users'/> All users
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='user country ranking' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaFlag id='user country ranking'/> User country ranking
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='user count chart' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaUserFriends id='user count chart'/> User count chart
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='subscribed users chart' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaUserCheck id='subscribed users chart'/> Subscribed users chart
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='new user registration chart' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaChartBar id='new user registration chart'/> New user registration chart
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='new user subscription chart' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaRegChartBar id='new user subscription chart'/> New user subscription chart
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='earnings report' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaCoins id='earnings report'/> Earnings report
-                                        </Button>
-                                        <br/><br/>
-                                        <Button id='payments list' onClick={this.SwitchScreen} 
-                                            style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
-                                        >
-                                            <FaCashRegister id='payments list'/> Payments list
-                                        </Button>
-                                        <br/><br/>
-                                    </div>
-                                    : <div></div>
-                                }
-                            </Collapse>
+                            <Button id='analysis' onClick={this.SwitchScreen} 
+                                style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                            >
+                                <FaChartLine id='analysis'/> Analysis
+                            </Button>
+                            <br/><br/>
+                            <Button id='subscriptions' onClick={this.SwitchScreen} 
+                                style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                            >
+                                <FaUserPlus id='subscriptions'/> Subscriptions
+                            </Button>
+                            <br/><br/>
+                            <Button id='past payments' onClick={this.SwitchScreen} 
+                                style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                            >
+                                <FaMoneyCheckAlt id='past payments'/> Past payments
+                            </Button>
+                            <br/><br/>
+                            <Button id='settings' onClick={this.SwitchScreen} 
+                                style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                            >
+                                <FaCogs id='settings'/> Settings
+                            </Button>
+                            <br/><br/>
+                            {
+                                user_role === null
+                                ? <div>
+                                    <h6 style={{color: 'inherit', marginTop: '13px'}}>
+                                        Admin Access
+                                    </h6>
+                                    <br/>
+                                    <Button id='all users' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaUsers id='all users'/> All users
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='user country ranking' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaFlag id='user country ranking'/> User country ranking
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='user count chart' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaUserFriends id='user count chart'/> User count chart
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='subscribed users chart' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaUserCheck id='subscribed users chart'/> Subscribed users chart
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='new user registration chart' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaChartBar id='new user registration chart'/> New user registration chart
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='new user subscription chart' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaRegChartBar id='new user subscription chart'/> New user subscription chart
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='earnings report' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaCoins id='earnings report'/> Earnings report
+                                    </Button>
+                                    <br/><br/>
+                                    <Button id='payments list' onClick={this.SwitchScreen} 
+                                        style={{marginTop: '13px', backgroundColor: 'inherit', color: 'inherit', border: 'none', width: '100%', textAlign: 'left'}}
+                                    >
+                                        <FaCashRegister id='payments list'/> Payments list
+                                    </Button>
+                                    <br/><br/>
+                                </div>
+                                : <div></div>
+                            }
                             <br/>
                         </Col>
                         <Col>
+                            {/* div for scroll into view purposes upon screen selection */}
+                            <div id='dashboard_screens_top' style={{minHeight: '150px', marginTop: '-150px', visibility: 'hidden'}}>
+
+                            </div>
                             <Container>
                                 {
                                     screen === 'analysis'

@@ -1,5 +1,10 @@
 // lists within this file must contain items contained within the same lists on the backend server
 
+// symbols
+export const Symbols = [
+    'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR'
+]
+
 // user roles
 export const User_Roles = ['user', 'admin']
 

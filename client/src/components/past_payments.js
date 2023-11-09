@@ -34,6 +34,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
+import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
 class PastPayments extends Component{
     static propTypes = {
@@ -48,6 +49,8 @@ class PastPayments extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
+            start_date: '',
+            end_date: '',
             past_payments: [
                 {
                     date: '14/10/2023 11:15am',
@@ -136,6 +139,10 @@ class PastPayments extends Component{
             this.LoadingOn()
             this.NetworkErrorScreenOff()
 
+            var data = new FormData()
+            data.append('start_date', this.state.start_date)
+            data.append('end_date', this.state.end_date)
+
             axios.post(Backend_Server_Address + 'getUserPaymentHistory', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
@@ -214,6 +221,41 @@ class PastPayments extends Component{
                             Past Payments
                         </h5>
                         <br/><br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='3' style={{textAlign: 'left', marginRight: '20px'}}>
+                                <Label style={{color: '#00539C'}}>Start Date</Label>
+                                <InputGroup>
+                                    <InputGroupText addonType="prepend">
+                                        <FaCalendarDay style={{margin:'10px'}}/>
+                                    </InputGroupText>
+                                    <Input style={{border: 'none', color: 'inherit', backgroundColor: 'inherit'}}
+                                        name="start_date" id="start_date"
+                                        value={this.state.start_date} onChange={this.HandleChange} type="date" 
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col sm='3' style={{textAlign: 'left', marginRight: '30px'}}>
+                                <Label style={{color: '#00539C'}}>End Date</Label>
+                                <InputGroup>
+                                    <InputGroupText addonType="prepend">
+                                        <FaCalendarWeek style={{margin:'10px'}}/>
+                                    </InputGroupText>
+                                    <Input style={{border: 'none', color: 'inherit', backgroundColor: 'inherit'}}
+                                        name="end_date" id="end_date"
+                                        value={this.state.end_date} onChange={this.HandleChange} type="date"  
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col sm='3'>
+                                <br/>
+                                <Button onClick={this.GetEarningsReport} 
+                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                >
+                                    View
+                                </Button>
+                            </Col>
+                        </Row>
+                        <br/><br/><br/>
                         <div style={{maxHeight: '450px', overflowY: 'scroll'}}>
                             <Table>
                                 <thead>

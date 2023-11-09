@@ -253,6 +253,7 @@ class PaymentsList extends Component{
                 on_mobile: true
             })
         }
+        // this.GetPaymentsList(false)
     }
 
     render() {

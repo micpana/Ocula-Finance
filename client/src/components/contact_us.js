@@ -174,134 +174,141 @@ class ContactUs extends Component{
                     ? <LoadingScreen />
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
-                    : <Container>
-                        <br/><br/><br/>
-                        <h4 style={{fontWeight: 'bold'}}>
-                            Contact us
-                        </h4>
-                        <br/><br/>
-                        <h6 style={{fontWeight: 'bold'}}>We're here to help</h6>
-                        <br/>
-                        <p style={{textAlign: 'left'}}>
-                            At Ocula Finance, we're committed to providing traders with innovative, data-driven solutions for more 
-                            informed trading decisions. If you have any questions, need more information, or require support, 
-                            don't hesitate to get in touch.
-                        </p>
-                        <br/><br/>
-                        <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
-                                <img src={ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
-                                <br/><br/>
-                            </Col>
-                            <Col>
+                    : <div>
+                        <div style={{backgroundColor: '#005fc9', position: 'relative'}}>
+                            <div style={{backgroundColor: 'grey', opacity: 0.7, minHeight: '200px'}}></div>
+                            <div style={{color: '#ffffff', position: 'absolute', top: 0, left: 0, right: 0}}>
                                 <br/><br/><br/>
-                                <h6 style={{fontWeight: 'bold'}}>
-                                    Contact Information
-                                </h6>
-                                <br/><br/>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6'>
-                                        <span style={{fontWeight: 'bold'}}>Email:</span> 
-                                        <br/>
-                                    </Col>
-                                    <Col>
-                                        <a href="mailto:support@oculafinance.com" style={{color: 'inherit'}}>
-                                            support@oculafinance.com
-                                        </a>
-                                        <br/><br/>
-                                    </Col>
-                                </Row>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6'>
-                                        <span style={{fontWeight: 'bold'}}>WhatsApp:</span>
-                                        <br/>
-                                    </Col>
-                                    <Col>
-                                    
-                                        <br/><br/>
-                                    </Col>
-                                </Row>
-                                <br/><br/>
-                            </Col>
-                        </Row>
-                        <br/>
-                        <h6 style={{fontWeight: 'bold'}}>
-                            Get In Touch
-                        </h6>
-                        <br/><br/>
-                        <p>
-                            Use the form below to send us your questions, comments or feedback. We aim to respond within 24 hours.
-                        </p>
-                        <br/>
-                        <Form onSubmit={this.GetInTouch}>
-                            <Row style={{margin: '0px'}}>
-                                <Col sm='6'>
-                                    <Label style={{fontWeight: 'bold'}}>Name <span style={{color: 'red'}}>*</span></Label>
-                                    <InputGroup>
-                                        <InputGroupText>
-                                            <FaUserAlt style={{margin:'10px'}}/>
-                                        </InputGroupText>
-                                        <Input style={{backgroundColor: 'inherit'}}
-                                            placeholder="Name" name="name" id="name"
-                                            value={this.state.name} onChange={this.HandleChange} type="text" 
-                                        />
-                                    </InputGroup>
-                                    <InputErrors field_error_state={this.state.input_errors['name']} field_label='Name' />
-                                    <br/><br/>
-                                </Col>
-                                <Col>
-                                    <Label style={{fontWeight: 'bold'}}>Email <span style={{color: 'red'}}>*</span></Label>
-                                    <InputGroup>
-                                        <InputGroupText>
-                                            <FaAt style={{margin:'10px'}}/>
-                                        </InputGroupText>
-                                        <Input style={{backgroundColor: 'inherit'}}
-                                            placeholder="Email" name="email" id="email"
-                                            value={this.state.email} onChange={this.HandleChange} type="text" 
-                                        />
-                                    </InputGroup>
-                                    <InputErrors field_error_state={this.state.input_errors['email']} field_label='Email' />
-                                    <br/><br/>
-                                </Col>
-                            </Row>
-                            <Row style={{margin: '0px'}}>
-                                <Col sm='6'>
-                                    <Label style={{fontWeight: 'bold'}}>Subject <span style={{color: 'red'}}>*</span></Label>
-                                    <InputGroup>
-                                        <InputGroupText>
-                                            <FaRegFolderOpen style={{margin:'10px'}}/>
-                                        </InputGroupText>
-                                        <Input style={{backgroundColor: 'inherit'}}
-                                            placeholder="Subject" name="subject" id="subject"
-                                            value={this.state.subject} onChange={this.HandleChange} type="text" 
-                                        />
-                                    </InputGroup>
-                                    <InputErrors field_error_state={this.state.input_errors['subject']} field_label='Subject' />
-                                    <br/><br/>
-                                </Col>
-                                <Col>
-                                    <Label style={{fontWeight: 'bold'}}>Message <span style={{color: 'red'}}>*</span></Label>
-                                    <InputGroup>
-                                        <InputGroupText>
-                                            <FaEnvelopeOpenText style={{margin:'10px'}}/>
-                                        </InputGroupText>
-                                        <Input style={{backgroundColor: 'inherit'}}
-                                            placeholder="Message" name="message" id="message"
-                                            value={this.state.message} onChange={this.HandleChange} type="textarea" rows={5}
-                                        />
-                                    </InputGroup>
-                                    <InputErrors field_error_state={this.state.input_errors['message']} field_label='Message' />
-                                    <br/><br/>
-                                </Col>
-                            </Row>
+                                <h3 style={{fontWeight: 'bold'}}>
+                                    Contact us
+                                </h3>
+                            </div>
+                        </div>
+                        <Container>
                             <br/><br/>
-                            <Button type="submit"
-                                style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: '1px solid #005fc9', borderRadius: '20px', width: '180px'}}
-                            >
-                                Submit
-                            </Button>
-                        </Form>
-                    </Container>
+                            <h6 style={{fontWeight: 'bold'}}>We're here to help</h6>
+                            <br/><br/>
+                            <p style={{textAlign: 'left'}}>
+                                At Ocula Finance, we're committed to providing traders with innovative, data-driven solutions for more 
+                                informed trading decisions. If you have any questions, need more information, or require support, 
+                                don't hesitate to get in touch.
+                            </p>
+                            <br/><br/>
+                            <Row style={{margin: '0px'}}>
+                                <Col sm='6'>
+                                    <img src={ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
+                                    <br/><br/>
+                                </Col>
+                                <Col>
+                                    <br/><br/><br/>
+                                    <h6 style={{fontWeight: 'bold'}}>
+                                        Contact Information
+                                    </h6>
+                                    <br/><br/>
+                                    <Row style={{margin: '0px', textAlign: 'left'}}>
+                                        <Col sm='6'>
+                                            <span style={{fontWeight: 'bold'}}>Email:</span> 
+                                            <br/>
+                                        </Col>
+                                        <Col>
+                                            <a href="mailto:support@oculafinance.com" style={{color: 'inherit'}}>
+                                                support@oculafinance.com
+                                            </a>
+                                            <br/><br/>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{margin: '0px', textAlign: 'left'}}>
+                                        <Col sm='6'>
+                                            <span style={{fontWeight: 'bold'}}>WhatsApp:</span>
+                                            <br/>
+                                        </Col>
+                                        <Col>
+                                        
+                                            <br/><br/>
+                                        </Col>
+                                    </Row>
+                                    <br/><br/>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <h6 style={{fontWeight: 'bold'}}>
+                                Get In Touch
+                            </h6>
+                            <br/><br/>
+                            <p>
+                                Use the form below to send us your questions, comments or feedback. We aim to respond within 24 hours.
+                            </p>
+                            <br/>
+                            <Form onSubmit={this.GetInTouch}>
+                                <Row style={{margin: '0px'}}>
+                                    <Col sm='6'>
+                                        <Label style={{fontWeight: 'bold'}}>Name <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText>
+                                                <FaUserAlt style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{backgroundColor: 'inherit'}}
+                                                placeholder="Name" name="name" id="name"
+                                                value={this.state.name} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['name']} field_label='Name' />
+                                        <br/><br/>
+                                    </Col>
+                                    <Col>
+                                        <Label style={{fontWeight: 'bold'}}>Email <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText>
+                                                <FaAt style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{backgroundColor: 'inherit'}}
+                                                placeholder="Email" name="email" id="email"
+                                                value={this.state.email} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['email']} field_label='Email' />
+                                        <br/><br/>
+                                    </Col>
+                                </Row>
+                                <Row style={{margin: '0px'}}>
+                                    <Col sm='6'>
+                                        <Label style={{fontWeight: 'bold'}}>Subject <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText>
+                                                <FaRegFolderOpen style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{backgroundColor: 'inherit'}}
+                                                placeholder="Subject" name="subject" id="subject"
+                                                value={this.state.subject} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['subject']} field_label='Subject' />
+                                        <br/><br/>
+                                    </Col>
+                                    <Col>
+                                        <Label style={{fontWeight: 'bold'}}>Message <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText>
+                                                <FaEnvelopeOpenText style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{backgroundColor: 'inherit'}}
+                                                placeholder="Message" name="message" id="message"
+                                                value={this.state.message} onChange={this.HandleChange} type="textarea" rows={5}
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['message']} field_label='Message' />
+                                        <br/><br/>
+                                    </Col>
+                                </Row>
+                                <br/><br/>
+                                <Button type="submit"
+                                    style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: '1px solid #005fc9', borderRadius: '20px', width: '180px'}}
+                                >
+                                    Submit
+                                </Button>
+                            </Form>
+                        </Container>
+                    </div>
                 }
                 <br/><br/><br/>
             </div>

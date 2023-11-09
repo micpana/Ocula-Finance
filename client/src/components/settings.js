@@ -408,7 +408,7 @@ class Settings extends Component{
                                 </Col>
                             </Row>
                             <br/>
-                            <p style={{fontWeight: 'bold'}}>
+                            <p style={{fontWeight: 'bold', color: '#00539C'}}>
                                 Use the input fields below only if you wish to change your account password
                             </p>
                             <br/>
