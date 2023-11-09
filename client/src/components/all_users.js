@@ -34,6 +34,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
+import { User_Roles, Payment_Purposes, Payment_Methods} from './lists'
 import { FaEdit, FaKey, FaMoneyBill, FaMoneyCheckAlt, FaNotesMedical, FaSearch } from 'react-icons/fa';
 
 class AllUsers extends Component{
@@ -126,10 +127,7 @@ class AllUsers extends Component{
             transaction_id: '',
             verified: false,
             discount_applied: 0,
-            amount: 0,
-            roles: ['user', 'admin'],
-            purposes: ['subscription'],
-            payment_methods: ['Cash', 'Innbucks', 'Ecocash USD', 'Paypal', 'Bitcoin', 'Ethereum']
+            amount: 0
         };
 
         this.HandleChange = (e) => {
@@ -601,6 +599,8 @@ class AllUsers extends Component{
                             window.location.href = '//' + window.location.hostname + port + '/signin';
                         }else if(result === 'incorrect password'){
                             Notification("You've entered an incorrect password.", 'error')
+                        }else if(result === 'invalid role'){
+                            Notification("You've entered an invalid user role.", 'error')
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')
@@ -692,6 +692,10 @@ class AllUsers extends Component{
                             Notification("The subscription amount cannot be more than the max subscription amount.", 'error')
                         }else if(result === 'incorrect password'){
                             Notification("You've entered an incorrect password.", 'error')
+                        }else if(result === 'invalid purpose'){
+                            Notification("You've entered an invalid payment purpose.", 'error')
+                        }else if(result === 'invalid method'){
+                            Notification("You've entered an invalid payment method.", 'error')
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')
@@ -1142,7 +1146,7 @@ class AllUsers extends Component{
                                             >
                                                 <option value=''>Select new user role</option>
                                                 {
-                                                    this.state.roles.map((item) => {
+                                                    User_Roles.map((item) => {
                                                         return<option value={item}>{item}</option>
                                                     })
                                                 }
@@ -1214,7 +1218,7 @@ class AllUsers extends Component{
                                         >
                                             <option value=''>Select purpose</option>
                                             {
-                                                this.state.purposes.map((item) => {
+                                                Payment_Purposes.map((item) => {
                                                     return<option value={item}>{item}</option>
                                                 })
                                             }
@@ -1229,7 +1233,7 @@ class AllUsers extends Component{
                                         >
                                             <option value=''>Select payment method</option>
                                             {
-                                                this.state.payment_methods.map((item) => {
+                                                Payment_Methods.map((item) => {
                                                     return<option value={item}>{item}</option>
                                                 })
                                             }
