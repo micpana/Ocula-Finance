@@ -1390,6 +1390,7 @@ def changeUserRole():
     try: new_role = request.form['new_role'] 
     except: response = make_response('New role field required'); response.status = 400; return response
     if new_role == '' or new_role == None: response = make_response('New role cannot be empty'); response.status = 400; return response
+    if new_role not in get_user_roles(): response = make_response('invalid role'); response.status = 400; return response
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -1434,9 +1435,11 @@ def manuallyEnterUserPayment():
     try: purpose = request.form['purpose']
     except: response = make_response('Purpose field required'); response.status = 400; return response
     if purpose == '' or purpose == None: response = make_response('Purpose cannot be empty'); response.status = 400; return response
+    if purpose not in get_payment_purposes(): response = make_response('invalid purpose'); response.status = 400; return response
     try: payment_method = request.form['payment_method']
     except: response = make_response('Payment method field required'); response.status = 400; return response
     if payment_method == '' or payment_method == None: response = make_response('Payment method cannot be empty'); response.status = 400; return response
+    if payment_method not in get_payment_methods(): response = make_response('invalid method'); response.status = 400; return response
     try: transaction_id = request.form['transaction_id']
     except: response = make_response('Transaction id field required'); response.status = 400; return response
     if transaction_id == '' or transaction_id == None: response = make_response('Transaction id cannot be empty'); response.status = 400; return response
