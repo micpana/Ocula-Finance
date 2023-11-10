@@ -142,7 +142,12 @@ class AboutUs extends Component{
                             <br/><br/>
                             <Row>
                                 <Col sm='6'>
-                                    <img src={AboutUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                        <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            Loading image...
+                                        </div>
+                                        <img src={AboutUs1} onError={(e) => e.target.src = AboutUs1} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                    </div>
                                     <br/><br/><br/>
                                 </Col>
                                 <Col>

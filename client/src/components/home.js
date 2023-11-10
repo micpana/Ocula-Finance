@@ -119,25 +119,25 @@ class Home extends Component{
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
                         <Row style={{color: '#ffffff', height: '550px', margin: '0px'}}>
-                            <div style={{height: '550px', overflow: 'hidden', backgroundColor: '#005fc9'}}>
-                                <img src={Jumbotron1} style={{width: '110%', height: '160%', marginLeft: '-30px', opacity: 0.4}}/>
+                            <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '550px', backgroundColor: '#005fc9'}}>
+                                <img src={Jumbotron1} onError={(e) => e.target.src = Jumbotron1} style={{position: 'absolute', opacity: 0.4, right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '550px'}} />
+                                <Container style={{position: 'absolute', top: '135px', left: '10px'}}>
+                                    <h1 style={{color: '#ffffff', fontWeight: 'bold', textAlign: 'left'}}>
+                                        Maximize Your Trading Potential with AI-Driven Analysis
+                                    </h1>
+                                    <h3 style={{color: '#FEF6DF', marginTop: '50px', textAlign: 'left'}}>
+                                        Unlock Profitable Trading Opportunities with Accurate Forecasts and Risk-to-Reward Profiles. 
+                                    </h3>
+                                    <Row style={{marginRight: '0px', marginTop: '70px', textAlign: 'left'}}>
+                                        <Col sm='6'>
+                                            <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
+                                                Get started
+                                            </Button>
+                                            <br/><br/>
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </div>
-                            <Container style={{position: 'absolute', top: '120px',left: '10px'}}>
-                                <h1 style={{color: '#ffffff', fontWeight: 'bold', marginTop: '100px', textAlign: 'left'}}>
-                                    Maximize Your Trading Potential with AI-Driven Analysis
-                                </h1>
-                                <h3 style={{color: '#FEF6DF', marginTop: '50px', textAlign: 'left'}}>
-                                    Unlock Profitable Trading Opportunities with Accurate Forecasts and Risk-to-Reward Profiles. 
-                                </h3>
-                                <Row style={{marginRight: '0px', marginTop: '70px', textAlign: 'left'}}>
-                                    <Col sm='6'>
-                                        <Button href='/signup' style={{backgroundColor: '#ffffff', color: '#005fc9', fontWeight: 'bold', border: 'none', width: '180px'}}>
-                                            Get started
-                                        </Button>
-                                        <br/><br/>
-                                    </Col>
-                                </Row>
-                            </Container>
                         </Row>
                         <Container>
                             <Row style={{margin: '0px', minHeight: '300px'}}>
@@ -147,7 +147,12 @@ class Home extends Component{
                                         ? <><br/><br/></>
                                         : <><br/><br/><br/><br/><br/><br/></>
                                     }
-                                    <img src={Home1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                        <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            Loading image...
+                                        </div>
+                                        <img src={Home1} onError={(e) => e.target.src = Home1} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                    </div>
                                 </Col>
                                 <Col>
                                     {
@@ -176,7 +181,12 @@ class Home extends Component{
                                     this.state.on_mobile === true
                                     ? <Col>
                                         <br/><br/>
-                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
+                                        <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                            <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                                Loading image...
+                                            </div>
+                                            <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        </div>
                                     </Col>
                                     : <></>
                                 }
@@ -205,7 +215,12 @@ class Home extends Component{
                                     this.state.on_mobile == false
                                     ? <Col>
                                         <br/><br/><br/><br/><br/><br/>
-                                        <img src={Home2} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
+                                        <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                            <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                                Loading image...
+                                            </div>
+                                            <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        </div>
                                     </Col>
                                     : <></>
                                 }
@@ -217,7 +232,12 @@ class Home extends Component{
                                         ? <><br/><br/></>
                                         : <><br/><br/><br/><br/><br/><br/></>
                                     }
-                                    <img src={Home3} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}} />
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                        <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            Loading image...
+                                        </div>
+                                        <img src={Home3} onError={(e) => e.target.src = Home3} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                    </div>
                                 </Col>
                                 <Col>
                                     {

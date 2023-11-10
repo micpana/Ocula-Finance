@@ -192,7 +192,7 @@ class NavBar extends Component{
                     <img src={Logo} style={{width: '100%'}} /> 
                 </NavbarBrand>
                 <NavbarToggler onClick={this.toggle} style={{backgroundColor: '#EEECEC'}}/>
-                <Collapse isOpen={this.state.isOpen} navbar>
+                <Collapse isOpen={this.state.isOpen} navbar style={{position: 'relative'}}>
                     <Nav className="ml-auto" navbar style={{position: 'absolute', right: 0, backgroundColor: '#EEECEC'}}>
                         <NavItem>
                             <NavLink href='/' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
