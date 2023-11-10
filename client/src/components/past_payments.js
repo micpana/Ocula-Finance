@@ -48,7 +48,7 @@ class PastPayments extends Component{
             network_error_message: '',
             retry_function: null,
             input_errors: {},
-            end_of_list: true,
+            end_of_list: false,
             on_mobile: false,
             start_date: '',
             end_date: '',
