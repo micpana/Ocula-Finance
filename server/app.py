@@ -452,7 +452,7 @@ def signin():
 # 17
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
 def getUserVerificationEmailByUserId():
-    # field validation
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
@@ -480,7 +480,7 @@ def getUserVerificationEmailByUserId():
 # 3
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
-    # field validation
+    # input field validation
     try: token = request.form['token'] 
     except: response = make_response('Token field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
@@ -535,7 +535,7 @@ def verifyEmail():
 # 4
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
-    # field validation
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
@@ -588,7 +588,7 @@ def resendEmailVerification():
 # 5
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
-    # field validation
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
@@ -652,7 +652,7 @@ def correctRegistrationEmail():
 # 6
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
-    # field validation
+    # input field validation
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
@@ -723,7 +723,7 @@ def recoverPassword():
 # 7
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
-    # field validation
+    # input field validation
     try: token = request.form['token'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
@@ -923,11 +923,58 @@ def getUserPaymentHistory():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
+    try: start_date = request.form['start_date'] 
+    except: response = make_response('Start date field required'); response.status = 400; return response
+    try: end_date = request.form['end_date'] 
+    except: response = make_response('End date field required'); response.status = 400; return response
+    try: length_of_data_received = request.form['length_of_data_received'] 
+    except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
+
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
+    user_payment_history = json.loads(user_payment_history.to_json()
+
+    # if no dates have been given
+    if (start_date == '' or start_date == None) and (end_date == '' or end_date == None):
+        user_payment_history = [i for i in user_payment_history if True]
+
+    # if only start date has been given
+    if (start_date != '' and start_date != None) and (end_date == '' or end_date == None):
+        user_payment_history = [i for i in user_payment_history if i.date >= start_date]
+
+    # if only end date has been given
+    if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
+        user_payment_history = [i for i in user_payment_history if i.date <= end_date]
+
+    # if both dates have been given
+    if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
+        user_payment_history = [i for i in user_payment_history if i.date >= start_date]
+
+    # if client has already received some data
+    if length_of_data_received != 0:
+        # current length of all data
+        length_of_all_data = len(user_payment_history)
+
+        # length difference between all data and data received by client
+        data_length_difference = length_of_all_data - length_of_data_received
+
+        # if length difference is 0, it means client has received all available data
+        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+
+        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
+        # only return payments client hasn't received yet
+        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+        user_payment_history = user_payment_history[start_index:end_index]
 
     # return payment history
-    response = make_response(user_payment_history.to_json()); response.status = 200; return response
+    response = make_response(jsonify(user_payment_history)); response.status = 200; return response
 
 # market analysis functions *******************************************************************************************
 # 11
@@ -937,7 +984,7 @@ def getCurrentMarketAnalysis():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # symbol field validation
+    # input field validation
     try: symbol = request.form['symbol'] 
     except: response = make_response('Symbol required'); response.status = 400; return response
     if symbol == '' or symbol == None: response = make_response('Symbol cannot be empty'); response.status = 400; return response
@@ -968,6 +1015,11 @@ def getAllUsers():
     # check user access token's validity
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+    
+    # input field validation
+    try: length_of_data_received = request.form['length_of_data_received'] 
+    except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
 
     # get current datetime
     current_datetime_object = datetime.now()
@@ -979,6 +1031,27 @@ def getAllUsers():
     # modify user objects... delete passwords, add subscription status
     all_users = json.loads(all_users.to_json())
     all_users = [user_object_modification(i, current_datetime) for i in all_users]
+
+    # if client has already received some data
+    if length_of_data_received != 0:
+        # current length of all data
+        length_of_all_data = len(all_users)
+
+        # length difference between all data and data received by client
+        data_length_difference = length_of_all_data - length_of_data_received
+
+        # if length difference is 0, it means client has received all available data
+        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+
+        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
+        # only return payments client hasn't received yet
+        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+        all_users = all_users[start_index:end_index]
 
     # return user list
     response = make_response(jsonify(all_users)); response.status = 200; return response
@@ -1114,12 +1187,37 @@ def getUserPaymentHistoryByAccountId():
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    try: length_of_data_received = request.form['length_of_data_received'] 
+    except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = account_id)
+    user_payment_history = json.loads(user_payment_history.to_json()
+
+    # if client has already received some data
+    if length_of_data_received != 0:
+        # current length of all data
+        length_of_all_data = len(user_payment_history)
+
+        # length difference between all data and data received by client
+        data_length_difference = length_of_all_data - length_of_data_received
+
+        # if length difference is 0, it means client has received all available data
+        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+
+        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
+        # only return payments client hasn't received yet
+        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+        user_payment_history = user_payment_history[start_index:end_index]
 
     # return payment history
-    response = make_response(user_payment_history.to_json()); response.status = 200; return response
+    response = make_response(jsonify(user_payment_history)); response.status = 200; return response
 
 # 19
 @app.route('/searchForUser', methods=['POST'])
@@ -1132,6 +1230,9 @@ def searchForUser():
     try: search_query = request.form['search_query'] 
     except: response = make_response('Search query field required'); response.status = 400; return response
     if search_query == '' or search_query == None: response = make_response('Search query cannot be empty'); response.status = 400; return response
+    try: length_of_data_received = request.form['length_of_data_received'] 
+    except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
 
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1153,6 +1254,27 @@ def searchForUser():
         search_query.lower() in i['lastname'].lower() or 
         search_query.lower() in i['phonenumber'].lower()
     ]
+
+    # if client has already received some data
+    if length_of_data_received != 0:
+        # current length of all data
+        length_of_all_data = len(user_results)
+
+        # length difference between all data and data received by client
+        data_length_difference = length_of_all_data - length_of_data_received
+
+        # if length difference is 0, it means client has received all available data
+        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+
+        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
+        # only return payments client hasn't received yet
+        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+        user_results = user_results[start_index:end_index]
 
     # return user list
     response = make_response(jsonify(user_results)); response.status = 200; return response
@@ -1296,6 +1418,7 @@ def banUser():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
@@ -1342,6 +1465,7 @@ def unbanUser():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
@@ -1384,6 +1508,7 @@ def changeUserRole():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
@@ -1429,6 +1554,7 @@ def manuallyEnterUserPayment():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
@@ -1537,6 +1663,7 @@ def getEarningsReport():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
     try: end_date = request.form['end_date'] 
@@ -1621,6 +1748,7 @@ def getPaymentList():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
     try: end_date = request.form['end_date'] 
@@ -1673,7 +1801,7 @@ def getPaymentList():
         # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
         if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-        # get client load more increment number
+        # proceed to get client load more increment number
         client_load_more_increment = get_client_load_more_increment()
 
         # only return payments client hasn't received yet
