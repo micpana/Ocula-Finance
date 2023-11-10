@@ -166,27 +166,34 @@ def index():
 # 1
 @app.route('/signup', methods=['POST'])
 def signup():
-    # input field validation
+    # input field validation ********************
+    # firstname
     try: firstname = request.form['firstname'] 
     except: response = make_response('Firstname field required'); response.status = 400; return response
     if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
+    # lastname
     try: lastname = request.form['lastname'] 
     except: response = make_response('Lastname field required'); response.status = 400; return response
     if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
+    # username
     try: username = request.form['username'] 
     except: response = make_response('Username field required'); response.status = 400; return response
     if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
+    # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('invalid email structure') ; response.status = 400; return response
+    # phonenumber
     try: phonenumber = request.form['phonenumber'] 
     except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('invalid password structure'); response.status = 400; return response
+    # country
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
@@ -268,10 +275,12 @@ def signup():
 # 2
 @app.route('/signin', methods=['POST'])
 def signin():
-    # input field validation
+    # input field validation ********************
+    # email or username
     try: email_or_username = request.form['email_or_username'] 
     except: response = make_response('Email or username field required'); response.status = 400; return response
     if email_or_username == '' or email_or_username == None: response = make_response('Email or username cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -452,7 +461,8 @@ def signin():
 # 17
 @app.route('/getUserVerificationEmailByUserId', methods=['POST'])
 def getUserVerificationEmailByUserId():
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
@@ -480,7 +490,8 @@ def getUserVerificationEmailByUserId():
 # 3
 @app.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
-    # input field validation
+    # input field validation ********************
+    # token
     try: token = request.form['token'] 
     except: response = make_response('Token field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
@@ -535,7 +546,8 @@ def verifyEmail():
 # 4
 @app.route('/resendEmailVerification', methods=['POST'])
 def resendEmailVerification():
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
@@ -588,10 +600,12 @@ def resendEmailVerification():
 # 5
 @app.route('/correctRegistrationEmail', methods=['POST'])
 def correctRegistrationEmail():
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
@@ -652,7 +666,8 @@ def correctRegistrationEmail():
 # 6
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
-    # input field validation
+    # input field validation ********************
+    # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
@@ -723,10 +738,12 @@ def recoverPassword():
 # 7
 @app.route('/setNewPassword', methods=['POST'])
 def setNewPassword():
-    # input field validation
+    # input field validation ********************
+    # token
     try: token = request.form['token'] 
-    except: response = make_response('Password field required'); response.status = 400; return response
+    except: response = make_response('Token field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -797,29 +814,37 @@ def editProfile():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
-    # input field validation
+    # input field validation ********************
+    # firstname
     try: firstname = request.form['firstname'] 
     except: response = make_response('Firstname field required'); response.status = 400; return response
     if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
+    # lastname
     try: lastname = request.form['lastname'] 
     except: response = make_response('Lastname field required'); response.status = 400; return response
     if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
+    # username
     try: username = request.form['username'] 
     except: response = make_response('Username field required'); response.status = 400; return response
     if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
+    # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('invalid email structure' ); response.status = 400; return response
+    # phonenumber
     try: phonenumber = request.form['phonenumber'] 
     except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    # new password
     try: new_password = request.form['new_password'] 
     except: response = make_response('New password field required'); response.status = 400; return response
     if new_password != '' and new_password != None and is_password_structure_valid(new_password) == False: response = make_response('invalid password structure'); response.status = 400; return response
+    # country
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
@@ -923,11 +948,14 @@ def getUserPaymentHistory():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
+    # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
@@ -984,7 +1012,8 @@ def getCurrentMarketAnalysis():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # symbol
     try: symbol = request.form['symbol'] 
     except: response = make_response('Symbol required'); response.status = 400; return response
     if symbol == '' or symbol == None: response = make_response('Symbol cannot be empty'); response.status = 400; return response
@@ -1016,7 +1045,8 @@ def getAllUsers():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
-    # input field validation
+    # input field validation ********************
+    # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
@@ -1083,11 +1113,14 @@ def getNewUserRegistrationStatistics():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
+    # category
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
@@ -1133,11 +1166,14 @@ def getNewSubscribedUserCountStatistics():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
+    # category
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
@@ -1183,10 +1219,12 @@ def getUserPaymentHistoryByAccountId():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
@@ -1226,10 +1264,12 @@ def searchForUser():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # search query
     try: search_query = request.form['search_query'] 
     except: response = make_response('Search query field required'); response.status = 400; return response
     if search_query == '' or search_query == None: response = make_response('Search query cannot be empty'); response.status = 400; return response
+    # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
@@ -1286,11 +1326,14 @@ def getUserCount():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
+    # category
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
@@ -1336,11 +1379,14 @@ def getUserSubscriptionStatistics():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
+    # category
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
@@ -1418,13 +1464,16 @@ def banUser():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    # ban reason
     try: ban_reason = request.form['ban_reason'] 
     except: response = make_response('Ban reason field required'); response.status = 400; return response
     if ban_reason == '' or ban_reason == None: response = make_response('Ban reason cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -1465,10 +1514,12 @@ def unbanUser():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -1508,14 +1559,17 @@ def changeUserRole():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    # new role
     try: new_role = request.form['new_role'] 
     except: response = make_response('New role field required'); response.status = 400; return response
     if new_role == '' or new_role == None: response = make_response('New role cannot be empty'); response.status = 400; return response
     if new_role not in get_user_roles(): response = make_response('invalid role'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -1554,30 +1608,38 @@ def manuallyEnterUserPayment():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # account id
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    # purpose
     try: purpose = request.form['purpose']
     except: response = make_response('Purpose field required'); response.status = 400; return response
     if purpose == '' or purpose == None: response = make_response('Purpose cannot be empty'); response.status = 400; return response
     if purpose not in get_payment_purposes(): response = make_response('invalid purpose'); response.status = 400; return response
+    # payment method
     try: payment_method = request.form['payment_method']
     except: response = make_response('Payment method field required'); response.status = 400; return response
     if payment_method == '' or payment_method == None: response = make_response('Payment method cannot be empty'); response.status = 400; return response
     if payment_method not in get_payment_methods(): response = make_response('invalid method'); response.status = 400; return response
+    # transaction id
     try: transaction_id = request.form['transaction_id']
     except: response = make_response('Transaction id field required'); response.status = 400; return response
     if transaction_id == '' or transaction_id == None: response = make_response('Transaction id cannot be empty'); response.status = 400; return response
+    # verified
     try: verified = request.form['verified']
     except: response = make_response('Verified field required'); response.status = 400; return response
     if verified == '' or verified == None: response = make_response('Verified cannot be empty'); response.status = 400; return response
+    # discount applied
     try: discount_applied = request.form['discount_applied']
     except: response = make_response('Discount applied field required'); response.status = 400; return response
     if discount_applied == '' or discount_applied == None: response = make_response('Discount applied cannot be empty'); response.status = 400; return response
+    # amount
     try: amount = request.form['amount']
     except: response = make_response('Amount field required'); response.status = 400; return response
     if amount == '' or amount == None: response = make_response('Amount cannot be empty'); response.status = 400; return response
+    # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
@@ -1663,9 +1725,11 @@ def getEarningsReport():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
 
@@ -1748,13 +1812,17 @@ def getPaymentList():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
-    # input field validation
+    # input field validation ********************
+    # start date
     try: start_date = request.form['start_date'] 
     except: response = make_response('Start date field required'); response.status = 400; return response
+    # end date
     try: end_date = request.form['end_date'] 
     except: response = make_response('End date field required'); response.status = 400; return response
+    # entered by
     try: entered_by = request.form['entered_by'] 
     except: response = make_response('Entered by field required'); response.status = 400; return response
+    # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response

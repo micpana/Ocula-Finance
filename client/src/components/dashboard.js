@@ -238,7 +238,7 @@ class Dashboard extends Component{
                             </Button>
                             <br/><br/>
                             {
-                                user_role != null
+                                user_role === null
                                 ? <div>
                                     <h6 style={{color: 'inherit', marginTop: '13px'}}>
                                         Admin Access
