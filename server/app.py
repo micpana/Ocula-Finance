@@ -962,7 +962,7 @@ def getUserPaymentHistory():
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
-    user_payment_history = json.loads(user_payment_history.to_json()
+    user_payment_history = json.loads(user_payment_history.to_json())
 
     # if no dates have been given
     if (start_date == '' or start_date == None) and (end_date == '' or end_date == None):
@@ -1231,7 +1231,7 @@ def getUserPaymentHistoryByAccountId():
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = account_id)
-    user_payment_history = json.loads(user_payment_history.to_json()
+    user_payment_history = json.loads(user_payment_history.to_json())
 
     # if client has already received some data
     if length_of_data_received != 0:
@@ -1833,7 +1833,7 @@ def getPaymentList():
 
     # get all payments
     all_payments = Payments.objects.all()
-    all_payments = json.loads(all_payments.to_json()
+    all_payments = json.loads(all_payments.to_json())
 
     # if entered by has been given
     if entered_by != '' and entered_by != None:
