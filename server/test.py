@@ -1,13 +1,10 @@
-ls = [10, 5, 7, 8, 9, 60, 10, 300, 40, 40, 40, 70, 70, 100, 100]
+from datetime import datetime
+date = str(datetime.now())
 
-lss = ls[0:5]
+print(date)
 
-print(lss)
+date = date.replace('-', '').replace(':', '').replace('.', '').replace(' ', '')[::-1]
 
-increment = 5
-start_index = len(lss); end_index = start_index + increment
-print(start_index, end_index)
+print(date)
 
-lss = ls[start_index:end_index]
-
-print(lss)
+print(len(date))

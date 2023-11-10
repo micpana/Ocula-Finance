@@ -436,7 +436,7 @@ def signin():
     )
     saved_token_details = token_details.save()
     token_id =saved_token_details.id
-    user_access_token = generated_access_token + '.' + token_id
+    user_access_token = generated_access_token + '.' + token_id + '.' + current_datetime.replace('-', '').replace(':', '').replace('.', '').replace(' ', '')[::-1]
     UserAccessTokens.objects(id = token_id).update(token = user_access_token)
 
     # save login trial
