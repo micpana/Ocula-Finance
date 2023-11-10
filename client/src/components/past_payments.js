@@ -48,6 +48,7 @@ class PastPayments extends Component{
             network_error_message: '',
             retry_function: null,
             input_errors: {},
+            end_of_list: true,
             on_mobile: false,
             start_date: '',
             end_date: '',
@@ -134,7 +135,7 @@ class PastPayments extends Component{
             this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
         }
 
-        this.GetUserPastPayments = () => {
+        this.GetUserPastPayments = (get_all) => {
             const { cookies } = this.props;
             this.LoadingOn()
             this.NetworkErrorScreenOff()
@@ -142,6 +143,8 @@ class PastPayments extends Component{
             var data = new FormData()
             data.append('start_date', this.state.start_date)
             data.append('end_date', this.state.end_date)
+            data.append('length_of_data_received', this.state.past_payments.length)
+            data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getUserPaymentHistory', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
@@ -166,17 +169,23 @@ class PastPayments extends Component{
                         // redirect to sign in
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'end of list'){
+                        this.setState({end_of_list: true})
+                    }else if(result === 'invalid length of data received'){
+                        notification_message = 'Invalid length of data received'
+                        Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, this.GetUserPastPayments)
+                        this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserPastPayments)
+                    this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetUserPastPayments(get_all))
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserPastPayments)
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetUserPastPayments(get_all))
                 }
                 this.LoadingOff()
             })
@@ -189,7 +198,7 @@ class PastPayments extends Component{
                 on_mobile: true
             })
         }
-        // this.GetUserPastPayments()
+        // this.GetUserPastPayments(false)
     }
 
     render() {
@@ -248,7 +257,7 @@ class PastPayments extends Component{
                             </Col>
                             <Col sm='3'>
                                 <br/>
-                                <Button onClick={this.GetEarningsReport} 
+                                <Button onClick={() => this.GetUserPastPayments(false)} 
                                     style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                 >
                                     View
@@ -270,6 +279,25 @@ class PastPayments extends Component{
                                     {past_payments_map}
                                 </tbody>
                             </Table>
+                            <br/>
+                            {
+                                this.state.end_of_list === true
+                                ? <p style={{color: '#00539C', fontWeight: 'bold'}}>All data loaded</p>
+                                : <></>
+                            }
+                            <br/>
+                            <Button onClick={() => {this.GetPaymentsList(false); this.setState({end_of_list: false})}} 
+                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                            >
+                                Load more
+                            </Button>
+                            {' '}
+                            <Button onClick={() => {this.GetEarningsReport(true); this.setState({end_of_list: false})}} 
+                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                            >
+                                Load all
+                            </Button>
+                            <br/><br/>
                         </div>
                     </div>
                 }

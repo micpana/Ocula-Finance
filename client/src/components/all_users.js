@@ -49,6 +49,7 @@ class AllUsers extends Component{
             network_error_message: '',
             retry_function: null,
             input_errors: {},
+            end_of_list: true,
             on_mobile: false,
             screen: 'users', // users / user / selected user payments
             to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified'],
@@ -127,7 +128,8 @@ class AllUsers extends Component{
             transaction_id: '',
             verified: false,
             discount_applied: 0,
-            amount: 0
+            amount: 0,
+            showing_search_results: false
         };
 
         this.HandleChange = (e) => {
@@ -173,16 +175,20 @@ class AllUsers extends Component{
             this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
         }
 
-        this.GetAllUsers = () => {
+        this.GetAllUsers = (get_all) => {
             const { cookies } = this.props;
             this.LoadingOn()
             this.NetworkErrorScreenOff()
 
-            axios.post(Backend_Server_Address + 'getAllUsers', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            var data = new FormData()
+            data.append('length_of_data_received', this.state.all_users.length)
+            data.append('get_all', get_all) // bool
+
+            axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set users to state
-                this.setState({all_users: result})
+                // set users to state, also set showing search results to false => so that we know users showing are not from a search
+                this.setState({all_users: result, showing_search_results: false})
                 this.LoadingOff()
                 this.GetUserMetrics()
             }).catch((error) => {
@@ -202,28 +208,36 @@ class AllUsers extends Component{
                         // redirect to sign in
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'end of list'){
+                        this.setState({end_of_list: true})
+                    }else if(result === 'invalid length of data received'){
+                        notification_message = 'Invalid length of data received'
+                        Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, () => this.GetAllUsers(get_all))
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, this.GetAllUsers)
+                        this.NetworkErrorScreenOn(notification_message, () => this.GetAllUsers(get_all))
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetAllUsers)
+                    this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetAllUsers(get_all))
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetAllUsers)
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetAllUsers(get_all))
                 }
                 this.LoadingOff()
             })
         }
 
-        this.GetSelectedUserPayments = (user_id) => {
+        this.GetSelectedUserPayments = (user_id, get_all) => {
             const { cookies } = this.props;
             this.LoadingOn()
             
             var data = new FormData()
             data.append('account_id', user_id)
+            data.append('length_of_data_received', this.state.user_payments.length)
+            data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
@@ -248,6 +262,11 @@ class AllUsers extends Component{
                         // redirect to sign in
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'end of list'){
+                        this.setState({end_of_list: true})
+                    }else if(result === 'invalid length of data received'){
+                        notification_message = 'Invalid length of data received'
+                        Notification(notification_message, 'error')
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
@@ -261,9 +280,7 @@ class AllUsers extends Component{
             })
         }
 
-        this.SearchForUser = (e) => {
-            e.preventDefault()
-            
+        this.SearchForUser = (get_all) => {
             // initialize variable to store input validation status
             var data_checks_out = true
 
@@ -282,12 +299,14 @@ class AllUsers extends Component{
 
                 var data = new FormData()
                 data.append('search_query', this.state.search_query)
+                data.append('length_of_data_received', this.state.all_users.length)
+                data.append('get_all', get_all) // bool
 
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
-                    // set user results to state
-                    this.setState({all_users: result})
+                    // set user results to state, also set showing search results to true => so that we know users showing are from a search
+                    this.setState({all_users: result, showing_search_results: true})
                     this.LoadingOff()
                 }).catch((error) => {
                     console.log(error)
@@ -306,6 +325,11 @@ class AllUsers extends Component{
                             // redirect to sign in
                             let port = (window.location.port ? ':' + window.location.port : '');
                             window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'end of list'){
+                            this.setState({end_of_list: true})
+                        }else if(result === 'invalid length of data received'){
+                            notification_message = 'Invalid length of data received'
+                            Notification(notification_message, 'error')
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')
@@ -351,14 +375,14 @@ class AllUsers extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, this.GetAllUsers)
+                        this.NetworkErrorScreenOn(notification_message, this.GetUserMetrics)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetAllUsers)
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserMetrics)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetAllUsers)
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserMetrics)
                 }
                 this.LoadingOff()
             })
@@ -717,7 +741,7 @@ class AllUsers extends Component{
                 on_mobile: true
             })
         }
-        // this.GetAllUsers()
+        // this.GetAllUsers(false)
     }
 
     render() {
@@ -825,13 +849,18 @@ class AllUsers extends Component{
                                     </Col>
                                     <Col sm='3'>
                                         <br/>
-                                        <Button onClick={this.SearchForUser} 
+                                        <Button onClick={() => this.SearchForUser(false)} 
                                             style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                         >
                                             Search <FaSearch style={{marginLeft: '20px'}}/>
                                         </Button>
                                     </Col>
                                 </Row>
+                                <div onClick={() => {this.setState({search_query: ''}); this.GetAllUsers(false)}}
+                                    style={{textAlign: 'right', fontWeight: 'bold', color: 'red', cursor: 'pointer'}}
+                                >
+                                    Clear search results
+                                </div>
                                 <br/><br/><br/>
                                 <div style={{maxHeight: '450px', overflowY: 'scroll'}}>
                                     <Table>
@@ -847,6 +876,43 @@ class AllUsers extends Component{
                                             {users_to_show_map}
                                         </tbody>
                                     </Table>
+                                    <br/>
+                                    {
+                                        this.state.end_of_list === true
+                                        ? <p style={{color: '#00539C', fontWeight: 'bold'}}>All data loaded</p>
+                                        : <></>
+                                    }
+                                    <br/>
+                                    {
+                                        this.state.showing_search_results === true
+                                        ? <>
+                                            <Button onClick={() => {this.SearchForUser(false); this.setState({end_of_list: false})}} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Load more
+                                            </Button>
+                                            {' '}
+                                            <Button onClick={() => {this.SearchForUser(true); this.setState({end_of_list: false})}} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Load all
+                                            </Button>
+                                        </>
+                                        : <>
+                                            <Button onClick={() => {this.GetAllUsers(false); this.setState({end_of_list: false})}} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Load more
+                                            </Button>
+                                            {' '}
+                                            <Button onClick={() => {this.GetAllUsers(true); this.setState({end_of_list: false})}} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Load all
+                                            </Button>
+                                        </>
+                                    }
+                                    <br/><br/>
                                 </div>
                             </>
                             : screen === 'user'
@@ -1095,7 +1161,7 @@ class AllUsers extends Component{
                                             <br/>
                                             <h6 style={{fontWeight: 'bold', color: '#00539C'}}>User Payments</h6>
                                             <br/>
-                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid); window.scrollTo(0, 0)}}
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false); this.setState({end_of_list: false}); window.scrollTo(0, 0)}}
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 <FaMoneyCheckAlt /> View user payments
@@ -1202,6 +1268,24 @@ class AllUsers extends Component{
                                                 </tbody>
                                             </Table>
                                             <br/>
+                                            {
+                                                this.state.end_of_list === true
+                                                ? <p style={{color: '#00539C', fontWeight: 'bold'}}>All data loaded</p>
+                                                : <></>
+                                            }
+                                            <br/>
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false); this.setState({end_of_list: false})}} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Load more
+                                            </Button>
+                                            {' '}
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false); this.setState({end_of_list: false})}} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Load all
+                                            </Button>
+                                            <br/><br/>
                                         </div>
                                     </Col>
                                 </Row>
