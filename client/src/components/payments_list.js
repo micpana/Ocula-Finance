@@ -319,7 +319,12 @@ class PaymentsList extends Component{
                                 </Button>
                             </Col>
                         </Row>
-                        <br/><br/>
+                        <div onClick={() => {this.setState({entered_by: ''}); this.GetPaymentsList(false)}}
+                            style={{textAlign: 'right', fontWeight: 'bold', color: 'red', cursor: 'pointer'}}
+                        >
+                            Clear search results
+                        </div>
+                        <br/><br/><br/>
                         <div style={{maxHeight: '450px', overflowY: 'scroll'}}>
                             <Table>
                                 <thead>
