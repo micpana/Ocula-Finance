@@ -193,7 +193,7 @@ class ForgotPassword extends Component{
                                         <FaAt style={{margin:'10px'}}/>
                                     </InputGroupText>
                                     <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
-                                        placeholder="Corrected email" name="email" id="email"
+                                        placeholder="Email" name="email" id="email"
                                         value={this.state.email} onChange={this.HandleChange} type="text" 
                                     />
                                 </InputGroup>
