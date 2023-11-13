@@ -177,7 +177,7 @@ class Dashboard extends Component{
 
         // check access token existance
         const { cookies } = this.props;
-        if(cookies.get(Access_Token_Cookie_Name) != null){
+        if(cookies.get(Access_Token_Cookie_Name) === null){
             let port = (window.location.port ? ':' + window.location.port : '');
             window.location.href = '//' + window.location.hostname + port + '/signin';
         }else{ 
