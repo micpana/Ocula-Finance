@@ -54,7 +54,7 @@ class Dashboard extends Component{
     constructor(props) { 
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
             network_error_screen: false,
             network_error_message: '',
             retry_function: null,
