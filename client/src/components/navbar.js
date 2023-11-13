@@ -29,7 +29,6 @@ import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import axios from 'axios';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import Notification from './notification_alert';
-import { Message, useToaster } from "rsuite";
 import Logo from '../images/logo.png'
 
 class NavBar extends Component{
