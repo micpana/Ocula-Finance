@@ -53,20 +53,7 @@ class UserCountChart extends Component{
             end_date: '',
             category: 'Daily', // Daily / Monthly / Yearly
             categories: ['Daily', 'Monthly', 'Yearly'],
-            user_count_statistics: [
-                {
-                    date: '14/11/2023',
-                    users: 30
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 1200
-                }
-            ]
+            user_count_statistics: []
         };
 
         this.HandleChange = (e) => {
@@ -168,7 +155,7 @@ class UserCountChart extends Component{
                 on_mobile: true
             })
         }
-        // this.GetUserCountStatistics()
+        this.GetUserCountStatistics()
     }
 
     render() {

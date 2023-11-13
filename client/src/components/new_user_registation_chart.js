@@ -53,60 +53,7 @@ class NewUserRegistrationChart extends Component{
             end_date: '',
             category: 'Daily', // Daily / Monthly / Yearly
             categories: ['Daily', 'Monthly', 'Yearly'],
-            new_user_registration_statistics: [
-                {
-                    date: '14/11/2023',
-                    users: 30
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 120
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 120
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 120
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 120
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 120
-                },
-                {
-                    date: '15/11/2023',
-                    users: 300
-                },
-                {
-                    date: '16/11/2023',
-                    users: 120
-                }
-            ]
+            new_user_registration_statistics: []
         };
 
         this.HandleChange = (e) => {
@@ -208,7 +155,7 @@ class NewUserRegistrationChart extends Component{
                 on_mobile: true
             })
         }
-        // this.GetNewUserRegistrationStatistics()
+        this.GetNewUserRegistrationStatistics()
     }
 
     render() {

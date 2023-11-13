@@ -52,44 +52,7 @@ class PastPayments extends Component{
             on_mobile: false,
             start_date: '',
             end_date: '',
-            past_payments: [
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    amount: 10
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Mastercard',
-                    amount: 96
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Paypal',
-                    amount: 10
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    amount: 10
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Mastercard',
-                    amount: 96
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Paypal',
-                    amount: 10
-                }
-            ]
+            past_payments: []
         };
 
         this.HandleChange = (e) => {
@@ -198,7 +161,7 @@ class PastPayments extends Component{
                 on_mobile: true
             })
         }
-        // this.GetUserPastPayments(false)
+        this.GetUserPastPayments(false)
     }
 
     render() {

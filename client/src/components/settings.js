@@ -50,15 +50,15 @@ class Settings extends Component{
             input_errors: {},
             on_mobile: false,
             user_details: {},
-            firstname: 'Michael',
-            lastname: 'Mudimbu',
-            username: 'micpana',
-            email: 'michaelmudimbu@gmail.com',
-            phonenumber: '+263782464219',
+            firstname: '',
+            lastname: '',
+            username: '',
+            email: '',
+            phonenumber: '',
             password: '',
             new_password: '',
             new_password_confirmation: '',
-            country: 'Zimbabwe'
+            country: ''
         };
 
         this.HandleChange = (e) => {
@@ -292,7 +292,7 @@ class Settings extends Component{
             })
         }
         // get user details
-        // this.GetUserDetails()
+        this.GetUserDetails()
     }
 
     render() {

@@ -182,7 +182,7 @@ class Dashboard extends Component{
             window.location.href = '//' + window.location.hostname + port + '/signin';
         }else{ 
             // check token's validity
-            // this.CheckAccessTokenValidity()
+            this.CheckAccessTokenValidity()
             // highlight current screen's button
             if (this.state.loading === false){
                 document.getElementById(this.state.screen).style.color = '#F2B027'
@@ -238,7 +238,7 @@ class Dashboard extends Component{
                             </Button>
                             <br/><br/>
                             {
-                                user_role === null
+                                user_role === 'admin'
                                 ? <div>
                                     <h6 style={{color: 'inherit', marginTop: '13px'}}>
                                         Admin Access

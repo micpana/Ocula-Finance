@@ -47,10 +47,7 @@ class Subscriptions extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
-            user_details: {
-                subscribed: true,
-                subscription_expiry: '14/11/2023 11:15am'
-            }
+            user_details: {}
         };
 
         this.HandleChange = (e) => {
@@ -147,7 +144,7 @@ class Subscriptions extends Component{
                 on_mobile: true
             })
         }
-        // this.GetUserDetails()
+        this.GetUserDetails()
     }
 
     render() {

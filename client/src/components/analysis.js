@@ -63,11 +63,7 @@ class Analysis extends Component{
             input_errors: {},
             on_mobile: false,
             symbol: 'EURUSD',
-            current_market_analysis: {
-                timestamp: '16/10/2023 11:30am',
-                maximum_possible_down_move: 0.57876,
-                maximum_possible_up_move: 1.58987
-            },
+            current_market_analysis: {},
             user_subscribed: null,
             user_last_m15_close: null
         };
@@ -217,7 +213,7 @@ class Analysis extends Component{
                 on_mobile: true
             })
         }
-        // this.GetCurrentMarketAnalysis(this.state.symbol)
+        this.GetCurrentMarketAnalysis(this.state.symbol)
     }
 
     render() {

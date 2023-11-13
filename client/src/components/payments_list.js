@@ -54,96 +54,7 @@ class PaymentsList extends Component{
             start_date: '',
             end_date: '',
             entered_by: '', // firstname / lastname / username
-            payments_list: [
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    discount_applied: 0,
-                    amount: 10,
-                    entered_by: 'Michael Panashe Mudimbu'
-                },
-            ]
+            payments_list: []
         };
 
         this.HandleChange = (e) => {
@@ -253,7 +164,7 @@ class PaymentsList extends Component{
                 on_mobile: true
             })
         }
-        // this.GetPaymentsList(false)
+        this.GetPaymentsList(false)
     }
 
     render() {

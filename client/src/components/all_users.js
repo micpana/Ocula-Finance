@@ -54,72 +54,11 @@ class AllUsers extends Component{
             screen: 'users', // users / user / selected user payments
             to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified'],
             users_showing: 'All', // All / Subscribed / Not subscribed / Banned / Verified / Not verified
-            all_users: [
-                {
-                    _id: {'$oid': 'shgugudyufhbdfu'},
-                    firstname: 'Michael',
-                    lastname: 'Mudimbu',
-                    username: 'micpana',
-                    email: 'michaelmudimbu@gmail.com',
-                    phonenumber: '+263782464219',
-                    country: 'Zimbabwe',
-                    date_of_registration: '14/10/2023 11:15am',
-                    verified: true,
-                    subscribed: true,
-                    subscription_date: '14/10/2023 11:15am',
-                    subscription_expiry: '14/11/2023 11:15am',
-                    role: 'admin',
-                    banned: false
-                }
-            ],
+            all_users: [],
             user: null,
-            user_payments: [
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    amount: 10
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Mastercard',
-                    amount: 96
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Paypal',
-                    amount: 10
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'VISA',
-                    amount: 10
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Mastercard',
-                    amount: 96
-                },
-                {
-                    date: '14/10/2023 11:15am',
-                    purpose: 'subscription',
-                    payment_method: 'Paypal',
-                    amount: 10
-                }
-            ],
+            user_payments: [],
             search_query: '',
-            user_metrics: {
-                all_users: 10000,
-                subscribed_users: 9700,
-                users_not_subscribed: 300,
-                banned_users: 20,
-                verified_users: 9900,
-                users_not_verified: 100
-            },
+            user_metrics: {},
             password: '',
             ban_reason: '',
             new_role: '',
@@ -741,7 +680,7 @@ class AllUsers extends Component{
                 on_mobile: true
             })
         }
-        // this.GetAllUsers(false)
+        this.GetAllUsers(false)
     }
 
     render() {

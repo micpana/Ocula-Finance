@@ -52,13 +52,7 @@ class EarningsReport extends Component{
             on_mobile: false,
             start_date: '',
             end_date: '',
-            earnings_report: {
-                total_earnings: 200000,
-                subscriptions: 200000,
-                Cash: 1000,
-                Innbucks: 2000,
-                Stripe: 197000
-            }
+            earnings_report: {}
         };
 
         this.HandleChange = (e) => {
@@ -159,7 +153,7 @@ class EarningsReport extends Component{
                 on_mobile: true
             })
         }
-        // this.GetEarningsReport()
+        this.GetEarningsReport()
     }
 
     render() {

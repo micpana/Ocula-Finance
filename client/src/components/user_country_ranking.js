@@ -48,24 +48,7 @@ class UserCountryRanking extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
-            user_country_ranking: [
-                {
-                    country: 'South Africa',
-                    users: 1200
-                },
-                {
-                    country: 'Zimbabwe',
-                    users: 600
-                },
-                {
-                    country: 'United Kingdom',
-                    users: 550
-                },
-                {
-                    country: 'United States of America',
-                    users: 400
-                }
-            ]
+            user_country_ranking: []
         };
 
         this.HandleChange = (e) => {
@@ -162,7 +145,7 @@ class UserCountryRanking extends Component{
                 on_mobile: true
             })
         }
-        // this.GetUserCountryRanking()
+        this.GetUserCountryRanking()
     }
 
     render() {

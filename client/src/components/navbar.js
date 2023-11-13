@@ -42,11 +42,7 @@ class NavBar extends Component{
             dropdownOpen: false,
             on_mobile: false,
             loading: false,
-            user_details: {
-                firstname: 'Michael Panashe',
-                lastname: 'Mudimbu',
-                subscribed: true
-            }
+            user_details: null
         };    
         
         this.HandleChange = (e) =>{
