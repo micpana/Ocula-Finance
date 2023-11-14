@@ -224,7 +224,7 @@ class HowItWorks extends Component{
                             </h6>
                             <br/><br/>
                             <p style={{textAlign: "left"}}>
-                                Sign up for a 14-day Free Trial now!
+                                Sign up for a 7-day Free Trial now!
                             </p>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='4'></Col>

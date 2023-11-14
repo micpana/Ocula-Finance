@@ -150,7 +150,7 @@ class Pricing extends Component{
                                                 <h3 style={{fontWeight: 'bold'}}>
                                                     $ 0.00
                                                 </h3>
-                                                For only 14 days
+                                                For only 7 days
                                             </Row>
                                             <br/><br/>
                                         </Container>
