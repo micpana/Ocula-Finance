@@ -10,7 +10,7 @@ from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment
+from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days
 
 # Flask stuff
 app = Flask(__name__)
@@ -1022,14 +1022,21 @@ def getCurrentMarketAnalysis():
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
 
+    # date format
+    date_format = '%Y-%m-%d'
+
     # administration exceptions
     administration_exceptions = ['admin']
 
     # exempt administration exceptions from subscription checks
     if user_role not in administration_exceptions:
         # user subscription test
-        user_subscription_expiration_date = Users.objects.filter(id = user_id)[0].subscription_expiry
-        if current_datetime > user_subscription_expiration_date: response = make_response('not subscribed'); response.status = 403; return response
+        user = Users.objects.filter(id = user_id)[0]
+        user_registration_date = user.date_of_registration
+        user_subscription_expiration_date = user.subscription_expiry
+        user_free_trial_expiration_date = datetime.strptime(user_registration_date, date_format) + timedelta(days=get_number_of_free_trial_days())
+        if current_datetime > user_subscription_expiration_date or current_datetime > user_free_trial_expiration_date: 
+            response = make_response('not subscribed'); response.status = 403; return response
 
     # proceed to get current market analysis ... ie last analysis entry
     current_market_analysis = MarketAnalysis.objects.filter(symbol = symbol)[-1]

@@ -36,6 +36,12 @@ def token_send_on_user_request_retry_period_in_minutes():
 
     return minutes 
 
+# number of free trial days
+def get_number_of_free_trial_days():
+    days = 7
+
+    return days
+
 # list of currency pairs and stocks ... symbols
 def get_symbols():
     currency_pairs = [
