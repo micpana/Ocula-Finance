@@ -1,8 +1,7 @@
 # imports
 from flask import Flask, request, send_file, jsonify, make_response
 from flask_cors import CORS, cross_origin
-# from user_agents import parse
-parse = None # replacement, just to get server up until user_agents is installed
+from user_agents import parse
 import json
 import re
 from datetime import datetime, timedelta
