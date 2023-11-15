@@ -10,7 +10,7 @@ pytz==2022.7.1
 pyyaml==5.1.1
 ua-parser==0.18.0
 user-agents==2.2.0
-mongoengine==0.18.2
+mongoengine
 mongomock==3.18.0
 pymongo==3.10.1
 dnspython==2.0.0
