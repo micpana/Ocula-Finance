@@ -14,7 +14,6 @@ mongoengine
 mongomock==3.18.0
 pymongo==3.10.1
 dnspython==2.0.0
-MetaTrader5
 yfinance==0.2.18
 Keras==2.11.0
 tensorflow==2.11.0
