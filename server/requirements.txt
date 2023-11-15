@@ -1,5 +1,6 @@
 Flask
 flask_cors
+passlib==1.7.4
 werkzeug
 waitress
 pyyaml==5.1.1
