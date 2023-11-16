@@ -65,7 +65,7 @@ def yahoo_fetch_data(symbol, timeframes, data_collection_days):
             columns={date_column_name: 'time', 'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close'}
         )
 
-        if timeframe = H4, modify timeframe_ohlc_df into a 4h timeframe, we collected 1h data since yfinance doesn't have 4h
+        # if timeframe = H4, modify timeframe_ohlc_df into a 4h timeframe, we collected 1h data since yfinance doesn't have 4h
         if timeframe == 'H4':
             # set the datetime index if its not already set
             timeframe_ohlc_df['time'] = pd.to_datetime(timeframe_ohlc_df['time'])
