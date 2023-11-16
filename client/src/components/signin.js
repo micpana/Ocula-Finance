@@ -217,7 +217,7 @@ class Signin extends Component{
                                             </InputGroupText>
                                             <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
                                                 placeholder="Password" name="password" id="password"
-                                                value={this.state.password} onChange={this.HandleChange} type="text" 
+                                                value={this.state.password} onChange={this.HandleChange} type="password" 
                                             />
                                         </InputGroup>
                                         <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
