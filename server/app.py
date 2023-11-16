@@ -56,7 +56,7 @@ def save_login_trials(account_id, email, username, firstname, lastname, device, 
     trial_details.save()
     
     # if login trial was a success + device is a new login device by user, notify user via email
-    if status == True:
+    if successful == True:
         # check if user has used the device before
         matches = LoginTrials.objects.filter(account_id = account_id, device = device, os = user_os, browser = browser)
         if len(matches) > 0: used_before = True 
