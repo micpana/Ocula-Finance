@@ -1,1 +1,1 @@
-export const Backend_Server_Address = 'https://backend.oculafinance.com/'
+export const Backend_Server_Address = 'https://giant-boa-jeans.cyclic.app'
