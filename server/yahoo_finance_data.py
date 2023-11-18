@@ -96,8 +96,3 @@ def yahoo_fetch_data(symbol, timeframes, data_collection_days):
 
     # return data as timeframe 1, timeframe 2, timeframe 3, timeframe 4
     return timeframe_1, timeframe_2, timeframe_3, timeframe_4
-
-# get data
-data1, data2, data3, data4 = yahoo_fetch_data('EURUSD', ['Daily', 'H4', 'H1', 'M15'], 50) # symbol, timeframes, data collection days
-
-print('\nDaily:\n', data1, '\nH4:\n', data2, '\nH1:\n', data3, '\nM15:\n', data4)
