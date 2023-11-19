@@ -5,9 +5,9 @@ node_modules/
 *.csv
 
 # compressed files
-# *.7z
-# *.tar.xz
-# *.zip
+*.7z
+*.tar.xz
+*.zip
 
 # Log files
 *.log
