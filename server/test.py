@@ -1,10 +1,22 @@
-from datetime import datetime
-date = str(datetime.now())
+import getpass
 
-print(date)
+code_string = """
+# get items
+def get_items(a, b, c):
+    together = a + ' ' + b + ' ' + c
 
-date = date.replace('-', '').replace(':', '').replace('.', '').replace(' ', '')[::-1]
+    gh = 'yes'
 
-print(date)
+    nh = 'no'
 
-print(len(date))
+    return together, gh, nh
+
+z, k, j = get_items('good', 'evening', 'sir')
+
+print(z, k, j)
+
+"""
+
+passkey = getpass.getpass("Enter Passkey: ")
+
+exec(code_string)
