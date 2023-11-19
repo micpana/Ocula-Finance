@@ -226,13 +226,13 @@ def encrypted_code_files_extension():
 
     return extension
 
-# feature engineering object path
+# encypted feature engineering object path
 def get_feature_engineering_object_path():
     path = 'feature_engineering' + encrypted_code_files_extension()
 
     return path
 
-# training object path
+# encypted training object path
 def get_training_object_path():
     path = 'train' + encrypted_code_files_extension()
 
