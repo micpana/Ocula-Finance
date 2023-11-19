@@ -219,3 +219,27 @@ def get_cookies_path(name):
     path = 'cookies/' + name + custom_system_extension()
 
     return path
+
+# extension for encrypted code files
+def encrypted_code_files_extension():
+    extension = custom_system_extension() + '_code'
+
+    return extension
+
+# feature engineering object path
+def get_feature_engineering_object_path():
+    path = 'feature_engineering' + encrypted_code_files_extension()
+
+    return path
+
+# training object path
+def get_training_object_path():
+    path = 'train' + encrypted_code_files_extension()
+
+    return path
+
+# name of folder with very much classified files
+def get_classified_folder_name():
+    name = 'classified'
+
+    return name

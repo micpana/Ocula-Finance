@@ -22,3 +22,6 @@ __pycache__/
 
 # system objects
 *.ocula_finance
+
+# classified folder
+classified/
