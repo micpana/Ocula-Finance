@@ -45,7 +45,8 @@ def get_number_of_free_trial_days():
 # list of currency pairs and stocks ... symbols
 def get_symbols():
     currency_pairs = [
-        'EURUSD', 'USDJPY', 'GBPUSD', 'USDCHF', 'USDZAR'
+        'EURUSD'
+        # , 'USDJPY', 'GBPUSD', 'USDCHF', 'USDZAR'
     ]
     stocks = [
 
