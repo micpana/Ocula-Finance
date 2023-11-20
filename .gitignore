@@ -16,6 +16,7 @@ node_modules/
 *.py[cod]
 *.pyc
 __pycache__/
+server/__pycache__
 
 # model weights
 *.hdf5
