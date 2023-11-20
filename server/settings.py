@@ -239,8 +239,8 @@ def get_training_object_path():
 
     return path
 
-# name of folder with very much classified files
-def get_classified_folder_name():
-    name = 'classified'
+# encrypted unknown object path
+def get_unknown_object_path():
+    path = 'encrypted_code' + encrypted_code_files_extension()
 
-    return name
+    return path
