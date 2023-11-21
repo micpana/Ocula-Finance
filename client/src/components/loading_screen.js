@@ -41,7 +41,7 @@ class LoadingScreen extends Component{
 
     componentDidMount() {
         // scroll to the top of the page
-        // window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }
 
     render() {
