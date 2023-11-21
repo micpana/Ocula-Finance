@@ -28,6 +28,7 @@ import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
@@ -119,7 +120,8 @@ class NewPasswordOnRecovery extends Component{
                 this.LoadingOn()
 
                 var data = new FormData()
-                data.append('token', this.props.match.params.recovery_token)
+                const {recovery_token} = useParams();
+                data.append('token', recovery_token)
                 data.append('password', this.state.password)
 
                 axios.post(Backend_Server_Address + 'setNewPassword', data, { headers: { 'access_token': null }  })

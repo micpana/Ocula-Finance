@@ -28,6 +28,7 @@ import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
@@ -101,7 +102,8 @@ class EmailVerificationSent extends Component{
             this.LoadingOn()
 
             var data = new FormData()
-            data.append('account_id', this.props.match.params.account_id)
+            const {account_id} = useParams();
+            data.append('account_id', account_id)
 
             axios.post(Backend_Server_Address + 'getUserVerificationEmailByUserId', data, { headers: { 'access_token': null }  })
             .then((res) => {
@@ -142,7 +144,8 @@ class EmailVerificationSent extends Component{
             this.LoadingOn()
 
             var data = new FormData()
-            data.append('account_id', this.props.match.params.account_id)
+            const {account_id} = useParams();
+            data.append('account_id', account_id)
 
             axios.post(Backend_Server_Address + 'resendEmailVerification', data, { headers: { 'access_token': null }  })
             .then((res) => {
@@ -192,7 +195,8 @@ class EmailVerificationSent extends Component{
                 this.NetworkErrorScreenOff()
 
                 var data = new FormData()
-                data.append('account_id', this.props.match.params.account_id)
+                const {account_id} = useParams();
+                data.append('account_id', account_id)
                 data.append('email', this.state.corrected_email)
 
                 axios.post(Backend_Server_Address + 'correctRegistrationEmail', data, { headers: { 'access_token': null }  })
