@@ -40,12 +40,13 @@ class LoadingScreen extends Component{
     }
 
     componentDidMount() {
-        
+        // scroll to the top of the page
+        // window.scrollTo(0, 0);
     }
 
     render() {
         return (
-            <div>
+            <div style={{minHeight: '550px'}}>
                 <br/><br/><br/>
                 <h5 style={{color: '#005fc9'}}>Loading ...</h5>
                 <br/><br/><br/>
