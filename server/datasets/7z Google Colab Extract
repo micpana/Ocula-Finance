@@ -1,0 +1,4 @@
+To current directory: !7za x EURUSD.7z
+
+To a specific folder name: !7za x EURUSD.7z -o datasets
+

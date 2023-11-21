@@ -8,9 +8,16 @@ def platform_name():
 
 # frontend url
 def frontend_client_url():
-    url = 'https://oculafinance.com'
+    # url = 'https://oculafinance.com' # main url
+    url = 'https://oculafinance.netlify.app' # test url
 
     return url
+
+# sending emails via ... mailjet / gmail test smtp
+def sending_emails_via():
+    send_via = 'gmail test smtp'
+
+    return send_via
 
 # database selection ... mock / test / live
 def database_selection():
