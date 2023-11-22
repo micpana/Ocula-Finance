@@ -973,7 +973,10 @@ def getUserPaymentHistory():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
-    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # get all
+    try: get_all = request.form['get_all'] 
+    except: response = make_response('Get all field required'); response.status = 400; return response
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
@@ -995,26 +998,28 @@ def getUserPaymentHistory():
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
         user_payment_history = [i for i in user_payment_history if i.date >= start_date and i.date <= end_date]
 
-    # if client has already received some data
-    if length_of_data_received != 0:
-        # current length of all data
-        length_of_all_data = len(user_payment_history)
+    # if client did not request all data
+    if get_all == False:
+        # if client has already received some data
+        if length_of_data_received != 0:
+            # current length of all data
+            length_of_all_data = len(user_payment_history)
 
-        # length difference between all data and data received by client
-        data_length_difference = length_of_all_data - length_of_data_received
+            # length difference between all data and data received by client
+            data_length_difference = length_of_all_data - length_of_data_received
 
-        # if length difference is 0, it means client has received all available data
-        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+            # if length difference is 0, it means client has received all available data
+            if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
 
-        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
-        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+            # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+            if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-        # proceed to get client load more increment number
-        client_load_more_increment = get_client_load_more_increment()
+            # proceed to get client load more increment number
+            client_load_more_increment = get_client_load_more_increment()
 
-        # only return payments client hasn't received yet
-        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
-        user_payment_history = user_payment_history[start_index:end_index]
+            # only return payments client hasn't received yet
+            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            user_payment_history = user_payment_history[start_index:end_index]
 
     # return payment history
     response = make_response(jsonify(user_payment_history)); response.status = 200; return response
@@ -1071,7 +1076,10 @@ def getAllUsers():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
-    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # get all
+    try: get_all = request.form['get_all'] 
+    except: response = make_response('Get all field required'); response.status = 400; return response
 
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1084,26 +1092,28 @@ def getAllUsers():
     all_users = json.loads(all_users.to_json())
     all_users = [user_object_modification(i, current_datetime) for i in all_users]
 
-    # if client has already received some data
-    if length_of_data_received != 0:
-        # current length of all data
-        length_of_all_data = len(all_users)
+    # if client did not request all data
+    if get_all == False:
+        # if client has already received some data
+        if length_of_data_received != 0:
+            # current length of all data
+            length_of_all_data = len(all_users)
 
-        # length difference between all data and data received by client
-        data_length_difference = length_of_all_data - length_of_data_received
+            # length difference between all data and data received by client
+            data_length_difference = length_of_all_data - length_of_data_received
 
-        # if length difference is 0, it means client has received all available data
-        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+            # if length difference is 0, it means client has received all available data
+            if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
 
-        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
-        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+            # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+            if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-        # proceed to get client load more increment number
-        client_load_more_increment = get_client_load_more_increment()
+            # proceed to get client load more increment number
+            client_load_more_increment = get_client_load_more_increment()
 
-        # only return payments client hasn't received yet
-        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
-        all_users = all_users[start_index:end_index]
+            # only return payments client hasn't received yet
+            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            all_users = all_users[start_index:end_index]
 
     # return user list
     response = make_response(jsonify(all_users)); response.status = 200; return response
@@ -1249,32 +1259,37 @@ def getUserPaymentHistoryByAccountId():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
-    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # get all
+    try: get_all = request.form['get_all'] 
+    except: response = make_response('Get all field required'); response.status = 400; return response
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = account_id)
     user_payment_history = json.loads(user_payment_history.to_json())
 
-    # if client has already received some data
-    if length_of_data_received != 0:
-        # current length of all data
-        length_of_all_data = len(user_payment_history)
+    # if client did not request all data
+    if get_all == False:
+        # if client has already received some data
+        if length_of_data_received != 0:
+            # current length of all data
+            length_of_all_data = len(user_payment_history)
 
-        # length difference between all data and data received by client
-        data_length_difference = length_of_all_data - length_of_data_received
+            # length difference between all data and data received by client
+            data_length_difference = length_of_all_data - length_of_data_received
 
-        # if length difference is 0, it means client has received all available data
-        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+            # if length difference is 0, it means client has received all available data
+            if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
 
-        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
-        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+            # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+            if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-        # proceed to get client load more increment number
-        client_load_more_increment = get_client_load_more_increment()
+            # proceed to get client load more increment number
+            client_load_more_increment = get_client_load_more_increment()
 
-        # only return payments client hasn't received yet
-        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
-        user_payment_history = user_payment_history[start_index:end_index]
+            # only return payments client hasn't received yet
+            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            user_payment_history = user_payment_history[start_index:end_index]
 
     # return payment history
     response = make_response(jsonify(user_payment_history)); response.status = 200; return response
@@ -1294,8 +1309,11 @@ def searchForUser():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
-    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
-
+    if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # get all
+    try: get_all = request.form['get_all'] 
+    except: response = make_response('Get all field required'); response.status = 400; return response
+    
     # get current datetime
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
@@ -1317,26 +1335,28 @@ def searchForUser():
         search_query.lower() in i['phonenumber'].lower()
     ]
 
-    # if client has already received some data
-    if length_of_data_received != 0:
-        # current length of all data
-        length_of_all_data = len(user_results)
+    # if client did not request all data
+    if get_all == False:
+        # if client has already received some data
+        if length_of_data_received != 0:
+            # current length of all data
+            length_of_all_data = len(user_results)
 
-        # length difference between all data and data received by client
-        data_length_difference = length_of_all_data - length_of_data_received
+            # length difference between all data and data received by client
+            data_length_difference = length_of_all_data - length_of_data_received
 
-        # if length difference is 0, it means client has received all available data
-        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+            # if length difference is 0, it means client has received all available data
+            if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
 
-        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
-        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+            # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+            if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-        # proceed to get client load more increment number
-        client_load_more_increment = get_client_load_more_increment()
+            # proceed to get client load more increment number
+            client_load_more_increment = get_client_load_more_increment()
 
-        # only return payments client hasn't received yet
-        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
-        user_results = user_results[start_index:end_index]
+            # only return payments client hasn't received yet
+            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            user_results = user_results[start_index:end_index]
 
     # return user list
     response = make_response(jsonify(user_results)); response.status = 200; return response
@@ -1847,7 +1867,10 @@ def getPaymentList():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
-    if length_of_data_received < 0: response = make_response('Invalid length of data received'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # get all
+    try: get_all = request.form['get_all'] 
+    except: response = make_response('Get all field required'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1877,26 +1900,28 @@ def getPaymentList():
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
         all_payments = [i for i in all_payments if i.date >= start_date and i.date <= end_date]
 
-    # if client has already received some data
-    if length_of_data_received != 0:
-        # current length of all data
-        length_of_all_data = len(all_payments)
+    # if client did not request all data
+    if get_all == False:
+        # if client has already received some data
+        if length_of_data_received != 0:
+            # current length of all data
+            length_of_all_data = len(all_payments)
 
-        # length difference between all data and data received by client
-        data_length_difference = length_of_all_data - length_of_data_received
+            # length difference between all data and data received by client
+            data_length_difference = length_of_all_data - length_of_data_received
 
-        # if length difference is 0, it means client has received all available data
-        if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+            # if length difference is 0, it means client has received all available data
+            if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
 
-        # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
-        if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+            # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+            if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-        # proceed to get client load more increment number
-        client_load_more_increment = get_client_load_more_increment()
+            # proceed to get client load more increment number
+            client_load_more_increment = get_client_load_more_increment()
 
-        # only return payments client hasn't received yet
-        start_index = length_of_data_received; end_index = start_index + client_load_more_increment
-        all_payments = all_payments[start_index:end_index]
+            # only return payments client hasn't received yet
+            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            all_payments = all_payments[start_index:end_index]
 
     # return response
     response = make_response(jsonify(all_payments)); response.status = 200; return response
