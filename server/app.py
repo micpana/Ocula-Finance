@@ -434,7 +434,7 @@ def signin():
         expiry_date = token_expiration_date
     )
     saved_token_details = token_details.save()
-    token_id =saved_token_details.id
+    token_id = saved_token_details.id
     user_access_token = generated_access_token + '.' + token_id + '.' + current_datetime.replace('-', '').replace(':', '').replace('.', '').replace(' ', '')[::-1]
     UserAccessTokens.objects(id = token_id).update(token = user_access_token)
 
@@ -479,7 +479,7 @@ def getUserVerificationEmailByUserId():
     # check if user verification status
     if user.verified == True: response = make_response('already verified'); response.status = 409; return response
 
-    # check if last verification token by user hasn't expired
+    # check if last verification token by user has expired
     last_user_token = EmailVerifications.objects.filter(account_id = account_id)[-1]
     if str(datetime.now()) > last_user_token.expiry_date: response = make_response('redirect to signin'); response.status = 401; return response
     
@@ -909,8 +909,9 @@ def editProfile():
             for i in all_active_tokens if True
         ]
         return_string = return_string + ', password has been changed'
-    
-     # user has not supplied a new password, save existing password to password_to_save
+
+    else: # user has not supplied a new password
+        # save existing password to password_to_save
         password_to_save = user_encrypted_password
 
     # update account details
@@ -992,7 +993,7 @@ def getUserPaymentHistory():
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
-        user_payment_history = [i for i in user_payment_history if i.date >= start_date]
+        user_payment_history = [i for i in user_payment_history if i.date >= start_date and i.date <= end_date]
 
     # if client has already received some data
     if length_of_data_received != 0:
@@ -1037,7 +1038,7 @@ def getCurrentMarketAnalysis():
     current_datetime = str(current_datetime_object)
 
     # date format
-    date_format = '%Y-%m-%d'
+    date_format = '%Y-%m-%d %H:%M:%S.%f'
 
     # administration exceptions
     administration_exceptions = ['admin']
@@ -1874,7 +1875,7 @@ def getPaymentList():
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
-        all_payments = [i for i in all_payments if i.date >= start_date]
+        all_payments = [i for i in all_payments if i.date >= start_date and i.date <= end_date]
 
     # if client has already received some data
     if length_of_data_received != 0:
