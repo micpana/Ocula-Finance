@@ -83,31 +83,43 @@ def check_user_access_token_validity(request_data, expected_user_role):
     try:
         # get user access token
         user_access_token = request_data.headers.get('access_token')
+        
         # get information on user's browsing device
         user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request_data)
+        
         # check token's validity while trying to retrieve the user's system id
         token_details = UserAccessTokens.objects.filter(
-            id = user_access_token, 
+            token = user_access_token, 
             active = True, 
             user_browsing_agent = user_browsing_agent
         )[0]
+
         # get user id
         user_id = token_details.user_id
+
         # get user role
         user_role = Users.objects.filter(id = user_id)[0].role
+
         # get current date and time
         current_datetime = str(datetime.now())
-        # get access token status
+
+        # get access token status ********************************
+        # check if access token is still active
         if token_details.active == False:
             access_token_status = 'access token disabled via signout'
+        # check access token expiration status
         elif current_datetime > token_details.expiry_date:
             access_token_status = 'access token expired'
-            # check if user account's role matches expected user role
-            if user_role not in expected_user_role.split('/'): return 'not authorized to access this'
-            # proceed since everything checks out
+        # check if user account's role matches expected user role
+        elif user_role not in expected_user_role.split('/'): 
+            access_token_status = 'not authorized to access this'
+        # if everything check out, set access token status to 'ok'
+        else:
             access_token_status = 'ok'
-            # show that access token was last used now
-            AccessTokens.objects(id = user_access_token).update(last_used_on_date = current_datetime)
+
+        # show that access token was last used now
+        AccessTokens.objects(id = token_details).update(last_used_on_date = current_datetime)
+
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
     except:
