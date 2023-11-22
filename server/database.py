@@ -28,7 +28,7 @@ elif selected_database == 'test':
     connect(host=connection_url)
 elif selected_database == 'live':
     # live db connection
-    connect_url = 'mongodb+srv://'+live_db_username+':'+live_db_password+'@cluster0.6cicshr.mongodb.net/?retryWrites=true&w=majority'
+    connect_url = 'mongodb+srv://'+live_db_username+':'+live_db_password+live_db_url
     connect(host=connect_url, ssl=True, ssl_cert_reqs='CERT_NONE')
 else:
     print('UNKNOWN DATABASE SELECTION:', selected_database)
