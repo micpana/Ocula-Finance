@@ -467,8 +467,11 @@ def getUserVerificationEmailByUserId():
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
 
     # search for user by given userid
-    matches = Users.objects.filter(id = account_id)
-    if len(matches) == 0: response = make_response('invalid'); response.status = 404; return response
+    try:
+        matches = Users.objects.filter(id = account_id)
+        if len(matches) == 0: response = make_response('invalid'); response.status = 404; return response
+    except:
+        response = make_response('invalid'); response.status = 404; return response
 
     # user data
     user = matches[0]
@@ -499,9 +502,12 @@ def verifyEmail():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # search for token
-    token_results = EmailVerifications.objects.filter(id = token)
-    if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
-    match = token_results[0]
+    try:
+        token_results = EmailVerifications.objects.filter(id = token)
+        if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
+        match = token_results[0]
+    except:
+        response = make_response('invalid token'); response.status = 404; return response
 
     # check if token has already been used
     if match.used == True: response = make_response('used'); response.status = 409; return response
@@ -562,9 +568,12 @@ def resendEmailVerification():
     token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
-    match = Users.objects.filter(id = account_id)
-    if len(match) == 0: response = make_response('invalid account id'); response.status = 404; return response
-    account = match[0]
+    try:
+        match = Users.objects.filter(id = account_id)
+        if len(match) == 0: response = make_response('invalid account id'); response.status = 404; return response
+        account = match[0]
+    except:
+        response = make_response('invalid account id'); response.status = 404; return response
 
     # check if email has already been verified
     if account.verified == True: response = make_response('email already verified'); response.status = 409; return response
@@ -621,9 +630,12 @@ def correctRegistrationEmail():
     token_expiration_date = str(token_expiration_date_object)
 
     # search for account by account id ... also verify validity of given account id
-    match = Users.objects.filter(id = account_id)
-    if len(match) == 0: response = make_response('invalid account id'); response.status = 400; return response
-    account = match[0]
+    try:
+        match = Users.objects.filter(id = account_id)
+        if len(match) == 0: response = make_response('invalid account id'); response.status = 400; return response
+        account = match[0]
+    except:
+        response = make_response('invalid account id'); response.status = 400; return response
 
     # check if email has already been verified
     if account.verified == True: response = make_response('email already verified'); response.status = 409; return response
@@ -749,9 +761,12 @@ def setNewPassword():
     if is_password_structure_valid(password) == False: response = make_response('invalid password structure'); response.status = 400; return response
 
     # search for token
-    token_results = PasswordRecoveries.objects.filter(id = token)
-    if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
-    match = token_results[0]
+    try:
+        token_results = PasswordRecoveries.objects.filter(id = token)
+        if len(token_results) == 0: response = make_response('invalid token'); response.status = 404; return response
+        match = token_results[0]
+    except:
+        response = make_response('invalid token'); response.status = 404; return response
 
     # check if token has already been used
     if match.used == True: response = make_response('used'); response.status = 409; return response
