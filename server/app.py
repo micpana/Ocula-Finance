@@ -118,7 +118,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
             access_token_status = 'ok'
 
         # show that access token was last used now
-        AccessTokens.objects(id = token_details).update(last_used_on_date = current_datetime)
+        AccessTokens.objects(id = token_details.id).update(last_used_on_date = current_datetime)
 
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
@@ -1027,15 +1027,32 @@ def getUserPaymentHistory():
 
     # if only start date has been given
     if (start_date != '' and start_date != None) and (end_date == '' or end_date == None):
-        user_payment_history = [i for i in user_payment_history if i.date >= start_date]
+        # date format validation
+        try: datetime.strptime(start_date, '%Y-%m-%d')
+        except: response = make_response('invalid start date'); response.status = 400; return response
+
+        # proceed to get data
+        user_payment_history = [i for i in user_payment_history if i.date[0:10] >= start_date]
 
     # if only end date has been given
     if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
-        user_payment_history = [i for i in user_payment_history if i.date <= end_date]
+        # date format validation
+        try: datetime.strptime(end_date, '%Y-%m-%d')
+        except: response = make_response('invalid end date'); response.status = 400; return response
+
+        # proceed to get data
+        user_payment_history = [i for i in user_payment_history if i.date[0:10] <= end_date]
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
-        user_payment_history = [i for i in user_payment_history if i.date >= start_date and i.date <= end_date]
+        # date format validation
+        try: datetime.strptime(start_date, '%Y-%m-%d')
+        except: response = make_response('invalid start date'); response.status = 400; return response
+        try: datetime.strptime(end_date, '%Y-%m-%d')
+        except: response = make_response('invalid end date'); response.status = 400; return response
+
+        # proceed to get data
+        user_payment_history = [i for i in user_payment_history if i.date[0:10] >= start_date and i.date[0:10] <= end_date]
 
     # if client did not request all data
     if get_all == False:
@@ -1217,6 +1234,12 @@ def getNewUserRegistrationStatistics():
     # date format
     date_format = '%Y-%m-%d'
 
+    # date format validation
+    try: datetime.strptime(start_date, date_format)
+    except: response = make_response('invalid start date'); response.status = 400; return response
+    try: datetime.strptime(end_date, date_format)
+    except: response = make_response('invalid end date'); response.status = 400; return response
+
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
     date_difference_in_days = date_difference_in_days.days
@@ -1270,6 +1293,12 @@ def getNewSubscribedUserCountStatistics():
 
     # date format
     date_format = '%Y-%m-%d'
+
+    # date format validation
+    try: datetime.strptime(start_date, date_format)
+    except: response = make_response('invalid start date'); response.status = 400; return response
+    try: datetime.strptime(end_date, date_format)
+    except: response = make_response('invalid end date'); response.status = 400; return response
 
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
@@ -1452,6 +1481,12 @@ def getUserCount():
     # date format
     date_format = '%Y-%m-%d'
 
+    # date format validation
+    try: datetime.strptime(start_date, date_format)
+    except: response = make_response('invalid start date'); response.status = 400; return response
+    try: datetime.strptime(end_date, date_format)
+    except: response = make_response('invalid end date'); response.status = 400; return response
+
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
     date_difference_in_days = date_difference_in_days.days
@@ -1505,6 +1540,12 @@ def getUserSubscriptionStatistics():
 
     # date format
     date_format = '%Y-%m-%d'
+
+    # date format validation
+    try: datetime.strptime(start_date, date_format)
+    except: response = make_response('invalid start date'); response.status = 400; return response
+    try: datetime.strptime(end_date, date_format)
+    except: response = make_response('invalid end date'); response.status = 400; return response
 
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
@@ -1872,50 +1913,64 @@ def getEarningsReport():
 
     # if only start date has been given
     if (start_date != '' and start_date != None) and (end_date == '' or end_date == None):
+        # date format validation
+        try: datetime.strptime(start_date, '%Y-%m-%d')
+        except: response = make_response('invalid start date'); response.status = 400; return response
+        
         # total earnings
-        total_earnings = sum([i.amount for i in all_payments if i.date >= start_date])
+        total_earnings = sum([i.amount for i in all_payments if i.date[0:10] >= start_date])
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date >= start_date])
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date[0:10] >= start_date])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
         payment_methods = get_payment_methods()
         for payment_method in payment_methods:
-            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date >= start_date])
+            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date[0:10] >= start_date])
             earnings_report[payment_method] = method_earnings
 
     # if only end date has been given
     if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
+        # date format validation
+        try: datetime.strptime(end_date, '%Y-%m-%d')
+        except: response = make_response('invalid end date'); response.status = 400; return response
+
         # total earnings
-        total_earnings = sum([i.amount for i in all_payments if i.date <= end_date])
+        total_earnings = sum([i.amount for i in all_payments if i.date[0:10] <= end_date])
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date <= end_date])
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date[0:10] <= end_date])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
         payment_methods = get_payment_methods()
         for payment_method in payment_methods:
-            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date <= end_date])
+            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date[0:10] <= end_date])
             earnings_report[payment_method] = method_earnings
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
+        # date format validation
+        try: datetime.strptime(start_date, '%Y-%m-%d')
+        except: response = make_response('invalid start date'); response.status = 400; return response
+        try: datetime.strptime(end_date, '%Y-%m-%d')
+        except: response = make_response('invalid end date'); response.status = 400; return response
+        
         # total earnings
-        total_earnings = sum([i.amount for i in all_payments if i.date >= start_date and i.date <= end_date])
+        total_earnings = sum([i.amount for i in all_payments if i.date[0:10] >= start_date and i.date[0:10] <= end_date])
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription'and i.date >= start_date and i.date <= end_date])
+        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription'and i.date[0:10] >= start_date and i.date[0:10] <= end_date])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
         payment_methods = get_payment_methods()
         for payment_method in payment_methods:
-            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date >= start_date and i.date <= end_date])
+            method_earnings = sum([i.amount for i in all_payments if i.payment_method == payment_method and i.date[0:10] >= start_date and i.date[0:10] <= end_date])
             earnings_report[payment_method] = method_earnings
 
     # return response
@@ -1968,15 +2023,32 @@ def getPaymentList():
 
     # if only start date has been given
     if (start_date != '' and start_date != None) and (end_date == '' or end_date == None):
-        all_payments = [i for i in all_payments if i.date >= start_date]
+        # date format validation
+        try: datetime.strptime(start_date, '%Y-%m-%d')
+        except: response = make_response('invalid start date'); response.status = 400; return response
+        
+        # proceed to get data
+        all_payments = [i for i in all_payments if i.date[0:10] >= start_date]
 
     # if only end date has been given
     if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
-        all_payments = [i for i in all_payments if i.date <= end_date]
+        # date format validation
+        try: datetime.strptime(end_date, '%Y-%m-%d')
+        except: response = make_response('invalid end date'); response.status = 400; return response
+        
+        # proceed to get data
+        all_payments = [i for i in all_payments if i.date[0:10] <= end_date]
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
-        all_payments = [i for i in all_payments if i.date >= start_date and i.date <= end_date]
+        # date format validation
+        try: datetime.strptime(start_date, '%Y-%m-%d')
+        except: response = make_response('invalid start date'); response.status = 400; return response
+        try: datetime.strptime(end_date, '%Y-%m-%d')
+        except: response = make_response('invalid end date'); response.status = 400; return response
+        
+        # proceed to get data
+        all_payments = [i for i in all_payments if i.date[0:10] >= start_date and i.date[0:10] <= end_date]
 
     # if client did not request all data
     if get_all == False:
