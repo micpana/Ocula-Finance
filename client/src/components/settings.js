@@ -35,6 +35,8 @@ import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
 import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import { FaUserAlt, FaUsers, FaUserAstronaut, FaAt, FaPhoneAlt, FaUserLock, FaKey } from 'react-icons/fa';
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 class Settings extends Component{
     static propTypes = {
@@ -49,6 +51,7 @@ class Settings extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
+            country_iso_code_by_ip_address: '',
             user_details: {},
             firstname: '',
             lastname: '',
@@ -283,6 +286,26 @@ class Settings extends Component{
                 })
             }
         }
+
+        this.ChangeCountryAndPhonenumber = (value, country, e, formattedValue) => {
+            this.setState({
+                country: country.name,
+                phonenumber: value.toString()
+            })
+        }
+
+        this.GetCountryByIP = () => {
+            axios.get('https://ipapi.co/json/').then((response) => {
+                let data = response.data;
+                let country_code = data.country_code
+                this.setState({
+                    country_iso_code_by_ip_address: country_code.toLowerCase()
+                });
+            }).catch((error) => {
+                console.log(error);
+                this.GetCountryByIP()
+            });
+        }
     }
 
     componentDidMount() {
@@ -291,8 +314,12 @@ class Settings extends Component{
                 on_mobile: true
             })
         }
+        
         // get user details
         this.GetUserDetails()
+
+        // get country by user ip address
+        this.GetCountryByIP()
     }
 
     render() {
@@ -379,16 +406,30 @@ class Settings extends Component{
                             <br/>
                             <Row>
                                 <Col sm='6'>
-                                    <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
-                                    <InputGroup>
-                                        <InputGroupText addonType="prepend">
-                                            <FaPhoneAlt style={{margin:'10px'}}/>
-                                        </InputGroupText>
-                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
-                                            placeholder="Phonenumber" name="phonenumber" id="phonenumber"
-                                            value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
-                                        />
-                                    </InputGroup>
+                                    <Label>Country and Phonenumber <span style={{color: 'red'}}>*</span></Label>
+                                    <PhoneInput
+                                        country={this.state.country_iso_code_by_ip_address}
+                                        value={this.state.phonenumber}
+                                        onChange={(value, country, e, formattedValue) => this.ChangeCountryAndPhonenumber(value, country, e, formattedValue)}
+                                        placeholder='Phonenumber'
+                                        autoFormat={true}
+                                        enableSearch={true}
+                                        countryCodeEditable={false}
+                                        searchPlaceholder={'Search'}
+                                        inputStyle={{
+                                            border: 'none',
+                                            borderBottom: '1px solid #828884',
+                                            width: '100%'
+                                        }}
+                                        buttonStyle={{
+                                            border: 'none'
+                                        }}
+                                        containerStyle={{
+                                            width: '100%',
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                    <InputErrors field_error_state={this.state.input_errors['country']} field_label='Country' />
                                     <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
                                     <br/>
                                 </Col>

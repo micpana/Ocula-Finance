@@ -232,6 +232,10 @@ class Signin extends Component{
                                     <a href='/forgot-password' style={{color: '#00539C'}}>
                                         Forgot your password? Click here to reset it.
                                     </a>
+                                    <br/><br/>
+                                    <a href='/signup' style={{color: '#00539C'}}>
+                                        Not yet registered? Click here to signup.
+                                    </a>
                                 </Container>
                                 <br/><br/><br/>
                             </Col>
