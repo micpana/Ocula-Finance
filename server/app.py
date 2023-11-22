@@ -118,8 +118,7 @@ def is_email_structure_valid(email):
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     if re.match(pattern, email):
         return True
-    
-    
+    else:
         return False
 
 # password structure validation ... 8 characters at minimum, with at least 1: uppercase letter, lowercase letter, number, special character
