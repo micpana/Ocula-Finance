@@ -149,7 +149,7 @@ class Settings extends Component{
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else{
-                        notification_message = 'Apologies! The server encountered an error while processing your request (Error ' + status_code.toString() + ': ' + result + '). Please try again later or contact our team for further assistance.'
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
                         this.NetworkErrorScreenOn(notification_message, this.GetUserDetails)
                     }
@@ -202,7 +202,7 @@ class Settings extends Component{
             if (this.state.new_password != '' || this.state.new_password_confirmation != ''){
                 if (IsPasswordStructureValid(this.state.new_password) === false){ this.SetInputError('new_password', 'invalid'); data_checks_out = false }
                 if (this.state.new_password_confirmation === ''){ this.SetInputError('new_password_confirmation', 'required'); data_checks_out = false }
-                if (this.state.new_password != this.state.new_password_confirmation){ this.SetInputError('new_password_mismatch', 'invalid'); data_checks_out = false }
+                if (this.state.new_password != this.state.new_password_confirmation){ this.SetInputError('new_password_confirmation', 'invalid'); data_checks_out = false }
             }
 
             // check data collection status

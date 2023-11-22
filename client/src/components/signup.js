@@ -125,7 +125,7 @@ class Signup extends Component{
             if (this.state.password === ''){ this.SetInputError('password', 'required'); data_checks_out = false }
             if (IsPasswordStructureValid(this.state.password) === false){ this.SetInputError('password', 'invalid'); data_checks_out = false }
             if (this.state.password_confirmation === ''){ this.SetInputError('password_confirmation', 'required'); data_checks_out = false }
-            if (this.state.password != this.state.password_confirmation){ this.SetInputError('password_mismatch', 'invalid'); data_checks_out = false }
+            if (this.state.password != this.state.password_confirmation){ this.SetInputError('password_confirmation', 'invalid'); data_checks_out = false }
             if (this.state.country === ''){ this.SetInputError('country', 'required'); data_checks_out = false }
 
             // check data collection status

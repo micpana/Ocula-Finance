@@ -99,6 +99,7 @@ class EmailVerificationSent extends Component{
 
         this.GetUserVerificationEmailByUserId = () => {
             this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
             var data = new FormData()
             const path = window.location.pathname.split('/')
@@ -110,7 +111,7 @@ class EmailVerificationSent extends Component{
                 let result = res.data
                 var user_email = result
                 // set user email to state
-                this.setState({email: user_email})
+                this.setState({email: user_email, screen: 'sent'})
                 this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
@@ -128,11 +129,14 @@ class EmailVerificationSent extends Component{
                     else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetUserVerificationEmailByUserId)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserVerificationEmailByUserId)
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserVerificationEmailByUserId)
                 }
                 this.LoadingOff()
             })
@@ -193,7 +197,6 @@ class EmailVerificationSent extends Component{
                 Notification('Check input fields for errors.', 'error')
             }else{ // send data to server
                 this.LoadingOn()
-                this.NetworkErrorScreenOff()
 
                 var data = new FormData()
                 const path = window.location.pathname.split('/')
@@ -219,18 +222,15 @@ class EmailVerificationSent extends Component{
                         var notification_message = ''
                         if(result === 'invalid account id'){ this.setState({screen: 'invalid account id'}) }
                         else if (result === 'email already registered'){ this.setState({screen: 'email already registered'}) }
-                        else if (result === 'account already verified'){ this.setState({screen: 'account already verified'}) }
+                        else if (result === 'email already verified'){ this.setState({screen: 'account already verified'}) }
                         else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')
-                            this.NetworkErrorScreenOn(notification_message, this.GetUserVerificationEmailByUserId)
                         }
                     }else if (error.request){ // request was made but no response was received ... network error
                         Notification(Network_Error_Message, 'error')
-                        this.NetworkErrorScreenOn(Network_Error_Message, this.GetUserVerificationEmailByUserId)
                     }else{ // error occured during request setup ... no network access
                         Notification(No_Network_Access_Message, 'error')
-                        this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetUserVerificationEmailByUserId)
                     }
                     this.LoadingOff()
                 })
