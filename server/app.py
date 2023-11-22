@@ -170,33 +170,40 @@ def signup():
     try: firstname = request.form['firstname'] 
     except: response = make_response('Firstname field required'); response.status = 400; return response
     if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
+    if isinstance(firstname, str) == False: response = make_response('Firstname data type is invalid'); response.status = 400; return response
     # lastname
     try: lastname = request.form['lastname'] 
     except: response = make_response('Lastname field required'); response.status = 400; return response
     if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
+    if isinstance(lastname, str) == False: response = make_response('Lastname data type is invalid'); response.status = 400; return response
     # username
     try: username = request.form['username'] 
     except: response = make_response('Username field required'); response.status = 400; return response
     if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
+    if isinstance(username, str) == False: response = make_response('Username data type is invalid'); response.status = 400; return response
     # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
+    if isinstance(email, str) == False: response = make_response('Email data type is invalid'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('invalid email structure') ; response.status = 400; return response
     # phonenumber
     try: phonenumber = request.form['phonenumber'] 
     except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
+    if isinstance(phonenumber, str) == False: response = make_response('Phonenumber data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('invalid password structure'); response.status = 400; return response
     # country
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
-
+    if isinstance(country, str) == False: response = make_response('Country data type is invalid'); response.status = 400; return response
+    
     # check if username is already in use
     if len(Users.objects.filter(username = username)) > 0: response = make_response('username in use'); response.status = 409; return response
 
@@ -279,11 +286,13 @@ def signin():
     try: email_or_username = request.form['email_or_username'] 
     except: response = make_response('Email or username field required'); response.status = 400; return response
     if email_or_username == '' or email_or_username == None: response = make_response('Email or username cannot be empty'); response.status = 400; return response
+    if isinstance(email_or_username, str) == False: response = make_response('Email or username data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
-
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
+    
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
@@ -465,7 +474,8 @@ def getUserVerificationEmailByUserId():
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
-
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
+    
     # search for user by given userid
     try:
         matches = Users.objects.filter(id = account_id)
@@ -497,6 +507,7 @@ def verifyEmail():
     try: token = request.form['token'] 
     except: response = make_response('Token field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
+    if isinstance(token, str) == False: response = make_response('Token data type is invalid'); response.status = 400; return response
     
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -556,7 +567,8 @@ def resendEmailVerification():
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
-
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
+    
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
@@ -613,10 +625,12 @@ def correctRegistrationEmail():
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
     # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
+    if isinstance(email, str) == False: response = make_response('Email data type is invalid'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
@@ -682,6 +696,7 @@ def recoverPassword():
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
+    if isinstance(email, str) == False: response = make_response('Email data type is invalid'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('invalid email structure'); response.status = 400; return response
 
     # get user browsing device information
@@ -754,10 +769,12 @@ def setNewPassword():
     try: token = request.form['token'] 
     except: response = make_response('Token field required'); response.status = 400; return response
     if token == '' or token == None: response = make_response('Token cannot be empty'); response.status = 400; return response
+    if isinstance(token, str) == False: response = make_response('Token data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     if is_password_structure_valid(password) == False: response = make_response('invalid password structure'); response.status = 400; return response
 
     # search for token
@@ -833,27 +850,33 @@ def editProfile():
     try: firstname = request.form['firstname'] 
     except: response = make_response('Firstname field required'); response.status = 400; return response
     if firstname == '' or firstname == None: response = make_response('Firstname cannot be empty'); response.status = 400; return response
+    if isinstance(firstname, str) == False: response = make_response('Firstname data type is invalid'); response.status = 400; return response
     # lastname
     try: lastname = request.form['lastname'] 
     except: response = make_response('Lastname field required'); response.status = 400; return response
     if lastname == '' or lastname == None: response = make_response('Lastname cannot be empty'); response.status = 400; return response
+    if isinstance(lastname, str) == False: response = make_response('Lastname data type is invalid'); response.status = 400; return response
     # username
     try: username = request.form['username'] 
     except: response = make_response('Username field required'); response.status = 400; return response
     if username == '' or username == None: response = make_response('Username cannot be empty'); response.status = 400; return response
+    if isinstance(username, str) == False: response = make_response('Username data type is invalid'); response.status = 400; return response
     # email
     try: email = request.form['email'] 
     except: response = make_response('Email field required'); response.status = 400; return response
     if email == '' or email == None: response = make_response('Email cannot be empty'); response.status = 400; return response
+    if isinstance(email, str) == False: response = make_response('Email data type is invalid'); response.status = 400; return response
     if is_email_structure_valid(email) == False: response = make_response('invalid email structure' ); response.status = 400; return response
     # phonenumber
     try: phonenumber = request.form['phonenumber'] 
     except: response = make_response('Phonenumber field required'); response.status = 400; return response
     if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
+    if isinstance(phonenumber, str) == False: response = make_response('Phonenumber data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     # new password
     try: new_password = request.form['new_password'] 
     except: response = make_response('New password field required'); response.status = 400; return response
@@ -862,7 +885,8 @@ def editProfile():
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
     if country == '' or country == None: response = make_response('Country cannot be empty'); response.status = 400; return response
-
+    if isinstance(country, str) == False: response = make_response('Country data type is invalid'); response.status = 400; return response
+    
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
@@ -973,11 +997,15 @@ def getUserPaymentHistory():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
+    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
-
+    if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
     user_payment_history = json.loads(user_payment_history.to_json())
@@ -1037,7 +1065,8 @@ def getCurrentMarketAnalysis():
     try: symbol = request.form['symbol'] 
     except: response = make_response('Symbol required'); response.status = 400; return response
     if symbol == '' or symbol == None: response = make_response('Symbol cannot be empty'); response.status = 400; return response
-
+    if isinstance(symbol, str) == False: response = make_response('Symbol data type is invalid'); response.status = 400; return response
+    
     # get current datetime
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
@@ -1076,11 +1105,15 @@ def getAllUsers():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
+    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
-
+    if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    
     # get current datetime
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
@@ -1156,6 +1189,7 @@ def getNewUserRegistrationStatistics():
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    if isinstance(category, str) == False: response = make_response('Category data type is invalid'); response.status = 400; return response
     
     # get user list
     all_users = Users.objects.all()
@@ -1209,6 +1243,7 @@ def getNewSubscribedUserCountStatistics():
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    if isinstance(category, str) == False: response = make_response('Category data type is invalid'); response.status = 400; return response
     
     # get subscriptions list
     all_subscriptions = Payments.objects.filter(purpose = 'subscription')
@@ -1256,14 +1291,19 @@ def getUserPaymentHistoryByAccountId():
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account ID field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
+    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
-
+    if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = account_id)
     user_payment_history = json.loads(user_payment_history.to_json())
@@ -1306,13 +1346,18 @@ def searchForUser():
     try: search_query = request.form['search_query'] 
     except: response = make_response('Search query field required'); response.status = 400; return response
     if search_query == '' or search_query == None: response = make_response('Search query cannot be empty'); response.status = 400; return response
+    if isinstance(search_query, str) == False: response = make_response('Search query data type is invalid'); response.status = 400; return response
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
+    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
+    if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1379,6 +1424,7 @@ def getUserCount():
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    if isinstance(category, str) == False: response = make_response('Category data type is invalid'); response.status = 400; return response
     
     # get user list
     all_users = Users.objects.all()
@@ -1432,6 +1478,7 @@ def getUserSubscriptionStatistics():
     try: category = request.form['category'] 
     except: response = make_response('Category field required'); response.status = 400; return response
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
+    if isinstance(category, str) == False: response = make_response('Category data type is invalid'); response.status = 400; return response
     
     # get subscriptions list
     all_subscriptions = Payments.objects.filter(purpose = 'subscription')
@@ -1511,14 +1558,17 @@ def banUser():
     try: account_id = request.form['account_id'] 
     except: response = make_response('Account id field required'); response.status = 400; return response
     if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
     # ban reason
     try: ban_reason = request.form['ban_reason'] 
     except: response = make_response('Ban reason field required'); response.status = 400; return response
     if ban_reason == '' or ban_reason == None: response = make_response('Ban reason cannot be empty'); response.status = 400; return response
+    if isinstance(ban_reason, str) == False: response = make_response('Ban reason data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1559,12 +1609,14 @@ def unbanUser():
     # input field validation ********************
     # account id
     try: account_id = request.form['account_id'] 
-    except: response = make_response('Account id field required'); response.status = 400; return response
-    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    except: response = make_response('Account ID field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1604,18 +1656,21 @@ def changeUserRole():
     # input field validation ********************
     # account id
     try: account_id = request.form['account_id'] 
-    except: response = make_response('Account id field required'); response.status = 400; return response
-    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    except: response = make_response('Account ID field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
     # new role
     try: new_role = request.form['new_role'] 
     except: response = make_response('New role field required'); response.status = 400; return response
     if new_role == '' or new_role == None: response = make_response('New role cannot be empty'); response.status = 400; return response
+    if isinstance(new_role, str) == False: response = make_response('New role data type is invalid'); response.status = 400; return response
     if new_role not in get_user_roles(): response = make_response('invalid role'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
-    
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
+        
     # get current datetime
     current_datetime_object = datetime.now()
     current_datetime = str(current_datetime_object)
@@ -1653,38 +1708,46 @@ def manuallyEnterUserPayment():
     # input field validation ********************
     # account id
     try: account_id = request.form['account_id'] 
-    except: response = make_response('Account id field required'); response.status = 400; return response
-    if account_id == '' or account_id == None: response = make_response('Account id cannot be empty'); response.status = 400; return response
+    except: response = make_response('Account ID field required'); response.status = 400; return response
+    if account_id == '' or account_id == None: response = make_response('Account ID cannot be empty'); response.status = 400; return response
+    if isinstance(account_id, str) == False: response = make_response('Account ID data type is invalid'); response.status = 400; return response
     # purpose
     try: purpose = request.form['purpose']
     except: response = make_response('Purpose field required'); response.status = 400; return response
     if purpose == '' or purpose == None: response = make_response('Purpose cannot be empty'); response.status = 400; return response
     if purpose not in get_payment_purposes(): response = make_response('invalid purpose'); response.status = 400; return response
+    if isinstance(purpose, str) == False: response = make_response('Purpose data type is invalid'); response.status = 400; return response
     # payment method
     try: payment_method = request.form['payment_method']
     except: response = make_response('Payment method field required'); response.status = 400; return response
     if payment_method == '' or payment_method == None: response = make_response('Payment method cannot be empty'); response.status = 400; return response
+    if isinstance(payment_method, str) == False: response = make_response('Payment method data type is invalid'); response.status = 400; return response
     if payment_method not in get_payment_methods(): response = make_response('invalid method'); response.status = 400; return response
     # transaction id
     try: transaction_id = request.form['transaction_id']
-    except: response = make_response('Transaction id field required'); response.status = 400; return response
-    if transaction_id == '' or transaction_id == None: response = make_response('Transaction id cannot be empty'); response.status = 400; return response
+    except: response = make_response('Transaction ID field required'); response.status = 400; return response
+    if transaction_id == '' or transaction_id == None: response = make_response('Transaction ID cannot be empty'); response.status = 400; return response
+    if isinstance(transaction_id, str) == False: response = make_response('Transaction ID data type is invalid'); response.status = 400; return response
     # verified
     try: verified = request.form['verified']
     except: response = make_response('Verified field required'); response.status = 400; return response
     if verified == '' or verified == None: response = make_response('Verified cannot be empty'); response.status = 400; return response
+    if isinstance(verified, bool) == False: response = make_response('Verified data type is invalid'); response.status = 400; return response
     # discount applied
     try: discount_applied = request.form['discount_applied']
     except: response = make_response('Discount applied field required'); response.status = 400; return response
     if discount_applied == '' or discount_applied == None: response = make_response('Discount applied cannot be empty'); response.status = 400; return response
+    if isinstance(discount_applied, int) == False and isinstance(discount_applied, float) == False: response = make_response('Discount data type is invalid'); response.status = 400; return response
     # amount
     try: amount = request.form['amount']
     except: response = make_response('Amount field required'); response.status = 400; return response
     if amount == '' or amount == None: response = make_response('Amount cannot be empty'); response.status = 400; return response
+    if isinstance(amount, int) == False and isinstance(amount, float) == False: response = make_response('Amount data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
     if password == '' or password == None: response = make_response('Password cannot be empty'); response.status = 400; return response
+    if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now()
@@ -1867,10 +1930,14 @@ def getPaymentList():
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
+    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
+    if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now()
