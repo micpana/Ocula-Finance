@@ -3,12 +3,12 @@ import pickle
 from cryptography.fernet import Fernet
 from settings import get_training_object_path
 
-try: 
-    # get decryption key from user
-    passkey = getpass.getpass("\n\nEnter Passkey (For Training): ")
-    key = passkey.encode('utf-8')
-    cipher_suite = Fernet(key)
+# get decryption key from user
+passkey = getpass.getpass("\n\nEnter Passkey (For Training): ")
+key = passkey.encode('utf-8')
+cipher_suite = Fernet(key)
 
+try: 
     # decrypt the data
     try:
         with open(get_training_object_path(), 'rb') as file:
