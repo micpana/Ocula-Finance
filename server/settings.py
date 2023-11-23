@@ -246,6 +246,12 @@ def get_training_object_path():
 
     return path
 
+# encrypted prediction object path
+def get_prediction_object_path():
+    path = 'predict' + encrypted_code_files_extension()
+
+    return path
+
 # encrypted unknown object path
 def get_unknown_object_path():
     path = 'encrypted_code' + encrypted_code_files_extension()
