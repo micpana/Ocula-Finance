@@ -892,6 +892,7 @@ def editProfile():
     try: new_password = request.form['new_password'] 
     except: response = make_response('New password field required'); response.status = 400; return response
     if new_password != '' and new_password != None and is_password_structure_valid(new_password) == False: response = make_response('invalid password structure'); response.status = 400; return response
+    if new_password != '' and new_password != None and isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     # country
     try: country = request.form['country'] 
     except: response = make_response('Country field required'); response.status = 400; return response
@@ -1993,6 +1994,7 @@ def getPaymentList():
     # entered by
     try: entered_by = request.form['entered_by'] 
     except: response = make_response('Entered by field required'); response.status = 400; return response
+    if entered_by != '' and entered_by != None and isinstance(entered_by, str) == False: response = make_response('Entered by data type is invalid'); response.status = 400; return response
     # length of data received
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
