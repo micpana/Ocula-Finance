@@ -206,6 +206,9 @@ class NewPasswordOnRecovery extends Component{
                                                 value={this.state.password} onChange={this.HandleChange} type="password" 
                                             />
                                         </InputGroup>
+                                        <div style={{fontSize: '10px', fontWeight: 'bold'}}>
+                                            (8 characters at minimum, with at least 1: uppercase letter, lowercase letter, number, and special character)
+                                        </div>
                                         <InputErrors field_error_state={this.state.input_errors['password']} field_label='Password' />
                                         <br/>
                                     </Col>
