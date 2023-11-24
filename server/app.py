@@ -97,8 +97,14 @@ def check_user_access_token_validity(request_data, expected_user_role):
         # get user id
         user_id = token_details.user_id
 
+        # get user details
+        user = Users.objects.filter(id = user_id)[0]
+
         # get user role
-        user_role = Users.objects.filter(id = user_id)[0].role
+        user_role = user.role
+
+        # get user ban status
+        user_banned = user.banned
 
         # get current date and time
         current_datetime = str(datetime.now())
@@ -112,6 +118,9 @@ def check_user_access_token_validity(request_data, expected_user_role):
             access_token_status = 'access token expired'
         # check if user account's role matches expected user role
         elif user_role not in expected_user_role.split('/'): 
+            access_token_status = 'not authorized to access this'
+        # check if user has not been banned
+        elif user_banned == True:
             access_token_status = 'not authorized to access this'
         # if everything check out, set access token status to 'ok'
         else:
