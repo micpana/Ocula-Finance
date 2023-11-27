@@ -252,8 +252,15 @@ def get_prediction_object_path():
 
     return path
 
+# encrypted data object path
+def get_data_object_path():
+    path = 'data' + encrypted_code_files_extension()
+
+    return path
+
 # encrypted unknown object path
 def get_unknown_object_path():
     path = 'encrypted_code' + encrypted_code_files_extension()
 
     return path
+
