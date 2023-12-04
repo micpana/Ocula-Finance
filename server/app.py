@@ -258,6 +258,7 @@ def signup():
         unban_time = ''
     )
     account_details = user_details.save()
+    account_details.reload()
     account_id = account_details.id
 
     # get user browsing device information
@@ -282,6 +283,7 @@ def signup():
         expiry_date = token_expiration_date
     )
     verification_details = email_verification_details.save()
+    verification_details.reload()
     email_verification_token = verification_details.id
 
     # send user email verification
