@@ -1,12 +1,11 @@
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-import numpy as np
+import traceback
 
-ls_1 = [1, 2, 3, 4, 5 ,6, 7]
-ls_2 = [3, 4, 5, 6, 7, 8, 9]
+try:
+    # Your code that may raise an exception
+    result = 10 / 'a'
+except Exception as e:
+    # Print the type of exception and a custom message
+    print(f"An exception of type {type(e).__name__} occurred: {str(e)}")
 
-mae = mean_absolute_error(ls_1, ls_2)
-rmse = np.sqrt(mean_squared_error(ls_1, ls_2))
-mse = mean_squared_error(ls_1, ls_2)
-print(mae)
-print(rmse)
-print(mse)
+    # Print the traceback details
+    traceback.print_exc()
