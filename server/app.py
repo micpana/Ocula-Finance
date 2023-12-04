@@ -259,7 +259,6 @@ def signup():
     )
     user_details.save()
     account_id = str(user_details.id)
-    print(account_id)
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -283,7 +282,7 @@ def signup():
         expiry_date = token_expiration_date
     )
     email_verification_details.save()
-    email_verification_token = email_verification_details.id
+    email_verification_token = str(email_verification_details.id)
 
     # send user email verification
     send_registration_email_confirmation(
@@ -368,7 +367,7 @@ def signin():
             expiry_date = token_expiration_date
         )
         email_verification_details.save()
-        email_verification_token = email_verification_details.id
+        email_verification_token = str(email_verification_details.id)
 
         # send user email verification
         send_registration_email_confirmation(
@@ -622,7 +621,7 @@ def resendEmailVerification():
         expiry_date = token_expiration_date
     )
     email_verification_details.save()
-    email_verification_token = email_verification_details.id
+    email_verification_token = str(email_verification_details.id)
 
     # send user email verification
     send_registration_email_confirmation(
@@ -693,7 +692,7 @@ def correctRegistrationEmail():
         expiry_date = token_expiration_date
     )
     email_verification_details.save()
-    email_verification_token = email_verification_details.id
+    email_verification_token = str(email_verification_details.id)
 
     # send user email verification
     send_registration_email_confirmation(
@@ -766,7 +765,7 @@ def recoverPassword():
         expiry_date = token_expiration_date
     )
     password_recovery_details.save()
-    password_recovery_token = password_recovery_details.id
+    password_recovery_token = str(password_recovery_details.id)
 
     # send user's password recovery token
     send_password_recovery_email(
@@ -983,7 +982,7 @@ def editProfile():
             expiry_date = token_expiration_date
         )
         email_verification_details.save()
-        email_verification_token = email_verification_details.id
+        email_verification_token = str(email_verification_details.id)
 
         # send user email verification
         send_email_change_confirmation(
