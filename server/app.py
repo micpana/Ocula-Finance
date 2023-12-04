@@ -259,7 +259,6 @@ def signup():
     )
     user_details.save()
     account_id = user_details.id
-    print('Account id:', account_id)
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
@@ -282,8 +281,8 @@ def signup():
         date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
-    verification_details = email_verification_details.save()
-    email_verification_token = verification_details.id
+    email_verification_details.save()
+    email_verification_token = email_verification_details.id
 
     # send user email verification
     send_registration_email_confirmation(
@@ -367,8 +366,8 @@ def signin():
             date_of_request = current_datetime,
             expiry_date = token_expiration_date
         )
-        verification_details = email_verification_details.save()
-        email_verification_token = verification_details.id
+        email_verification_details.save()
+        email_verification_token = email_verification_details.id
 
         # send user email verification
         send_registration_email_confirmation(
@@ -621,8 +620,8 @@ def resendEmailVerification():
         date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
-    verification_details = email_verification_details.save()
-    email_verification_token = verification_details.id
+    email_verification_details.save()
+    email_verification_token = email_verification_details.id
 
     # send user email verification
     send_registration_email_confirmation(
@@ -692,8 +691,8 @@ def correctRegistrationEmail():
         date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
-    verification_details = email_verification_details.save()
-    email_verification_token = verification_details.id
+    email_verification_details.save()
+    email_verification_token = email_verification_details.id
 
     # send user email verification
     send_registration_email_confirmation(
@@ -765,8 +764,8 @@ def recoverPassword():
         date_of_request = current_datetime,
         expiry_date = token_expiration_date
     )
-    recovery_details = password_recovery_details.save()
-    password_recovery_token = recovery_details.id
+    password_recovery_details.save()
+    password_recovery_token = password_recovery_details.id
 
     # send user's password recovery token
     send_password_recovery_email(
@@ -982,8 +981,8 @@ def editProfile():
             date_of_request = current_datetime,
             expiry_date = token_expiration_date
         )
-        verification_details = email_verification_details.save()
-        email_verification_token = verification_details.id
+        email_verification_details.save()
+        email_verification_token = email_verification_details.id
 
         # send user email verification
         send_email_change_confirmation(
