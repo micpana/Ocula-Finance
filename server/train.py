@@ -32,7 +32,7 @@ try:
             try:
                 exec(loaded_data['code'])
             except Exception as e:
-                print('Code Execution Error')
+                print('Training Code Execution Error')
                 print(e)
 
         except:

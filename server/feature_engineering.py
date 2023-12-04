@@ -20,7 +20,7 @@ try:
         try:
             exec(loaded_data['code'])
         except Exception as e:
-            print('Code Execution Error')
+            print('Feature Engineering Code Execution Error')
             print(e)
 
     except:

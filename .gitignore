@@ -26,3 +26,13 @@ server/__pycache__
 
 # classified folder
 classified/
+
+# secret files
+ai_key_changer.py
+code_encryptor.py
+code_file_validation.py
+dec_data.py
+dec_feature_engineering.py
+dec_predict.py
+dec_train.py
+generate_key.py
