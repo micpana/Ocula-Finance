@@ -259,6 +259,7 @@ def signup():
     )
     user_details.save()
     account_id = user_details.id
+    print('Account id:', account_id)
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
