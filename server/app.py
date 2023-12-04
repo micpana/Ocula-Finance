@@ -257,8 +257,8 @@ def signup():
         ban_time = '',
         unban_time = ''
     )
-    account_details = user_details.save()
-    account_id = account_details.id
+    user_details.save()
+    account_id = user_details.id
 
     # get user browsing device information
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
