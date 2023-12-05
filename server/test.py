@@ -1,11 +1,23 @@
-import traceback
+# timezone conversion, bard solution ************************************
+from pytz import timezone
+from datetime import datetime, timedelta, date
+from settings import system_timezone
 
-try:
-    # Your code that may raise an exception
-    result = 10 / 'a'
-except Exception as e:
-    # Print the type of exception and a custom message
-    print(f"An exception of type {type(e).__name__} occurred: {str(e)}")
+utc_datetime = datetime.now(timezone('UTC'))
+est_datetime = utc_datetime.astimezone(timezone(system_timezone()))
 
-    # Print the traceback details
-    traceback.print_exc()
+print(utc_datetime)
+print(est_datetime)
+
+est_str = str(est_datetime)
+print(est_str)
+
+# date format
+date_format = '%Y-%m-%d %H:%M:%S.%f%z'
+
+new = datetime.strptime(est_str, date_format) + timedelta(days=2)
+print(new)
+
+current_day = date.today().isoweekday()
+
+print(current_day)

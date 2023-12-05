@@ -1,4 +1,5 @@
 from datetime import datetime
+from pytz import timezone
 
 # platform name
 def platform_name():
@@ -24,6 +25,12 @@ def database_selection():
     selection = 'mock'
 
     return selection
+
+# system timezone ... pytz compatible
+def system_timezone():
+    sys_timezone = 'Africa/Harare'
+
+    return sys_timezone
 
 # verification token expiration minutes
 def verification_token_expiration_minutes():
@@ -191,7 +198,7 @@ def universal_filename_append_string(timeframes, features_type, model_type, with
 
 # get training logs path
 def get_training_logs_path(symbol, timeframes, features_type, model_type):
-    path = 'logs/training logs/' + symbol + '-Training Log-' + str(datetime.now()) + universal_filename_append_string(timeframes, features_type, model_type, True)
+    path = 'logs/training logs/' + symbol + '-Training Log-' + str(datetime.now(timezone(system_timezone()))) + universal_filename_append_string(timeframes, features_type, model_type, True)
 
     return path
 
@@ -218,7 +225,7 @@ def get_models_checkpoints_path(symbol, timeframes, features_type, model_type):
 
 # get error logs path
 def get_error_logs_path(name):
-    path = 'logs/error logs/' + 'Log-' + name + '-' + str(datetime.now()) + '.txt'
+    path = 'logs/error logs/' + 'Log-' + name + '-' + str(datetime.now(timezone(system_timezone()))) + '.txt'
 
     return path
 

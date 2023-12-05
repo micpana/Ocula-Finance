@@ -4,12 +4,13 @@ from flask_cors import CORS, cross_origin
 from user_agents import parse
 import json
 import re
+from pytz import timezone
 from datetime import datetime, timedelta
 from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days
+from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
 
 # Flask stuff
 app = Flask(__name__)
@@ -106,7 +107,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         user_banned = user.banned
 
         # get current date and time
-        current_datetime = str(datetime.now())
+        current_datetime = str(datetime.now(timezone(system_timezone())))
 
         # get access token status ********************************
         # check if access token is still active
@@ -244,7 +245,7 @@ def signup():
         phonenumber = phonenumber,
         password = password,
         country = country,
-        date_of_registration = str(datetime.now()),
+        date_of_registration = str(datetime.now(timezone(system_timezone()))),
         verified = False,
         subscription_date = '',
         subscription_expiry = '',
@@ -264,7 +265,7 @@ def signup():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
@@ -316,7 +317,7 @@ def signin():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # calculate access token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(days = access_token_expiration_days())
@@ -510,7 +511,7 @@ def getUserVerificationEmailByUserId():
 
     # check if last verification token by user has expired
     last_user_token = EmailVerifications.objects.filter(account_id = account_id)[-1]
-    if str(datetime.now()) > last_user_token.expiry_date: response = make_response('redirect to signin'); response.status = 401; return response
+    if str(datetime.now(timezone(system_timezone()))) > last_user_token.expiry_date: response = make_response('redirect to signin'); response.status = 401; return response
     
     # get user email
     user_email = user.email
@@ -543,7 +544,7 @@ def verifyEmail():
     if match.used == True: response = make_response('used'); response.status = 409; return response
 
     # check if token has already expired
-    if str(datetime.now()) > match.expiry_date: response = make_response('expired'); response.status = 401; return response
+    if str(datetime.now(timezone(system_timezone()))) > match.expiry_date: response = make_response('expired'); response.status = 401; return response
 
     # get token purpose
     purpose = match.purpose
@@ -592,7 +593,7 @@ def resendEmailVerification():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
@@ -656,7 +657,7 @@ def correctRegistrationEmail():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
@@ -722,7 +723,7 @@ def recoverPassword():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
@@ -730,7 +731,7 @@ def recoverPassword():
     # get retry wait time in minutes
     retry_wait_minutes = token_send_on_user_request_retry_period_in_minutes()
     # date format
-    date_format = '%Y-%m-%d %H:%M:%S.%f'
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # search for account by email
     match = Users.objects.filter(email = email)
@@ -808,7 +809,7 @@ def setNewPassword():
     if match.used == True: response = make_response('used'); response.status = 409; return response
 
     # check if token has already expired
-    if str(datetime.now()) > match.expiry_date: response = make_response('expired'); response.status = 401; return response
+    if str(datetime.now(timezone(system_timezone()))) > match.expiry_date: response = make_response('expired'); response.status = 401; return response
 
     # encrypt submitted password
     password = encrypt_password(password)
@@ -830,7 +831,7 @@ def getUserDetailsByAccessToken():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # get user by user_id
@@ -852,7 +853,7 @@ def signout():
 
     # disable used access token
     token = UserAccessTokens.objects.filter(token = request.headers.get('access_token'))[0]
-    UserAccessTokens.objects(id = token.id).update(active = False, signout_date = str(datetime.now()))
+    UserAccessTokens.objects(id = token.id).update(active = False, signout_date = str(datetime.now(timezone(system_timezone()))))
 
     # return response
     response = make_response('ok'); response.status = 200; return response
@@ -911,7 +912,7 @@ def editProfile():
     user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request)
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # calculate verification token expiration date
     token_expiration_date_object = current_datetime_object + timedelta(minutes = verification_token_expiration_minutes())
@@ -949,7 +950,7 @@ def editProfile():
         # since password has been changed, log out all logged in devices for this user
         all_active_tokens = UserAccessTokens.objects.filter(user_id = user_id, active = True)
         signouts = [
-            UserAccessTokens.objects(id = i.id).update(active = False, signout_date = str(datetime.now()))
+            UserAccessTokens.objects(id = i.id).update(active = False, signout_date = str(datetime.now(timezone(system_timezone()))))
             for i in all_active_tokens if True
         ]
         return_string = return_string + ', password has been changed'
@@ -1105,11 +1106,11 @@ def getCurrentMarketAnalysis():
     if isinstance(symbol, str) == False: response = make_response('Symbol data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # date format
-    date_format = '%Y-%m-%d %H:%M:%S.%f'
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # administration exceptions
     administration_exceptions = ['admin']
@@ -1152,7 +1153,7 @@ def getAllUsers():
     if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # get user list
@@ -1238,7 +1239,7 @@ def getNewUserRegistrationStatistics():
     # start and end days if they were'nt given on as input
     if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
         start_date = all_users[0]['date_of_registration'][0:10] # start with first user's registration date in format yyyy-mm-dd
-        end_date = str(datetime.now())[0:10]
+        end_date = str(datetime.now(timezone(system_timezone())))[0:10]
 
     # date format
     date_format = '%Y-%m-%d'
@@ -1298,7 +1299,7 @@ def getNewSubscribedUserCountStatistics():
     # start and end days if they were'nt given on as input
     if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
         start_date = all_subscriptions[0]['date'][0:10] # start with first subscription's date in format yyyy-mm-dd
-        end_date = str(datetime.now())[0:10]
+        end_date = str(datetime.now(timezone(system_timezone())))[0:10]
 
     # date format
     date_format = '%Y-%m-%d'
@@ -1409,7 +1410,7 @@ def searchForUser():
     if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # get user list
@@ -1485,7 +1486,7 @@ def getUserCount():
     # start and end days if they were'nt given on as input
     if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
         start_date = all_users[0]['date_of_registration'][0:10] # start with first user's registration date in format yyyy-mm-dd
-        end_date = str(datetime.now())[0:10]
+        end_date = str(datetime.now(timezone(system_timezone())))[0:10]
 
     # date format
     date_format = '%Y-%m-%d'
@@ -1545,7 +1546,7 @@ def getUserSubscriptionStatistics():
     # start and end days if they were'nt given on as input
     if (start_date == '' or start_date == None) or (end_date == '' or end_date == None):
         start_date = all_subscriptions[0]['date'][0:10] # start with first subscription's date in format yyyy-mm-dd
-        end_date = str(datetime.now())[0:10]
+        end_date = str(datetime.now(timezone(system_timezone())))[0:10]
 
     # date format
     date_format = '%Y-%m-%d'
@@ -1584,7 +1585,7 @@ def getUserMetrics():
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # get user list
@@ -1632,7 +1633,7 @@ def banUser():
     if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # check if admin password is correct
@@ -1680,7 +1681,7 @@ def unbanUser():
     if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # check if admin password is correct
@@ -1733,7 +1734,7 @@ def changeUserRole():
     if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
         
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # check if admin password is correct
@@ -1811,10 +1812,10 @@ def manuallyEnterUserPayment():
     if isinstance(password, str) == False: response = make_response('Password data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
     # date format
-    date_format = '%Y-%m-%d %H:%M:%S.%f'
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # check if admin password is correct
     admin = Users.objects.filter(id = user_id)[0]
@@ -2016,7 +2017,7 @@ def getPaymentList():
     if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
-    current_datetime_object = datetime.now()
+    current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
 
     # get all payments
