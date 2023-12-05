@@ -510,7 +510,8 @@ def getUserVerificationEmailByUserId():
     if user.verified == True: response = make_response('already verified'); response.status = 409; return response
 
     # check if last verification token by user has expired
-    last_user_token = EmailVerifications.objects.filter(account_id = account_id)[-1]
+    tokens_by_user = EmailVerifications.objects.filter(account_id = account_id)
+    last_user_token = tokens_by_user[len(tokens_by_user)-1]
     if str(datetime.now(timezone(system_timezone()))) > last_user_token.expiry_date: response = make_response('redirect to signin'); response.status = 401; return response
     
     # get user email
@@ -745,7 +746,7 @@ def recoverPassword():
     recovery_requests = PasswordRecoveries.objects.filter(email = email, used = False)
     if len(recovery_requests) > 0:
         # get last request's time
-        request_datetime = recovery_requests[-1].date_of_request
+        request_datetime = recovery_requests[len(recovery_requests)-1].date_of_request
         # calculate end-datetime for waiting period
         retry_wait_ending_time_object = datetime.strptime(request_datetime, date_format) + timedelta(minutes = retry_wait_minutes)
         # check if last request was made outside of the retry wait period 
@@ -1126,7 +1127,8 @@ def getCurrentMarketAnalysis():
             response = make_response('not subscribed'); response.status = 403; return response
 
     # proceed to get current market analysis ... ie last analysis entry
-    current_market_analysis = MarketAnalysis.objects.filter(symbol = symbol)[-1]
+    market_analysis = MarketAnalysis.objects.filter(symbol = symbol)
+    current_market_analysis = market_analysis[len(market_analysis)-1]
 
     # return current market analysis
     response = make_response(current_market_analysis.to_json()); response.status = 200; return response
