@@ -1,5 +1,6 @@
 from models import Users
 from mongoengine import connect
+from mongomock import MongoClient
 import dns
 import urllib
 from encryption import encrypt_password, verify_encrypted_password
@@ -21,9 +22,9 @@ selected_database = database_selection()
 
 if selected_database == 'mock':
     # mock db connection
-    client = MongoClient(mongo_client_class=mongomock.MongoClient, db_name="ocula-finance-mock")
+    client = MongoClient(mongo_client_class=MongoClient, db_name="ocula-finance-mock")
     port = client.address[1]
-    connect(host=f"localhost:{port}", mongo_client_class=mongomock.MongoClient)
+    connect(host=f"localhost:{port}", mongo_client_class=MongoClient)
 elif selected_database == 'test':
     # test db connection
     connect_url = 'mongodb://'+test_db_username+':'+test_db_password+'@localhost:27017/ocula-finance-test'

@@ -1,15 +1,14 @@
 from models import Users
 from mongoengine import connect
 from mongomock import MongoClient
-import mongomock
 from pytz import timezone
 from datetime import datetime, timedelta
 
 # connect to db
-client = MongoClient(mongo_client_class=mongomock.MongoClient, db_name="ocula-finance-test")
+client = MongoClient(mongo_client_class=MongoClient, db_name="ocula-finance-test")
 port = client.address[1]
-print('Host:', client.address, '| Port:', port, '| Client Class:', mongomock.MongoClient)
-connect(host=f"localhost:{port}", mongo_client_class=mongomock.MongoClient)
+print('Host:', client.address, '| Port:', port, '| Client Class:', MongoClient)
+connect(host=f"localhost:{port}", mongo_client_class=MongoClient)
 
 # add items to db
 user_details = Users(
