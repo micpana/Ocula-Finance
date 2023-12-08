@@ -21,7 +21,9 @@ selected_database = database_selection()
 
 if selected_database == 'mock':
     # mock db connection
-    connect('ocula-finance-test', host='mongomock://localhost', alias='default')
+    client = MongoClient(mongo_client_class=mongomock.MongoClient, db_name="ocula-finance-mock")
+    port = client.address[1]
+    connect(host=f"localhost:{port}", mongo_client_class=mongomock.MongoClient)
 elif selected_database == 'test':
     # test db connection
     connect_url = 'mongodb://'+test_db_username+':'+test_db_password+'@localhost:27017/ocula-finance-test'
