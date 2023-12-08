@@ -128,8 +128,8 @@ class Signin extends Component{
                     const { cookies } = this.props;
                     cookies.set(Access_Token_Cookie_Name, user_access_token, { 
                         path: '/',
-                        sameSite: true,
-                        httpOnly: true
+                        // sameSite: true,
+                        // httpOnly: true
                     })
                     // redirect to user dashboard
                     let port = (window.location.port ? ':' + window.location.port : '')
