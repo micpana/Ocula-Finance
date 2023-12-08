@@ -76,7 +76,7 @@ def save_login_trials(account_id, email, username, firstname, lastname, device, 
                 user_os, 
                 device, 
                 ip_address, 
-                user_browser
+                browser
             ) # inputs: user_email, username, firstname, lastname, date_and_time, user_os, user_device, user_ip_address, user_browser
 
     return 'ok'
