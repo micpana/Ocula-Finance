@@ -44,7 +44,7 @@ def information_on_user_browsing_device(request_data):
 # function for saving login trials
 def save_login_trials(account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description):
     trial_details = LoginTrials(
-        account_id = account_id,
+        account_id = str(account_id),
         email = email,
         device = device,
         os = user_os,
@@ -358,7 +358,7 @@ def signin():
 
         # create email verification token
         email_verification_details = EmailVerifications(
-            account_id = match.id,
+            account_id = str(match.id),
             email = match.email,
             purpose = 'registration email', # registration email / email change 
             used = False,
@@ -449,7 +449,7 @@ def signin():
 
     # save access token details and modify original token
     token_details = UserAccessTokens(
-        user_id = match.id,
+        user_id = str(match.id),
         token = generated_access_token,
         active = True,
         signin_date = current_datetime,
@@ -462,8 +462,8 @@ def signin():
         last_used_on_date = current_datetime,
         expiry_date = token_expiration_date
     )
-    saved_token_details = token_details.save()
-    token_id = saved_token_details.id
+    token_details.save()
+    token_id = str(token_details.id)
     user_access_token = generated_access_token + '.' + token_id + '.' + current_datetime.replace('-', '').replace(':', '').replace('.', '').replace(' ', '')[::-1]
     UserAccessTokens.objects(id = token_id).update(token = user_access_token)
 
@@ -758,7 +758,7 @@ def recoverPassword():
 
     # proceed to create password recovery token
     password_recovery_details = PasswordRecoveries(
-        account_id = account.id,
+        account_id = str(account.id),
         email = email,
         used = False,
         device = user_device,
