@@ -11,8 +11,8 @@ passlib==1.7.4
 pyyaml==5.1.1
 ua-parser==0.18.0
 user-agents==2.2.0
-mongoengine==0.18.2
-mongomock==3.18.0
+mongoengine==0.27.0
+mongomock==4.1.2
 pymongo==3.10.1
 dnspython==2.0.0
 MetaTrader5
