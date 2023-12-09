@@ -132,7 +132,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
             access_token_status = 'ok'
 
         # show that access token was last used now
-        AccessTokens.objects(id = token_details.id).update(last_used_on_date = current_datetime)
+        UserAccessTokens.objects(id = token_details.id).update(last_used_on_date = current_datetime)
 
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
