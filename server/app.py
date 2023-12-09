@@ -22,7 +22,6 @@ app.debug = True
 # Cross Origin Stuff *******************
 # headers that have to be allowed
 app.config['CORS_HEADERS'] = ['Content-Type', 'Access-Control-Allow-Origin', 'Access-Token']
-# app.config['CORS_HEADERS'] = '*'
 # resources (endpoints) and expected request origins
 app.config['CORS_RESOURCES'] = {r"/*": {"origins": "*"}}
 # enables Cross-Origin Resource Sharing
@@ -90,8 +89,6 @@ def check_user_access_token_validity(request_data, expected_user_role):
     try:
         # get user access token
         user_access_token = request_data.headers.get('Access-Token')
-        print('Token:', user_access_token)
-        print('Headers:\n', request_data.headers)
 
         # get information on user's browsing device
         user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request_data)
@@ -101,14 +98,12 @@ def check_user_access_token_validity(request_data, expected_user_role):
             token = user_access_token, 
             user_browsing_agent = user_browsing_agent
         )[0]
-        print('Token details:\n', token_details.to_json())
 
         # get user id
         user_id = token_details.user_id
 
         # get user details
         user = Users.objects.filter(id = user_id)[0]
-        print('User:\n', user.to_json())
 
         # get user role
         user_role = user.role
@@ -1153,7 +1148,7 @@ def getCurrentMarketAnalysis():
             response = make_response('not subscribed'); response.status = 403; return response
 
     # proceed to get current market analysis ... ie last analysis entry
-    market_analysis = MarketAnalysis.objects.filter(symbol = symbol)
+    market_analysis = MarketAnalysis.objects.filter(asset = symbol)
     if len(market_analysis) > 0:
         current_market_analysis = market_analysis[len(market_analysis)-1]
         current_market_analysis_json = current_market_analysis.to_json()
