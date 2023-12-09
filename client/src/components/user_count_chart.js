@@ -109,7 +109,7 @@ class UserCountChart extends Component{
             data.append('end_date', this.state.end_date)
             data.append('category', this.state.category)
 
-            axios.post(Backend_Server_Address + 'getUserCountStatistics', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserCountStatistics', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user count statistics to state

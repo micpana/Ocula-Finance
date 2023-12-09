@@ -99,7 +99,7 @@ class UserCountryRanking extends Component{
             this.LoadingOn()
             this.NetworkErrorScreenOff()
 
-            axios.post(Backend_Server_Address + 'getUserCountryRanking', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserCountryRanking', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user country ranking to state

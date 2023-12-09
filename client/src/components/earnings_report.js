@@ -107,7 +107,7 @@ class EarningsReport extends Component{
             data.append('start_date', this.state.start_date)
             data.append('end_date', this.state.end_date)
 
-            axios.post(Backend_Server_Address + 'getEarningsReport', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getEarningsReport', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set earnings report to state

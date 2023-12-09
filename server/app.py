@@ -21,8 +21,7 @@ app.debug = True
 
 # Cross Origin Stuff *******************
 # headers that have to be allowed
-# app.config['CORS_HEADERS'] = ['Content-Type', 'Access-Control-Allow-Origin', 'access_token']
-app.config['CORS_HEADERS'] = '*'
+app.config['CORS_HEADERS'] = ['Content-Type', 'Access-Control-Allow-Origin', 'Access-Token']
 # resources (endpoints) and expected request origins
 app.config['CORS_RESOURCES'] = {r"/*": {"origins": "*"}}
 # enables Cross-Origin Resource Sharing
@@ -98,15 +97,10 @@ def check_user_access_token_validity(request_data, expected_user_role):
         token_details = UserAccessTokens.objects.filter(
             token = user_access_token, 
             user_browsing_agent = user_browsing_agent
-        )
-        print(token_details)
-        print(user_access_token)
-        print(user_browsing_agent)
-        print(request_data.headers)
-        print(dict(request_data.headers))
+        )[0]
 
         # get user id
-        user_id = token_details[0].user_id
+        user_id = token_details.user_id
 
         # get user details
         user = Users.objects.filter(id = user_id)[0]

@@ -123,7 +123,7 @@ class AllUsers extends Component{
             data.append('length_of_data_received', this.state.all_users.length)
             data.append('get_all', get_all) // bool
 
-            axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set users to state, also set showing search results to false => so that we know users showing are not from a search
@@ -178,7 +178,7 @@ class AllUsers extends Component{
             data.append('length_of_data_received', this.state.user_payments.length)
             data.append('get_all', get_all) // bool
 
-            axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user payments to state and switch to user payments screen
@@ -241,7 +241,7 @@ class AllUsers extends Component{
                 data.append('length_of_data_received', this.state.all_users.length)
                 data.append('get_all', get_all) // bool
 
-                axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // set user results to state, also set showing search results to true => so that we know users showing are from a search
@@ -288,7 +288,7 @@ class AllUsers extends Component{
             this.LoadingOn()
             this.NetworkErrorScreenOff()
 
-            axios.post(Backend_Server_Address + 'getUserMetrics', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserMetrics', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set users to state
@@ -352,7 +352,7 @@ class AllUsers extends Component{
                 data.append('ban_reason', this.state.ban_reason)
                 data.append('password', this.state.password)
 
-                axios.post(Backend_Server_Address + 'banUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                axios.post(Backend_Server_Address + 'banUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // clear password and ban reason in state
@@ -434,7 +434,7 @@ class AllUsers extends Component{
                 data.append('account_id', this.state.user._id.$oid)
                 data.append('password', this.state.password)
 
-                axios.post(Backend_Server_Address + 'unbanUser', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                axios.post(Backend_Server_Address + 'unbanUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // clear password in state
@@ -517,7 +517,7 @@ class AllUsers extends Component{
                 data.append('new_role', this.state.new_role)
                 data.append('password', this.state.password)
 
-                axios.post(Backend_Server_Address + 'changeUserRole', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                axios.post(Backend_Server_Address + 'changeUserRole', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // clear password and new_role in state
@@ -615,7 +615,7 @@ class AllUsers extends Component{
                 data.append('amount', this.state.amount)
                 data.append('password', this.state.password)
 
-                axios.post(Backend_Server_Address + 'manuallyEnterUserPayment', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                axios.post(Backend_Server_Address + 'manuallyEnterUserPayment', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // clear request related data in state... alse set screen to 'user', so that payments have to be reloaded to view them again

@@ -123,7 +123,7 @@ class Settings extends Component{
             this.LoadingOn()
             this.NetworkErrorScreenOff()
 
-            axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user details to state
@@ -222,7 +222,7 @@ class Settings extends Component{
                 data.append('new_password', this.state.new_password)
                 data.append('country', this.state.country)
 
-                axios.post(Backend_Server_Address + 'editProfile', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+                axios.post(Backend_Server_Address + 'editProfile', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // clear password fields

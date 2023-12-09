@@ -112,7 +112,7 @@ class PaymentsList extends Component{
             data.append('length_of_data_received', this.state.payments_list.length)
             data.append('get_all', get_all) // bool
 
-            axios.post(Backend_Server_Address + 'getPaymentsList', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getPaymentsList', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set payments list to state
