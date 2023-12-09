@@ -143,10 +143,10 @@ class Analysis extends Component{
                         result === 'invalid token'
                     ){ 
                         // delete token from user cookies
-                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
-                        // redirect to sign in
-                        let port = (window.location.port ? ':' + window.location.port : '');
-                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                        // cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // // redirect to sign in
+                        // let port = (window.location.port ? ':' + window.location.port : '');
+                        // window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else if (result === 'not subscribed'){
                         this.setState({user_subscribed: false})
                     }else{
