@@ -1041,10 +1041,11 @@ def getUserPaymentHistory():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    print(get_all)
     try: get_all = ast.literal_eval(get_all)
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     print(length_of_data_received, get_all)
-    
+
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
     user_payment_history = json.loads(user_payment_history.to_json())
