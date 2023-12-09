@@ -124,7 +124,7 @@ class Analysis extends Component{
             var data = new FormData()
             data.append('symbol', symbol)
 
-            axios.post(Backend_Server_Address + 'getCurrentMarketAnalysis', data, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getCurrentMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set current market analysis to state
