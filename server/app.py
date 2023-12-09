@@ -1042,7 +1042,7 @@ def getUserPaymentHistory():
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
     print(get_all)
-    try: get_all = ast.literal_eval(get_all)
+    try: get_all = ast.literal_eval(str(get_all).capitalize())
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     print(length_of_data_received, get_all)
 
@@ -1184,7 +1184,7 @@ def getAllUsers():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    try: get_all = ast.literal_eval(get_all)
+    try: get_all = ast.literal_eval(str(get_all).capitalize())
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
@@ -1388,7 +1388,7 @@ def getUserPaymentHistoryByAccountId():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    try: get_all = ast.literal_eval(get_all)
+    try: get_all = ast.literal_eval(str(get_all).capitalize())
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # collect payment history by user_id
@@ -1445,7 +1445,7 @@ def searchForUser():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    try: get_all = ast.literal_eval(get_all)
+    try: get_all = ast.literal_eval(str(get_all).capitalize())
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
@@ -2058,7 +2058,7 @@ def getPaymentsList():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    try: get_all = ast.literal_eval(get_all)
+    try: get_all = ast.literal_eval(str(get_all).capitalize())
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
