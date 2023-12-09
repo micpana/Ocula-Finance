@@ -19,11 +19,12 @@ from settings import frontend_client_url, verification_token_expiration_minutes,
 app = Flask(__name__)
 app.debug = True
 
-# Cross Origin Stuff
-app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
-app.config['CORS_HEADERS'] = 'access_token'
-# app.config['CORS_RESOURCES'] = {r"/*": {"origins": "*"}}
+# Cross Origin Stuff *******************
+# headers that have to be allowed
+app.config['CORS_HEADERS'] = ['Content-Type', 'Access-Control-Allow-Origin', 'access_token']
+# resources (endpoints) and expected request origins
+app.config['CORS_RESOURCES'] = {r"/*": {"origins": "*"}}
+# enables Cross-Origin Resource Sharing
 cors = CORS(app)
 
 # frontend url
