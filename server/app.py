@@ -7,6 +7,7 @@ import re
 import random
 import string
 import traceback
+import ast
 from pytz import timezone
 from datetime import datetime, timedelta
 from database import init_db
@@ -1040,8 +1041,9 @@ def getUserPaymentHistory():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
-    
+    try: get_all = ast.literal_eval(get_all)
+    except: response = make_response('Get all data type is invalid'); response.status = 400; return response
+
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
     user_payment_history = json.loads(user_payment_history.to_json())
@@ -1180,7 +1182,8 @@ def getAllUsers():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    try: get_all = ast.literal_eval(get_all)
+    except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
@@ -1383,7 +1386,8 @@ def getUserPaymentHistoryByAccountId():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    try: get_all = ast.literal_eval(get_all)
+    except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = account_id)
@@ -1439,7 +1443,8 @@ def searchForUser():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    try: get_all = ast.literal_eval(get_all)
+    except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
@@ -2051,7 +2056,8 @@ def getPaymentsList():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    if isinstance(get_all, bool) == False: response = make_response('Get all data type is invalid'); response.status = 400; return response
+    try: get_all = ast.literal_eval(get_all)
+    except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
