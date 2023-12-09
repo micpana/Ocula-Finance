@@ -1033,7 +1033,8 @@ def getUserPaymentHistory():
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
-    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
+    try: length_of_data_received = int(length_of_data_received)
+    except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
@@ -1172,7 +1173,8 @@ def getAllUsers():
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
-    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
+    try: length_of_data_received = int(length_of_data_received)
+    except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
@@ -1374,7 +1376,8 @@ def getUserPaymentHistoryByAccountId():
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
-    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
+    try: length_of_data_received = int(length_of_data_received)
+    except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
@@ -1429,7 +1432,8 @@ def searchForUser():
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
-    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
+    try: length_of_data_received = int(length_of_data_received)
+    except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
@@ -1827,12 +1831,14 @@ def manuallyEnterUserPayment():
     try: discount_applied = request.form['discount_applied']
     except: response = make_response('Discount applied field required'); response.status = 400; return response
     if discount_applied == '' or discount_applied == None: response = make_response('Discount applied cannot be empty'); response.status = 400; return response
-    if isinstance(discount_applied, int) == False and isinstance(discount_applied, float) == False: response = make_response('Discount data type is invalid'); response.status = 400; return response
+    try: discount_applied = float(discount_applied)
+    except: response = make_response('Discount data type is invalid'); response.status = 400; return response
     # amount
     try: amount = request.form['amount']
     except: response = make_response('Amount field required'); response.status = 400; return response
     if amount == '' or amount == None: response = make_response('Amount cannot be empty'); response.status = 400; return response
-    if isinstance(amount, int) == False and isinstance(amount, float) == False: response = make_response('Amount data type is invalid'); response.status = 400; return response
+    try: amount = float(amount)
+    except: response = make_response('Amount data type is invalid'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
@@ -2036,7 +2042,8 @@ def getPaymentsList():
     try: length_of_data_received = request.form['length_of_data_received'] 
     except: response = make_response('Length of data received field required'); response.status = 400; return response
     if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
-    if isinstance(length_of_data_received, int) == False: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
+    try: length_of_data_received = int(length_of_data_received)
+    except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 

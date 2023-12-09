@@ -106,7 +106,7 @@ class PastPayments extends Component{
             var data = new FormData()
             data.append('start_date', this.state.start_date)
             data.append('end_date', this.state.end_date)
-            data.append('length_of_data_received', Math.floor(this.state.past_payments.length))
+            data.append('length_of_data_received', this.state.past_payments.length)
             data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getUserPaymentHistory', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })

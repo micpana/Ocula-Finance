@@ -120,7 +120,7 @@ class AllUsers extends Component{
             this.NetworkErrorScreenOff()
 
             var data = new FormData()
-            data.append('length_of_data_received', Math.floor(this.state.all_users.length))
+            data.append('length_of_data_received', this.state.all_users.length)
             data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
@@ -175,7 +175,7 @@ class AllUsers extends Component{
             
             var data = new FormData()
             data.append('account_id', user_id)
-            data.append('length_of_data_received', Math.floor(this.state.user_payments.length))
+            data.append('length_of_data_received', this.state.user_payments.length)
             data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
@@ -238,7 +238,7 @@ class AllUsers extends Component{
 
                 var data = new FormData()
                 data.append('search_query', this.state.search_query)
-                data.append('length_of_data_received', Math.floor(this.state.all_users.length))
+                data.append('length_of_data_received', this.state.all_users.length)
                 data.append('get_all', get_all) // bool
 
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
