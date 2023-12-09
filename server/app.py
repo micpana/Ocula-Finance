@@ -93,8 +93,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         
         # check token's validity while trying to retrieve the user's system id
         token_details = UserAccessTokens.objects.filter(
-            token = user_access_token, 
-            user_browsing_agent = user_browsing_agent
+            token = user_access_token
         )[0]
 
         # get user id
