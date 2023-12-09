@@ -133,7 +133,13 @@ def check_user_access_token_validity(request_data, expected_user_role):
 
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
-    except:
+    except Exception as e:
+        # print the type of exception and a custom message
+        print(f"An exception of type {type(e).__name__} occurred: {str(e)}")
+
+        # print the traceback details
+        traceback.print_exc()
+        
         return 'invalid token', None, None
 
 # email structure validation
