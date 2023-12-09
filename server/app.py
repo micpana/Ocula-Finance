@@ -1833,12 +1833,14 @@ def manuallyEnterUserPayment():
     if discount_applied == '' or discount_applied == None: response = make_response('Discount applied cannot be empty'); response.status = 400; return response
     try: discount_applied = float(discount_applied)
     except: response = make_response('Discount data type is invalid'); response.status = 400; return response
+    if discount_applied < 0: response = make_response('Discount applied cannot be less than 0'); response.status = 400; return response
     # amount
     try: amount = request.form['amount']
     except: response = make_response('Amount field required'); response.status = 400; return response
     if amount == '' or amount == None: response = make_response('Amount cannot be empty'); response.status = 400; return response
     try: amount = float(amount)
     except: response = make_response('Amount data type is invalid'); response.status = 400; return response
+    if amount < 0: response = make_response('Amount cannot be less than 0'); response.status = 400; return response
     # password
     try: password = request.form['password'] 
     except: response = make_response('Password field required'); response.status = 400; return response
