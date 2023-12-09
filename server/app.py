@@ -124,7 +124,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         # check if user has not been banned
         elif user_banned == True:
             access_token_status = 'not authorized to access this'
-        # if everything check out, set access token status to 'ok'
+        # if everything checks out, set access token status to 'ok'
         else:
             access_token_status = 'ok'
 
@@ -134,7 +134,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
     except:
-        return 'invalid token', None
+        return 'invalid token', None, None
 
 # email structure validation
 def is_email_structure_valid(email):
