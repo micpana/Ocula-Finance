@@ -844,7 +844,7 @@ def setNewPassword():
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
@@ -1024,7 +1024,7 @@ def editProfile():
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
