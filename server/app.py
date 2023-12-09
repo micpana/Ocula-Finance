@@ -22,6 +22,7 @@ app.debug = True
 # Cross Origin Stuff
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['CORS_HEADERS'] = 'Access-Control-Allow-Origin'
+app.config['CORS_HEADERS'] = 'access_token'
 # app.config['CORS_RESOURCES'] = {r"/*": {"origins": "*"}}
 cors = CORS(app)
 
