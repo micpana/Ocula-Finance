@@ -99,6 +99,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         print(token_details)
         print(user_access_token)
         print(user_browsing_agent)
+        print(request_data.headers)
 
         # get user id
         user_id = token_details[0].user_id
