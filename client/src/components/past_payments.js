@@ -109,7 +109,7 @@ class PastPayments extends Component{
             data.append('length_of_data_received', this.state.past_payments.length)
             data.append('get_all', get_all) // bool
 
-            axios.post(Backend_Server_Address + 'getUserPaymentHistory', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserPaymentHistory', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set past payments to state
