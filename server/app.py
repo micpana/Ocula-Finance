@@ -95,10 +95,13 @@ def check_user_access_token_validity(request_data, expected_user_role):
         token_details = UserAccessTokens.objects.filter(
             token = user_access_token, 
             user_browsing_agent = user_browsing_agent
-        )[0]
+        )
+        print(token_details)
+        print(user_access_token)
+        print(user_browsing_agent)
 
         # get user id
-        user_id = token_details.user_id
+        user_id = token_details[0].user_id
 
         # get user details
         user = Users.objects.filter(id = user_id)[0]
