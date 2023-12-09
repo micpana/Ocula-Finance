@@ -1,5 +1,6 @@
 import getpass
 import pickle
+import traceback
 from cryptography.fernet import Fernet
 from settings import get_prediction_object_path
 

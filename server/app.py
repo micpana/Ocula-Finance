@@ -6,6 +6,7 @@ import json
 import re
 import random
 import string
+import traceback
 from pytz import timezone
 from datetime import datetime, timedelta
 from database import init_db
@@ -139,7 +140,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
 
         # print the traceback details
         traceback.print_exc()
-        
+
         return 'invalid token', None, None
 
 # email structure validation

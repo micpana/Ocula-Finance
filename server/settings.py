@@ -22,7 +22,7 @@ def sending_emails_via():
 
 # database selection ... mock / test / live
 def database_selection():
-    selection = 'mock'
+    selection = 'live'
 
     return selection
 

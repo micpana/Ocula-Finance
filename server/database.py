@@ -27,11 +27,11 @@ if selected_database == 'mock':
     connect(host=f"localhost:{port}", mongo_client_class=MongoClient)
 elif selected_database == 'test':
     # test db connection
-    connect_url = 'mongodb://'+test_db_username+':'+test_db_password+'@localhost:27017/ocula-finance-test'
+    connect_url = 'mongodb://'+test_db_username+':'+urllib.parse.quote(test_db_password)+'@localhost:27017/ocula-finance-test'
     connect(host=connection_url)
 elif selected_database == 'live':
     # live db connection
-    connect_url = 'mongodb+srv://'+live_db_username+':'+live_db_password+live_db_url
+    connect_url = 'mongodb+srv://'+live_db_username+':'+urllib.parse.quote(live_db_password)+live_db_url
     connect(host=connect_url, ssl=True, ssl_cert_reqs='CERT_NONE')
 else:
     print('UNKNOWN DATABASE SELECTION:', selected_database)
