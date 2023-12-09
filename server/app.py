@@ -49,23 +49,10 @@ def information_on_user_browsing_device(request_data):
 
 # function for saving login trials
 def save_login_trials(account_id, email, username, firstname, lastname, device, user_os, browser, ip_address, date_and_time, successful, description):
-    trial_details = LoginTrials(
-        account_id = str(account_id),
-        email = email,
-        device = device,
-        os = user_os,
-        browser = browser,
-        ip_address = ip_address,
-        date_and_time = date_and_time,
-        successful = successful,
-        description = description # not registered / not verified / incorrect details / banned / authenticated
-    )
-    trial_details.save()
-    
     # if login trial was a success + device is a new login device by user, notify user via email
     if successful == True:
         # check if user has used the device before
-        matches = LoginTrials.objects.filter(account_id = str(account_id), device = device, os = user_os, browser = browser)
+        matches = LoginTrials.objects.filter(account_id = str(account_id), device = device, os = user_os, browser = browser, successful = True)
         if len(matches) > 0: used_before = True 
         else: used_before = False
 
@@ -83,6 +70,21 @@ def save_login_trials(account_id, email, username, firstname, lastname, device, 
                 browser
             ) # inputs: user_email, username, firstname, lastname, date_and_time, user_os, user_device, user_ip_address, user_browser
 
+    # save login trial
+    trial_details = LoginTrials(
+        account_id = str(account_id),
+        email = email,
+        device = device,
+        os = user_os,
+        browser = browser,
+        ip_address = ip_address,
+        date_and_time = date_and_time,
+        successful = successful,
+        description = description # not registered / not verified / incorrect details / banned / authenticated
+    )
+    trial_details.save()
+    
+    
     return 'ok'
 
 # function for checking a user access token's validity
@@ -965,7 +967,7 @@ def editProfile():
         # since password has been changed, log out all logged in devices for this user
         all_active_tokens = UserAccessTokens.objects.filter(user_id = user_id, active = True)
         signouts = [
-            UserAccessTokens.objects(id = i.id).update(active = False, signout_date = str(datetime.now(timezone(system_timezone()))))
+            UserAccessTokens.objects(id = str(i.id)).update(active = False, signout_date = str(datetime.now(timezone(system_timezone()))))
             for i in all_active_tokens if True
         ]
         return_string = return_string + ', password has been changed'
