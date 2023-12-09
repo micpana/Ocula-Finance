@@ -1,12 +1,7 @@
-import traceback
+date1 = '2023/12/23 15:36'
+date2 = ''
 
-try:
-    exec(loaded_data['code'])
-except Exception as e:
-    print('Prediction Code Execution Error')
-
-    # print the type of exception and a custom message
-    print(f"An exception of type {type(e).__name__} occurred: {str(e)}")
-
-    # print the traceback details
-    traceback.print_exc()
+if date1 > date2:
+    print('yes')
+else:
+    print('no')

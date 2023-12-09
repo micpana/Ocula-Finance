@@ -1129,20 +1129,33 @@ def getCurrentMarketAnalysis():
 
     # exempt administration exceptions from subscription checks
     if user_role not in administration_exceptions:
-        # user subscription test
+        # user subscription test *****************************
+        # get user details
         user = Users.objects.filter(id = user_id)[0]
+        # user registration date
         user_registration_date = user.date_of_registration
+        # user subscription expiry date
         user_subscription_expiration_date = user.subscription_expiry
+        # user free trial expiration date
         user_free_trial_expiration_date = datetime.strptime(user_registration_date, date_format) + timedelta(days=get_number_of_free_trial_days())
-        if current_datetime > user_subscription_expiration_date or current_datetime > user_free_trial_expiration_date: 
+        # user subscription check using dates
+        if (
+            (user_subscription_expiration_date != '' and current_datetime > user_subscription_expiration_date) or 
+            current_datetime > str(user_free_trial_expiration_date)
+        ): 
             response = make_response('not subscribed'); response.status = 403; return response
 
     # proceed to get current market analysis ... ie last analysis entry
     market_analysis = MarketAnalysis.objects.filter(symbol = symbol)
-    current_market_analysis = market_analysis[len(market_analysis)-1]
+    if len(market_analysis) > 0:
+        current_market_analysis = market_analysis[len(market_analysis)-1]
+        current_market_analysis_json = current_market_analysis.to_json()
+    else:
+        current_market_analysis = {}
+        current_market_analysis_json = jsonify(current_market_analysis)
 
     # return current market analysis
-    response = make_response(current_market_analysis.to_json()); response.status = 200; return response
+    response = make_response(current_market_analysis_json); response.status = 200; return response
 
 # admin functions *****************************************************************************************************
 # 13
