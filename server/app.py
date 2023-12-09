@@ -1041,10 +1041,8 @@ def getUserPaymentHistory():
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
     if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
-    print(get_all)
     try: get_all = ast.literal_eval(str(get_all).capitalize())
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
-    print(length_of_data_received, get_all)
 
     # collect payment history by user_id
     user_payment_history = Payments.objects.filter(user_id = user_id)
@@ -1288,6 +1286,10 @@ def getNewUserRegistrationStatistics():
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
     date_difference_in_days = date_difference_in_days.days
+
+    # if date difference is 0 days, change it to 1
+    if date_difference_in_days == 0:
+        date_difference_in_days = 1
     
     # list of days
     list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
@@ -1348,6 +1350,10 @@ def getNewSubscribedUserCountStatistics():
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
     date_difference_in_days = date_difference_in_days.days
+
+    # if date difference is 0 days, change it to 1
+    if date_difference_in_days == 0:
+        date_difference_in_days = 1
     
     # list of days
     list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
@@ -1539,6 +1545,10 @@ def getUserCountStatistics():
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
     date_difference_in_days = date_difference_in_days.days
+
+    # if date difference is 0 days, change it to 1
+    if date_difference_in_days == 0:
+        date_difference_in_days = 1
     
     # list of days
     list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
@@ -1599,6 +1609,10 @@ def getUserSubscriptionStatistics():
     # difference between dates in days
     date_difference_in_days = datetime.strptime(end_date, date_format) - datetime.strptime(start_date, date_format)
     date_difference_in_days = date_difference_in_days.days
+
+    # if date difference is 0 days, change it to 1
+    if date_difference_in_days == 0:
+        date_difference_in_days = 1
     
     # list of days
     list_of_days = [str(datetime.strptime(start_date, date_format) + timedelta(days=i)) for i in range(date_difference_in_days)]
