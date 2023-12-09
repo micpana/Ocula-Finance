@@ -1485,8 +1485,8 @@ def searchForUser():
     response = make_response(jsonify(user_results)); response.status = 200; return response
 
 # 20
-@app.route('/getUserCount', methods=['POST'])
-def getUserCount():
+@app.route('/getUserCountStatistics', methods=['POST'])
+def getUserCountStatistics():
     # check user access token's validity
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
@@ -2015,8 +2015,8 @@ def getEarningsReport():
     response = make_response(jsonify(earnings_report)); response.status = 200; return response
 
 # 28
-@app.route('/getPaymentList', methods=['POST'])
-def getPaymentList():
+@app.route('/getPaymentsList', methods=['POST'])
+def getPaymentsList():
     # check user access token's validity
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
