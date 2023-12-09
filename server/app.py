@@ -101,14 +101,14 @@ def check_user_access_token_validity(request_data, expected_user_role):
             token = user_access_token, 
             user_browsing_agent = user_browsing_agent
         )[0]
-        print('Token details:\n', token_details)
+        print('Token details:\n', token_details.to_json())
 
         # get user id
         user_id = token_details.user_id
 
         # get user details
         user = Users.objects.filter(id = user_id)[0]
-        print('User:\n', user)
+        print('User:\n', user.to_json())
 
         # get user role
         user_role = user.role
@@ -137,7 +137,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
             access_token_status = 'ok'
 
         # show that access token was last used now
-        UserAccessTokens.objects(id = token_details.id).update(last_used_on_date = current_datetime)
+        UserAccessTokens.objects(id = str(token_details.id)).update(last_used_on_date = current_datetime)
 
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
