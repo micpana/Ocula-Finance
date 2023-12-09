@@ -90,7 +90,8 @@ def check_user_access_token_validity(request_data, expected_user_role):
     try:
         # get user access token
         user_access_token = request_data.headers.get('Access-Token')
-        
+        print(request_data.headers)
+
         # get information on user's browsing device
         user_browsing_agent, user_os, user_device, user_ip_address, user_browser = information_on_user_browsing_device(request_data)
         
