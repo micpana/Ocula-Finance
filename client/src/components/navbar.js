@@ -81,7 +81,7 @@ class NavBar extends Component{
             const { cookies } = this.props;
             this.LoadingOn()
 
-            axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'access_token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getUserDetailsByAccessToken', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
                 // set user details to state
