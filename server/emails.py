@@ -30,8 +30,10 @@ def send_crafted_email(user_email, firstname, subject, email_content_html, email
             gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
 
     # send email in a separate thread, so that we don't keep the user waiting on the frontend
-    email_thread = Thread(target=send_email) # if function has arguments, add: ,args=(arg,)
-    email_thread.start()
+    # email_thread = Thread(target=send_email) # if function has arguments, add: ,args=(arg,)
+    # email_thread.start()
+
+    send_email()
 
 # email confirmations on registration ********************************************************************************************
 def send_registration_email_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
