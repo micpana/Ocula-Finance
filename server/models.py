@@ -58,7 +58,7 @@ class PasswordRecoveries(Document):
     meta = {'collection': 'passwordrecoveries'}
     account_id = StringField(required=True)
     email = StringField(required=True)
-    used = StringField(required=True)
+    used = BooleanField(required=True)
     device = StringField(required=True)
     ip_address = StringField(required=True)
     date_of_request = StringField(required=True)
