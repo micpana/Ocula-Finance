@@ -1849,7 +1849,8 @@ def manuallyEnterUserPayment():
     try: verified = request.form['verified']
     except: response = make_response('Verified field required'); response.status = 400; return response
     if verified == '' or verified == None: response = make_response('Verified cannot be empty'); response.status = 400; return response
-    if isinstance(verified, bool) == False: response = make_response('Verified data type is invalid'); response.status = 400; return response
+    try: verified = ast.literal_eval(str(verified).capitalize())
+    except: response = make_response('Verified data type is invalid'); response.status = 400; return response
     # discount applied
     try: discount_applied = request.form['discount_applied']
     except: response = make_response('Discount applied field required'); response.status = 400; return response
