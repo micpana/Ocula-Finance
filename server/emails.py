@@ -22,6 +22,7 @@ def get_link_to_follow(purpose, token): # purpose: verification / password recov
 # function for actually sending crafted email ************************************************************************************
 def send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text):
     # send email
+    @copy_current_request_context # for preserving flask app threading context
     def send_email():
         send_via = sending_emails_via()
         if send_via == 'mailjet':
@@ -30,10 +31,10 @@ def send_crafted_email(user_email, firstname, subject, email_content_html, email
             gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
 
     # send email in a separate thread, so that we don't keep the user waiting on the frontend
-    # email_thread = Thread(target=send_email) # if function has arguments, add: ,args=(arg,)
-    # email_thread.start()
+    email_thread = Thread(target=send_email) # if function has arguments, add: ,args=(arg,)
+    email_thread.start()
 
-    send_email()
+    # send_email()
 
 # email confirmations on registration ********************************************************************************************
 def send_registration_email_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
