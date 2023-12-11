@@ -431,14 +431,14 @@ class Analysis extends Component{
                                 </h6>
                                 <br/><br/>
                                 <Container>
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '50%', height: '500px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '150px', height: '500px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
                                         <img src={BuySetup} onError={(e) => e.target.src = BuySetup} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '500px'}} />
                                     </div>
                                     <br/><br/><br/>
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '50%', height: '500px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '150px', height: '500px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
