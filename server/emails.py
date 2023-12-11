@@ -1,4 +1,5 @@
 from threading import Thread
+from flask import copy_current_request_context
 from settings import platform_name, frontend_client_url, sending_emails_via
 from mailjet import mailjet_send_email
 from gmail_test_smtp import gmail_test_smtp_send_email
