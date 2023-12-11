@@ -1,5 +1,5 @@
-from threading import Thread
-from flask import current_app
+# from threading import Thread
+from flask import threading
 from settings import platform_name, frontend_client_url, sending_emails_via
 from mailjet import mailjet_send_email
 from gmail_test_smtp import gmail_test_smtp_send_email
@@ -31,10 +31,12 @@ def send_crafted_email(user_email, firstname, subject, email_content_html, email
             gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
 
     # send email in a separate thread, so that we don't keep the user waiting on the frontend
-    with current_app.app_context():
-        email_thread = Thread(target=send_email) # if function has arguments, add: ,args=(arg,)
+    # email_thread = Thread(target=send_email) # if function has arguments, add: ,args=(arg,)
+    # email_thread.start()
+    email_thread = threading.Thread(target=send_email)
+    if not email_thread.is_alive():
         email_thread.start()
-
+        
     # send_email()
 
 # email confirmations on registration ********************************************************************************************
