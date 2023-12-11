@@ -2,7 +2,6 @@
 from flask import Flask, request, send_file, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from user_agents import parse
-from threading import Thread
 import json
 import re
 import random
@@ -785,23 +784,14 @@ def recoverPassword():
     password_recovery_token = str(password_recovery_details.id)
 
     # send user's password recovery token
-    # send_password_recovery_email(
-    #     account.email, 
-    #     account.username, 
-    #     account.firstname, 
-    #     account.lastname, 
-    #     password_recovery_token, 
-    #     token_expiration_date
-    # ) # inputs: user_email, username, firstname, lastname, recovery_token, token_expiration_date
-    send_password_recovery_email_thread = Thread(target=send_password_recovery_email, args=(
+    send_password_recovery_email(
         account.email, 
         account.username, 
         account.firstname, 
         account.lastname, 
         password_recovery_token, 
         token_expiration_date
-    )) # inputs: user_email, username, firstname, lastname, recovery_token, token_expiration_date
-    send_password_recovery_email_thread.start()
+    ) # inputs: user_email, username, firstname, lastname, recovery_token, token_expiration_date
 
     # return response
     response = make_response('ok'); response.status = 200; return response
