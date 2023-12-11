@@ -433,18 +433,18 @@ class Analysis extends Component{
                                 <Row>
                                     <Col sm='6'>
                                         <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '550px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
-                                            <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            {/* <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                                 Loading image...
-                                            </div>
+                                            </div> */}
                                             <img src={BuySetup} onError={(e) => e.target.src = BuySetup} style={{position: 'absolute', right: 0, width: 'auto', maxWidth: '100%', height: 'auto', maxHeight: '550px'}} />
                                         </div>
                                         <br/><br/>
                                     </Col>
                                     <Col sm='6'>
                                         <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '550px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
-                                            <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            {/* <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                                 Loading image...
-                                            </div>
+                                            </div> */}
                                             <img src={SellSetup} onError={(e) => e.target.src = SellSetup} style={{position: 'absolute', right: 0, width: 'auto', maxWidth: '100%', height: 'auto', maxHeight: '550px'}} />
                                         </div>
                                     </Col>
