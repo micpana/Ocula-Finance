@@ -68,7 +68,8 @@ class AllUsers extends Component{
             verified: false,
             discount_applied: 0,
             amount: 0,
-            showing_search_results: false
+            showing_search_results: false,
+            search_results_owner_query: ''
         };
 
         this.HandleChange = (e) => {
@@ -120,7 +121,12 @@ class AllUsers extends Component{
             this.NetworkErrorScreenOff()
 
             var data = new FormData()
-            data.append('length_of_data_received', this.state.all_users.length)
+            if(this.state.showing_search_results === true){
+                var length_of_data_received = 0
+            }else{
+                var length_of_data_received = this.state.all_users.length
+            }
+            data.append('length_of_data_received', length_of_data_received)
             data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
@@ -238,14 +244,19 @@ class AllUsers extends Component{
 
                 var data = new FormData()
                 data.append('search_query', this.state.search_query)
-                data.append('length_of_data_received', this.state.all_users.length)
+                if(this.state.showing_search_results === true && this.state.search_query === this.state.search_results_owner_query){ // continuing search
+                    var length_of_data_received = this.state.all_users.length
+                }else{ // new search
+                    var length_of_data_received = 0
+                }
+                data.append('length_of_data_received', length_of_data_received)
                 data.append('get_all', get_all) // bool
 
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
                     // set user results to state, also set showing search results to true => so that we know users showing are from a search
-                    this.setState({all_users: result, showing_search_results: true})
+                    this.setState({all_users: result, showing_search_results: true, search_results_owner_query: this.state.search_query})
                     this.LoadingOff()
                 }).catch((error) => {
                     console.log(error)

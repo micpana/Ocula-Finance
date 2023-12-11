@@ -196,7 +196,7 @@ class ContactUs extends Component{
                             <br/><br/>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='6'>
-                                    <img src={ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
+                                    <img src={ContactUs1} onError={(e) => e.target.src = ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
                                     <br/><br/>
                                 </Col>
                                 <Col>

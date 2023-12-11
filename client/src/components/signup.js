@@ -230,7 +230,7 @@ class Signup extends Component{
                     : <div>
                         <Row>
                             <Col sm='6'>
-                                <img src={Signup1} style={{width: '100%'}} />
+                                <img src={Signup1} onError={(e) => e.target.src = Signup1} style={{width: '100%'}} />
                             </Col>
                             <Col>
                                 <Container>

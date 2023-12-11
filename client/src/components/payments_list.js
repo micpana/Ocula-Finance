@@ -54,7 +54,9 @@ class PaymentsList extends Component{
             start_date: '',
             end_date: '',
             entered_by: '', // firstname / lastname / username
-            payments_list: []
+            payments_list: [],
+            showing_search_results: false,
+            search_results_owner_query: ''
         };
 
         this.HandleChange = (e) => {
@@ -109,7 +111,16 @@ class PaymentsList extends Component{
             data.append('start_date', this.state.start_date)
             data.append('end_date', this.state.end_date)
             data.append('entered_by', this.state.entered_by)
-            data.append('length_of_data_received', this.state.payments_list.length)
+            if(this.state.showing_search_results === false && this.state.entered_by != '' && this.state.entered_by != this.state.search_results_owner_query){ // is a new search
+                var length_of_data_received = 0
+            }else if(this.state.showing_search_results === true && this.state.entered_by != '' && this.state.entered_by === this.state.search_results_owner_query){ // is a continuing search
+                var length_of_data_received = this.state.payments_list.length
+            }else if(this.state.showing_search_results === true && this.state.entered_by === ''){ // a call for all data while previous call was a search
+                var length_of_data_received = 0
+            }else{ // is a continuing call for all data search
+                var length_of_data_received = this.state.payments_list.length
+            }
+            data.append('length_of_data_received', length_of_data_received)
             data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getPaymentsList', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
@@ -117,6 +128,11 @@ class PaymentsList extends Component{
                 let result = res.data
                 // set payments list to state
                 this.setState({payments_list: result})
+                if(this.state.entered_by != ''){ // is a search
+                    this.setState({showing_search_results: true, search_results_owner_query: this.state.entered_by})
+                }else{ // is not a search
+                    this.setState({showing_search_results: false})
+                }
                 this.LoadingOff()
             }).catch((error) => {
                 console.log(error)

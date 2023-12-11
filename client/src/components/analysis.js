@@ -48,6 +48,8 @@ import BTC from '../images/bitcoin.png'
 import ETH from '../images/ethereum.png'
 import LTC from '../images/lite_coin.png'
 import XRP from '../images/xrp.png'
+import BuySetup from '../images/buy_setup.png'
+import SellSetup from '../images/sell_setup.png'
 
 class Analysis extends Component{
     static propTypes = {
@@ -351,6 +353,12 @@ class Analysis extends Component{
                                                 <br/>
                                             </Col>
                                         </Row>
+                                        <br/><br/>
+                                        <div onClick={() => document.getElementById('explainer').scrollIntoView()}
+                                            style={{fontWeight: 'bold'}}
+                                        >
+                                            Click here to know more on how to use these metrics.
+                                        </div>
                                     </Col>
                                 </Row>
                                 <br/><br/>
@@ -413,6 +421,30 @@ class Analysis extends Component{
                                         <br/>
                                     </Col>
                                 </Row>
+                                {/* div for scroll into view purposes upon explainer selection */}
+                                <div id='dexplainer' style={{minHeight: '150px', marginTop: '-150px', visibility: 'hidden'}}>
+
+                                </div>
+                                <br/><br/>
+                                <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
+                                    Usage guide:
+                                </h6>
+                                <br/><br/>
+                                <Container>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                        <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            Loading image...
+                                        </div>
+                                        <img src={BuySetup} onError={(e) => e.target.src = BuySetup} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                    </div>
+                                    <br/><br/><br/>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                        <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                            Loading image...
+                                        </div>
+                                        <img src={SellSetup} onError={(e) => e.target.src = SellSetup} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                    </div>
+                                </Container>
                             </div>
                         }
                     </div>
