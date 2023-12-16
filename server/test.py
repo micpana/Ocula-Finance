@@ -1,21 +1,27 @@
-from threading import Thread
-from time import sleep
+from flask import Flask, request, send_file, jsonify, make_response
+import threading
+import time
+from test2 import run_predictions
 
-tt = 9
-def me():
-    while True:
-        print(tt)
-        sleep(5)
+app = Flask(__name__)
+app.debug = True
 
-def you():
-    while True:
-        print('yes')
-        sleep(10)
-        
-# Send the email in a separate thread
-msg = 'proceed now'
-mg = '!'
-thr = Thread(target=me)
-thr.start()
+@app.route('/', methods=['POST', 'GET'])
+def index():
+    response = make_response('Not authorized')
+    response.status = 401
+    
+    # return response
+    return response
 
-you()
+# Create and start the prediction thread
+prediction_thread = threading.Thread(target=run_predictions)
+
+# Start the prediction thread if not already running
+if not prediction_thread.is_alive():
+    prediction_thread.start()
+else:
+    print('prediction thread already running')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')

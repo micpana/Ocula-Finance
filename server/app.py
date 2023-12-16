@@ -1559,7 +1559,7 @@ def getUserCountStatistics():
     user_count_statistics = [
         {'date': i[0:10], 'users': len([
             z for z in all_users if 
-            i[0:10] <= z.date_of_registration[0:10]
+            i[0:10] >= z.date_of_registration[0:10]
         ])}
         for i in list_of_days if True
     ]
