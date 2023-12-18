@@ -15,8 +15,7 @@ from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
-from predict import run_predictions
+from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, run_predictions_as_flask_thread
 
 # Flask stuff
 app = Flask(__name__)
@@ -2152,15 +2151,20 @@ def getPaymentsList():
     response = make_response(jsonify(all_payments)); response.status = 200; return response
 
 # ******************* CUSTOM THREADS ************************************************************************************
-# create the predictions thread
-predictions_thread = threading.Thread(target=run_predictions)
+# predictions thread 
+if run_predictions_as_flask_thread() == True:
+    # imports
+    from predict import run_predictions
 
-# start the predictions thread if its not already running
-if not predictions_thread.is_alive():
-    predictions_thread.start()
-    print('\n\nPredictions thread has been started.\n\n')
-else:
-    print('\n\nPredictions thread is already running.')
+    # create the predictions thread
+    predictions_thread = threading.Thread(target=run_predictions)
+
+    # start the predictions thread if its not already running
+    if not predictions_thread.is_alive():
+        predictions_thread.start()
+        print('\n\nPredictions thread has been started.\n\n')
+    else:
+        print('\n\nPredictions thread is already running.')
 
 # ******************* END OF CUSTOM THREADS *****************************************************************************
 

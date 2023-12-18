@@ -97,6 +97,12 @@ def get_client_load_more_increment():
 
     return client_load_more_increment
 
+# run predictions module as flask thread or not
+def run_predictions_as_flask_thread():
+    run = False
+
+    return run
+
 # source for training data ... csv / mt5 / yahoo
 def training_data_source():
     source = 'csv'
