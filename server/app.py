@@ -3,6 +3,7 @@ from flask import Flask, request, send_file, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from user_agents import parse
 import json
+import threading
 import re
 import random
 import string
@@ -15,6 +16,7 @@ from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveri
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
 from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
+from predict import run_predictions
 
 # Flask stuff
 app = Flask(__name__)
@@ -2149,9 +2151,22 @@ def getPaymentsList():
     # return response
     response = make_response(jsonify(all_payments)); response.status = 200; return response
 
+# ******************* CUSTOM THREADS ************************************************************************************
+# create the predictions thread
+predictions_thread = threading.Thread(target=run_predictions)
+
+# start the predictions thread if its not already running
+if not predictions_thread.is_alive():
+    predictions_thread.start()
+    print('\n\nPredictions thread has been started.\n\n')
+else:
+    print('\n\nPredictions thread is already running.')
+
+# ******************* END OF CUSTOM THREADS *****************************************************************************
+
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0')
-    # app.run(host=os.environ.get("BACKEND_HOST", "0.0.0.0"), port=5000) # for use in docker
+    app.run(host='0.0.0.0') # for development
+    # app.run(host=os.environ.get("BACKEND_HOST", "0.0.0.0"), port=5000) # for development use in docker
     # from waitress import serve
-    # serve(app, host='0.0.0.0') # use waitress
+    # serve(app, host='0.0.0.0') # use waitress... for production

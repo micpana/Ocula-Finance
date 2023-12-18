@@ -1,9 +1,9 @@
-import time
+from datetime import datetime
 
-user = input('Name?')
+date_format = '%Y-%m-%d %H:%M'
+current_datetime = datetime.now().strftime(date_format)
+current_datetime_object = datetime.strptime(current_datetime, date_format)
 
-def run_predictions():
-    while True:
-        # Your prediction logic here
-        print('Hi', user)
-        time.sleep(5)  # Change this to your desired interval
+current_minute = str(current_datetime_object.minute)
+
+print(current_minute)

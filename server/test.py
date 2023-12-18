@@ -1,27 +1,17 @@
-from flask import Flask, request, send_file, jsonify, make_response
-import threading
-import time
-from test2 import run_predictions
+import pandas as pd
 
-app = Flask(__name__)
-app.debug = True
+# Replace this with your actual DataFrame
+y_dataframe = pd.DataFrame({
+    "col1": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+    "col2": [5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105, 115],
+})
 
-@app.route('/', methods=['POST', 'GET'])
-def index():
-    response = make_response('Not authorized')
-    response.status = 401
-    
-    # return response
-    return response
+y_description = y_dataframe.describe()
+print('Description:\n', y_description)
 
-# Create and start the prediction thread
-prediction_thread = threading.Thread(target=run_predictions)
+string = """
+it is:
+{y_description}
+""".format(y_description = y_description)
 
-# Start the prediction thread if not already running
-if not prediction_thread.is_alive():
-    prediction_thread.start()
-else:
-    print('prediction thread already running')
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+print(string)
