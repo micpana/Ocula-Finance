@@ -196,9 +196,9 @@ def get_training_price_data_csvs_folder_path():
 # universal filename append string for model object files
 def universal_filename_append_string(timeframes, features_type, model_type, with_extension):
     if with_extension == True:
-        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes) + custom_system_extension()
+        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes) + '-' + str(get_lookback_period()) + ':' + str(get_forecast_period()) + custom_system_extension()
     else:
-        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes)
+        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes) + '-' + str(get_lookback_period()) + ':' + str(get_forecast_period())
 
     return string
 
