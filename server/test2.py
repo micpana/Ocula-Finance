@@ -1,9 +1,8 @@
-from datetime import datetime
+import numpy as np
 
-date_format = '%Y-%m-%d %H:%M'
-current_datetime = datetime.now().strftime(date_format)
-current_datetime_object = datetime.strptime(current_datetime, date_format)
+timeframe_3_dates = np.array([1, 2, 3, 4, 5, 6, 7])
+timeframe_4_date = 6
+timeframe_3_index_of_date_reference = np.where(timeframe_3_dates <= timeframe_4_date)[0][-1]
 
-current_minute = str(current_datetime_object.minute)
-
-print(current_minute)
+print('index:', timeframe_3_index_of_date_reference)
+print(np.where(timeframe_3_dates <= timeframe_4_date)[0])
