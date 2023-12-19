@@ -99,7 +99,7 @@ def get_client_load_more_increment():
 
 # run predictions module as flask thread or not
 def run_predictions_as_flask_thread():
-    run = True
+    run = False
 
     return run
 
