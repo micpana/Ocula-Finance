@@ -212,7 +212,7 @@ def get_training_logs_path(symbol, timeframes, features_type, model_type):
 def get_scalers_path(symbol, timeframes, features_type, model_type, scaler_set):
     if scaler_set == 'x':
         path = 'scalers/' + symbol + '-X Scaler' + universal_filename_append_string(timeframes, features_type, model_type, True)
-    elif scalers == 'y':
+    elif scaler_set == 'y':
         path = 'scalers/' + symbol + '-Y Scaler' + universal_filename_append_string(timeframes, features_type, model_type, True)
 
     return path
