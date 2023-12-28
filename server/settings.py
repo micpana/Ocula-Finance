@@ -129,7 +129,7 @@ def get_forecast_period():
 
 # lookback period
 def get_lookback_period():
-    lookback_period = 50
+    lookback_period = 7
 
     return lookback_period
 
@@ -175,11 +175,17 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         
         return data_length
 
-# get model bidirectional status ... true / false
-def get_model_bidirectional_status():
-    use_bidirectional_model = True
+# get scaler x status
+def scale_x():
+    scale_x = True
 
-    return use_bidirectional_model
+    return scale_x
+
+# get scaler y status
+def scale_y():
+    scale_y = False
+
+    return scale_y 
 
 # get custom system extension for saving objects as files
 def custom_system_extension():
@@ -194,38 +200,38 @@ def get_training_price_data_csvs_folder_path():
     return path
 
 # universal filename append string for model object files
-def universal_filename_append_string(timeframes, features_type, model_type, with_extension):
+def universal_filename_append_string(timeframes, features_type, with_extension):
     if with_extension == True:
-        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes) + '-' + str(get_lookback_period()) + ':' + str(get_forecast_period()) + custom_system_extension()
+        string = '-' + ' Model-' + features_type + '-' + str(timeframes) + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y()) + custom_system_extension()
     else:
-        string = '-' + model_type + ' Model-' + features_type + '-' + str(timeframes) + '-' + str(get_lookback_period()) + ':' + str(get_forecast_period())
+        string = '-' + ' Model-' + features_type + '-' + str(timeframes) + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y())
 
     return string
 
 # get training logs path
-def get_training_logs_path(symbol, timeframes, features_type, model_type):
-    path = 'logs/training logs/' + symbol + '-Training Log-' + str(datetime.now(timezone(system_timezone()))) + universal_filename_append_string(timeframes, features_type, model_type, True)
+def get_training_logs_path(symbol, timeframes, features_type):
+    path = 'logs/training logs/' + symbol + '-Training Log-' + str(datetime.now(timezone(system_timezone()))) + universal_filename_append_string(timeframes, features_type, True)
 
     return path
 
 # get scalers path
-def get_scalers_path(symbol, timeframes, features_type, model_type, scaler_set):
+def get_scalers_path(symbol, timeframes, features_type, scaler_set):
     if scaler_set == 'x':
-        path = 'scalers/' + symbol + '-X Scaler' + universal_filename_append_string(timeframes, features_type, model_type, True)
+        path = 'scalers/' + symbol + '-X Scaler' + universal_filename_append_string(timeframes, features_type, True)
     elif scaler_set == 'y':
-        path = 'scalers/' + symbol + '-Y Scaler' + universal_filename_append_string(timeframes, features_type, model_type, True)
+        path = 'scalers/' + symbol + '-Y Scaler' + universal_filename_append_string(timeframes, features_type, True)
 
     return path
 
 # get models path
-def get_models_path(symbol, timeframes, features_type, model_type):
-    path = 'models/' + symbol + universal_filename_append_string(timeframes, features_type, model_type, True)
+def get_models_path(symbol, timeframes, features_type):
+    path = 'models/' + symbol + universal_filename_append_string(timeframes, features_type, True)
 
     return path
 
 # get models checkpoints path
-def get_models_checkpoints_path(symbol, timeframes, features_type, model_type):
-    path = 'models checkpoints/' + 'weights' + universal_filename_append_string(timeframes, features_type, model_type, False) + '.best' + '.hdf5' 
+def get_models_checkpoints_path(symbol, timeframes, features_type):
+    path = 'models checkpoints/' + 'weights' + universal_filename_append_string(timeframes, features_type, False) + '.best' + '.hdf5' 
 
     return path
 

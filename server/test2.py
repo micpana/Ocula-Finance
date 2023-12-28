@@ -1,7 +1,5 @@
-from collections import deque
+f = True
 
-ob = {
-    'ls': deque([1, 2, 3, 4, 5])
-}
+f = str(f)
 
-print(ob['ls'][-1])
+print(f)
