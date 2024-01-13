@@ -27,11 +27,15 @@ def mt5_fetch_data(symbol, timeframes, data_collection_days):
     timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
     timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
 
-    # initialize variables for timeframe 1, timeframe 2, timeframe 3, timeframe 4 data
+    # initialize variables for timeframe 1, timeframe 2, timeframe 3, timeframe 4, etc... data
     timeframe_1 = None
     timeframe_2 = None
     timeframe_3 = None
     timeframe_4 = None
+    timeframe_5 = None
+    timeframe_6 = None
+    timeframe_7 = None
+    timeframe_8 = None
 
     # get data for each stated timeframe
     print('Fetching rates for ', symbol, 'from MT5 ...')
@@ -65,8 +69,10 @@ def mt5_fetch_data(symbol, timeframes, data_collection_days):
         # convert time in seconds into the 'datetime' format
         timeframe_ohlc_df['time'] = pd.to_datetime(timeframe_ohlc_df['time'], unit='s')
 
-        # set data to appropriate timeframe variable
+        # get timeframe number
         timeframe_number = timeframes.index(timeframe) + 1
+
+        # set data to appropriate timeframe variable
         if timeframe_number == 1:
             timeframe_1 = timeframe_ohlc_df
         elif timeframe_number == 2:
@@ -75,8 +81,16 @@ def mt5_fetch_data(symbol, timeframes, data_collection_days):
             timeframe_3 = timeframe_ohlc_df
         elif timeframe_number == 4:
             timeframe_4 = timeframe_ohlc_df
+        elif timeframe_number == 5:
+            timeframe_5 = timeframe_ohlc_df
+        elif timeframe_number == 6:
+            timeframe_6 = timeframe_ohlc_df
+        elif timeframe_number == 7:
+            timeframe_7 = timeframe_ohlc_df
+        elif timeframe_number == 8:
+            timeframe_8 = timeframe_ohlc_df
 
     print('MT5 Rates fetched.\n\n')
 
-    # return data as timeframe 1, timeframe 2, timeframe 3, timeframe 4
-    return timeframe_1, timeframe_2, timeframe_3, timeframe_4
+    # return data as timeframe 1, timeframe 2, timeframe 3, timeframe 4, timeframe 5, timeframe 6, timeframe 7, timeframe 8
+    return timeframe_1, timeframe_2, timeframe_3, timeframe_4, timeframe_5, timeframe_6, timeframe_7, timeframe_8

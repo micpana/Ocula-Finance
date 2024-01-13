@@ -129,15 +129,30 @@ def get_forecast_period():
 
 # lookback period
 def get_lookback_period():
-    lookback_period = 7
+    lookback_period = 300
 
     return lookback_period
 
-# get timeframes in use, in descending order
+# get timeframes in use, in descending order ... max 8 timeframes, min 1 timeframe
 def get_timeframes_in_use():
-    timeframes_in_use = ['Daily', 'H4', 'H1', 'M15']
+    timeframes_in_use = [
+        # 'Monthly',
+        # 'Weekly',
+        'Daily', 
+        'H4', 
+        'H1', 
+        'M15',
+        'M5',
+        'M1'
+    ]
 
     return timeframes_in_use
+
+# get entry timeframe ... should be part of the timeframes_in_use list
+def get_entry_timeframe():
+    entry_timeframe = 'M15'
+
+    return entry_timeframe
 
 # get data collection days by intended purpose
 def get_data_collection_days_by_intended_purpose(purpose):
@@ -175,6 +190,24 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         
         return data_length
 
+# index of model to use
+def index_of_model_to_use():
+    index = 1
+
+    return index
+
+# whether to use percentage changes or price on x data
+def x_use_percentages():
+    use = False
+
+    return use
+
+# whether to use percentage changes or price on y data 
+def y_use_percentages():
+    use = True
+
+    return use
+
 # get scaler x status
 def scale_x():
     scale_x = True
@@ -185,7 +218,13 @@ def scale_x():
 def scale_y():
     scale_y = False
 
-    return scale_y 
+    return scale_y
+
+# whether to show plots during training or not
+def show_plots_during_training():
+    show = True
+
+    return show
 
 # get custom system extension for saving objects as files
 def custom_system_extension():
@@ -202,9 +241,9 @@ def get_training_price_data_csvs_folder_path():
 # universal filename append string for model object files
 def universal_filename_append_string(timeframes, features_type, with_extension):
     if with_extension == True:
-        string = '-' + ' Model-' + features_type + '-' + str(timeframes) + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y()) + custom_system_extension()
+        string = '-MI:' + str(index_of_model_to_use()) + '-Model-' + features_type + '-TF' + str(timeframes) + '-ET:' + get_entry_timeframe() + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y()) + '-XUP' + str(x_use_percentages()) + ':YUP' + str(y_use_percentages()) + custom_system_extension()
     else:
-        string = '-' + ' Model-' + features_type + '-' + str(timeframes) + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y())
+        string = '-MI:' + str(index_of_model_to_use()) + '-Model-' + features_type + '-TF' + str(timeframes) + '-ET:' + get_entry_timeframe() + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y()) + '-XUP' + str(x_use_percentages()) + ':YUP' + str(y_use_percentages())
 
     return string
 
@@ -225,9 +264,16 @@ def get_scalers_path(symbol, timeframes, features_type, scaler_set):
 
 # get models path
 def get_models_path(symbol, timeframes, features_type):
-    path = 'models/' + symbol + universal_filename_append_string(timeframes, features_type, True)
+    if index_of_model_to_use() == 2 or index_of_model_to_use() == 3: # models that do one output at a time
+        path_y_1 = 'models/' + symbol + '-Y1' + universal_filename_append_string(timeframes, features_type, True)
+        path_y_2 = 'models/' + symbol + '-Y2' + universal_filename_append_string(timeframes, features_type, True)
 
-    return path
+        return path_y_1, path_y_2
+
+    else: # models that can do multiple outputs at a time
+        path = 'models/' + symbol + universal_filename_append_string(timeframes, features_type, True)
+
+        return path
 
 # get models checkpoints path
 def get_models_checkpoints_path(symbol, timeframes, features_type):
