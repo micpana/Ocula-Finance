@@ -123,15 +123,21 @@ def use_closing_prices_only():
 
 # forecast period
 def get_forecast_period():
-    forecast_period = 7
+    forecast_period = 105
 
     return forecast_period
 
 # lookback period
 def get_lookback_period():
-    lookback_period = 300
+    lookback_period = 100
 
     return lookback_period
+
+# whether to remove last n (n = lookback value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
+def remove_last_n_values_without_full_forecast():
+    remove = True
+
+    return remove
 
 # get timeframes in use, in descending order ... max 8 timeframes, min 1 timeframe
 def get_timeframes_in_use():
@@ -150,7 +156,7 @@ def get_timeframes_in_use():
 
 # get entry timeframe ... should be part of the timeframes_in_use list
 def get_entry_timeframe():
-    entry_timeframe = 'M15'
+    entry_timeframe = 'M1'
 
     return entry_timeframe
 
