@@ -160,6 +160,18 @@ def get_entry_timeframe():
 
     return entry_timeframe
 
+# whether to save live predictions to the database or not
+def save_live_predictions_to_database():
+    save = False
+
+    return save
+
+# whether to print live predictions to the console or not
+def print_live_predictions_to_console():
+    print_ = True
+
+    return print_
+
 # get data collection days by intended purpose
 def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':

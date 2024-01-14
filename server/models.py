@@ -67,6 +67,7 @@ class PasswordRecoveries(Document):
 class MarketAnalysis(Document):
     meta = {'collection': 'marketanalysis'}
     timestamp = StringField(required=True)
+    entry_timeframe_last_timestamp = StringField(required=True)
     asset = StringField(required=True)
     maximum_possible_down_move = FloatField(required=True)
     maximum_possible_up_move = FloatField(required=True)
