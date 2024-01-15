@@ -172,6 +172,12 @@ def print_live_predictions_to_console():
 
     return print_
 
+# whether to perform a custom unshuffled natural train test/validation split or not(which will then use the sklearn train test split with shuffling on)
+def perform_custom_unshuffled_natural_train_test_or_validation_split():
+    perform = True
+
+    return perform
+
 # get data collection days by intended purpose
 def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':
