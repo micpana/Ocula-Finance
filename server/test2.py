@@ -1,16 +1,13 @@
-import numpy as np
+import multiprocessing
 
-# Create a sample array
-arr = np.arange(10)
+def square(x):
+    print(x[0])
+    print(x[1])
+    print(x[2])
+    return x
 
-# Calculate the split indices
-split_idx = int((1-0.2) * len(arr))
-print('Split indices:', split_idx)
-
-# Split the array
-arr1, arr2 = arr[:split_idx], arr[split_idx:]
-
-print('Main array:', arr)
-# Print the split arrays
-print(f"Array 1: {arr1}")
-print(f"Array 2: {arr2}")
+if __name__ == '__main__':
+    numbers = [1, 'b', [9,0,8]]
+    pool = multiprocessing.Pool()
+    results = pool.map(square, numbers)
+    print(results)  # Output: [1, 4, 9, 16, 25]

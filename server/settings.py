@@ -133,7 +133,7 @@ def get_lookback_period():
 
     return lookback_period
 
-# whether to remove last n (n = lookback value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
+# whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
 def remove_last_n_values_without_full_forecast():
     remove = True
 
@@ -174,7 +174,7 @@ def print_live_predictions_to_console():
 
 # whether to perform a custom unshuffled natural train test/validation split or not(which will then use the sklearn train test split with shuffling on)
 def perform_custom_unshuffled_natural_train_test_or_validation_split():
-    perform = True
+    perform = False
 
     return perform
 
