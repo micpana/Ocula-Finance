@@ -123,13 +123,13 @@ def use_closing_prices_only():
 
 # forecast period
 def get_forecast_period():
-    forecast_period = 105
+    forecast_period = 7
 
     return forecast_period
 
 # lookback period
 def get_lookback_period():
-    lookback_period = 100
+    lookback_period = 7
 
     return lookback_period
 
@@ -156,7 +156,7 @@ def get_timeframes_in_use():
 
 # get entry timeframe ... should be part of the timeframes_in_use list
 def get_entry_timeframe():
-    entry_timeframe = 'M1'
+    entry_timeframe = 'M15'
 
     return entry_timeframe
 
