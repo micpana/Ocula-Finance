@@ -214,6 +214,12 @@ def index_of_model_to_use():
 
     return index
 
+# shuffle train validation data
+def shuffle_train_validation_data():
+    shuffle = False
+
+    return shuffle
+
 # whether to combine training and validation set into one or not, might be useful for non kerals models ... set to true for keras models
 def combine_training_and_validation_set():
     combine = False
@@ -224,7 +230,7 @@ def combine_training_and_validation_set():
 def number_of_trees():
     number = 100
 
-    return number_of_trees
+    return number
 
 # whether to use percentage changes or price on x data
 def x_use_percentages():
