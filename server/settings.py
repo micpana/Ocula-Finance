@@ -115,11 +115,23 @@ def prediction_data_source():
 
     return source
 
+# whether to use price action features or not ... will overide use_closing_prices_only(), use_weighted_features(), x_use_log_returns(), x_use_percentages(), and y_use_percentages()
+def use_price_action_features():
+    use_price_action_features = True
+
+    return use_price_action_features
+
 # use closing prices only or not ... closing prices only / all ohlc prices
 def use_closing_prices_only():
     use_closing_prices_only = True
 
     return use_closing_prices_only
+
+# whether to use weighted features or not ... using weighted features will override use_closing_prices_only() setting
+def use_weighted_features():
+    use_weighted_features = False
+
+    return use_weighted_features
 
 # forecast period
 def get_forecast_period():
@@ -129,7 +141,7 @@ def get_forecast_period():
 
 # lookback period
 def get_lookback_period():
-    lookback_period = 7
+    lookback_period = 50
 
     return lookback_period
 
@@ -144,12 +156,12 @@ def get_timeframes_in_use():
     timeframes_in_use = [
         # 'Monthly',
         # 'Weekly',
-        'Daily', 
-        'H4', 
-        'H1', 
+        # 'Daily', 
+        # 'H4', 
+        # 'H1', 
         'M15',
-        'M5',
-        'M1'
+        # 'M5',
+        # 'M1'
     ]
 
     return timeframes_in_use
@@ -208,9 +220,39 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         
         return data_length
 
+# whether to incorporate simulation or not
+def incorporate_simulation():
+    incorporate = False
+
+    return incorporate
+
+# number of candlesticks to simulate per simulation
+def number_of_candlesticks_to_simulate():
+    number = 7
+
+    return number
+
+# number of simulations to run
+def number_of_simulations():
+    number = 100
+
+    return number
+
+# whether to aggregate across simulations or not ... if aggregating, the resulting dataFrame provides a condensed overview of the simulated price movements, summarizing the central tendencies of all simulations for each time step ... if not aggregating, resulting dataframe will have num_simulations * T rows
+def aggregate_across_simulations():
+    aggregate = True
+
+    return aggregate
+
+# whether to show the simulated price chart or not ... also dependant on the show_plots_during_training() setting
+def show_simulated_price_chart():
+    show = True
+
+    return show
+
 # index of model to use
 def index_of_model_to_use():
-    index = 1
+    index = 2
 
     return index
 
@@ -232,9 +274,15 @@ def number_of_trees():
 
     return number
 
+# whether to use log returns on x data or not ... can help to stabilize the variance of returns and make them more normally distributed
+def x_use_log_returns(): # (requires x_use_percentages() to be set to true inorder to work)
+    use = True
+
+    return use
+
 # whether to use percentage changes or price on x data
 def x_use_percentages():
-    use = False
+    use = True
 
     return use
 
@@ -246,7 +294,7 @@ def y_use_percentages():
 
 # get scaler x status
 def scale_x():
-    scale_x = True
+    scale_x = False
 
     return scale_x
 
