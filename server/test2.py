@@ -84,7 +84,20 @@ for i in range(1, -1, -1): # loop backwards, starting from the second index whic
     
     # check if 2nd from last structure is a high / low, or a combination of both
     if structure_1_is == None:
-        if structure_2_is == 'high':
+        if structure_2_is == 'both':
+            if high_index == low_index:
+                structure_1_is = 'both'
+                structure_value_1 = high
+                structure_index_1 = high_index
+            elif high_index > low_index:
+                structure_1_is = 'high'
+                structure_value_1 = high
+                structure_index_1 = high_index
+            elif low_index > high_index:
+                structure_1_is = 'low'
+                structure_value_1 = low
+                structure_index_1 = low_index
+        elif structure_2_is == 'high':
             structure_1_is = 'low'
             structure_value_1 = low
             structure_index_1 = low_index
@@ -92,6 +105,13 @@ for i in range(1, -1, -1): # loop backwards, starting from the second index whic
             structure_1_is = 'high'
             structure_value_1 = high
             structure_index_1 = high_index
+
+    # if we are now on index 0 and structure_1_is == None, repeat the index 0 loop, else break loop
+    print(i)
+    if i == 0 and structure_1_is == None:
+        do_nothing = True
+    else:
+        break
 
 print(structure_value_1, structure_value_2, structure_value_3)
 print(structure_index_1, structure_index_2, structure_index_3)
