@@ -27,3 +27,72 @@ structure_lows = lows[structure_lows_indices]
 print("Market structure highs:", structure_highs, '@', structure_highs_indices)
 print("Market structure lows:", structure_lows, '@', structure_lows_indices)
 
+# get the last two structure highs indices
+last_two_structure_highs_indices = structure_highs_indices[-2:]
+
+# get the last two structure lows indices
+last_two_structure_lows_indices = structure_lows_indices[-2:]
+
+# loop through structures to get the last 3 structures
+structure_index_1, structure_index_2, structure_index_3 = None, None, None
+structure_value_1, structure_value_2, structure_value_3 = None, None, None
+structure_1_is, structure_2_is, structure_3_is = None, None, None
+for i in range(1, -1, -1): # loop backwards, starting from the second index which is 1, looping back to 0
+    # get structure indices
+    high_index = last_two_structure_highs_indices[i]
+    low_index = last_two_structure_lows_indices[i]
+
+    # get structure values
+    high = highs[high_index]
+    low = lows[low_index]
+    
+    # check if last structure is a high / low, or a combination of both
+    if structure_3_is == None:
+        if high_index == low_index:
+            structure_3_is = 'both'
+            structure_2_is = 'both'
+            structure_value_3 = high
+            structure_value_2 = low
+            structure_index_3 = high_index
+            structure_index_2 = low_index
+        elif high_index > low_index:
+            structure_3_is = 'high'
+            structure_value_3 = high
+            structure_index_3 = high_index
+        elif low_index > high_index:
+            structure_3_is = 'low'
+            structure_value_3 = low
+            structure_index_3 = low_index
+    
+    # check if 1st from last structure is a high / low, or a combination of both
+    if structure_2_is == None:
+        if high_index == low_index:
+            structure_2_is = 'both'
+            structure_1_is = 'both'
+            structure_value_2 = high
+            structure_value_1 = low
+            structure_index_2 = high_index
+            structure_index_1 = low_index
+        elif structure_3_is == 'high':
+            structure_2_is = 'low'
+            structure_value_2 = low
+            structure_index_2 = low_index
+        elif structure_3_is == 'low':
+            structure_2_is = 'high'
+            structure_value_2 = high
+            structure_index_2 = high_index
+    
+    # check if 2nd from last structure is a high / low, or a combination of both
+    if structure_1_is == None:
+        if structure_2_is == 'high':
+            structure_1_is = 'low'
+            structure_value_1 = low
+            structure_index_1 = low_index
+        elif structure_2_is == 'low':
+            structure_1_is = 'high'
+            structure_value_1 = high
+            structure_index_1 = high_index
+
+print(structure_value_1, structure_value_2, structure_value_3)
+print(structure_index_1, structure_index_2, structure_index_3)
+print(structure_1_is, structure_2_is, structure_3_is)
