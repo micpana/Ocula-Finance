@@ -1,6 +1,6 @@
 import numpy as np
 
-highs = np.array([1, 2, 2, 1, 0, 0, 2, 3, 4, 4, 3]) 
+highs = np.array([1, 2, 2, 1, 0, 0, 2, 4, 4, 3, 3]) 
 
 lows = np.array([1, 1, 1, 0, 0, 2, 3, 4, 3, 3, 4]) 
 
@@ -38,80 +38,87 @@ structure_index_1, structure_index_2, structure_index_3 = None, None, None
 structure_value_1, structure_value_2, structure_value_3 = None, None, None
 structure_1_is, structure_2_is, structure_3_is = None, None, None
 for i in range(1, -1, -1): # loop backwards, starting from the second index which is 1, looping back to 0
-    # get structure indices
-    high_index = last_two_structure_highs_indices[i]
-    low_index = last_two_structure_lows_indices[i]
+    while True:
+        # loop status
+        new_loop = True
 
-    # get structure values
-    high = highs[high_index]
-    low = lows[low_index]
-    
-    # check if last structure is a high / low, or a combination of both
-    if structure_3_is == None:
-        if high_index == low_index:
-            structure_3_is = 'both'
-            structure_2_is = 'both'
-            structure_value_3 = high
-            structure_value_2 = low
-            structure_index_3 = high_index
-            structure_index_2 = low_index
-        elif high_index > low_index:
-            structure_3_is = 'high'
-            structure_value_3 = high
-            structure_index_3 = high_index
-        elif low_index > high_index:
-            structure_3_is = 'low'
-            structure_value_3 = low
-            structure_index_3 = low_index
-    
-    # check if 1st from last structure is a high / low, or a combination of both
-    if structure_2_is == None:
-        if high_index == low_index:
-            structure_2_is = 'both'
-            structure_1_is = 'both'
-            structure_value_2 = high
-            structure_value_1 = low
-            structure_index_2 = high_index
-            structure_index_1 = low_index
-        elif structure_3_is == 'high':
-            structure_2_is = 'low'
-            structure_value_2 = low
-            structure_index_2 = low_index
-        elif structure_3_is == 'low':
-            structure_2_is = 'high'
-            structure_value_2 = high
-            structure_index_2 = high_index
-    
-    # check if 2nd from last structure is a high / low, or a combination of both
-    if structure_1_is == None:
-        if structure_2_is == 'both':
+        # get structure indices
+        high_index = last_two_structure_highs_indices[i]
+        low_index = last_two_structure_lows_indices[i]
+
+        # get structure values
+        high = highs[high_index]
+        low = lows[low_index]
+        
+        # check if last structure is a high / low, or a combination of both
+        if structure_3_is == None and new_loop == True:
+            new_loop = False
             if high_index == low_index:
-                structure_1_is = 'both'
-                structure_value_1 = high
-                structure_index_1 = high_index
+                structure_3_is = 'both'
+                structure_2_is = 'both'
+                structure_value_3 = high
+                structure_value_2 = low
+                structure_index_3 = high_index
+                structure_index_2 = low_index
             elif high_index > low_index:
-                structure_1_is = 'high'
-                structure_value_1 = high
-                structure_index_1 = high_index
+                structure_3_is = 'high'
+                structure_value_3 = high
+                structure_index_3 = high_index
             elif low_index > high_index:
+                structure_3_is = 'low'
+                structure_value_3 = low
+                structure_index_3 = low_index
+        
+        # check if 1st from last structure is a high / low, or a combination of both
+        if structure_2_is == None and new_loop == True:
+            new_loop = False
+            if high_index == low_index:
+                structure_2_is = 'both'
+                structure_1_is = 'both'
+                structure_value_2 = high
+                structure_value_1 = low
+                structure_index_2 = high_index
+                structure_index_1 = low_index
+            elif structure_3_is == 'high':
+                structure_2_is = 'low'
+                structure_value_2 = low
+                structure_index_2 = low_index
+            elif structure_3_is == 'low':
+                structure_2_is = 'high'
+                structure_value_2 = high
+                structure_index_2 = high_index
+        
+        # check if 2nd from last structure is a high / low, or a combination of both
+        if structure_1_is == None and new_loop == True:
+            new_loop = False
+            if structure_2_is == 'both':
+                if high_index == low_index:
+                    structure_1_is = 'both'
+                    structure_value_1 = high
+                    structure_index_1 = high_index
+                elif high_index > low_index:
+                    structure_1_is = 'high'
+                    structure_value_1 = high
+                    structure_index_1 = high_index
+                elif low_index > high_index:
+                    structure_1_is = 'low'
+                    structure_value_1 = low
+                    structure_index_1 = low_index
+            elif structure_2_is == 'high':
                 structure_1_is = 'low'
                 structure_value_1 = low
                 structure_index_1 = low_index
-        elif structure_2_is == 'high':
-            structure_1_is = 'low'
-            structure_value_1 = low
-            structure_index_1 = low_index
-        elif structure_2_is == 'low':
-            structure_1_is = 'high'
-            structure_value_1 = high
-            structure_index_1 = high_index
+            elif structure_2_is == 'low':
+                structure_1_is = 'high'
+                structure_value_1 = high
+                structure_index_1 = high_index
 
-    # if we are now on index 0 and structure_1_is == None, repeat the index 0 loop, else break loop
-    print(i)
-    if i == 0 and structure_1_is == None:
-        do_nothing = True
-    else:
-        break
+        # if we are now on index 0 and structure_1_is == None, repeat the index 0 loop, else break loop
+        print(i)
+        if i == 0 and structure_1_is == None:
+            new_loop = True
+        else:
+            break
 
 print(structure_value_1, structure_value_2, structure_value_3)
 print(structure_index_1, structure_index_2, structure_index_3)
