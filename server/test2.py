@@ -81,12 +81,14 @@ for i in range(1, -1, -1): # loop backwards, starting from the second index whic
                 structure_index_1 = low_index
             elif structure_3_is == 'high':
                 structure_2_is = 'low'
-                structure_value_2 = low
-                structure_index_2 = low_index
+                index_of_first_low_from_high = [z for z in last_two_structure_lows_indices if z < structure_index_3][-1]
+                structure_value_2 = lows[index_of_first_low_from_high]
+                structure_index_2 = index_of_first_low_from_high
             elif structure_3_is == 'low':
                 structure_2_is = 'high'
-                structure_value_2 = high
-                structure_index_2 = high_index
+                index_of_first_high_from_low = [z for z in last_two_structure_highs_indices if z < structure_index_3][-1]
+                structure_value_2 = highs[index_of_first_high_from_low]
+                structure_index_2 = index_of_first_high_from_low
         
         # check if 2nd from last structure is a high / low, or a combination of both
         if structure_1_is == None and new_loop == True:
@@ -106,12 +108,14 @@ for i in range(1, -1, -1): # loop backwards, starting from the second index whic
                     structure_index_1 = low_index
             elif structure_2_is == 'high':
                 structure_1_is = 'low'
-                structure_value_1 = low
-                structure_index_1 = low_index
+                index_of_first_low_from_high = [z for z in last_two_structure_lows_indices if z < structure_index_3][-1]
+                structure_value_1 = lows[index_of_first_low_from_high]
+                structure_index_1 = index_of_first_low_from_high
             elif structure_2_is == 'low':
                 structure_1_is = 'high'
-                structure_value_1 = high
-                structure_index_1 = high_index
+                index_of_first_high_from_low = [z for z in last_two_structure_highs_indices if z < structure_index_3][-1]
+                structure_value_1 = highs[index_of_first_high_from_low]
+                structure_index_1 = index_of_first_high_from_low
 
         # if we are now on index 0 and structure_1_is == None, repeat the index 0 loop, else break loop
         print(i)
