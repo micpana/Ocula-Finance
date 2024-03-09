@@ -1,7 +1,7 @@
 import numpy as np
 
 # feature extraction
-def extract_price_action_features(lows, highs, closes):
+def extract_price_action_features(lows, highs, last_close):
     # find indices of structure highs (i.e., highest values in each consecutive sub-sequence)
     structure_highs_indices = np.argwhere(np.diff(np.sign(highs - np.roll(highs, 1))) < 0).flatten()
 
@@ -121,9 +121,6 @@ def extract_price_action_features(lows, highs, closes):
     # gradient calculation ... m = (y2 - y1) / (x2 - x1) ... price is y, indexes are x
     gradient_1 = (structure_value_2 - structure_value_1) / (structure_index_2 - structure_index_1)
     gradient_2 = (structure_value_3 - structure_value_2) / (structure_index_3 - structure_index_2)
-
-    # get last close 
-    last_close = closes[-1]
 
     # make structure patterns identifiable regardless of price ranges, by using differences between prices
     structure_2_to_structure_1 = structure_value_2 - structure_value_1
