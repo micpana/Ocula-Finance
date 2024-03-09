@@ -127,3 +127,9 @@ for i in range(1, -1, -1): # loop backwards, starting from the second index whic
 print(structure_value_1, structure_value_2, structure_value_3)
 print(structure_index_1, structure_index_2, structure_index_3)
 print(structure_1_is, structure_2_is, structure_3_is)
+
+# gradient calculation ... m = (y2 - y1) / (x2 - x1) ... price is y, indexes are x
+gradient_1 = (structure_value_2 - structure_value_1) / (structure_index_2 - structure_index_1)
+gradient_2 = (structure_value_3 - structure_value_2) / (structure_index_3 - structure_index_2)
+
+print(gradient_1, gradient_2)

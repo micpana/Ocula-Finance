@@ -117,6 +117,10 @@ def extract_price_action_features(lows, highs):
                 new_loop = True
             else:
                 break
+
+    # gradient calculation ... m = (y2 - y1) / (x2 - x1) ... price is y, indexes are x
+    gradient_1 = (structure_value_2 - structure_value_1) / (structure_index_2 - structure_index_1)
+    gradient_2 = (structure_value_3 - structure_value_2) / (structure_index_3 - structure_index_2)
     
     # return price action features
     return structure_value_1, structure_value_2, structure_value_3, gradient_1, gradient_2
