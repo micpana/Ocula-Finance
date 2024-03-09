@@ -126,9 +126,9 @@ def extract_price_action_features(lows, highs, closes):
     last_close = closes[-1]
 
     # make structure patterns identifiable regardless of price ranges, by using differences between prices
-    structure_2_to_structure_1
-    structure_3_to_structure_3
-    last_close_to_structure_3
+    structure_2_to_structure_1 = structure_value_2 - structure_value_1
+    structure_3_to_structure_2 = structure_value_3 - structure_value_2
+    last_close_to_structure_3 = last_close - structure_value_3
     
     # return price action features
-    return structure_value_1, structure_value_2, structure_value_3, gradient_1, gradient_2, last_close
+    return structure_2_to_structure_1, structure_3_to_structure_2, gradient_1, gradient_2, last_close_to_structure_3

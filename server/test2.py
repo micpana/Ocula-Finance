@@ -133,3 +133,13 @@ gradient_1 = (structure_value_2 - structure_value_1) / (structure_index_2 - stru
 gradient_2 = (structure_value_3 - structure_value_2) / (structure_index_3 - structure_index_2)
 
 print(gradient_1, gradient_2)
+
+# get last close
+last_close = 1
+
+# make structure patterns identifiable regardless of price ranges, by using differences between prices
+structure_2_to_structure_1 = structure_value_2 - structure_value_1
+structure_3_to_structure_2 = structure_value_3 - structure_value_2
+last_close_to_structure_3 = last_close - structure_value_3
+
+print(structure_2_to_structure_1, structure_3_to_structure_2, gradient_1, gradient_2, last_close_to_structure_3)
