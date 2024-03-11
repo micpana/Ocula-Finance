@@ -56,7 +56,7 @@ def test(symbol):
 
     # Seeker parameters
     seeker.n_closest = 3
-    seeker.run_value_simulation = True
+    seeker.run_value_simulation = False
     seeker.number_of_simulations = 100000
     seeker. simulate_using_normalize_distribution = False
     seeker.verbosity = True

@@ -10,11 +10,11 @@ def extract_price_action_features(lows, highs, last_close):
 
     # if high indices are consecutive, just take the last one
     structure_highs_consecutive_indices = np.where(np.diff(structure_highs_indices) == 1)[0]
-    structure_highs_indices = structure_highs_indices[structure_highs_consecutive_indices + 1]
+    structure_highs_indices = np.delete(structure_highs_indices, structure_highs_consecutive_indices)
 
     # if low indices are consecutive, just take the last one
     structure_lows_consecutive_indices = np.where(np.diff(structure_lows_indices) == 1)[0]
-    structure_lows_indices = structure_lows_indices[structure_lows_consecutive_indices + 1]
+    structure_lows_indices = np.delete(structure_lows_indices, structure_lows_consecutive_indices)
 
     # get the corresponding peak values using the structure highs indices
     structure_highs = highs[structure_highs_indices]
@@ -121,11 +121,6 @@ def extract_price_action_features(lows, highs, last_close):
     # gradient calculation ... m = (y2 - y1) / (x2 - x1) ... price is y, indexes are x
     gradient_1 = (structure_value_2 - structure_value_1) / (structure_index_2 - structure_index_1)
     gradient_2 = (structure_value_3 - structure_value_2) / (structure_index_3 - structure_index_2)
-
-    # make structure patterns identifiable regardless of price ranges, by using differences between prices
-    structure_2_to_structure_1 = structure_value_2 - structure_value_1
-    structure_3_to_structure_2 = structure_value_3 - structure_value_2
-    last_close_to_structure_3 = last_close - structure_value_3
     
     # return price action features
-    return structure_2_to_structure_1, structure_3_to_structure_2, gradient_1, gradient_2, last_close_to_structure_3
+    return structure_value_1, structure_value_2, structure_value_3, gradient_1, gradient_2, last_close

@@ -156,9 +156,9 @@ def get_timeframes_in_use():
     timeframes_in_use = [
         # 'Monthly',
         # 'Weekly',
-        # 'Daily', 
-        # 'H4', 
-        # 'H1', 
+        'Daily', 
+        'H4', 
+        'H1', 
         'M15',
         # 'M5',
         # 'M1'
@@ -252,7 +252,7 @@ def show_simulated_price_chart():
 
 # index of model to use
 def index_of_model_to_use():
-    index = 2
+    index = 1
 
     return index
 
@@ -294,7 +294,7 @@ def y_use_percentages():
 
 # get scaler x status
 def scale_x():
-    scale_x = False
+    scale_x = True
 
     return scale_x
 
@@ -361,7 +361,8 @@ def get_models_path(symbol, timeframes, features_type):
 
 # get models checkpoints path
 def get_models_checkpoints_path(symbol, timeframes, features_type):
-    path = 'models checkpoints/' + 'weights' + universal_filename_append_string(timeframes, features_type, False) + '.best' + '.hdf5' 
+    # path = 'models checkpoints/' + 'weights' + universal_filename_append_string(timeframes, features_type, False) + '.best' + '.weights.h5' 
+    path = 'models checkpoints/model_weights.weights.h5' 
 
     return path
 
