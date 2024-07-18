@@ -2,107 +2,59 @@ import numpy as np
 from tqdm import tqdm
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
+from collections import deque
 
 class Seeker(object):
     def __init__(self):
         # parameters
         self.x = []
         self.y = []
-        self.n_closest = 2
-        self.run_value_simulation = True
-        self.number_of_simulations = 100000
-        self. simulate_using_normalize_distribution = True
         self.verbosity = True
+        self.regression = True
 
     # function for seeking
     def seeker(self, input):
         # model parameters
         verbosity = self.verbosity
-        n_closest = self.n_closest
-        run_value_simulation = self.run_value_simulation
-        number_of_simulations = self.number_of_simulations
-        simulate_using_normalize_distribution = self.simulate_using_normalize_distribution
-        current_column_index = self.current_column_index
+        regression = self.regression
 
-        # NOTE ... we're getting x and y directly from class parameters using self.x and self.y inorder to reduce overhead of assigning data to new x and y local variables during loops eg when seeker is called by the test function
+        # compare corresponding columns per each row
+        sequence_comparisons =  np.abs(input - self.x)
 
-        # signal operation's start
-        if verbosity == True:
-            print('\n\nSeeking...')
+        # calculate weight value for each row based on column similarity figures
+        sequence_row_sumations = sequence_comparisons.sum(axis=1) 
 
-        #  weigh similarities per each row and perform sumations for each row's column ... using abs((input value - row-column value) / input value)
-        if verbosity == True:
-            print('Weighing rows...')
-        normalized_differences = np.abs((input - self.x) / np.max(self.x)) # calculate similarities in each column per each row
-        normalized_differences = np.nan_to_num(normalized_differences, nan=0, posinf=0, neginf=0) # replace all nan and inf values with 0
-        row_sumations = normalized_differences.sum(axis=1) # calculate weight value for each row based on column similarity figures
+        # get the smallest value in sequence summations
+        smallest_weight = np.nanmin(sequence_row_sumations) # ignore nans
 
-        # sort row sumations
-        sorted_sumations = np.sort(row_sumations)
+        # find indexes of all rows holding the smallest weight we found
+        indexes = np.where(sequence_row_sumations == smallest_weight)
 
-        # get n closest values in sorted_summations *****************************
-        if verbosity == True:
-            print('Finding best matches...')
-        # get the n closest rows' weight values
-        n_closest_values = sorted_sumations[:n_closest] 
-        # create a boolean mask where each element of n_closest_values is compared to each element of row_sumations
-        mask = n_closest_values[:, np.newaxis] == row_sumations
-        # use np.where to find the indices where the mask is True
-        indices = np.where(mask)
-        # get the indexes of n closest values
-        indexes_for_n_closest_values = indices[1]
+        # get the real perceived values according to the indexes holding the smallest weight
+        real_perceived_values = self.y[indexes]
 
-        # obtain the real closest values using the obtained indexes ... from y's entire rows but column=current_column_index
-        if verbosity == True:
-            print('Obtaining real values...')
-        real_closest_values = np.array([self.y[:, current_column_index][i] for i in indexes_for_n_closest_values if True], dtype=float)
+        # get seek result
+        unique, counts = np.unique(real_perceived_values, return_counts=True, axis=0) # arrays of unique values and their counts
+        # print('y:', self.y)
+        # print('sequence comparisons:', sequence_comparisons)
+        # print('summations:', sequence_row_sumations)
+        # print('smallest weight:', smallest_weight)
+        # print('indexes:', indexes)
+        # print('real:', real_perceived_values)
+        # print('unique:', unique)
+        # print('counts:', counts)
+        counts_equal = np.all(counts == counts[0]) # check if the probabilities are equal
+        if counts_equal == False: # if we have a single most probable outcome
+            most_frequent_indices = np.argmax(counts, axis=0)
+            seek_result = unique[most_frequent_indices]
+        else: # if we have the same probabilities
+            # for regression
+            if regression == True:
+                seek_result = np.mean(unique, axis=0)
+            else: # for classification
+                seek_result = unique[0]
 
-        # run seek_result via basic estimation
-        if run_value_simulation == False:
-            # calculate mean
-            seek_result = real_closest_values.mean()
-
-        # run seek_result via Monte Carlo Simulation
-        else:
-            # get the smallest and larget values among the real closest values
-            min_value = real_closest_values.min()
-            max_value = real_closest_values.max()
-
-            # if we're using a normalized distribution
-            if simulate_using_normalize_distribution == True:
-                # normalize real closest values
-                normalized_values = np.array([(y - min_value) / (max_value - min_value) for y in real_closest_values], dtype=float)
-
-                # get mean and standard deviation
-                mean = normalized_values.mean()
-                std = normalized_values.std()
-
-                # run simulations
-                if verbosity == True:
-                    print('Simulating Outputs...')
-                simulations = np.random.normal(mean, std, number_of_simulations)
-
-                # change normalized simulations to our ordinary scale
-                simulations = np.array([(y * (max_value - min_value)) + min_value for y in simulations], dtype=float)
-                
-                # use the mean of the simulated values as the seek_result
-                seek_result = simulations.mean()
-            
-            # if we're not using a normalized distribution
-            else:
-                # run simulation
-                if verbosity == True:
-                    print('Simulating Outputs...')
-                simulations = np.random.uniform(min_value, max_value, number_of_simulations) # we're adding abs(min_value) to max_value so as to include max_value during simulation ... abs(min_value) won't stray max simulated values away from the distribution of our values
-
-                # use the mean of the simulated values as the seek_result
-                seek_result = simulations.mean()
-
-        # create empty space between seeker's printouts and any other console outputs that may come after
-        if verbosity == True:
-            print('\n\n')
-
-        # return seek result
+        # return seek result, which = most frequent elements
         return seek_result
 
     # function for using seeker given a single input
@@ -110,26 +62,17 @@ class Seeker(object):
         # set x and y as class parameters
         self.x = x
         self.y = y
+        verbosity = self.verbosity
 
-        # get number of columns y has
-        y_column_count = len(y[0])
+        # signal operation's start
+        if verbosity == True:
+            print('\n\nSeeking...\n\n')
 
-        # initialize array to store seek_results ... number of rows is one because this function is for single inputs
-        seek_results = np.zeros((1, y_column_count))
+        # seek
+        seek_result = self.seeker(input)
 
-        # loop through y columns
-        for j in range(0, y_column_count, +1):
-            # set current column index to class parameters
-            self.current_column_index = j
-
-            # seek
-            seek_result = self.seeker(input)
-
-            # add seeker result to seek_results array ... row index is 0 because this function is for single inputs
-            seek_results[0, j] = seek_result
-
-        # return seek results
-        return seek_results
+        # return seek result
+        return seek_result
 
     # function for testing seeker
     def test(self, x, y, x_test, y_test):
@@ -147,30 +90,28 @@ class Seeker(object):
         if verbosity == True:
             print('\n\nTesting...')
 
-        # get number of columns y has
-        y_column_count = len(y[0])
-
         # initialize array to store seek_results
-        seek_results = np.zeros((len(x_test), y_column_count))
+        seek_results = deque([])
 
         # loop through x_test
         for i in tqdm(range(0, len(x_test), +1), desc="Testing", unit="row", disable= not verbosity):
             # get current row's data
             test_input_row = x_test[i]
 
-            # loop through y columns
-            for j in range(0, y_column_count, +1):
-                # set current column index to class parameters
-                self.current_column_index = j
+            # seek
+            seek_result = self.seeker(test_input_row)
 
-                # seek
-                seek_result = self.seeker(test_input_row)
+            # add seek result to seek results array
+            seek_results.append(seek_result)
 
-                # add seeker result to seek_results array
-                seek_results[i, j] = seek_result
+        # for regression
+        if self.regression == True:
+            seek_results = np.array(seek_results)
+        else: # for classification
+            seek_results = np.array(seek_results, dtype=str)
 
-        # performance results printing
-        if verbosity == True:
+        # for regression
+        if self.regression == True:
             # mean squared error
             mse = mean_squared_error(y_test, seek_results)
 
@@ -180,18 +121,25 @@ class Seeker(object):
             # mean absolute error
             mae = mean_absolute_error(y_test, seek_results)
 
-            # print performance results
-            print('\n\nMean Squared Error (MSE):', mse)
-            print('Root Mean Squared Error (RMSE):', rmse)
-            print('Mean Absolute Error (MAE):', mae, '\n\n')
+            # performance results printing
+            if verbosity == True:
+                # print performance results
+                print('\n\nMean Squared Error (MSE):', mse)
+                print('Root Mean Squared Error (RMSE):', rmse)
+                print('Mean Absolute Error (MAE):', mae, '\n\n')
 
-        # results object
-        results_object = {
-            'seek_results': seek_results,
-            'mse': mse,
-            'rmse': rmse,
-            'mae': mae
-        }
+            # results object
+            results_object = {
+                'seek_results': seek_results,
+                'mse': mse,
+                'rmse': rmse,
+                'mae': mae
+            }
+        else: # for classification
+            # results object
+            results_object = {
+                'seek_results': seek_results
+            }
 
         # create empty space between seeker's printouts and any other console outputs that may come after
         if verbosity == True:

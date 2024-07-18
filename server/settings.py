@@ -116,8 +116,8 @@ def prediction_data_source():
     return source
 
 # whether to use price action features or not ... will overide use_closing_prices_only(), use_weighted_features(), x_use_log_returns(), x_use_percentages(), and y_use_percentages()
-def use_price_action_features():
-    use_price_action_features = True
+def use_price_action_features(): # requires a reasonably high lookback
+    use_price_action_features = False
 
     return use_price_action_features
 
@@ -141,7 +141,7 @@ def get_forecast_period():
 
 # lookback period
 def get_lookback_period():
-    lookback_period = 50
+    lookback_period = 7
 
     return lookback_period
 
@@ -262,9 +262,9 @@ def shuffle_train_validation_data():
 
     return shuffle
 
-# whether to combine training and validation set into one or not, might be useful for non kerals models ... set to true for keras models
+# whether to combine training and validation set into one or not, might be useful for non kerals models ... set to true for non keras models ... for non keras models that cannot use a validation set during training
 def combine_training_and_validation_set():
-    combine = False
+    combine = True
 
     return combine
 
@@ -282,7 +282,7 @@ def x_use_log_returns(): # (requires x_use_percentages() to be set to true inord
 
 # whether to use percentage changes or price on x data
 def x_use_percentages():
-    use = True
+    use = False
 
     return use
 
