@@ -172,45 +172,61 @@ elif y_type == 'buy or sell':
 
     # print confusion matrix
     confusion_matrix_ = pd.DataFrame(
-        confusion_matrix(y_test, y_predicted, labels=['Buy', 'Nothing', 'Sell']), 
-        index=['Buy (Actual)', 'Nothing (Actual)', 'Sell (Actual)'], 
-        columns=['Buy (Predicted)', 'Nothing (Predicted)', 'Sell (Predicted)']
+        confusion_matrix(y_test, y_predicted, labels=[
+            'Buy',
+            'Nothing',
+            'Sell'
+        ]), 
+        index=[
+            'Actual Buy',
+            'Actual Nothing',
+            'Actual Sell'
+        ], 
+        columns=[
+            'Predicted Buy',
+            'Predicted Nothing',
+            'Predicted Sell'
+        ]
     )
     print('CONFUSION MATRIX:\n', confusion_matrix_, '\n\n')
     # *****************************************************************************************************************
 
     # visualize actual vs predicted ***********************************************************************************
-    # replace all Buys with 1
-    y_test[y_test == 'Buy'] = 1
-    y_predicted[y_predicted == 'Buy'] = 1
+    visualize_actual_vs_predicted = True
+    if visualize_actual_vs_predicted == True:
+        # replace all Buys with 1
+        y_test[y_test == 'Buy'] = 1
+        y_predicted[y_predicted == 'Buy'] = 1
 
-    # replace all Nothings with 0
-    y_test[y_test == 'Nothing'] = 0
-    y_predicted[y_predicted == 'Nothing'] = 0
+        # replace all Nothing with 0
+        y_test[y_test == 'Nothing'] = 0
+        y_predicted[y_predicted == 'Nothing'] = 0
 
-    # replace all Sells with -1
-    y_test[y_test == 'Sell'] = -1
-    y_predicted[y_predicted == 'Sell'] = -1
+        # replace all Sells with -1
+        y_test[y_test == 'Sell'] = -1
+        y_predicted[y_predicted == 'Sell'] = -1
 
-    # plot comparisons
-    plt.plot(y_test, label='Actual')
-    plt.plot(y_predicted, label='Predicted')
-    plt.xticks(rotation=90)
-    plt.title('Predicted vs Actual')
-    plt.legend()
-    plt.show()
+        # plot comparisons
+        plt.plot(y_test, label='Actual')
+        plt.plot(y_predicted, label='Predicted')
+        plt.xticks(rotation=90)
+        plt.title('Predicted vs Actual')
+        plt.legend()
+        plt.show()
     # *****************************************************************************************************************
 
     # feature importance **********************************************************************************************
-    # get feature importance
-    feature_importance = model.feature_importances_
+    visualize_feature_importance = True
+    if visualize_feature_importance == True:
+        # get feature importance
+        feature_importance = model.feature_importances_
 
-    # plot feature importance
-    plt.bar([x_column_list[x] for x in range(len(feature_importance))], feature_importance)
-    plt.xticks(rotation=90, ha='right')
-    plt.title("Feature Importance")
-    plt.xlabel("Features")
-    plt.ylabel("Scores")
-    plt.show()
+        # plot feature importance
+        plt.bar([x_column_list[x] for x in range(len(feature_importance))], feature_importance)
+        plt.xticks(rotation=90, ha='right')
+        plt.title("Feature Importance")
+        plt.xlabel("Features")
+        plt.ylabel("Scores")
+        plt.show()
     # *****************************************************************************************************************
 # *****************************************************************************************************************************************

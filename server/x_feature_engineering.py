@@ -38,7 +38,7 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
         # 'Daily', 
         # 'H4', 
         'H1', 
-        # 'M30',
+        'M30',
         'M15'
     ]
 
@@ -81,22 +81,54 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
         x_dict[timeframe+'_Candlestick_Size'] = deque([])
         # candlestick size log
         x_dict[timeframe+'_Candlestick_Size_Log'] = deque([])
-        # 50 MA
-        x_dict[timeframe+'_50MA'] = deque([])
-        # 50 MA log change from first candle close in view window
-        x_dict[timeframe+'_50MA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
-        # 25 MA 
-        x_dict[timeframe+'_25MA'] = deque([])
-        # 25 MA log change from first candle close in view window
-        x_dict[timeframe+'_25MA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
-        # 10 MA
-        x_dict[timeframe+'_10MA'] = deque([])
-        # 10 MA log change from first candle close in view window
-        x_dict[timeframe+'_10MA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
-        # 5 MA
-        x_dict[timeframe+'_5MA'] = deque([])
-        # 5 MA log change from first candle close in view window
-        x_dict[timeframe+'_5MA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
+        # MAs *******************************************************************************************************************
+        ma_periods = np.array([50, 25, 10, 5])
+        for z in range(len(ma_periods)):
+            # MA period
+            period = ma_periods[z]
+            # MA
+            x_dict[timeframe+'_'+str(period)+'MA'] = deque([])
+            # MA log change from first candle close in view window
+            x_dict[timeframe+'_'+str(period)+'MA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
+            # current close - MA
+            x_dict[timeframe+'_Close-'+str(period)+'MA'] = deque([])
+            # MA log change from current close
+            x_dict[timeframe+'_Close_'+str(period)+'MA_Log_Change'] = deque([])
+            # current open - MA
+            x_dict[timeframe+'_Open-'+str(period)+'MA'] = deque([])
+            # MA log change from current open
+            x_dict[timeframe+'_Open_'+str(period)+'MA_Log_Change'] = deque([])
+            # current high - MA
+            x_dict[timeframe+'_High-'+str(period)+'MA'] = deque([])
+            # MA log change from current high
+            x_dict[timeframe+'_High_'+str(period)+'MA_Log_Change'] = deque([])
+            # current low - MA
+            x_dict[timeframe+'_Low-'+str(period)+'MA'] = deque([])
+            # MA log change from current low
+            x_dict[timeframe+'_Low_'+str(period)+'MA_Log_Change'] = deque([])
+            # difference between current MA and every other MA before it **********************************************
+            if z != 0:
+                for y in range(len(ma_periods[:z])):
+                    # larger MA period
+                    larger_period = ma_periods[y]
+                    # current MA - larger MA
+                    x_dict[timeframe+'_'+str(period)+'MA-'+str(larger_period)+'MA'] = deque([])
+                    # current MA larger MA Log change
+                    x_dict[timeframe+'_'+str(period)+'MA_'+str(larger_period)+'MA_Log_Change'] = deque([])
+            # *********************************************************************************************************
+        # ***********************************************************************************************************************
+        # RSIs ******************************************************************************************************************
+        rsi_periods = np.array([14])
+        for period in rsi_periods:
+            # period rsi
+            x_dict[timeframe+'_'+str(period)+'_Period_RSI'] = deque([])
+        # ***********************************************************************************************************************
+        # standard deviations ***************************************************************************************************
+        std_periods = np.array([20])
+        for period in std_periods:
+            # period standard deviation
+            x_dict[timeframe+'_'+str(period)+'_Period_Std'] = deque([])
+        # ***********************************************************************************************************************
         # n most recent turning points ******************************************************************************************
         for i in range(number_of_most_recent_turning_points_per_each_view_window, 0, -1): # loop in reverse ... from n till 1
             # turning point's position from current candle
@@ -122,7 +154,69 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
             x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Slope_Log_From_Previous_Turning_Point'] = deque([])
             x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Broke_Structure_Up'] = deque([])
             x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Broke_Structure_Down'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_Close'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_Close'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_Close'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_Close'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_Open'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_Open'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_Open'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_Open'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_High'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_High'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_High'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_High'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_Low'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_Low'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_Low'] = deque([])
+            x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_Low'] = deque([])
         # ***********************************************************************************************************************
+    # *************************************************************************************************************************************
+
+    # function for calculating RSI ********************************************************************************************************
+    def calculate_rsi(prices, period=14):
+        # Calculate daily price changes
+        deltas = np.diff(prices)
+        
+        # Separate positive and negative price changes
+        gains = np.where(deltas > 0, deltas, 0)
+        losses = np.where(deltas < 0, -deltas, 0)
+        
+        # Calculate the average gains and losses over the specified period
+        avg_gain = np.zeros_like(prices)
+        avg_loss = np.zeros_like(prices)
+        
+        avg_gain[period] = np.mean(gains[:period])
+        avg_loss[period] = np.mean(losses[:period])
+        
+        # Calculate the average gains and losses for the rest of the array
+        for i in range(period + 1, len(prices)):
+            avg_gain[i] = (avg_gain[i - 1] * (period - 1) + gains[i - 1]) / period
+            avg_loss[i] = (avg_loss[i - 1] * (period - 1) + losses[i - 1]) / period
+        
+        # Calculate Relative Strength (RS)
+        rs = avg_gain / avg_loss
+        
+        # Calculate RSI
+        rsi = 100 - (100 / (1 + rs))
+        
+        # return most recent rsi value
+        return rsi[-1]
+    # *************************************************************************************************************************************
+
+    # function for calculating typical price **********************************************************************************************
+    def calculate_typical_price(close, open, high, low):
+        return (close + open + high + low) / 4
+    # *************************************************************************************************************************************
+
+    # function for calculating standard deviation ****************************************************************************************
+    def calculate_rolling_std(typical_prices, period=20):
+        rolling_std = np.zeros_like(typical_prices)
+        for i in range(period - 1, len(typical_prices)):
+            rolling_std[i] = np.std(typical_prices[i - period + 1:i + 1])
+
+        # return most recent std
+        return rolling_std[-1]
     # *************************************************************************************************************************************
 
     # loop through each timeframe's df and populate df dict *******************************************************************************
@@ -156,6 +250,22 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
             turning_points_dict['Turning_Point_Slope_Log_From_Previous_Turning_Point'] = deque([])
             turning_points_dict['Turning_Point_Broke_Structure_Up'] = deque([])
             turning_points_dict['Turning_Point_Broke_Structure_Down'] = deque([])
+            turning_points_dict['Turning_Point_Subtracted_From_Current_Close'] = deque([])
+            turning_points_dict['Turning_Point_Log_Change_From_Current_Close'] = deque([])
+            turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Close'] = deque([])
+            turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Close'] = deque([])
+            turning_points_dict['Turning_Point_Subtracted_From_Current_Open'] = deque([])
+            turning_points_dict['Turning_Point_Log_Change_From_Current_Open'] = deque([])
+            turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Open'] = deque([])
+            turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Open'] = deque([])
+            turning_points_dict['Turning_Point_Subtracted_From_Current_High'] = deque([])
+            turning_points_dict['Turning_Point_Log_Change_From_Current_High'] = deque([])
+            turning_points_dict['Turning_Point_Close_Subtracted_From_Current_High'] = deque([])
+            turning_points_dict['Turning_Point_Close_Log_Change_From_Current_High'] = deque([])
+            turning_points_dict['Turning_Point_Subtracted_From_Current_Low'] = deque([])
+            turning_points_dict['Turning_Point_Log_Change_From_Current_Low'] = deque([])
+            turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Low'] = deque([])
+            turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Low'] = deque([])
             # ***********************************************************************************************
 
             # first candle ohlc in view window
@@ -164,6 +274,16 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
             first_candle_high_in_view_window = highs[first_candle_index_in_view_window]
             first_candle_low_in_view_window = lows[first_candle_index_in_view_window]
             first_candle_close_in_view_window = closes[first_candle_index_in_view_window]
+
+            # array of all closes up until i, i included
+            all_closes_till_i = closes[:i+1] # i+1 so that i is included
+
+            # current ohlc data, plus date
+            current_candle_date = dates[i]
+            current_candle_open = opens[i]
+            current_candle_high = highs[i]
+            current_candle_low = lows[i]
+            current_candle_close = closes[i]
 
             # go through view window to find turning points *************************************************
             for j in range(view_window):
@@ -211,19 +331,44 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
                     # high's parameters
                     turning_point = second_most_recent_high # high's value
                     turning_point_close = previous_close if previous_close >= previous_open else previous_open # high's close/open depending on candlestick type
+                    # high compared to first candle close in view window
                     turning_point_log_change_from_first_candle_close_in_view_window = np.log(turning_point / first_candle_close_in_view_window) # high's log change from first candle close
                     turning_point_close_log_change_from_first_candle_close_in_view_window = np.log(turning_point_close / first_candle_close_in_view_window) # high close's log change from first candle close
+                    # mark as high
                     turning_point_is_a_high = 1 # 0 if false, 1 if true
                     turning_point_is_a_low = 0 # 0 if false, 1 if true
+                    # x and y positioning
                     turning_point_index_in_view_window = j-1 # high's index in view window
                     turning_point_y_distance_from_previous_turning_point = turning_point - first_candle_low_in_view_window if len(turning_points_dict['Turning_Point']) == 0 else turning_point - turning_points_dict['Turning_Point'][-1] # change in y
                     turning_point_y_log_distance_from_previous_turning_point = np.log(turning_point / first_candle_low_in_view_window) if len(turning_points_dict['Turning_Point']) == 0 else np.log(turning_point / turning_points_dict['Turning_Point'][-1]) # log change in y
                     turning_point_x_steps_from_previous_turning_point = steps_from_last_turning_point
                     turning_point_x_log_steps_from_previous_turning_point = log_change_in_x
+                    # gradient
                     turning_point_slope_from_previous_turning_point = turning_point_y_distance_from_previous_turning_point / turning_point_x_steps_from_previous_turning_point # slope / gradient
                     turning_point_slope_log_from_previous_turning_point =  turning_point_y_log_distance_from_previous_turning_point / log_change_in_x # log slope / gradient
+                    # market structure
                     turning_point_broke_structure_up = 0 if len(np.where(np.array(turning_points_dict['Turning_Point_Is_A_High']) == 1)[0]) == 0 else 1 if turning_point > turning_points_dict['Turning_Point'][np.where(np.array(turning_points_dict['Turning_Point_Is_A_High']) == 1)[0][-1]] else 0 # 0 if false, 1 if true
                     turning_point_broke_structure_down = 0 if len(np.where(np.array(turning_points_dict['Turning_Point_Is_A_Low']) == 1)[0]) == 0 else 1 if turning_point < turning_points_dict['Turning_Point'][np.where(np.array(turning_points_dict['Turning_Point_Is_A_Low']) == 1)[0][-1]] else 0 # 0 if false, 1 if true
+                    # turning point high compared to current candle's close
+                    current_close_minus_turning_point = current_candle_close - turning_point
+                    current_close_turning_point_log_change = np.log(current_candle_close / turning_point)
+                    current_close_minus_turning_point_close = current_candle_close - turning_point_close
+                    current_close_turning_point_close_log_change = np.log(current_candle_close / turning_point_close)
+                    # turning point high compared to current candle's open
+                    current_open_minus_turning_point = current_candle_open - turning_point
+                    current_open_turning_point_log_change = np.log(current_candle_open / turning_point)
+                    current_open_minus_turning_point_close = current_candle_open - turning_point_close
+                    current_open_turning_point_close_log_change = np.log(current_candle_open / turning_point_close)
+                    # turning point high compared to current candle's high
+                    current_high_minus_turning_point = current_candle_high - turning_point
+                    current_high_turning_point_log_change = np.log(current_candle_high / turning_point)
+                    current_high_minus_turning_point_close = current_candle_high - turning_point_close
+                    current_high_turning_point_close_log_change = np.log(current_candle_high / turning_point_close)
+                    # turning point high compared to current candle's low
+                    current_low_minus_turning_point = current_candle_low - turning_point
+                    current_low_turning_point_log_change = np.log(current_candle_low / turning_point)
+                    current_low_minus_turning_point_close = current_candle_low - turning_point_close
+                    current_low_turning_point_close_log_change = np.log(current_candle_low / turning_point_close)
                     # append parameter values to turning points dict
                     turning_points_dict['Turning_Point'].append(turning_point)
                     turning_points_dict['Turning_Point_Close'].append(turning_point_close)
@@ -241,25 +386,66 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
                     turning_points_dict['Turning_Point_Slope_Log_From_Previous_Turning_Point'].append(turning_point_slope_log_from_previous_turning_point)
                     turning_points_dict['Turning_Point_Broke_Structure_Up'].append(turning_point_broke_structure_up)
                     turning_points_dict['Turning_Point_Broke_Structure_Down'].append(turning_point_broke_structure_down)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_Close'].append(current_close_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_Close'].append(current_close_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Close'].append(current_close_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Close'].append(current_close_turning_point_close_log_change)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_Open'].append(current_open_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_Open'].append(current_open_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Open'].append(current_open_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Open'].append(current_open_turning_point_close_log_change)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_High'].append(current_high_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_High'].append(current_high_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_High'].append(current_high_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_High'].append(current_high_turning_point_close_log_change)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_Low'].append(current_low_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_Low'].append(current_low_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Low'].append(current_low_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Low'].append(current_low_turning_point_close_log_change)
 
                 # check for new low
                 if second_most_recent_low <= third_most_recent_low and second_most_recent_low <= most_recent_low:
                     # low's parameters
                     turning_point = second_most_recent_low # low's value
                     turning_point_close = previous_open if previous_open <= previous_close else previous_close # low's close/open depending on candlestick type
+                    # low compared to first candle in view window
                     turning_point_log_change_from_first_candle_close_in_view_window = np.log(turning_point / first_candle_close_in_view_window) # low's log change from first candle close
                     turning_point_close_log_change_from_first_candle_close_in_view_window = np.log(turning_point_close / first_candle_close_in_view_window) # low close's log change from first candle close
+                    # mark as low
                     turning_point_is_a_high = 0 # 0 if false, 1 if true
                     turning_point_is_a_low = 1 # 0 if false, 1 if true
+                    # x and y positioning
                     turning_point_index_in_view_window = j-1 # low's index in view window
                     turning_point_y_distance_from_previous_turning_point = turning_point - first_candle_high_in_view_window if len(turning_points_dict['Turning_Point']) == 0 else turning_point - turning_points_dict['Turning_Point'][-1] # change in y
                     turning_point_y_log_distance_from_previous_turning_point = np.log(turning_point / first_candle_high_in_view_window) if len(turning_points_dict['Turning_Point']) == 0 else np.log(turning_point / turning_points_dict['Turning_Point'][-1]) # log change in y
                     turning_point_x_steps_from_previous_turning_point = steps_from_last_turning_point
                     turning_point_x_log_steps_from_previous_turning_point = log_change_in_x
+                    # gradient
                     turning_point_slope_from_previous_turning_point = turning_point_y_distance_from_previous_turning_point / turning_point_x_steps_from_previous_turning_point # slope / gradient
                     turning_point_slope_log_from_previous_turning_point = turning_point_y_log_distance_from_previous_turning_point / log_change_in_x # log slope / gradient
+                    # market structure
                     turning_point_broke_structure_up = 0 if len(np.where(np.array(turning_points_dict['Turning_Point_Is_A_High']) == 1)[0]) == 0 else 1 if turning_point > turning_points_dict['Turning_Point'][np.where(np.array(turning_points_dict['Turning_Point_Is_A_High']) == 1)[0][-1]] else 0 # 0 if false, 1 if true
                     turning_point_broke_structure_down = 0 if len(np.where(np.array(turning_points_dict['Turning_Point_Is_A_Low']) == 1)[0]) == 0 else 1 if turning_point < turning_points_dict['Turning_Point'][np.where(np.array(turning_points_dict['Turning_Point_Is_A_Low']) == 1)[0][-1]] else 0 # 0 if false, 1 if true
+                    # turning point low compared to current candle's close
+                    current_close_minus_turning_point = current_candle_close - turning_point
+                    current_close_turning_point_log_change = np.log(current_candle_close / turning_point)
+                    current_close_minus_turning_point_close = current_candle_close - turning_point_close
+                    current_close_turning_point_close_log_change = np.log(current_candle_close / turning_point_close)
+                    # turning point low compared to current candle's open
+                    current_open_minus_turning_point = current_candle_open - turning_point
+                    current_open_turning_point_log_change = np.log(current_candle_open / turning_point)
+                    current_open_minus_turning_point_close = current_candle_open - turning_point_close
+                    current_open_turning_point_close_log_change = np.log(current_candle_open / turning_point_close)
+                    # turning point low compared to current candle's high
+                    current_high_minus_turning_point = current_candle_high - turning_point
+                    current_high_turning_point_log_change = np.log(current_candle_high / turning_point)
+                    current_high_minus_turning_point_close = current_candle_high - turning_point_close
+                    current_high_turning_point_close_log_change = np.log(current_candle_high / turning_point_close)
+                    # turning point low compared to current candle's low
+                    current_low_minus_turning_point = current_candle_low - turning_point
+                    current_low_turning_point_log_change = np.log(current_candle_low / turning_point)
+                    current_low_minus_turning_point_close = current_candle_low - turning_point_close
+                    current_low_turning_point_close_log_change = np.log(current_candle_low / turning_point_close)
                     # append parameter values to turning points dict
                     turning_points_dict['Turning_Point'].append(turning_point)
                     turning_points_dict['Turning_Point_Close'].append(turning_point_close)
@@ -277,19 +463,154 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
                     turning_points_dict['Turning_Point_Slope_Log_From_Previous_Turning_Point'].append(turning_point_slope_log_from_previous_turning_point)
                     turning_points_dict['Turning_Point_Broke_Structure_Up'].append(turning_point_broke_structure_up)
                     turning_points_dict['Turning_Point_Broke_Structure_Down'].append(turning_point_broke_structure_down)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_Close'].append(current_close_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_Close'].append(current_close_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Close'].append(current_close_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Close'].append(current_close_turning_point_close_log_change)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_Open'].append(current_open_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_Open'].append(current_open_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Open'].append(current_open_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Open'].append(current_open_turning_point_close_log_change)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_High'].append(current_high_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_High'].append(current_high_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_High'].append(current_high_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_High'].append(current_high_turning_point_close_log_change)
+                    turning_points_dict['Turning_Point_Subtracted_From_Current_Low'].append(current_low_minus_turning_point)
+                    turning_points_dict['Turning_Point_Log_Change_From_Current_Low'].append(current_low_turning_point_log_change)
+                    turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Low'].append(current_low_minus_turning_point_close)
+                    turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Low'].append(current_low_turning_point_close_log_change)
             # ***********************************************************************************************
             # *********************************************************************************************************
 
-            # array of all closes up until i, i included
-            all_closes_till_i = closes[:i+1] # i+1 so that i is included
-
-            # current ohlc data, plus date
-            current_candle_date = dates[i]
-            current_candle_open = opens[i]
-            current_candle_high = highs[i]
-            current_candle_low = lows[i]
-            current_candle_close = closes[i]
-
+            # calculations ********************************************************************************************
+            # ohlc data's log change from first candle in the view window
+            _Open_Log_Change_From_First_Candle_Close_In_View_Window = np.log(current_candle_open / first_candle_close_in_view_window)
+            _High_Log_Change_From_First_Candle_Close_In_View_Window = np.log(current_candle_high / first_candle_close_in_view_window)
+            _Low_Log_Change_From_First_Candle_Close_In_View_Window = np.log(current_candle_low / first_candle_close_in_view_window)
+            _Close_Log_Change_From_First_Candle_Close_In_View_Window = np.log(current_candle_close / first_candle_close_in_view_window)
+            # candlestick types
+            _Bullish = 1 if current_candle_close > current_candle_close else 0
+            _Bearish = 1 if current_candle_close < current_candle_open else 0
+            _Doji = 1 if current_candle_close == current_candle_open else 0
+            # wicks
+            _Upper_Wick = current_candle_high - current_candle_close if current_candle_close >= current_candle_open else current_candle_high - current_candle_open
+            _Lower_Wick = current_candle_close - current_candle_low if current_candle_close < current_candle_open else current_candle_open - current_candle_low
+            # wicks logs
+            _Upper_Wick_Log = np.log(current_candle_high / current_candle_close) if current_candle_close >= current_candle_open else np.log(current_candle_high / current_candle_open)
+            _Lower_Wick_Log = np.log(current_candle_close / current_candle_low) if current_candle_close < current_candle_open else np.log(current_candle_open / current_candle_low)
+            # body size
+            _Body_Size = current_candle_close - current_candle_open
+            # body size logs
+            _Body_Size_Log = np.log(current_candle_close / current_candle_open)
+            # candlestick size
+            _Candlestick_Size = current_candle_high - current_candle_low
+            # candlestick size logs
+            _Candlestick_Size_Log = np.log(current_candle_high / current_candle_low)
+            # MAs *******************************************************************************************
+            for z in range(len(ma_periods)):
+                # MA period
+                period = ma_periods[z]
+                # MA ******************************************************************************
+                ma = np.sum(all_closes_till_i[-period:]) / period
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_'+str(period)+'MA'].append(ma)
+                # *********************************************************************************
+                # MA log change from first candle close in view window ****************************
+                ma_log_change_from_first_candle_close_in_view_window = np.log(ma / first_candle_close_in_view_window)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_'+str(period)+'MA_Log_Change_From_First_Candle_Close_In_View_Window'].append(ma_log_change_from_first_candle_close_in_view_window)
+                # *********************************************************************************
+                # current close - MA **************************************************************
+                current_close_minus_ma = current_candle_close - ma
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Close-'+str(period)+'MA'].append(current_close_minus_ma)
+                # *********************************************************************************
+                # MA log change from current close ************************************************
+                ma_log_change_from_current_close = np.log(current_candle_close / ma)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Close_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_close)
+                # *********************************************************************************
+                # current open - MA ***************************************************************
+                current_open_minus_ma = current_candle_open - ma
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Open-'+str(period)+'MA'].append(current_open_minus_ma)
+                # *********************************************************************************
+                # MA log change from current open *************************************************
+                ma_log_change_from_current_open = np.log(current_candle_open / ma)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Open_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_open)
+                # *********************************************************************************
+                # current high - MA ***************************************************************
+                current_high_minus_ma = current_candle_high - ma
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_High-'+str(period)+'MA'].append(current_high_minus_ma)
+                # *********************************************************************************
+                # MA log change from current high *************************************************
+                ma_log_change_from_current_high = np.log(current_candle_high / ma)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_High_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_high)
+                # *********************************************************************************
+                # current low - MA ****************************************************************
+                current_low_minus_ma = current_candle_low - ma
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Low-'+str(period)+'MA'].append(current_low_minus_ma)
+                # *********************************************************************************
+                # MA log change from current low **************************************************
+                ma_log_change_from_current_low = np.log(current_candle_low / ma)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Low_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_low)
+                # *********************************************************************************
+                # difference between current MA and every other MA before it **********************
+                if z != 0:
+                    for y in range(len(ma_periods[:z])):
+                        # larger MA period
+                        larger_period = ma_periods[y]
+                        # larger MA
+                        larger_ma = np.sum(all_closes_till_i[-larger_period:]) / larger_period
+                        # current MA - larger MA ****************************************
+                        current_ma_minus_larger_ma = ma - larger_ma
+                        # add to df dict according to timeframe's append frequency
+                        for k in range(append_frequency):
+                            x_dict[timeframe+'_'+str(period)+'MA-'+str(larger_period)+'MA'].append(current_ma_minus_larger_ma)
+                        # ***************************************************************
+                        # current MA larger MA Log change *******************************
+                        current_ma_larger_ma_log_change = np.log(ma / larger_ma)
+                        # add to df dict according to timeframe's append frequency
+                        for k in range(append_frequency):
+                            x_dict[timeframe+'_'+str(period)+'MA_'+str(larger_period)+'MA_Log_Change'].append(current_ma_larger_ma_log_change)
+                        # ***************************************************************
+                # *********************************************************************************
+            # ***********************************************************************************************
+            # RSIs ******************************************************************************************
+            for period in rsi_periods:
+                # period rsi
+                rsi = calculate_rsi(closes[i-28:i+1], period=period)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_'+str(period)+'_Period_RSI'].append(rsi)
+            # ***********************************************************************************************
+            # typical prices ********************************************************************************
+            typical_prices = calculate_typical_price(closes[i-28:i+1], opens[i-28:i+1], highs[i-28:i+1], lows[i-28:i+1])
+            # ***********************************************************************************************
+            # standard deviations ***************************************************************************
+            for period in std_periods:
+                # period standard deviation
+                rolling_std = calculate_rolling_std(typical_prices, period=period)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_'+str(period)+'_Period_Std'].append(rolling_std)
+            # ***********************************************************************************************
+            # *********************************************************************************************************
             # populate df dict according to timeframe's append frequency **********************************************
             for k in range(append_frequency):
                 # timestamp
@@ -300,48 +621,28 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
                 x_dict[timeframe+'_Low'].append(current_candle_low)
                 x_dict[timeframe+'_Close'].append(current_candle_close)
                 # ohlc data's log change from first candle in the view window
-                x_dict[timeframe+'_Open_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(current_candle_open / first_candle_close_in_view_window))
-                x_dict[timeframe+'_High_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(current_candle_high / first_candle_close_in_view_window))
-                x_dict[timeframe+'_Low_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(current_candle_low / first_candle_close_in_view_window))
-                x_dict[timeframe+'_Close_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(current_candle_close / first_candle_close_in_view_window))
+                x_dict[timeframe+'_Open_Log_Change_From_First_Candle_Close_In_View_Window'].append(_Open_Log_Change_From_First_Candle_Close_In_View_Window)
+                x_dict[timeframe+'_High_Log_Change_From_First_Candle_Close_In_View_Window'].append(_High_Log_Change_From_First_Candle_Close_In_View_Window)
+                x_dict[timeframe+'_Low_Log_Change_From_First_Candle_Close_In_View_Window'].append(_Low_Log_Change_From_First_Candle_Close_In_View_Window)
+                x_dict[timeframe+'_Close_Log_Change_From_First_Candle_Close_In_View_Window'].append(_Close_Log_Change_From_First_Candle_Close_In_View_Window)
                 # candlestick types
-                x_dict[timeframe+'_Bullish'].append(1 if current_candle_close > current_candle_close else 0)
-                x_dict[timeframe+'_Bearish'].append(1 if current_candle_close < current_candle_open else 0)
-                x_dict[timeframe+'_Doji'].append(1 if current_candle_close == current_candle_open else 0)
+                x_dict[timeframe+'_Bullish'].append(_Bullish)
+                x_dict[timeframe+'_Bearish'].append(_Bearish)
+                x_dict[timeframe+'_Doji'].append(_Doji)
                 # wicks
-                x_dict[timeframe+'_Upper_Wick'].append(current_candle_high - current_candle_close if current_candle_close >= current_candle_open else current_candle_high - current_candle_open)
-                x_dict[timeframe+'_Lower_Wick'].append(current_candle_close - current_candle_low if current_candle_close < current_candle_open else current_candle_open - current_candle_low)
+                x_dict[timeframe+'_Upper_Wick'].append(_Upper_Wick)
+                x_dict[timeframe+'_Lower_Wick'].append(_Lower_Wick)
                 # wicks logs
-                x_dict[timeframe+'_Upper_Wick_Log'].append(np.log(current_candle_high / current_candle_close) if current_candle_close >= current_candle_open else np.log(current_candle_high / current_candle_open))
-                x_dict[timeframe+'_Lower_Wick_Log'].append(np.log(current_candle_close / current_candle_low) if current_candle_close < current_candle_open else np.log(current_candle_open / current_candle_low))
+                x_dict[timeframe+'_Upper_Wick_Log'].append(_Upper_Wick_Log)
+                x_dict[timeframe+'_Lower_Wick_Log'].append(_Lower_Wick_Log)
                 # body size
-                x_dict[timeframe+'_Body_Size'].append(current_candle_close - current_candle_open)
+                x_dict[timeframe+'_Body_Size'].append(_Body_Size)
                 # body size logs
-                x_dict[timeframe+'_Body_Size_Log'].append(np.log(current_candle_close / current_candle_open))
+                x_dict[timeframe+'_Body_Size_Log'].append(_Body_Size_Log)
                 # candlestick size
-                x_dict[timeframe+'_Candlestick_Size'].append(current_candle_high - current_candle_low)
+                x_dict[timeframe+'_Candlestick_Size'].append(_Candlestick_Size)
                 # candlestick size logs
-                x_dict[timeframe+'_Candlestick_Size_Log'].append(np.log(current_candle_high / current_candle_low))
-                # 50 MA
-                ma50 = np.sum(all_closes_till_i[-50:]) / 50
-                x_dict[timeframe+'_50MA'].append(ma50)
-                # 50 MA log change from first candle close in view window
-                x_dict[timeframe+'_50MA_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(ma50 / first_candle_close_in_view_window))
-                # 25 MA 
-                ma25 = np.sum(all_closes_till_i[-25:]) / 25
-                x_dict[timeframe+'_25MA'].append(ma25)
-                # 25 MA log change from first candle close in view window
-                x_dict[timeframe+'_25MA_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(ma25 / first_candle_close_in_view_window))
-                # 10 MA
-                ma10 = np.sum(all_closes_till_i[-10:]) / 10
-                x_dict[timeframe+'_10MA'].append(ma10)
-                # 10 MA log change from first candle close in view window
-                x_dict[timeframe+'_10MA_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(ma10 / first_candle_close_in_view_window))
-                # 5 MA
-                ma5 = np.sum(all_closes_till_i[-5:]) / 5
-                x_dict[timeframe+'_5MA'].append(ma5)
-                # 5 MA log change from first candle close in view window
-                x_dict[timeframe+'_5MA_Log_Change_From_First_Candle_Close_In_View_Window'].append(np.log(ma5 / first_candle_close_in_view_window))
+                x_dict[timeframe+'_Candlestick_Size_Log'].append(_Candlestick_Size_Log)
                 # n most recent turning points **************************************************************
                 for j in range(number_of_most_recent_turning_points_per_each_view_window, 0, -1): # loop in reverse ... from n till 1
                     # turning point's position from current candle
@@ -367,6 +668,22 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
                     x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Slope_Log_From_Previous_Turning_Point'].append(turning_points_dict['Turning_Point_Slope_Log_From_Previous_Turning_Point'][-j])
                     x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Broke_Structure_Up'].append(turning_points_dict['Turning_Point_Broke_Structure_Up'][-j])
                     x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Broke_Structure_Down'].append(turning_points_dict['Turning_Point_Broke_Structure_Down'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_Close'].append(turning_points_dict['Turning_Point_Subtracted_From_Current_Close'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_Close'].append(turning_points_dict['Turning_Point_Log_Change_From_Current_Close'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_Close'].append(turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Close'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_Close'].append(turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Close'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_Open'].append(turning_points_dict['Turning_Point_Subtracted_From_Current_Open'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_Open'].append(turning_points_dict['Turning_Point_Log_Change_From_Current_Open'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_Open'].append(turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Open'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_Open'].append(turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Open'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_High'].append(turning_points_dict['Turning_Point_Subtracted_From_Current_High'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_High'].append(turning_points_dict['Turning_Point_Log_Change_From_Current_High'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_High'].append(turning_points_dict['Turning_Point_Close_Subtracted_From_Current_High'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_High'].append(turning_points_dict['Turning_Point_Close_Log_Change_From_Current_High'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Subtracted_From_Current_Low'].append(turning_points_dict['Turning_Point_Subtracted_From_Current_Low'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Log_Change_From_Current_Low'].append(turning_points_dict['Turning_Point_Log_Change_From_Current_Low'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Subtracted_From_Current_Low'].append(turning_points_dict['Turning_Point_Close_Subtracted_From_Current_Low'][-j])
+                    x_dict[timeframe+'_'+position+'_Most_Recent_Turning_Point_Close_Log_Change_From_Current_Low'].append(turning_points_dict['Turning_Point_Close_Log_Change_From_Current_Low'][-j])
                 # *******************************************************************************************
             # *********************************************************************************************************
         # ***********************************************************************************************************************
