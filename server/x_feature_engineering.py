@@ -81,40 +81,76 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
         x_dict[timeframe+'_Candlestick_Size'] = deque([])
         # candlestick size log
         x_dict[timeframe+'_Candlestick_Size_Log'] = deque([])
-        # MAs *******************************************************************************************************************
-        ma_periods = np.array([50, 25, 10, 5])
-        for z in range(len(ma_periods)):
-            # MA period
-            period = ma_periods[z]
-            # MA
-            x_dict[timeframe+'_'+str(period)+'MA'] = deque([])
-            # MA log change from first candle close in view window
-            x_dict[timeframe+'_'+str(period)+'MA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
-            # current close - MA
-            x_dict[timeframe+'_Close-'+str(period)+'MA'] = deque([])
-            # MA log change from current close
-            x_dict[timeframe+'_Close_'+str(period)+'MA_Log_Change'] = deque([])
-            # current open - MA
-            x_dict[timeframe+'_Open-'+str(period)+'MA'] = deque([])
-            # MA log change from current open
-            x_dict[timeframe+'_Open_'+str(period)+'MA_Log_Change'] = deque([])
-            # current high - MA
-            x_dict[timeframe+'_High-'+str(period)+'MA'] = deque([])
-            # MA log change from current high
-            x_dict[timeframe+'_High_'+str(period)+'MA_Log_Change'] = deque([])
-            # current low - MA
-            x_dict[timeframe+'_Low-'+str(period)+'MA'] = deque([])
-            # MA log change from current low
-            x_dict[timeframe+'_Low_'+str(period)+'MA_Log_Change'] = deque([])
-            # difference between current MA and every other MA before it **********************************************
+        # simple MAs ************************************************************************************************************
+        sma_periods = np.array([50, 25, 10, 5])
+        for z in range(len(sma_periods)):
+            # SMA period
+            period = sma_periods[z]
+            # SMA
+            x_dict[timeframe+'_'+str(period)+'SMA'] = deque([])
+            # SMA log change from first candle close in view window
+            x_dict[timeframe+'_'+str(period)+'SMA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
+            # current close - SMA
+            x_dict[timeframe+'_Close-'+str(period)+'SMA'] = deque([])
+            # SMA log change from current close
+            x_dict[timeframe+'_Close_'+str(period)+'SMA_Log_Change'] = deque([])
+            # current open - SMA
+            x_dict[timeframe+'_Open-'+str(period)+'SMA'] = deque([])
+            # SMA log change from current open
+            x_dict[timeframe+'_Open_'+str(period)+'SMA_Log_Change'] = deque([])
+            # current high - SMA
+            x_dict[timeframe+'_High-'+str(period)+'SMA'] = deque([])
+            # SMA log change from current high
+            x_dict[timeframe+'_High_'+str(period)+'SMA_Log_Change'] = deque([])
+            # current low - SMA
+            x_dict[timeframe+'_Low-'+str(period)+'SMA'] = deque([])
+            # SMA log change from current low
+            x_dict[timeframe+'_Low_'+str(period)+'SMA_Log_Change'] = deque([])
+            # difference between current SMA and every other SMA before it **********************************************
             if z != 0:
-                for y in range(len(ma_periods[:z])):
-                    # larger MA period
-                    larger_period = ma_periods[y]
-                    # current MA - larger MA
-                    x_dict[timeframe+'_'+str(period)+'MA-'+str(larger_period)+'MA'] = deque([])
-                    # current MA larger MA Log change
-                    x_dict[timeframe+'_'+str(period)+'MA_'+str(larger_period)+'MA_Log_Change'] = deque([])
+                for y in range(len(sma_periods[:z])):
+                    # larger SMA period
+                    larger_period = sma_periods[y]
+                    # current SMA - larger SMA
+                    x_dict[timeframe+'_'+str(period)+'SMA-'+str(larger_period)+'SMA'] = deque([])
+                    # current SMA larger SMA Log change
+                    x_dict[timeframe+'_'+str(period)+'SMA_'+str(larger_period)+'SMA_Log_Change'] = deque([])
+            # *********************************************************************************************************
+        # ***********************************************************************************************************************
+        # exponential MAs *******************************************************************************************************
+        ema_periods = np.array([50, 25, 10, 5])
+        for z in range(len(ema_periods)):
+            # EMA period
+            period = ema_periods[z]
+            # EMA
+            x_dict[timeframe+'_'+str(period)+'EMA'] = deque([])
+            # EMA log change from first candle close in view window
+            x_dict[timeframe+'_'+str(period)+'EMA_Log_Change_From_First_Candle_Close_In_View_Window'] = deque([])
+            # current close - EMA
+            x_dict[timeframe+'_Close-'+str(period)+'EMA'] = deque([])
+            # EMA log change from current close
+            x_dict[timeframe+'_Close_'+str(period)+'EMA_Log_Change'] = deque([])
+            # current open - EMA
+            x_dict[timeframe+'_Open-'+str(period)+'EMA'] = deque([])
+            # EMA log change from current open
+            x_dict[timeframe+'_Open_'+str(period)+'EMA_Log_Change'] = deque([])
+            # current high - EMA
+            x_dict[timeframe+'_High-'+str(period)+'EMA'] = deque([])
+            # EMA log change from current high
+            x_dict[timeframe+'_High_'+str(period)+'EMA_Log_Change'] = deque([])
+            # current low - EMA
+            x_dict[timeframe+'_Low-'+str(period)+'EMA'] = deque([])
+            # EMA log change from current low
+            x_dict[timeframe+'_Low_'+str(period)+'EMA_Log_Change'] = deque([])
+            # difference between current EMA and every other EMA before it **********************************************
+            if z != 0:
+                for y in range(len(ema_periods[:z])):
+                    # larger EMA period
+                    larger_period = ema_periods[y]
+                    # current EMA - larger EMA
+                    x_dict[timeframe+'_'+str(period)+'EMA-'+str(larger_period)+'EMA'] = deque([])
+                    # current EMA larger EMA Log change
+                    x_dict[timeframe+'_'+str(period)+'EMA_'+str(larger_period)+'EMA_Log_Change'] = deque([])
             # *********************************************************************************************************
         # ***********************************************************************************************************************
         # RSIs ******************************************************************************************************************
@@ -217,6 +253,27 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
 
         # return most recent std
         return rolling_std[-1]
+    # *************************************************************************************************************************************
+
+    # function for calculating simple moving average **************************************************************************************
+    def sma(values, period):
+        sma = np.zeros_like(values, dtype=float)
+        # ensure that we only calculate SMA for periods where there is enough data
+        for i in range(period - 1, len(values)):
+            sma[i] = np.mean(values[i - period + 1:i + 1])
+        # return most recent sma
+        return sma[-1]
+    # *************************************************************************************************************************************
+
+    # function for calculating exponential moving average *********************************************************************************
+    def ema(values, period):
+        ema_values = np.zeros_like(values)
+        multiplier = 2 / (period + 1)
+        ema_values[0] = values[0]
+        for i in range(1, len(values)):
+            ema_values[i] = (values[i] - ema_values[i-1]) * multiplier + ema_values[i-1]
+        # return most recent ema
+        return ema_values[-1]
     # *************************************************************************************************************************************
 
     # loop through each timeframe's df and populate df dict *******************************************************************************
@@ -506,88 +563,173 @@ def engineer_x(daily_df, h4_df, h1_df, m30_df, m15_df):
             _Candlestick_Size = current_candle_high - current_candle_low
             # candlestick size logs
             _Candlestick_Size_Log = np.log(current_candle_high / current_candle_low)
-            # MAs *******************************************************************************************
-            for z in range(len(ma_periods)):
-                # MA period
-                period = ma_periods[z]
-                # MA ******************************************************************************
-                ma = np.sum(all_closes_till_i[-period:]) / period
+            # simple MAs ************************************************************************************
+            for z in range(len(sma_periods)):
+                # SMA period
+                period = sma_periods[z]
+                # SMA *****************************************************************************
+                sma = sma(all_closes_till_i[-period:], period=period)
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_'+str(period)+'MA'].append(ma)
+                    x_dict[timeframe+'_'+str(period)+'SMA'].append(sma)
                 # *********************************************************************************
-                # MA log change from first candle close in view window ****************************
-                ma_log_change_from_first_candle_close_in_view_window = np.log(ma / first_candle_close_in_view_window)
+                # SMA log change from first candle close in view window ***************************
+                sma_log_change_from_first_candle_close_in_view_window = np.log(sma / first_candle_close_in_view_window)
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_'+str(period)+'MA_Log_Change_From_First_Candle_Close_In_View_Window'].append(ma_log_change_from_first_candle_close_in_view_window)
+                    x_dict[timeframe+'_'+str(period)+'SMA_Log_Change_From_First_Candle_Close_In_View_Window'].append(sma_log_change_from_first_candle_close_in_view_window)
                 # *********************************************************************************
-                # current close - MA **************************************************************
-                current_close_minus_ma = current_candle_close - ma
+                # current close - SMA *************************************************************
+                current_close_minus_sma = current_candle_close - sma
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_Close-'+str(period)+'MA'].append(current_close_minus_ma)
+                    x_dict[timeframe+'_Close-'+str(period)+'SMA'].append(current_close_minus_sma)
                 # *********************************************************************************
-                # MA log change from current close ************************************************
-                ma_log_change_from_current_close = np.log(current_candle_close / ma)
+                # SMA log change from current close ***********************************************
+                sma_log_change_from_current_close = np.log(current_candle_close / sma)
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_Close_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_close)
+                    x_dict[timeframe+'_Close_'+str(period)+'SMA_Log_Change'].append(sma_log_change_from_current_close)
                 # *********************************************************************************
-                # current open - MA ***************************************************************
-                current_open_minus_ma = current_candle_open - ma
+                # current open - SMA **************************************************************
+                current_open_minus_sma = current_candle_open - sma
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_Open-'+str(period)+'MA'].append(current_open_minus_ma)
+                    x_dict[timeframe+'_Open-'+str(period)+'SMA'].append(current_open_minus_sma)
                 # *********************************************************************************
-                # MA log change from current open *************************************************
-                ma_log_change_from_current_open = np.log(current_candle_open / ma)
+                # SMA log change from current open ************************************************
+                sma_log_change_from_current_open = np.log(current_candle_open / sma)
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_Open_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_open)
+                    x_dict[timeframe+'_Open_'+str(period)+'SMA_Log_Change'].append(sma_log_change_from_current_open)
                 # *********************************************************************************
-                # current high - MA ***************************************************************
-                current_high_minus_ma = current_candle_high - ma
+                # current high - SMA **************************************************************
+                current_high_minus_sma = current_candle_high - sma
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_High-'+str(period)+'MA'].append(current_high_minus_ma)
+                    x_dict[timeframe+'_High-'+str(period)+'SMA'].append(current_high_minus_sma)
                 # *********************************************************************************
-                # MA log change from current high *************************************************
-                ma_log_change_from_current_high = np.log(current_candle_high / ma)
+                # SMA log change from current high ************************************************
+                sma_log_change_from_current_high = np.log(current_candle_high / sma)
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_High_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_high)
+                    x_dict[timeframe+'_High_'+str(period)+'SMA_Log_Change'].append(sma_log_change_from_current_high)
                 # *********************************************************************************
-                # current low - MA ****************************************************************
-                current_low_minus_ma = current_candle_low - ma
+                # current low - SMA ***************************************************************
+                current_low_minus_sma = current_candle_low - sma
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_Low-'+str(period)+'MA'].append(current_low_minus_ma)
+                    x_dict[timeframe+'_Low-'+str(period)+'SMA'].append(current_low_minus_sma)
                 # *********************************************************************************
-                # MA log change from current low **************************************************
-                ma_log_change_from_current_low = np.log(current_candle_low / ma)
+                # SMA log change from current low *************************************************
+                sma_log_change_from_current_low = np.log(current_candle_low / sma)
                 # add to df dict according to timeframe's append frequency
                 for k in range(append_frequency):
-                    x_dict[timeframe+'_Low_'+str(period)+'MA_Log_Change'].append(ma_log_change_from_current_low)
+                    x_dict[timeframe+'_Low_'+str(period)+'SMA_Log_Change'].append(sma_log_change_from_current_low)
                 # *********************************************************************************
-                # difference between current MA and every other MA before it **********************
+                # difference between current SMA and every other SMA before it ********************
                 if z != 0:
-                    for y in range(len(ma_periods[:z])):
-                        # larger MA period
-                        larger_period = ma_periods[y]
-                        # larger MA
-                        larger_ma = np.sum(all_closes_till_i[-larger_period:]) / larger_period
-                        # current MA - larger MA ****************************************
-                        current_ma_minus_larger_ma = ma - larger_ma
+                    for y in range(len(sma_periods[:z])):
+                        # larger SMA period
+                        larger_period = sma_periods[y]
+                        # larger SMA
+                        larger_sma = np.sum(all_closes_till_i[-larger_period:]) / larger_period
+                        # current SMA - larger SMA **************************************
+                        current_sma_minus_larger_sma = sma - larger_sma
                         # add to df dict according to timeframe's append frequency
                         for k in range(append_frequency):
-                            x_dict[timeframe+'_'+str(period)+'MA-'+str(larger_period)+'MA'].append(current_ma_minus_larger_ma)
+                            x_dict[timeframe+'_'+str(period)+'SMA-'+str(larger_period)+'SMA'].append(current_sma_minus_larger_sma)
                         # ***************************************************************
-                        # current MA larger MA Log change *******************************
-                        current_ma_larger_ma_log_change = np.log(ma / larger_ma)
+                        # current SMA larger SMA Log change *****************************
+                        current_sma_larger_sma_log_change = np.log(sma / larger_sma)
                         # add to df dict according to timeframe's append frequency
                         for k in range(append_frequency):
-                            x_dict[timeframe+'_'+str(period)+'MA_'+str(larger_period)+'MA_Log_Change'].append(current_ma_larger_ma_log_change)
+                            x_dict[timeframe+'_'+str(period)+'SMA_'+str(larger_period)+'SMA_Log_Change'].append(current_sma_larger_sma_log_change)
+                        # ***************************************************************
+                # *********************************************************************************
+            # ***********************************************************************************************
+            # exponential MAs *******************************************************************************
+            for z in range(len(ema_periods)):
+                # EMA period
+                period = ema_periods[z]
+                # EMA *****************************************************************************
+                ema = ema(all_closes_till_i[-period:], period=period)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_'+str(period)+'EMA'].append(ema)
+                # *********************************************************************************
+                # EMA log change from first candle close in view window ***************************
+                ema_log_change_from_first_candle_close_in_view_window = np.log(ema / first_candle_close_in_view_window)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_'+str(period)+'EMA_Log_Change_From_First_Candle_Close_In_View_Window'].append(ema_log_change_from_first_candle_close_in_view_window)
+                # *********************************************************************************
+                # current close - EMA *************************************************************
+                current_close_minus_ema = current_candle_close - ema
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Close-'+str(period)+'EMA'].append(current_close_minus_ema)
+                # *********************************************************************************
+                # EMA log change from current close ***********************************************
+                ema_log_change_from_current_close = np.log(current_candle_close / ema)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Close_'+str(period)+'EMA_Log_Change'].append(ema_log_change_from_current_close)
+                # *********************************************************************************
+                # current open - EMA **************************************************************
+                current_open_minus_ema = current_candle_open - ema
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Open-'+str(period)+'EMA'].append(current_open_minus_ema)
+                # *********************************************************************************
+                # EMA log change from current open ************************************************
+                ema_log_change_from_current_open = np.log(current_candle_open / ema)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Open_'+str(period)+'EMA_Log_Change'].append(ema_log_change_from_current_open)
+                # *********************************************************************************
+                # current high - EMA **************************************************************
+                current_high_minus_ema = current_candle_high - ema
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_High-'+str(period)+'EMA'].append(current_high_minus_ema)
+                # *********************************************************************************
+                # EMA log change from current high ************************************************
+                ema_log_change_from_current_high = np.log(current_candle_high / ema)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_High_'+str(period)+'EMA_Log_Change'].append(ema_log_change_from_current_high)
+                # *********************************************************************************
+                # current low - EMA ***************************************************************
+                current_low_minus_ema = current_candle_low - ema
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Low-'+str(period)+'EMA'].append(current_low_minus_ema)
+                # *********************************************************************************
+                # EMA log change from current low *************************************************
+                ema_log_change_from_current_low = np.log(current_candle_low / ema)
+                # add to df dict according to timeframe's append frequency
+                for k in range(append_frequency):
+                    x_dict[timeframe+'_Low_'+str(period)+'EMA_Log_Change'].append(ema_log_change_from_current_low)
+                # *********************************************************************************
+                # difference between current EMA and every other EMA before it ********************
+                if z != 0:
+                    for y in range(len(ema_periods[:z])):
+                        # larger EMA period
+                        larger_period = ema_periods[y]
+                        # larger EMA
+                        larger_ema = np.sum(all_closes_till_i[-larger_period:]) / larger_period
+                        # current EMA - larger EMA **************************************
+                        current_ema_minus_larger_ema = ema - larger_ema
+                        # add to df dict according to timeframe's append frequency
+                        for k in range(append_frequency):
+                            x_dict[timeframe+'_'+str(period)+'EMA-'+str(larger_period)+'EMA'].append(current_ema_minus_larger_ema)
+                        # ***************************************************************
+                        # current EMA larger EMA Log change *****************************
+                        current_ema_larger_ema_log_change = np.log(ema / larger_ema)
+                        # add to df dict according to timeframe's append frequency
+                        for k in range(append_frequency):
+                            x_dict[timeframe+'_'+str(period)+'EMA_'+str(larger_period)+'EMA_Log_Change'].append(current_ema_larger_ema_log_change)
                         # ***************************************************************
                 # *********************************************************************************
             # ***********************************************************************************************
