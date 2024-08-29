@@ -22,10 +22,9 @@ import {
     ThreeDots,
 } from '@agney/react-loading';
 import { Platform_Name } from '../platform_name';
-import Instagram from '../images/instagram.png'
-import Facebook from '../images/facebook.png'
-import Twitter from '../images/twitter.png'
 import Logo from '../images/logo.png'
+import {Facebook, X, Instagram, LinkedIn, Telegram } from '../social_links'
+import { FaMailBulk, Whatsapp, FaTelegram, FaPhone, FaSearchLocation, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaWhatsapp, FaLocationArrow, FaPhoneAlt } from 'react-icons/fa';
 
 class Footer extends Component{
     constructor(props) { 
@@ -48,15 +47,11 @@ class Footer extends Component{
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold', color: '#000000'}}>Get In Touch</h6>
                             <br/>
-                            <a href="mailto:support@oculafinance.com" style={{color: 'inherit'}}>support@oculafinance.com</a>
+                            <FaMailBulk /> <a href="mailto:support@oculafinance.com" style={{color: 'inherit'}}>support@oculafinance.com</a>
                             <br/><br/>
-                            <a href="tel:+263" style={{color: 'inherit'}}>+263 </a>
+                            <FaWhatsapp /> <a href="https://wa.me/+263784111412" style={{color: 'inherit'}}>+263 784 111 412</a>
                             <br/><br/>
-                            <a href="tel:+263" style={{color: 'inherit'}}>+263 </a>
-                            <br/><br/>
-                            <a href="https://www.google.com/maps/place/21+Mull+Rd,+Harare/@-17.822603,31.0154291,17z/data=!4m5!3m4!1s0x1931a5b3de5b7695:0x5c5e0e4fb34aebb0!8m2!3d-17.8228481!4d31.017886?entry=ttu" target='_blank' style={{color: 'inherit'}}>
-                                Harare, Zimbabwe
-                            </a>
+                            <FaPhoneAlt /> <a href="tel:+263784111412" style={{color: 'inherit'}}>+263 784 111 412</a>
                         </Col>
                         <Col sm='3'>
                             <br/><br/>
@@ -94,12 +89,24 @@ class Footer extends Component{
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold', color: '#000000'}}>Social Media</h6>
                             <br/>
-                            <a href='https://www.facebook.com/' target='_blank' style={{color: 'inherit'}}>
+                            <FaFacebook /> <a href={Facebook} target='_blank' style={{color: 'inherit'}}>
                                 Facebook
                             </a>
                             <br/><br/>
-                            <a href='https://www.instagram.com/' target='_blank' style={{color: 'inherit'}}>
+                            <FaTwitter /> <a href={X} target='_blank' style={{color: 'inherit'}}>
+                                X
+                            </a>
+                            <br/><br/>
+                            <FaInstagram /> <a href={Instagram} target='_blank' style={{color: 'inherit'}}>
                                 Instagram
+                            </a>
+                            <br/><br/>
+                            <FaLinkedin /> <a href={LinkedIn} target='_blank' style={{color: 'inherit'}}>
+                                LinkedIn
+                            </a>
+                            <br/><br/>
+                            <FaTelegram /> <a href={Telegram} target='_blank' style={{color: 'inherit'}}>
+                                Telegram
                             </a>
                         </Col>
                         <Col sm=''>
@@ -117,20 +124,13 @@ class Footer extends Component{
                     </Row>
                     <br/>
                     <Row style={{marginTop: '20px'}}>
-                        <Col>
+                        <Col sm='6'>
                             <Col sm='3' style={{alignItems: 'left', textAlign: 'left', justifyContent: 'left'}}>
-                                <Row style={{marginTop: '15px'}}>
-                                    <Col xs='5'>
-                                        <a href='https://www.facebook.com/' target='_blank'><img src={Facebook} style={{width: '80%'}} /></a>
-                                    </Col>
-                                    <Col xs='5'>
-                                        <a href='https://www.instagram.com/' target='_blank'><img src={Instagram} style={{width: '80%'}} /></a>
-                                    </Col>
-                                </Row>
+
                             </Col>
                         </Col>
                         <Col>
-                            Copyright 2023 &copy; {Platform_Name}
+                            Copyright 2024 &copy; {Platform_Name}
                         </Col>
                     </Row>
                     <br/>

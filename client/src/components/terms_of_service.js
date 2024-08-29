@@ -124,37 +124,38 @@ class TermsOfService extends Component{
                         <br/><br/><br/>
                         <div style={{textAlign: 'left'}}>
                             <p>
-                                Thank you for choosing Ocula Finance. These Terms of Service constitute a legal agreement
-                                between you and Ocula Finance. <span style={{fontWeight: 'bold'}}>You</span> means you as an individual or any other entity you
-                                represent on Ocula Finance, if any. <span style={{fontWeight: 'bold'}}>Us</span> or <span style={{fontWeight: 'bold'}}>we</span> or <span style={{fontWeight: 'bold'}}>this platform</span> refers to Ocula Finance. If
-                                you are accepting these terms on behalf of your employer or any other entity you may represent,
-                                you warrant that you have full legal authority to bind that entity to this agreement, and you are
+                                Thank you for choosing {Platform_Name}. These Terms of Service constitute a legal agreement
+                                between you and {Platform_Name}. <span style={{fontWeight: 'bold'}}>You</span> means you as an individual or any 
+                                other entity you represent on {Platform_Name}, if any. <span style={{fontWeight: 'bold'}}>Us</span> or 
+                                <span style={{fontWeight: 'bold'}}>we</span> or <span style={{fontWeight: 'bold'}}>this platform</span> refers 
+                                to {Platform_Name}. If you are accepting these terms on behalf of your employer or any other entity you may 
+                                represent, you warrant that you have full legal authority to bind that entity to this agreement, and you are
                                 agreeing to these Terms of Service on behalf of yourself and the entity you represent. If you do not
                                 have the legal authority to bind the entity to this agreement then do not proceed with signing up
                                 unless you choose to signup as an individual. If you have the legal authority to bind the entity,
-                                please note that <span style={{fontWeight: 'bold'}}>you</span> will refer to yourself and that entity, jointly. By accepting this agreement
-                                (proceeding with signup), you acknowledge that your have read and understood all the terms stated
-                                in this agreement.
+                                please note that <span style={{fontWeight: 'bold'}}>you</span> will refer to yourself and that entity, jointly. 
+                                By accepting this agreement (proceeding with signup), you acknowledge that your have read and understood all the 
+                                terms stated in this agreement.
                             </p>
                             <p>
-                                If you signup and Ocula Finance changes these Terms of Service, you will be notified via the Ocula
-                                Finance platform, as well as via email, and you will be required to review and accept or reject the
-                                new terms. If you accept the new terms, you can proceed with using the platform.
+                                If you signup and {Platform_Name} changes these Terms of Service, you will be notified via the {Platform_Name}
+                                platform, as well as via email, and you will be required to review and accept or reject the new terms. If you 
+                                accept the new terms, you can proceed with using the platform.
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>1. Services.</h6>
                             <br/>
                             <p>
-                                <span style={{fontWeight: 'bold'}}>1.1</span> <u>Services we provide.</u> Ocula Finance is a technology brand focused on using Artificial
-                                Intelligence in analysing the financial markets. Our service comprises of a web based software
-                                product that provides the user with detailed risk-to-reward profiles on a range of financial assets
+                                <span style={{fontWeight: 'bold'}}>1.1</span> <u>Services we provide.</u> {Platform_Name} is a technology 
+                                brand focused on using Artificial Intelligence in analysing the financial markets. Our service comprises of a web 
+                                based software product that provides the user with detailed risk-to-reward profiles on a range of financial assets
                                 supported by the software. Our software has been trained with years of historical market data to
-                                determine potential maximum moves to be taken by the market in either direction. In addition to
-                                that, our software continues to learn as it comes across new market data.
+                                determine "high probability trade entry points". In addition to that, our software continues to learn as it comes 
+                                across new market data.
                             </p>
                             <br/>
                             <p style={{fontWeight: 'bold'}}>
-                                IMPORTANT: Ocula Finance is not a broker, hedgefund or trading firm, therefore we do not
+                                IMPORTANT: {Platform_Name} is not a broker, hedgefund or trading firm, therefore we do not
                                 by any means accept investments from any entities, nor will we ever ask you for money
                                 promising returns on our website or on any social media platform. The money users pay is a
                                 subscription fee for them to access our services, and all transactions are done on our website
@@ -163,12 +164,12 @@ class TermsOfService extends Component{
                             </p>
                             <br/>
                             <p>
-                                <span style={{fontWeight: 'bold'}}>1.2</span> <u>Access and use of our services.</u> In order to use our services, you must signup using a valid email
-                                address which our software will send a verification link to inorder to verify that the email address
-                                that you have provided truly belongs to you. Once you have completed the email verification
+                                <span style={{fontWeight: 'bold'}}>1.2</span> <u>Access and use of our services.</u> In order to use our services, 
+                                you must signup using a valid email address which our software will send a verification link to inorder to verify 
+                                that the email address  that you have provided truly belongs to you. Once you have completed the email verification
                                 process, you will be able to signin using the details you provided during signup. By default, every
                                 new user is given 7 days of free access to our paid package, which means they’ll be able to fully
-                                access all analysis done by our AI for all financial assets available on Ocula Finance. After you have
+                                access all analysis done by our AI for all financial assets available on {Platform_Name}. After you have
                                 completed the 7 days free trial, for all the financial assets available on our platform, analysis done
                                 by our AI will only be available if you have an active subscription.
                             </p>
@@ -176,38 +177,39 @@ class TermsOfService extends Component{
                             <h6 style={{fontWeight: 'bold'}}>2. User requirements and conduct.</h6>
                             <br/>
                             <p>
-                                <span style={{fontWeight: 'bold'}}>2.1</span> <u>User requirements.</u> Before signing up to use Ocula Finance, you should have at least a basic
-                                knowledge of what forex trading is, what cryptocurrency trading is, how risky they both are, how to
-                                open and close trades, how to place a stoploss and take profit, what a risk-to-reward ratio is, and
-                                what a timeframe is. If you do not possess the stated knowledge, we advise that you seek basic
-                                knowledge or any higher level of knowledge you may see fit, from the numerous reliable free or
-                                paid educational sites such as Baby Pips.
+                                <span style={{fontWeight: 'bold'}}>2.1</span> <u>User requirements.</u> Before signing up to use {Platform_Name}, 
+                                you should have at least a basic knowledge of what forex trading is, what cryptocurrency trading is, how risky 
+                                they both are, how to open and close trades, how to place a stoploss and take profit, what a risk-to-reward 
+                                ratio is, and  what a timeframe is. If you do not possess the stated knowledge, we advise that you seek basic
+                                knowledge or any higher level of knowledge you may see fit, from the numerous reliable free or paid educational 
+                                sites such as Baby Pips.
                             </p>
                             <br/>
                             <p>
-                                <span style={{fontWeight: 'bold'}}>2.2</span> <u>User conduct.</u> Market analysis done by our software is meant to be received and used by entities
-                                registered on Ocula Finance, via their accounts. <span style={{fontWeight: 'bold'}}>Reselling or even redistributing our AI’s analysis
-                                to outside entities is strictly prohibited and will result in the termination of your account even
-                                if it has an active subscription.</span>
+                                <span style={{fontWeight: 'bold'}}>2.2</span> <u>User conduct.</u> Market analysis done by our software is 
+                                meant to be received and used by entities registered on {Platform_Name}, via their accounts. 
+                                <span style={{fontWeight: 'bold'}}>Reselling or even redistributing our AI’s analysis to outside entities is 
+                                strictly prohibited and will result in the termination of your account even if it has an active subscription.
+                                </span>
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>3. Data Privacy</h6>
                             <br/>
                             <p>
                                 To understand what data we collect from you, how we collect it, and why we collect it, refer to our
-                                Privacy Policy.
+                                Privacy Policy: <a href='/privacy-policy' target='_blank' style={{color: 'inherit'}}>Privacy Policy</a>
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>4. Disclaimer</h6>
                             <br/>
                             <p>
-                                Ocula Finance is not a financial advisor, our software gives you market analysis based on
+                                {Platform_Name} is not a financial advisor, our software gives you market analysis based on
                                 mathematical probabilities calculated by our Artificial Intelligence using market data. Section 2.1 of
                                 our Terms of Service clearly states that the user should have a basic knowledge on what trading is
                                 as well as the risks associated with it. Forex and Cryptocurrency trading involves significant risk to
-                                your invested capital, losses can and will be encountered. <span style={{fontWeight: 'bold'}}>Ocula Finance shall not be liable for
-                                any losses you may encounter, or any disputes you may encounter with the broker of your
-                                choosing, or any money lost to scammers disguised as Ocula Finance (as highlighted in section
+                                your invested capital, losses can and will be encountered. <span style={{fontWeight: 'bold'}}>{Platform_Name} 
+                                shall not be liable for any losses you may encounter, or any disputes you may encounter with the broker of 
+                                your choosing, or any money lost to scammers disguised as {Platform_Name} (as highlighted in section
                                 1.1 of our Terms of Service).</span>
                             </p>
                         </div>

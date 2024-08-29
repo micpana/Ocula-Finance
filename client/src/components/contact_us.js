@@ -37,6 +37,8 @@ import ContactUs1 from '../images/contact_us_1.svg'
 import { FaUserAlt, FaAt, FaRegFolderOpen, FaEnvelopeOpenText } from 'react-icons/fa';
 import * as emailjs from 'emailjs-com'
 import { EmailJsServiceID, EmailJsTemplateID, EmailJsAPIKey } from '../credentials'
+import {Facebook, X, Instagram, LinkedIn, Telegram } from '../social_links'
+import { FaMailBulk, Whatsapp, FaTelegram, FaPhone, FaSearchLocation, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaWhatsapp, FaLocationArrow, FaPhoneAlt } from 'react-icons/fa';
 
 class ContactUs extends Component{
     static propTypes = {
@@ -175,14 +177,11 @@ class ContactUs extends Component{
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
-                        <div style={{backgroundColor: '#005fc9', position: 'relative'}}>
-                            <div style={{backgroundColor: 'grey', opacity: 0.7, minHeight: '200px'}}></div>
-                            <div style={{color: '#ffffff', position: 'absolute', top: 0, left: 0, right: 0}}>
-                                <br/><br/><br/>
-                                <h3 style={{fontWeight: 'bold'}}>
-                                    Contact us
-                                </h3>
-                            </div>
+                        <div style={{backgroundColor: '#005fc9', color: '#ffffff', minHeight: '200px', borderBottom: '1px solid #F9C961'}}>
+                            <br/><br/><br/>
+                            <h3 style={{fontWeight: 'bold'}}>
+                                Contact us
+                            </h3>
                         </div>
                         <Container>
                             <br/><br/>
@@ -196,7 +195,7 @@ class ContactUs extends Component{
                             <br/><br/>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='6'>
-                                    <img src={ContactUs1} onError={(e) => e.target.src = ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}/>
+                                    <img src={ContactUs1} onError={(e) => e.target.src = ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '10px'}}/>
                                     <br/><br/>
                                 </Col>
                                 <Col>
@@ -223,8 +222,50 @@ class ContactUs extends Component{
                                             <br/>
                                         </Col>
                                         <Col>
-                                        
+                                            <a href="https://wa.me/263784111412" style={{color: 'inherit'}}>
+                                                +263 784 111 412
+                                            </a>
                                             <br/><br/>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{margin: '0px', textAlign: 'left'}}>
+                                        <Col sm='6'>
+                                            <span style={{fontWeight: 'bold'}}>Calls:</span>
+                                            <br/>
+                                        </Col>
+                                        <Col>
+                                            <a href="tel:" style={{color: 'inherit'}}>
+                                                +263 784 111 412
+                                            </a>
+                                            <br/><br/>
+                                        </Col>
+                                    </Row>
+                                    <br/>
+                                    <Row style={{margin: '0px'}}>
+                                        <Col xs=''>
+                                            <a href={Facebook} target='_blank' style={{color: 'inherit'}}>
+                                                <FaFacebook />
+                                            </a>
+                                        </Col>
+                                        <Col xs=''>
+                                            <a href={X} target='_blank' style={{color: 'inherit'}}>
+                                                <FaTwitter /> 
+                                            </a>
+                                        </Col>
+                                        <Col xs=''>
+                                            <a href={Instagram} target='_blank' style={{color: 'inherit'}}>
+                                                <FaInstagram /> 
+                                            </a>
+                                        </Col>
+                                        <Col xs=''>
+                                            <a href={LinkedIn} target='_blank' style={{color: 'inherit'}}>
+                                                <FaLinkedin /> 
+                                            </a>
+                                        </Col>
+                                        <Col xs=''>
+                                            <a href={Telegram} target='_blank' style={{color: 'inherit'}}>
+                                                <FaTelegram /> 
+                                            </a>
                                         </Col>
                                     </Row>
                                     <br/><br/>

@@ -1,0 +1,12 @@
+{
+    "how": "is",
+    "this": "possible",
+    "bool": true,
+    "num": 1.2,
+    "num2": 2,
+    "list": [
+        1,
+        2,
+        3
+    ]
+}

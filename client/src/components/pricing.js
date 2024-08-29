@@ -114,27 +114,24 @@ class Pricing extends Component{
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
-                        <div style={{backgroundColor: '#005fc9', position: 'relative'}}>
-                            <div style={{backgroundColor: 'grey', opacity: 0.7, minHeight: '200px'}}></div>
-                            <div style={{color: '#ffffff', position: 'absolute', top: 0, left: 0, right: 0}}>
-                                <br/><br/><br/>
-                                <h3 style={{fontWeight: 'bold'}}>
-                                    Pricing
-                                </h3>
-                                <br/>
-                                <h5>Uncover the Value of {Platform_Name}</h5>
-                            </div>
+                        <div style={{backgroundColor: '#005fc9', color: '#ffffff', minHeight: '200px', borderBottom: '1px solid #F9C961'}}>
+                            <br/><br/><br/>
+                            <h3 style={{fontWeight: 'bold'}}>
+                                Pricing
+                            </h3>
+                            <br/>
+                            <h5>Uncover the Value of {Platform_Name}</h5>
                         </div>
                         <Container>
                             <br/><br/>
                             <h6>Discover our affordable plans that position your trading decisions for success.</h6>
                             <br/><br/>
-                            <p style={{textAlign: 'left'}}>
-                                Welcome to the {Platform_Name} pricing page. Our advanced AI-powered platform provides pivotal market 
-                                information at cost-effective rates, empowering traders to enhance their trading strategy with 
-                                decisive data. Analyzing mostly forex markets, our system details the potential max upmove and max 
-                                downmove for the next 1 hour 45 minutes. This precious data creates a risk-reward profile, helping 
-                                establish the most advantageous market direction.
+                            <p style={{textAlign: 'justify'}}>
+                                Welcome to the {Platform_Name} pricing page. Our advanced AI-powered platform provides high quality trade entries 
+                                at cost-effective rates, empowering traders to enhance their trading strategies with decisive data. Analyzing 
+                                mostly forex markets, our system provides trades accompanied by their stoploss and takeprofit percentages, with 
+                                a maximum recommended holding time of 2 hours. Our AI uses reliable risk-to-reward ratios, sticking to a minimum 
+                                of 1:2, ensuring that you remain profitable in the longrun.
                             </p>
                             <br/><br/><br/>
                             <Row style={{margin: '0px'}}>
@@ -159,21 +156,10 @@ class Pricing extends Component{
                                         <Container style={{textAlign: 'left'}}>
                                             <br/><br/><br/>
                                             <ul>
-                                                <li>
-                                                    Potential max upmove and downmove forecasts
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Risk-to-reward profiles
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Regular updates every 15 minutes
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Customer support
-                                                </li>
+                                                <li>Predicted buy and sell trade entries.</li><br/>
+                                                <li>Recommended stoploss percentages.</li><br/>
+                                                <li>Recommended takeprofit percentages.</li><br/>
+                                                <li>Reliable risk-to-reward ratios, sticking to a minimum of 1:2.</li><br/>
                                             </ul>
                                             <br/><br/><br/>
                                             <div style={{textAlign: 'center'}}>
@@ -209,21 +195,10 @@ class Pricing extends Component{
                                         <Container style={{textAlign: 'left'}}>
                                             <br/><br/><br/>
                                             <ul>
-                                                <li>
-                                                    Potential max upmove and downmove forecasts
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Risk-to-reward profiles
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Regular updates every 15 minutes
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Customer support
-                                                </li>
+                                                <li>Predicted buy and sell trade entries.</li><br/>
+                                                <li>Recommended stoploss percentages.</li><br/>
+                                                <li>Recommended takeprofit percentages.</li><br/>
+                                                <li>Reliable risk-to-reward ratios, sticking to a minimum of 1:2.</li><br/>
                                             </ul>
                                             <br/><br/><br/>
                                             <div style={{textAlign: 'center'}}>
@@ -259,21 +234,10 @@ class Pricing extends Component{
                                         <Container style={{textAlign: 'left'}}>
                                             <br/><br/><br/>
                                             <ul>
-                                                <li>
-                                                    Potential max upmove and downmove forecasts
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Risk-to-reward profiles
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Regular updates every 15 minutes
-                                                </li>
-                                                <br/>
-                                                <li>
-                                                    Customer support
-                                                </li>
+                                                <li>Predicted buy and sell trade entries.</li><br/>
+                                                <li>Recommended stoploss percentages.</li><br/>
+                                                <li>Recommended takeprofit percentages.</li><br/>
+                                                <li>Reliable risk-to-reward ratios, sticking to a minimum of 1:2.</li><br/>
                                             </ul>
                                             <br/><br/><br/>
                                             <div style={{textAlign: 'center'}}>
@@ -290,14 +254,13 @@ class Pricing extends Component{
                                 </Col>
                             </Row>
                             <br/>
-                            <p style={{textAlign: 'left'}}>
+                            <p style={{textAlign: 'justify'}}>
                                 Our goal is to equip traders with a simple yet powerful tool in an affordable manner, and that’s 
                                 reflected in our pricing structure. {Platform_Name}’s pricing is designed to accommodate traders of all 
                                 scales - from budding enthusiasts to seasoned professionals. We have designed a straightforward and 
                                 transparent pricing system that ensures you get the most out of your trading experience. We invite you 
-                                to explore our versatile pricing options to find a plan that suits your trading needs best. 
-                                Please note that all our pricing plans offer full access to our AI-driven forecasts and risk-to-reward 
-                                profiles.
+                                to explore our versatile pricing options to find a plan that suits your trading needs best. Please note that 
+                                all our pricing plans offer full access to our AI-driven forecasts.
                             </p>
                         </Container>
                     </div>

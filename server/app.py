@@ -15,7 +15,7 @@ from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, run_predictions_as_flask_thread
+from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
 
 # Flask stuff
 app = Flask(__name__)
@@ -1112,8 +1112,8 @@ def getUserPaymentHistory():
 
 # market analysis functions *******************************************************************************************
 # 11
-@app.route('/getCurrentMarketAnalysis', methods=['POST'])
-def getCurrentMarketAnalysis():
+@app.route('/getMarketAnalysis', methods=['POST'])
+def getMarketAnalysis():
     # check user access token's validity
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
@@ -1153,7 +1153,7 @@ def getCurrentMarketAnalysis():
         ): 
             response = make_response('not subscribed'); response.status = 403; return response
 
-    # proceed to get current market analysis ... ie last analysis entry
+    # proceed to get market analysis
     market_analysis = MarketAnalysis.objects.filter(asset = symbol)
     if len(market_analysis) > 0:
         current_market_analysis = market_analysis[len(market_analysis)-1]
@@ -2149,24 +2149,6 @@ def getPaymentsList():
 
     # return response
     response = make_response(jsonify(all_payments)); response.status = 200; return response
-
-# ******************* CUSTOM THREADS ************************************************************************************
-# predictions thread 
-if run_predictions_as_flask_thread() == True:
-    # imports
-    from predict import run_predictions
-
-    # create the predictions thread
-    predictions_thread = threading.Thread(target=run_predictions)
-
-    # start the predictions thread if its not already running
-    if not predictions_thread.is_alive():
-        predictions_thread.start()
-        print('\n\nPredictions thread has been started.\n\n')
-    else:
-        print('\n\nPredictions thread is already running.')
-
-# ******************* END OF CUSTOM THREADS *****************************************************************************
 
 if __name__ == '__main__':
     init_db()

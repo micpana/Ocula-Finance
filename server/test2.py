@@ -1,14 +1,25 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
 
-def sma(values, period):
-    sma = np.zeros_like(values, dtype=float)
-    # Ensure that we only calculate SMA for periods where there is enough data
-    for i in range(period - 1, len(values)):
-        sma[i] = np.mean(values[i - period + 1:i + 1])
-    return sma
+fig, ax = plt.subplots()
+plt.subplots_adjust(bottom=0.25)
 
-# Example usage:
-prices = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-period = 3
-sma_values = sma(prices, period)
-print(sma_values)
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+y = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
+l, = plt.plot(x, y)
+plt.axis([0, 2, 0, 9])
+
+axcolor = 'lightgoldenrodyellow'
+axpos = plt.axes([0.2, 0.1, 0.65, 0.03], facecolor=axcolor)
+
+spos = Slider(axpos, 'Pos', 0.1, 7.0)
+
+def update(val):
+    pos = spos.val
+    ax.axis([pos, pos+2, 0, 9])
+    fig.canvas.draw_idle()
+
+spos.on_changed(update)
+
+plt.show()

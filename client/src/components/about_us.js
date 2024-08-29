@@ -119,14 +119,11 @@ class AboutUs extends Component{
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
-                        <div style={{backgroundColor: '#005fc9', position: 'relative'}}>
-                            <div style={{backgroundColor: 'grey', opacity: 0.7, minHeight: '200px'}}></div>
-                            <div style={{color: '#ffffff', position: 'absolute', top: 0, left: 0, right: 0}}>
-                                <br/><br/><br/>
-                                <h3 style={{fontWeight: 'bold'}}>
-                                    About us
-                                </h3>
-                            </div>
+                        <div style={{backgroundColor: '#005fc9', color: '#ffffff', minHeight: '200px', borderBottom: '1px solid #F9C961'}}>
+                            <br/><br/><br/>
+                            <h3 style={{fontWeight: 'bold'}}>
+                                About us
+                            </h3>
                         </div>
                         <Container>
                             <br/><br/>
@@ -134,15 +131,14 @@ class AboutUs extends Component{
                                 {Platform_Name}
                             </h6>
                             <br/><br/>
-                            <p style={{textAlign: 'left'}}>
-                                Welcome to {Platform_Name} - Your Intelligence Partner for Forex Trading. We leverage Artificial 
-                                Intelligence to provide deep analysis of the financial markets, particularly focusing on the Forex 
-                                markets.
+                            <p style={{textAlign: 'justify'}}>
+                                Welcome to {Platform_Name} - Your Intelligent Forex Trading Partner. We leverage Artificial Intelligence to 
+                                perform deep analysis of financial markets, particularly the forex markets. 
                             </p>
                             <br/><br/>
                             <Row>
                                 <Col sm='6'>
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
@@ -151,34 +147,35 @@ class AboutUs extends Component{
                                     <br/><br/><br/>
                                 </Col>
                                 <Col>
-                                    <p style={{textAlign: 'left'}}>
-                                        Our SAAS platform employs sophisticated AI models to predict potential upmoves and downmoves in the 
-                                        market over the next 105 minutes. These forecasts are updated every 15 minutes and are designed to 
-                                        equip traders with a risk-reward profile for informed trading decisions.
+                                    <p style={{textAlign: 'justify'}}>
+                                        Our SAAS platform employs sophisticated AI models to provide high probability trading signals. Every 15 
+                                        minutes, our AI analyses the current market dynamics in search of good trading opportunities, and alerts 
+                                        our users if it finds any.
                                     </p>
                                     <br/>
-                                    <p style={{textAlign: 'left'}}>
-                                        Taking a cue from established statistical models used in financial markets such as VaR and ER, we’ve 
-                                        upped the game by implementing deep neural networks. This approach provides more precision in 
-                                        predicting the potential percentages to be moved in any direction.
+                                    <p style={{textAlign: 'justify'}}>
+                                        Taking a cue from established price action and technical analysis methods, we’ve upped the game by 
+                                        implementing machine learning. This approach provides more precision in selecting reliable entry points.
                                     </p>
                                     <br/>
-                                    <p style={{textAlign: 'left'}}>
-                                        Whether you're deciding to use these metrics as sole guides, or you're integrating them with existing 
-                                        trading strategies, our goal remains the same - to simplify complex data and provide powerful metrics. 
-                                        Our vision is to aid traders in minimizing risk and maximizing rewards, all in an affordable manner.
+                                    <p style={{textAlign: 'justify'}}>
+                                        Whether you're deciding to use the provided trades as sole guides, or you're integrating them with 
+                                        existing trading strategies, our goal remains the same - to simplify the analysis of vast amounts of 
+                                        complex data, and provide traders with simplified high probability trading signals, offering them a 
+                                        reliable edge in the financial markets. Our vision is to aid traders in minimizing risk and maximizing 
+                                        rewards, all in an affordable manner.
                                     </p>
                                     <br/><br/><br/>
                                 </Col>
                             </Row>
-                            <h6 style={{fontWeight: 'bold'}}>
+                            <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
                                 Explore {Platform_Name} today and redefine your trading experience. 
                             </h6>
                             <br/><br/>
                             <p style={{textAlign: 'left'}}>
                                 Join {Platform_Name} today and optimize your Forex Trading with the ultimate support of AI-powered 
                                 analysis. We believe that technology and analytics should be affordable, simple, and impactful, 
-                                offering each of our users more control over their trades. Welcome to the future of Forex Trading.
+                                offering each of our users more control over their trades.
                             </p>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='4'></Col>

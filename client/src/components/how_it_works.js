@@ -119,14 +119,11 @@ class HowItWorks extends Component{
                     : this.state.network_error_screen === true
                     ? <NetworkErrorScreen error_message={this.state.network_error_message} retryFunction={this.state.retry_function} />
                     : <div>
-                        <div style={{backgroundColor: '#005fc9', position: 'relative'}}>
-                            <div style={{backgroundColor: 'grey', opacity: 0.7, minHeight: '200px'}}></div>
-                            <div style={{color: '#ffffff', position: 'absolute', top: 0, left: 0, right: 0}}>
-                                <br/><br/><br/>
-                                <h3 style={{fontWeight: 'bold'}}>
-                                    How it works
-                                </h3>
-                            </div>
+                        <div style={{backgroundColor: '#005fc9', color: '#ffffff', minHeight: '200px', borderBottom: '1px solid #F9C961'}}>
+                            <br/><br/><br/>
+                            <h3 style={{fontWeight: 'bold'}}>
+                                How it works
+                            </h3>
                         </div>
                         <Container>
                             <br/><br/>
@@ -134,16 +131,16 @@ class HowItWorks extends Component{
                                 Introduction
                             </h6>
                             <br/><br/>
-                            <p style={{textAlign: 'left'}}>
+                            <p style={{textAlign: 'justify'}}>
                                 Welcome to {Platform_Name} - the Advanced SAAS platform that revolutionizes the way you approach 
-                                financial markets, primarily forex. Powered by cutting-edge AI and deep neural networks, our platform 
-                                provides you with comprehensive forecast data for the next 105 minutes, enabling you to create a 
-                                balanced risk-to-reward profile for favourable market directions. Here's how our system works.
+                                financial markets, primarily forex. Powered by cutting-edge AI, our platform provides you with high quality 
+                                trades that have a maximum recommended holding time of 2 hours, addable to any trading arsenal you may already 
+                                have. Here's how our system works:
                             </p>
                             <br/><br/>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='6'>
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
@@ -160,13 +157,12 @@ class HowItWorks extends Component{
                                         What We Offer
                                     </h6>
                                     <br/><br/>
-                                    <p style={{textAlign: 'left'}}>
+                                    <p style={{textAlign: 'justify'}}>
                                         <ul>
-                                            <li>Potential max upmove and downmove forecasts.</li><br/>
-                                            <li>Comprehensive risk-to-reward profile construction.</li><br/>
-                                            <li>Enhanced support to existing trading strategies.</li><br/>
-                                            <li>Simple, powerful metrics for savvy trading.</li><br/>
-                                            <li>Regular updates every 15 minutes.</li><br/>
+                                            <li>Predicted buy and sell trade entries.</li><br/>
+                                            <li>Recommended stoploss percentages.</li><br/>
+                                            <li>Recommended takeprofit percentages.</li><br/>
+                                            <li>Reliable risk-to-reward ratios, sticking to a minimum of 1:2.</li><br/>
                                         </ul>
                                     </p>
                                 </Col>
@@ -176,16 +172,16 @@ class HowItWorks extends Component{
                                 Our Distinct Approach 
                             </h6>
                             <br/><br/>
-                            <p style={{textAlign: 'left'}}>
-                                While our process mirrors the statistical models employed in market finance, such as VaR and ER, we 
-                                have a critical edge. {Platform_Name} leverages the power of deep neural networks to provide potential 
-                                percentages moved in either direction. This crucial difference amplifies the effectiveness of our 
-                                platform and the insight users gain. 
+                            <p style={{textAlign: 'justify'}}>
+                                While our process mirrors multitimeframe price action analysis, and various other technical analysis methods, we 
+                                have a critical edge. {Platform_Name} leverages the power of machine learning to go through huge amounts of data 
+                                and learn from it, inorder to make predictions based on the gained knowledge. This crucial difference amplifies the 
+                                effectiveness of our platform and the quality of the trades it gives. 
                             </p>
                             <br/><br/>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='6'>
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
@@ -202,30 +198,23 @@ class HowItWorks extends Component{
                                         Empower Your Trading 
                                     </h6>
                                     <br/><br/>
-                                    <p style={{textAlign: 'left'}}>
-                                        Whether you're a seasoned trading expert or a newcomer, our metrics can serve as your 
+                                    <p style={{textAlign: 'justify'}}>
+                                        Whether you're a seasoned trading expert or a newcomer, our signals can serve as your 
                                         standalone guide or efficiently supplement your existing trading strategy. We aim to minimize 
                                         trading risks while maximizing rewards, all at an affordable price point.
                                     </p>
                                 </Col>
                             </Row>
-                            <br/><br/>
-                            <h6 style={{fontWeight: 'bold'}}>
-                                Stay updated 
-                            </h6>
-                            <br/><br/>
-                            <p style={{textAlign: 'left'}}>
-                                At {Platform_Name}, we understand the dynamic nature of financial markets, which is why we update our 
-                                data every 15 minutes. Stay in sync with the latest trends and make data-driven decisions on the go.
-                            </p>
-                            <br/><br/>
-                            <h6 style={{fontWeight: 'bold'}}>
+                            <br/><br/><br/><br/>
+                            <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
                                 Explore {Platform_Name} today and redefine your trading experience. 
                             </h6>
                             <br/><br/>
                             <p style={{textAlign: "left"}}>
-                                Sign up for a 7-day Free Trial now!
+                                Join a world where complex financial market navigations can be made simpler, smarter, and more profitable. Your 
+                                journey to informed trading starts here.
                             </p>
+                            <br/>
                             <Row style={{margin: '0px'}}>
                                 <Col sm='4'></Col>
                                 <Col sm='4'></Col>

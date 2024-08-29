@@ -132,8 +132,13 @@ class AllUsers extends Component{
             axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set users to state, also set showing search results to false => so that we know users showing are not from a search
-                this.setState({all_users: result, showing_search_results: false})
+                if (get_all == true){
+                    // set users to state, also set showing search results to false => so that we know users showing are not from a search
+                    this.setState({all_users: result, showing_search_results: false})
+                }else{
+                    // append users to state, also set showing search results to false => so that we know users showing are not from a search
+                    this.setState({all_users: this.state.all_users.concat(result), showing_search_results: false})
+                }
                 this.LoadingOff()
                 this.GetUserMetrics()
             }).catch((error) => {
@@ -187,8 +192,13 @@ class AllUsers extends Component{
             axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set user payments to state and switch to user payments screen
-                this.setState({user_payments: result, screen: 'selected user payments'})
+                if (get_all == true){
+                    // set user payments to state and switch to user payments screen
+                    this.setState({user_payments: result, screen: 'selected user payments'})
+                }else{
+                    // append user payments to state and switch to user payments screen
+                    this.setState({user_payments: this.state.user_payments.concat(result), screen: 'selected user payments'})
+                }
                 this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
@@ -255,8 +265,13 @@ class AllUsers extends Component{
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
-                    // set user results to state, also set showing search results to true => so that we know users showing are from a search
-                    this.setState({all_users: result, showing_search_results: true, search_results_owner_query: this.state.search_query})
+                    if (get_all == true){
+                        // set user results to state, also set showing search results to true => so that we know users showing are from a search
+                        this.setState({all_users: result, showing_search_results: true, search_results_owner_query: this.state.search_query})
+                    }else{
+                        // append user results to state, also set showing search results to true => so that we know users showing are from a search
+                        this.setState({all_users: this.state.all_users.concat(result), showing_search_results: true, search_results_owner_query: this.state.search_query})
+                    }
                     this.LoadingOff()
                 }).catch((error) => {
                     console.log(error)
@@ -1230,7 +1245,7 @@ class AllUsers extends Component{
                                                 Load more
                                             </Button>
                                             {' '}
-                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false); this.setState({end_of_list: false})}} 
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, true); this.setState({end_of_list: false})}} 
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 Load all

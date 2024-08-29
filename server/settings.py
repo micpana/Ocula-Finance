@@ -56,19 +56,6 @@ def get_number_of_free_trial_days():
 
     return days
 
-# list of currency pairs and stocks ... symbols
-def get_symbols():
-    currency_pairs = [
-        'EURUSD'
-        # , 'USDJPY', 'GBPUSD', 'USDCHF', 'USDZAR'
-    ]
-    stocks = [
-
-    ]
-    symbols = currency_pairs + stocks
-
-    return symbols
-
 # list of user roles
 def get_user_roles():
     user_roles = [
@@ -97,12 +84,6 @@ def get_client_load_more_increment():
 
     return client_load_more_increment
 
-# run predictions module as flask thread or not
-def run_predictions_as_flask_thread():
-    run = False
-
-    return run
-
 # source for training data ... csv / mt5 / yahoo
 def training_data_source():
     source = 'csv'
@@ -115,62 +96,11 @@ def prediction_data_source():
 
     return source
 
-# whether to use price action features or not ... will overide use_closing_prices_only(), use_weighted_features(), x_use_log_returns(), x_use_percentages(), and y_use_percentages()
-def use_price_action_features(): # requires a reasonably high lookback
-    use_price_action_features = False
-
-    return use_price_action_features
-
-# use closing prices only or not ... closing prices only / all ohlc prices
-def use_closing_prices_only():
-    use_closing_prices_only = True
-
-    return use_closing_prices_only
-
-# whether to use weighted features or not ... using weighted features will override use_closing_prices_only() setting
-def use_weighted_features():
-    use_weighted_features = False
-
-    return use_weighted_features
-
-# forecast period
-def get_forecast_period():
-    forecast_period = 7
-
-    return forecast_period
-
-# lookback period
-def get_lookback_period():
-    lookback_period = 7
-
-    return lookback_period
-
 # whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
 def remove_last_n_values_without_full_forecast():
-    remove = True
+    remove = False
 
     return remove
-
-# get timeframes in use, in descending order ... max 8 timeframes, min 1 timeframe
-def get_timeframes_in_use():
-    timeframes_in_use = [
-        # 'Monthly',
-        # 'Weekly',
-        'Daily', 
-        'H4', 
-        'H1', 
-        'M15',
-        # 'M5',
-        # 'M1'
-    ]
-
-    return timeframes_in_use
-
-# get entry timeframe ... should be part of the timeframes_in_use list
-def get_entry_timeframe():
-    entry_timeframe = 'M15'
-
-    return entry_timeframe
 
 # whether to save live predictions to the database or not
 def save_live_predictions_to_database():
@@ -189,7 +119,7 @@ def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':
         days =  2000 # if available ... if more is available, take all ... else take whats available if reasonable
     elif purpose == 'prediction':
-        days = 5
+        days = 200
 
     return days
 
@@ -210,7 +140,7 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         elif timeframe == 'M5':
             data_length = int(days * 288) # 288 5min segments in a day
         elif timeframe == 'M1':
-            data_length = int(days * 1440) # 1140 minutes in a day
+            data_length = int(days * 1440) # 1440 minutes in a day
         else:
             print('Timeframe not configured:', timeframe)
 
@@ -219,90 +149,6 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
             data_length = 1
         
         return data_length
-
-# whether to incorporate simulation or not
-def incorporate_simulation():
-    incorporate = False
-
-    return incorporate
-
-# number of candlesticks to simulate per simulation
-def number_of_candlesticks_to_simulate():
-    number = 7
-
-    return number
-
-# number of simulations to run
-def number_of_simulations():
-    number = 100
-
-    return number
-
-# whether to aggregate across simulations or not ... if aggregating, the resulting dataFrame provides a condensed overview of the simulated price movements, summarizing the central tendencies of all simulations for each time step ... if not aggregating, resulting dataframe will have num_simulations * T rows
-def aggregate_across_simulations():
-    aggregate = True
-
-    return aggregate
-
-# whether to show the simulated price chart or not ... also dependant on the show_plots_during_training() setting
-def show_simulated_price_chart():
-    show = True
-
-    return show
-
-# index of model to use
-def index_of_model_to_use():
-    index = 1
-
-    return index
-
-# shuffle train validation data
-def shuffle_train_validation_data():
-    shuffle = False
-
-    return shuffle
-
-# whether to combine training and validation set into one or not, might be useful for non kerals models ... set to true for non keras models ... for non keras models that cannot use a validation set during training
-def combine_training_and_validation_set():
-    combine = True
-
-    return combine
-
-# number of trees
-def number_of_trees():
-    number = 100
-
-    return number
-
-# whether to use log returns on x data or not ... can help to stabilize the variance of returns and make them more normally distributed
-def x_use_log_returns(): # (requires x_use_percentages() to be set to true inorder to work)
-    use = True
-
-    return use
-
-# whether to use percentage changes or price on x data
-def x_use_percentages():
-    use = False
-
-    return use
-
-# whether to use percentage changes or price on y data 
-def y_use_percentages():
-    use = True
-
-    return use
-
-# get scaler x status
-def scale_x():
-    scale_x = True
-
-    return scale_x
-
-# get scaler y status
-def scale_y():
-    scale_y = False
-
-    return scale_y
 
 # whether to show plots during training or not
 def show_plots_during_training():
@@ -322,53 +168,33 @@ def get_training_price_data_csvs_folder_path():
 
     return path
 
-# universal filename append string for model object files
-def universal_filename_append_string(timeframes, features_type, with_extension):
-    if with_extension == True:
-        string = '-MI:' + str(index_of_model_to_use()) + '-Model-' + features_type + '-TF' + str(timeframes) + '-ET:' + get_entry_timeframe() + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y()) + '-XUP' + str(x_use_percentages()) + ':YUP' + str(y_use_percentages()) + custom_system_extension()
-    else:
-        string = '-MI:' + str(index_of_model_to_use()) + '-Model-' + features_type + '-TF' + str(timeframes) + '-ET:' + get_entry_timeframe() + '-L' + str(get_lookback_period()) + ':F' + str(get_forecast_period()) + '-XS' + str(scale_x()) + ':YS' + str(scale_y()) + '-XUP' + str(x_use_percentages()) + ':YUP' + str(y_use_percentages())
-
-    return string
-
 # get training logs path
-def get_training_logs_path(symbol, timeframes, features_type):
-    path = 'logs/training logs/' + symbol + '-Training Log-' + str(datetime.now(timezone(system_timezone()))) + universal_filename_append_string(timeframes, features_type, True)
+def get_training_log_path(symbol):
+    path = 'logs/training logs/' + symbol + '-Training-Log.json'
 
     return path
 
 # get scalers path
-def get_scalers_path(symbol, timeframes, features_type, scaler_set):
-    if scaler_set == 'x':
-        path = 'scalers/' + symbol + '-X Scaler' + universal_filename_append_string(timeframes, features_type, True)
-    elif scaler_set == 'y':
-        path = 'scalers/' + symbol + '-Y Scaler' + universal_filename_append_string(timeframes, features_type, True)
+def get_scaler_path(symbol):
+    path = 'scalers/' + symbol + '-Scaler' + custom_system_extension()
 
     return path
 
 # get models path
-def get_models_path(symbol, timeframes, features_type):
-    if index_of_model_to_use() == 2 or index_of_model_to_use() == 3: # models that do one output at a time
-        path_y_1 = 'models/' + symbol + '-Y1' + universal_filename_append_string(timeframes, features_type, True)
-        path_y_2 = 'models/' + symbol + '-Y2' + universal_filename_append_string(timeframes, features_type, True)
-
-        return path_y_1, path_y_2
-
-    else: # models that can do multiple outputs at a time
-        path = 'models/' + symbol + universal_filename_append_string(timeframes, features_type, True)
-
-        return path
-
-# get models checkpoints path
-def get_models_checkpoints_path(symbol, timeframes, features_type):
-    # path = 'models checkpoints/' + 'weights' + universal_filename_append_string(timeframes, features_type, False) + '.best' + '.weights.h5' 
-    path = 'models checkpoints/model_weights.weights.h5' 
+def get_model_path(symbol):
+    path = 'models/' + symbol + '-Model' + custom_system_extension()
 
     return path
 
 # get error logs path
 def get_error_logs_path(name):
     path = 'logs/error logs/' + 'Log-' + name + '-' + str(datetime.now(timezone(system_timezone()))) + '.txt'
+
+    return path
+
+# get model performance visual insights path
+def get_model_performance_visual_insights_path(symbol, name):
+    path = 'model performance visual insights/' + symbol + ' - ' + name + '.png'
 
     return path
 

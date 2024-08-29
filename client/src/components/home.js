@@ -126,7 +126,7 @@ class Home extends Component{
                                         Maximize Your Trading Potential with AI-Driven Analysis
                                     </h1>
                                     <h3 style={{color: '#FEF6DF', marginTop: '50px', textAlign: 'left'}}>
-                                        Unlock Profitable Trading Opportunities with Accurate Forecasts and Risk-to-Reward Profiles. 
+                                        Unlock Profitable Trading Opportunities Through The Use Of High-Grade Financial Market Analysis. 
                                     </h3>
                                     <Row style={{marginRight: '0px', marginTop: '70px', textAlign: 'left'}}>
                                         <Col sm='6'>
@@ -144,95 +144,110 @@ class Home extends Component{
                                 <Col sm='6'>
                                     {
                                         this.state.on_mobile === true
-                                        ? <><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/></>
+                                        ? <><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/></>
                                     }
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
                                         <img src={Home1} onError={(e) => e.target.src = Home1} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
                                     </div>
+                                    {
+                                        this.state.on_mobile === true
+                                        ? <></>
+                                        : <><br/><br/><br/><br/></>
+                                    }
                                 </Col>
                                 <Col>
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/><br/></>
                                     }
                                     <h6 style={{fontWeight: 'bold'}}>
                                         Analyze, Predict, and Profit.
                                     </h6>
                                     <br/><br/>
-                                    <p style={{textAlign: "left"}}>
-                                        {Platform_Name} is designed to deliver data-driven predictions on market movements for the 
-                                        next 1hr 45min. Our revolutionary platform carefully examines the market dynamics 
-                                        and provides you with a potential maximum up-move and down-move for this period.
+                                    <p style={{textAlign: "justify"}}>
+                                        {Platform_Name} is designed to deliver data-driven trade entries with a maximum holding time of 2 Hours. 
+                                        Every trade comes with recommended takeprofit and stoploss percentages, sticking to a minimum risk-to-reward 
+                                        ratio of 1:2. Although it may not catch every market move, every trade our revolutionary platform gives 
+                                        comes after a careful examination of market dynamics, ensuring that you only get high probability trades.
+                                        <br/><br/>
+                                        Our goal is clear - to arm traders with easily accessible and effective tools that facilitate risk 
+                                        minimization and reward maximization during trading. We have ensured that this AI powerhouse is 
+                                        available to you at an affordable price point, democratizing high-grade financial market analysis.
                                     </p>
-                                    {
-                                        this.state.on_mobile === true
-                                        ? <></>
-                                        : <><br/><br/><br/><br/></>
-                                    }
                                 </Col>
                             </Row>
-                            <Row style={{margin: '0px', minHeight: '300px'}}>
-                                {
-                                    this.state.on_mobile === true
-                                    ? <Col>
-                                        <br/><br/>
-                                        <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
-                                            <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
-                                                Loading image...
+                        </Container>
+                        <div style={{backgroundColor: '#005fc9', color: '#ffffff'}}>
+                            <Container>
+                                <Row style={{margin: '0px', minHeight: '300px'}}>
+                                    {
+                                        this.state.on_mobile === true
+                                        ? <Col>
+                                            <br/><br/><br/><br/>
+                                            <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
+                                                <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                                    Loading image...
+                                                </div>
+                                                <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
                                             </div>
-                                            <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
-                                        </div>
+                                        </Col>
+                                        : <></>
+                                    }
+                                    <Col sm='6'>
+                                        {
+                                            this.state.on_mobile === true
+                                            ? <><br/><br/><br/></>
+                                            : <><br/><br/><br/><br/><br/><br/><br/></>
+                                        }
+                                        <h6 style={{fontWeight: 'bold'}}>
+                                            Maximise Your Gains, Minimise Your Risks.
+                                        </h6>
+                                        <br/><br/>
+                                        <p style={{textAlign: "justify"}}>
+                                            We help traders take the guesswork out of trading decisions. {Platform_Name} is an affordable, and 
+                                            powerful tool that complements your existing strategies to give you a well-rounded trading 
+                                            perspective. Whether you're a seasoned trader or a beginner, the analysis provided by {Platform_Name} {' '}
+                                            can form the bedrock of your investment decisions. The provided predictions can either act as 
+                                            standalone trading decisions or they can complement your existing trading strategies by providing 
+                                            an additional, robust, statistics based analytical layer.
+                                        </p>
+                                        {
+                                            this.state.on_mobile === true
+                                            ? <><br/><br/><br/><br/></>
+                                            : <><br/><br/><br/><br/></>
+                                        }
                                     </Col>
-                                    : <></>
-                                }
+                                    {
+                                        this.state.on_mobile == false
+                                        ? <Col>
+                                            <br/><br/><br/><br/>
+                                            <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
+                                                <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
+                                                    Loading image...
+                                                </div>
+                                                <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                            </div>
+                                            <br/><br/><br/><br/>
+                                        </Col>
+                                        : <></>
+                                    }
+                                </Row>
+                            </Container>
+                        </div>
+                        <Container>
+                            <Row style={{margin: '0px', minHeight: '300px'}}>
                                 <Col sm='6'>
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></>
-                                    }
-                                    <h6 style={{fontWeight: 'bold'}}>
-                                        Maximise Your Gains, Minimise Your Risks.
-                                    </h6>
-                                    <br/><br/>
-                                    <p style={{textAlign: "left"}}>
-                                        We help traders construct favourable risk-to-reward profiles, taking the guesswork out of 
-                                        trading decisions. {Platform_Name} is an affordable, powerful tool that complements your 
-                                        existing strategies to give you a well-rounded trading perspective.
-                                    </p>
-                                    {
-                                        this.state.on_mobile === true
-                                        ? <></>
                                         : <><br/><br/><br/><br/></>
                                     }
-                                </Col>
-                                {
-                                    this.state.on_mobile == false
-                                    ? <Col>
-                                        <br/><br/><br/><br/><br/><br/>
-                                        <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
-                                            <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
-                                                Loading image...
-                                            </div>
-                                            <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
-                                        </div>
-                                    </Col>
-                                    : <></>
-                                }
-                            </Row>
-                            <Row style={{margin: '0px', minHeight: '300px'}}>
-                                <Col sm='6'>
-                                    {
-                                        this.state.on_mobile === true
-                                        ? <><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/></>
-                                    }
-                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
+                                    <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '20px'}}>
                                         <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
                                             Loading image...
                                         </div>
@@ -243,17 +258,18 @@ class Home extends Component{
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/><br/><br/><br/><br/><br/></>
                                     }
                                     <h6 style={{fontWeight: 'bold'}}>
                                         Advanced Tools, Simplified Trading.
                                     </h6>
                                     <br/><br/>
-                                    <p style={{textAlign: "left"}}>
-                                        With an operational method akin to well-known statistical models such as VaR and ER, 
-                                        {Platform_Name} stands apart by employing deep neural networks, simplifying complex data 
-                                        into manageable metrics for traders. This strategic utilization of AI enables us to gauge 
-                                        potential percentage movements in either direction with remarkable precision.
+                                    <p style={{textAlign: "justify"}}>
+                                        With an operational method akin to technical analysis, {Platform_Name} stands apart by employing AI 
+                                        models, taking on the burden of analysing vast amounts of multitimeframe data and indicators 
+                                        in a matter of seconds to come up with simple buy or sell trading decisions that traders can act on. 
+                                        Our strategic utilization of AI gives traders a remarkable statistical edge that keeps them profitable 
+                                        in the longrun.
                                     </p>
                                     {
                                         this.state.on_mobile === true
@@ -267,7 +283,7 @@ class Home extends Component{
                                 ? <><br/><br/><br/></>
                                 : <><br/><br/><br/><br/></>
                             }
-                            <h6 style={{fontWeight: 'bold'}}>
+                            <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
                                 Join {Platform_Name} Today.
                             </h6>
                             <br/>

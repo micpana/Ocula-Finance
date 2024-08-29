@@ -67,10 +67,18 @@ class PasswordRecoveries(Document):
 class MarketAnalysis(Document):
     meta = {'collection': 'marketanalysis'}
     timestamp = StringField(required=True)
-    entry_timeframe_last_timestamp = StringField(required=True)
-    asset = StringField(required=True)
-    maximum_possible_down_move = FloatField(required=True)
-    maximum_possible_up_move = FloatField(required=True)
+    entry_timeframe_timestamp = StringField(required=True)
+    symbol = StringField(required=True)
+    action = StringField(required=True)
+    stoploss_percentage = FloatField(required=True)
+    takeprofit_percentage = FloatField(required=True)
+    risk_to_reward_ratio = StringField(required=True)
+    maximum_holding_time = StringField(required=True)
+    expiry_already_managed_by_system = BooleanField(required=True)
+    stoploss_hit = BooleanField(required=False)
+    takeprofit_hit = BooleanField(required=False)
+    trade_close_percentage = FloatField(required=False)
+    trade_won = StringField(required=False)
 
 class Payments(Document):
     meta = {'collection': 'payments'}

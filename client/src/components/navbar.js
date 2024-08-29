@@ -182,7 +182,7 @@ class NavBar extends Component{
         var user_details = this.state.user_details
 
         return (
-            <Navbar light expand="md" sticky='top' style={{backgroundColor: '#EEECEC'}}>
+            <Navbar light expand="md" sticky='top' style={{backgroundColor: '#EEECEC', borderBottom: '1px solid #F9C961'}}>
                 <NavbarBrand href="/" style={{marginBottom: '0px', height: '70px', width: '150px', marginLeft: '10px'}}>
                     <img src={Logo} style={{width: '100%'}} /> 
                 </NavbarBrand>

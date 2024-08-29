@@ -54,7 +54,7 @@ class Dashboard extends Component{
     constructor(props) { 
         super(props);
         this.state = {
-            loading: true,
+            loading: false,
             network_error_screen: false,
             network_error_message: '',
             retry_function: null,
@@ -176,18 +176,18 @@ class Dashboard extends Component{
         }
 
         // check access token existance
-        const { cookies } = this.props;
-        if(cookies.get(Access_Token_Cookie_Name) == null){
-            let port = (window.location.port ? ':' + window.location.port : '');
-            window.location.href = '//' + window.location.hostname + port + '/signin';
-        }else{ 
-            // check token's validity
-            this.CheckAccessTokenValidity()
-            // highlight current screen's button
-            if (this.state.loading === false){
-                document.getElementById(this.state.screen).style.color = '#F2B027'
-            }
-        }
+        // const { cookies } = this.props;
+        // if(cookies.get(Access_Token_Cookie_Name) == null){
+        //     let port = (window.location.port ? ':' + window.location.port : '');
+        //     window.location.href = '//' + window.location.hostname + port + '/signin';
+        // }else{ 
+        //     // check token's validity
+        //     this.CheckAccessTokenValidity()
+        //     // highlight current screen's button
+        //     if (this.state.loading === false){
+        //         document.getElementById(this.state.screen).style.color = '#F2B027'
+        //     }
+        // }
     }
 
     render() {

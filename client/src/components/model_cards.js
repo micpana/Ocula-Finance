@@ -1,0 +1,52 @@
+// Model Cards showing each symbol's AI model performance after training and testing ******************************************************
+
+// model cards
+export const Model_Cards = {
+    // EURUSD *************************************************************************************
+    'EURUSD': {
+        "Symbol": "EURUSD",
+        "Starting account balance (example in $)": 100.0,
+        "Account balance after trades ($)": 453.8278416351762,
+        "Number of trades taken": 211,
+        "Trades won": 181,
+        "Trades lost": 26,
+        "Overall Win Rate %": 87.67772511848341,
+        "Risk:Reward": "1:2",
+        "Stoploss Hits": 21,
+        "Stoploss Misses": 0,
+        "Takeprofit Misses": 5,
+        "Maximum number of consecutive wins": 24,
+        "Maximum number of consecutive losses": 2,
+        "Average number of consecutive wins": 7.869565217391305,
+        "Average number of consecutive losses": 1.1304347826086956,
+        "Number of features": 932,
+        "Training data start date": "2019.12.13 19:45",
+        "Training data end date": "2023.03.15 12:30",
+        "Training data number of trading days": 841.40625,
+        "Test data start date": "2023.03.15 12:45",
+        "Test data end date": "2024.01.05 23:45",
+        "Test data number of trading days": 210.34375
+    }, 
+    // GBPUSD *************************************************************************************
+    'GBPUSD': {
+
+    }, 
+    // USDJPY *************************************************************************************
+    'USDJPY': {
+
+    }, 
+    // USDCHF *************************************************************************************
+    'USDCHF': {
+
+    }, 
+    // AUDUSD *************************************************************************************
+    'AUDUSD': {
+
+    }, 
+    // USDCAD *************************************************************************************
+    'USDCAD': {
+
+    }, 
+    // USDZAR *************************************************************************************
+    'USDZAR': {}
+}

@@ -48,8 +48,8 @@ import BTC from '../images/bitcoin.png'
 import ETH from '../images/ethereum.png'
 import LTC from '../images/lite_coin.png'
 import XRP from '../images/xrp.png'
-import BuySetup from '../images/buy_setup.png'
-import SellSetup from '../images/sell_setup.png'
+import Modal from './modal';
+import { Model_Cards } from './model_cards'
 
 class Analysis extends Component{
     static propTypes = {
@@ -65,9 +65,23 @@ class Analysis extends Component{
             input_errors: {},
             on_mobile: false,
             symbol: 'EURUSD',
-            current_market_analysis: {},
+            market_analysis: [
+                {
+                    timestamp: '28/08/2024 19:15',
+                    entry_timeframe_timestamp: '28/08/2024 19:15',
+                    symbol: 'EURUSD',
+                    action: 'Buy',
+                    stoploss_percentage: -0.75,
+                    takeprofit_percentage: 1.5,
+                    risk_to_reward_ratio: '1:2',
+                    maximum_holding_time: '2 trading hours',
+                    trade_close_percentage: 1.5
+                }
+            ],
             user_subscribed: null,
-            user_last_m15_close: null
+            user_closing_price_at_entry: null,
+            modal_open: false,
+            modal_content: null
         };
 
         this.HandleChange = (e) => {
@@ -126,11 +140,11 @@ class Analysis extends Component{
             var data = new FormData()
             data.append('symbol', symbol)
 
-            axios.post(Backend_Server_Address + 'getCurrentMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set current market analysis to state
-                this.setState({current_market_analysis: result})
+                // set market analysis to state
+                this.setState({market_analysis: result})
                 this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
@@ -167,10 +181,8 @@ class Analysis extends Component{
             })
         }
 
-        this.GetSymbolIcons = () => {
-            var symbol = this.state.symbol
-            var base = ''
-            var quote = ''
+        this.GetSymbolIcons = (symbol) => {
+            var base = ''; var quote = ''
             if(symbol === 'EURUSD'){ base = EUR; quote = USD }
             if(symbol === 'USDJPY'){ base = USD; quote = JPY }
             if(symbol === 'GBPUSD'){ base = GBP; quote = USD }
@@ -200,12 +212,232 @@ class Analysis extends Component{
 
             return <Row style={{margin: '0px'}}>
                 <Col xs='6'>
-                    <img src={base} style={{width: '50px', height: '50px'}} />
+                    <img src={base} style={{width: '30px', height: '30px'}} />
                 </Col>
                 <Col xs='6'>
-                    <img src={quote} style={{width: '50px', height: '50px'}} />
+                    <img src={quote} style={{width: '30px', height: '30px'}} />
                 </Col>
             </Row>
+        }
+
+        this.OpenModal = (modal_content) => {
+            this.setState({modal_content: modal_content, modal_open: true})
+        }
+
+        this.CloseModal = () => {
+            this.setState({modal_open: false})
+        }
+
+        this.ModelCardRender = (symbol) => {
+            // symbol's model card
+            var symbol_model_card = Model_Cards[symbol]
+            // model card render
+            return <div>
+                <h5>
+                    {symbol} AI Model's Performance Card
+                </h5>
+                <br/>
+                <p style={{fontSize: '13px', textAlign: 'left'}}>
+                    All test trades were takes using a fixed risk-to-reward ratio and a fixed risk amount in dollars, risking a single dollar to gain two.
+                </p>
+                <br/><br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Initial account balance:
+                    </Col>
+                    <Col>
+                        ${symbol_model_card["Starting account balance (example in $)"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Account balance after test trades:
+                    </Col>
+                    <Col>
+                        ${symbol_model_card["Account balance after trades ($)"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Number of trades taken:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Number of trades taken"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Trades won:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Trades won"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Trades lost:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Trades lost"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Overall Win Rate:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Overall Win Rate %"]} %
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Risk:Reward:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Risk:Reward"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Stoploss Hits:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Stoploss Hits"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Stoploss Misses:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Stoploss Misses"]} <span style={{fontSize: '13px'}}>(closed in red but didn't hit the stoploss)</span>
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Takeprofit Misses:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Takeprofit Misses"]} <span style={{fontSize: '13px'}}>(closed in blue but didn't hit the takeprofit)</span>
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Maximum number of consecutive wins:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Maximum number of consecutive wins"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Maximum number of consecutive losses:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Maximum number of consecutive losses"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Average number of consecutive wins:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Average number of consecutive wins"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Average number of consecutive losses:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Average number of consecutive losses"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Number of features:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Number of features"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Training data start date:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Training data start date"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Training data end date:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Training data end date"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Training data number of trading days:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Training data number of trading days"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Test data start date:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Test data start date"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Test data end date:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Test data end date"]}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Test data number of trading days:
+                    </Col>
+                    <Col>
+                        {symbol_model_card["Test data number of trading days"]}
+                    </Col>
+                </Row>
+                <br/>
+            </div>
+        }
+
+        this.PercentagesToPriceRender = () => {
+            // percentages to prices render
+            return <div>
+
+            </div>
         }
     }
 
@@ -215,23 +447,151 @@ class Analysis extends Component{
                 on_mobile: true
             })
         }
-        this.GetCurrentMarketAnalysis(this.state.symbol)
+        // this.GetCurrentMarketAnalysis(this.state.symbol)
     }
 
     render() {
         // market analysis
-        var current_market_analysis = this.state.current_market_analysis
-        var maximum_possible_up_move = current_market_analysis.maximum_possible_up_move
-        var maximum_possible_down_move = current_market_analysis.maximum_possible_down_move
+        var market_analysis = this.state.market_analysis
 
-        // risk to reward ... risk = 1
-        var up_reward = Math.round((maximum_possible_up_move/maximum_possible_down_move) * 1000) / 1000
-        var down_reward = Math.round((maximum_possible_down_move/maximum_possible_up_move) * 1000) / 1000
+        // selected symbol icons
+        var selected_symbol_icons = this.GetSymbolIcons(this.state.symbol)
+        
+        // trade signals / market analysis mapping
+        var signals = market_analysis.map((item, index) => {
+            // symbol icons
+            var symbol_icons = this.GetSymbolIcons(item.symbol)
 
-        // price based analysis
-        var user_last_m15_close = this.state.user_last_m15_close
-        var up_move_possible_maximum_price = user_last_m15_close - -1 * ((maximum_possible_up_move / 100) * user_last_m15_close)
-        var down_move_possible_maximum_price = user_last_m15_close - ((maximum_possible_down_move / 100) * user_last_m15_close)
+            // model card modal content
+            var model_card_modal_content = this.ModelCardRender(item.symbol)
+
+            // percentages to price modal content
+            var percentages_to_price_modal_content = this.PercentagesToPriceRender()
+
+            return <div style={{marginBottom: '15px', border: '1px solid #F2B027', borderRadius: '20px'}}>
+                <Row style={{margin: '0px', textAlign: 'left', marginTop: '10px'}}>
+                    <Col>
+                        <h5>
+                            {item.symbol}
+                        </h5>
+                    </Col>
+                    <Col>
+                        <a onClick={() => this.OpenModal(model_card_modal_content)} style={{color: 'inherit', cursor: 'pointer'}}>
+                            Click here to view the {item.symbol} AI model's performance card.
+                        </a>
+                    </Col>
+                </Row>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col sm='2'>
+                        <br/>
+                        {symbol_icons}
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h5>
+                                    {item.action}
+                                </h5>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h6>
+                                    Stoploss Percentage:
+                                </h6>
+                            </Col>
+                            <Col>
+                                <h5 style={{color: 'red'}}>
+                                    {item.stoploss_percentage} %
+                                </h5>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h6>
+                                    Takeprofit Percentage:
+                                </h6>
+                            </Col>
+                            <Col>
+                                <h5 style={{color: 'blue'}}>
+                                    {item.takeprofit_percentage} %
+                                </h5>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h6>
+                                    Risk to reward ratio:
+                                </h6>
+                            </Col>
+                            <Col>
+                                <h5>
+                                    {item.risk_to_reward_ratio}
+                                </h5>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h6>
+                                    Entry time:
+                                </h6>
+                            </Col>
+                            <Col>
+                                <h5>
+                                    {item.timestamp}
+                                </h5>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h6>
+                                    Maximum Holding Time:
+                                </h6>
+                            </Col>
+                            <Col>
+                                <h5>
+                                    {item.maximum_holding_time}
+                                </h5>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col>
+                                <h6>
+                                    Trade Closed At:
+                                </h6>
+                            </Col>
+                            <Col>
+                                {
+                                    item.trade_close_percentage == null || item.trade_close_percentage == undefined
+                                    ? <h5>To be updated.</h5>
+                                    : <h5 style={{color: item.trade_close_percentage < 0 ? 'red' : 'blue'}}>
+                                        {
+                                            item.trade_close_percentage
+                                        } %
+                                    </h5>
+                                }
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <h6 style={{textAlign: 'left', marginLeft: '10px', marginTop: '5px', fontSize: '13px'}}>
+                    Percentages are % distances from the entry price at the stated entry time. Prices vary according to the broker being used. {' '}
+                    <a onClick={() => this.OpenModal(percentages_to_price_modal_content)} style={{color: 'inherit', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold'}}>
+                        Click here to convert percentages to prices.
+                    </a>
+                </h6>
+            </div>
+        })
+
 
         return (
             <div>
@@ -266,6 +626,7 @@ class Analysis extends Component{
                                         <select name='symbol' value={this.state.symbol} onChange={this.HandleChange}
                                             style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
                                         >
+                                            <option value='ALL'>ALL</option>
                                             {
                                                 Symbols.map((item) => {
                                                     return<option value={item}>{item}</option>
@@ -275,180 +636,34 @@ class Analysis extends Component{
                                         <br/>
                                     </Col>
                                     <Col><br/></Col>
-                                    <Col sm='4' style={{textAlign: 'right'}}>
-                                        <this.GetSymbolIcons/>
-                                        <br/>
+                                    <Col sm='2' style={{textAlign: 'right'}}>
+                                        {
+                                            this.state.symbol == 'ALL'
+                                            ? <div></div>
+                                            : <div>
+                                                {selected_symbol_icons}
+                                                <br/>
+                                            </div>
+                                        }
                                     </Col>
                                 </Row>
                                 <br/>
-                                <h6 style={{fontWeight: 'bold', textAlign: 'left'}}>
-                                    Last updated: <span style={{color: '#005fc9'}}>{current_market_analysis.timestamp}</span>
-                                </h6>
-                                <br/>
-                                <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
-                                    Predictions for the next 105 minutes (seven 15 minute candles)
-                                </h6>
-                                <br/><br/><br/>
-                                <Row style={{margin: '0px'}}>
-                                    <Col sm='6'>
-                                        <Row>
-                                            <Col sm='6'>
-                                                <Container>
-                                                    <div style={{backgroundColor: 'green', height: '150px', width: '150px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                        <Container style={{paddingTop: '14px'}}>
-                                                            <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                                <h5 style={{'paddingTop': '25px'}}>
-                                                                    {maximum_possible_up_move} %
-                                                                </h5>
-                                                                <p style={{fontSize: '13px'}}>
-                                                                    Maximum possible up move
-                                                                </p>
-                                                            </div>
-                                                        </Container>
-                                                    </div>
-                                                </Container>
-                                                <br/>
-                                            </Col>
-                                            <Col sm='6'>
-                                                <Container>
-                                                    <div style={{backgroundColor: 'red', height: '150px', width: '150px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                        <Container style={{paddingTop: '14px'}}>
-                                                            <div style={{backgroundColor: '#FFFFFF', height: '120px', width: '120px', borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                                                <h5 style={{'paddingTop': '25px'}}>
-                                                                    {maximum_possible_down_move} %
-                                                                </h5>
-                                                                <p style={{fontSize: '13px'}}>
-                                                                    Maximum possible down move
-                                                                </p>
-                                                            </div>
-                                                        </Container>
-                                                    </div>
-                                                </Container>
-                                                <br/>
-                                            </Col>
-                                        </Row>
+                                {
+                                    market_analysis.length === 0
+                                    ? <div>
+                                        <h5 style={{color: '#005fc9'}}>
+                                            Trade entries found by our AI will appear here
+                                        </h5>
                                         <br/>
-                                    </Col>
-                                    <Col>
-                                        <Row style={{margin: '0px', textAlign: 'left'}}>
-                                            <Col sm='6' style={{fontWeight: 'bold', color: 'green'}}>
-                                                Up-move risk-to-reward ratio:
-                                                <br/>
-                                            </Col>
-                                            <Col>
-                                                <span style={{fontWeight: 'bold'}}>1:{up_reward} </span>
-                                                <span style={{fontSize: '13px'}}>(Risk: 1, Reward: : {up_reward})</span>
-                                                <br/>
-                                            </Col>
-                                        </Row>
-                                        <br/>
-                                        <Row style={{margin: '0px', textAlign: 'left'}}>
-                                            <Col sm='6' style={{fontWeight: 'bold', color: 'red'}}>
-                                                Down-move risk-to-reward ratio:
-                                                <br/>
-                                            </Col>
-                                            <Col>
-                                                <span style={{fontWeight: 'bold'}}>1:{down_reward} </span>
-                                                <span style={{fontSize: '13px'}}>(Risk: 1, Reward: {down_reward})</span>
-                                                <br/>
-                                            </Col>
-                                        </Row>
-                                        <br/><br/>
-                                        <div onClick={() => document.getElementById('explainer').scrollIntoView()}
-                                            style={{fontWeight: 'bold', cursor: 'pointer'}}
-                                        >
-                                            Click here to know more on how to use these metrics.
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <br/><br/>
-                                <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
-                                    Price based analysis:
-                                </h6>
-                                <br/><br/>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6' style={{fontWeight: 'bold'}}>
-                                        Recent 15 minute close:
-                                        <br/>
-                                    </Col>
-                                    <Col>
-                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
-                                            placeholder="Your broker's most recent 15 minute closing price" name="user_last_m15_close" id="user_last_m15_close"
-                                            value={this.state.user_last_m15_close} onChange={this.HandleChange} type="number" 
-                                        />
-                                        <br/>
-                                    </Col>
-                                </Row>
-                                <br/>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6' style={{fontWeight: 'bold', color: 'green'}}>
-                                        Up-move possible max price:
-                                        <br/>
-                                    </Col>
-                                    <Col>
-                                        <span style={{fontWeight: 'bold'}}>
-                                            {
-                                                this.state.user_last_m15_close === null || this.state.user_last_m15_close == 0 || this.state.user_last_m15_close === ''
-                                                ? <>
-                                                    Waiting for price input
-                                                </>
-                                                : <>
-                                                    {up_move_possible_maximum_price}
-                                                </>
-                                            }    
-                                        </span>
-                                        <br/>
-                                    </Col>
-                                </Row>
-                                <br/>
-                                <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='6' style={{fontWeight: 'bold', color: 'red'}}>
-                                        Down-move possible max price:
-                                        <br/>
-                                    </Col>
-                                    <Col>
-                                        <span style={{fontWeight: 'bold'}}>
-                                            {
-                                                this.state.user_last_m15_close === null || this.state.user_last_m15_close == 0 || this.state.user_last_m15_close === ''
-                                                ? <>
-                                                    Waiting for price input
-                                                </>
-                                                : <>
-                                                    {down_move_possible_maximum_price}
-                                                </>
-                                            }    
-                                        </span>
-                                        <br/>
-                                    </Col>
-                                </Row>
-                                {/* div for scroll into view purposes upon explainer selection */}
-                                <div id='explainer' style={{minHeight: '150px', marginTop: '-150px', visibility: 'hidden'}}>
-
-                                </div>
-                                <br/><br/>
-                                <h6 style={{fontWeight: 'bold', color: '#005fc9'}}>
-                                    Usage guide:
-                                </h6>
-                                <br/><br/>
-                                <Row>
-                                    <Col sm='6'>
-                                        <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '550px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
-                                            {/* <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
-                                                Loading image...
-                                            </div> */}
-                                            <img src={BuySetup} onError={(e) => e.target.src = BuySetup} style={{position: 'absolute', right: 0, width: 'auto', maxWidth: '100%', height: 'auto', maxHeight: '550px'}} />
-                                        </div>
-                                        <br/><br/>
-                                    </Col>
-                                    <Col sm='6'>
-                                        <div style={{position: 'relative', overflow: 'hidden', width: '100%', height: '550px', backgroundColor: '#D0DFE9', border: '2px solid silver', borderRadius: '10px'}}>
-                                            {/* <div style={{position: 'absolute', top: '170px', left: 0, right: 0}}>
-                                                Loading image...
-                                            </div> */}
-                                            <img src={SellSetup} onError={(e) => e.target.src = SellSetup} style={{position: 'absolute', right: 0, width: 'auto', maxWidth: '100%', height: 'auto', maxHeight: '550px'}} />
-                                        </div>
-                                    </Col>
-                                </Row>
+                                        <Circles width='180px' style={{color: '#005fc9'}}/>
+                                    </div>
+                                    : <div>
+                                        {signals}
+                                        <Modal isOpen={this.state.modal_open} onClose={this.CloseModal}>
+                                            {this.state.modal_content}
+                                        </Modal>
+                                    </div>
+                                }
                             </div>
                         }
                     </div>

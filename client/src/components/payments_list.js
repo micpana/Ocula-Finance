@@ -126,8 +126,13 @@ class PaymentsList extends Component{
             axios.post(Backend_Server_Address + 'getPaymentsList', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set payments list to state
-                this.setState({payments_list: result})
+                if (get_all == true){
+                    // set payments list to state
+                    this.setState({payments_list: result})
+                }else{
+                    // append payments list to state
+                    this.setState({payments_list: this.state.payments_list.concat(result)})
+                }
                 if(this.state.entered_by != ''){ // is a search
                     this.setState({showing_search_results: true, search_results_owner_query: this.state.entered_by})
                 }else{ // is not a search

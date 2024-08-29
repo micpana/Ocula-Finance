@@ -18,7 +18,7 @@ ohlc_df = read_csv(ohlc_df_path, names=columns, encoding='utf-16')
 del ohlc_df['col1']
 del ohlc_df['col2']
 print('OHLC DF:\n', ohlc_df.head(), '\n\n')
-ohlc_df = ohlc_df.head(1500)
+ohlc_df = ohlc_df.head(10000)
 # *****************************************************************************************************************************
 
 # get price and date numpy arrays *********************************************************************************************
@@ -171,7 +171,7 @@ ohlc = np.array([[dates[i], opens[i], highs[i], lows[i], closes[i]] for i in ran
 fig, ax = plt.subplots(figsize=(10, 6))
 
 # plot OHLC data
-candlestick_ohlc(ax, ohlc, width=0.01, colorup='green', colordown='red')
+candlestick_ohlc(ax, ohlc, width=0.0003, colorup='green', colordown='red')
 
 # plot market structure points as dots (scatter)
 ax.scatter(dates, last_structure_highs, label='Last Structure Highs', color='green', marker='o', s=1)
@@ -190,14 +190,14 @@ ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y.%m.%d %H:%M'))
 ax.xaxis.set_major_locator(mdates.AutoDateLocator(maxticks=len(dates))) # set a custom locator to customize the number of ticks
 
 # set x-axis limits to ensure proper spacing
-# ax.set_xlim(dates[0] - 0.5, dates[-1] + 0.5)
+ax.set_xlim(dates[0] - 0.5, dates[-1] + 0.5)
 
 plt.xlabel('Date')
 plt.ylabel('Price')
 plt.title(symbol + ' Chart')
-plt.legend()
+plt.legend(loc="upper right")
 # plt.grid()
-plt.xticks(rotation=45)
+plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 # *****************************************************************************************************************************
