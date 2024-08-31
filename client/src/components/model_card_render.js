@@ -22,7 +22,7 @@ const ModelCardRender = ({ symbol }) => {
             <div style={{width: '100%', borderBottom: '1px solid #F9C961'}}></div>
             <br/>
             <p style={{fontSize: '13px', textAlign: 'left'}}>
-                All test trades were takes using a fixed risk-to-reward ratio and a fixed risk amount in dollars, risking a single dollar to gain two.
+                All test trades were taken using a fixed risk-to-reward ratio and a fixed risk amount in dollars, risking a single dollar to gain two.
             </p>
             <br/><br/>
             <Row style={{margin: '0px', textAlign: 'left'}}>
