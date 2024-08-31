@@ -229,6 +229,14 @@ class NavBar extends Component{
                         <NavItem>
                             <NavLink></NavLink>
                         </NavItem>
+                        <NavItem>
+                            <NavLink href='/ai-performance' style={{color: '#005fc9', fontWeight: 'bold', fontSize: '15px'}}>
+                                AI Performance
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink></NavLink>
+                        </NavItem>
                         {
                             user_details === null
                             ? <>

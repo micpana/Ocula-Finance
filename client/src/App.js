@@ -16,6 +16,7 @@ import HowItWorks from './components/how_it_works'
 import Pricing from './components/pricing'
 import AboutUs from './components/about_us'
 import ContactUs from './components/contact_us'
+import AIPerformance from './components/ai_performance'
 import Signup from './components/signup'
 import Signin from './components/signin'
 import EmailVerificationSent from './components/email_verification_sent'
@@ -52,6 +53,7 @@ class App extends Component {
                     <Route path='/pricing' element={<Pricing />}/>
                     <Route path='/about-us' element={<AboutUs />}/>
                     <Route path='/contact-us' element={<ContactUs />}/>
+                    <Route path='/ai-performance' element={<AIPerformance />}/>
                     <Route path='/email-verification-sent/:account_id' element={<EmailVerificationSent />}/>
                     <Route path='/verify-email/:verification_token' element={<VerifyEmail />}/>
                     <Route path='/forgot-password' element={<ForgotPassword />}/>

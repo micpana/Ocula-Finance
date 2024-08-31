@@ -50,6 +50,8 @@ import LTC from '../images/lite_coin.png'
 import XRP from '../images/xrp.png'
 import Modal from './modal';
 import { Model_Cards } from './model_cards'
+import ModelCardRender from './model_card_render'
+import { FaMonero, FaMoneyBillWave } from 'react-icons/fa';
 
 class Analysis extends Component{
     static propTypes = {
@@ -64,24 +66,13 @@ class Analysis extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
-            symbol: 'EURUSD',
-            market_analysis: [
-                {
-                    timestamp: '28/08/2024 19:15',
-                    entry_timeframe_timestamp: '28/08/2024 19:15',
-                    symbol: 'EURUSD',
-                    action: 'Buy',
-                    stoploss_percentage: -0.75,
-                    takeprofit_percentage: 1.5,
-                    risk_to_reward_ratio: '1:2',
-                    maximum_holding_time: '2 trading hours',
-                    trade_close_percentage: 1.5
-                }
-            ],
+            symbol: 'ALL',
+            market_analysis: [],
             user_subscribed: null,
             user_closing_price_at_entry: null,
             modal_open: false,
-            modal_content: null
+            modal_selection: null,
+            selected_signal: {}
         };
 
         this.HandleChange = (e) => {
@@ -220,223 +211,123 @@ class Analysis extends Component{
             </Row>
         }
 
-        this.OpenModal = (modal_content) => {
-            this.setState({modal_content: modal_content, modal_open: true})
+        this.OpenModal = (modal_selection) => {
+            this.setState({modal_selection: modal_selection, modal_open: true})
         }
 
         this.CloseModal = () => {
-            this.setState({modal_open: false})
-        }
-
-        this.ModelCardRender = (symbol) => {
-            // symbol's model card
-            var symbol_model_card = Model_Cards[symbol]
-            // model card render
-            return <div>
-                <h5>
-                    {symbol} AI Model's Performance Card
-                </h5>
-                <br/>
-                <p style={{fontSize: '13px', textAlign: 'left'}}>
-                    All test trades were takes using a fixed risk-to-reward ratio and a fixed risk amount in dollars, risking a single dollar to gain two.
-                </p>
-                <br/><br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Initial account balance:
-                    </Col>
-                    <Col>
-                        ${symbol_model_card["Starting account balance (example in $)"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Account balance after test trades:
-                    </Col>
-                    <Col>
-                        ${symbol_model_card["Account balance after trades ($)"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Number of trades taken:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Number of trades taken"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Trades won:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Trades won"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Trades lost:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Trades lost"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Overall Win Rate:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Overall Win Rate %"]} %
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Risk:Reward:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Risk:Reward"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Stoploss Hits:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Stoploss Hits"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Stoploss Misses:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Stoploss Misses"]} <span style={{fontSize: '13px'}}>(closed in red but didn't hit the stoploss)</span>
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Takeprofit Misses:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Takeprofit Misses"]} <span style={{fontSize: '13px'}}>(closed in blue but didn't hit the takeprofit)</span>
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Maximum number of consecutive wins:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Maximum number of consecutive wins"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Maximum number of consecutive losses:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Maximum number of consecutive losses"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Average number of consecutive wins:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Average number of consecutive wins"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Average number of consecutive losses:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Average number of consecutive losses"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Number of features:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Number of features"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Training data start date:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Training data start date"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Training data end date:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Training data end date"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Training data number of trading days:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Training data number of trading days"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Test data start date:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Test data start date"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Test data end date:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Test data end date"]}
-                    </Col>
-                </Row>
-                <br/>
-                <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
-                        Test data number of trading days:
-                    </Col>
-                    <Col>
-                        {symbol_model_card["Test data number of trading days"]}
-                    </Col>
-                </Row>
-                <br/>
-            </div>
+            this.setState({modal_open: false, user_closing_price_at_entry: null})
         }
 
         this.PercentagesToPriceRender = () => {
+            // selected signal
+            var selected_signal = this.state.selected_signal
+            
+            // symbol
+            var symbol = selected_signal.symbol
+
+            // action
+            var action = selected_signal.action
+
+            // timestamp
+            var timestamp = selected_signal.timestamp
+
+            // stoploss percentage
+            var stoploss_percentage = selected_signal.stoploss_percentage
+
+            // takeprofit percentage
+            var takeprofit_percentage = selected_signal.takeprofit_percentage
+
+            // trade close percentage
+            var trade_close_percentage = selected_signal.trade_close_percentage
+
+            // user's closing price at entry
+            var user_closing_price_at_entry = this.state.user_closing_price_at_entry
+
+            // stoploss percentage to stoploss price
+            if (user_closing_price_at_entry == null || isNaN(user_closing_price_at_entry) == true || user_closing_price_at_entry == 0){
+                var stoploss_price = 'Awaiting entry price input.'
+            }else{
+                var stoploss_price = parseFloat(user_closing_price_at_entry) + ((parseFloat(stoploss_percentage) / 100) * parseFloat(user_closing_price_at_entry))
+            }
+
+            // takeprofit percentage to takeprofit price
+            if (user_closing_price_at_entry == null || isNaN(user_closing_price_at_entry) == true || user_closing_price_at_entry == 0){
+                var takeprofit_price = 'Awaiting entry price input.'
+            }else{
+                var takeprofit_price = parseFloat(user_closing_price_at_entry) + ((parseFloat(takeprofit_percentage) / 100) * parseFloat(user_closing_price_at_entry))
+            }
+
+            // trade close percentage to trade close price
+            if (trade_close_percentage == null || trade_close_percentage == undefined){
+                var trade_close_price = 'To be updated.'
+            }else{
+                if (user_closing_price_at_entry == null || isNaN(user_closing_price_at_entry) == true || user_closing_price_at_entry == 0){
+                    var trade_close_price = 'Awaiting entry price input.'
+                }else{
+                    var trade_close_price = parseFloat(user_closing_price_at_entry) + ((parseFloat(trade_close_percentage) / 100) * parseFloat(user_closing_price_at_entry))
+                }
+            }
+
             // percentages to prices render
             return <div>
-
+                <h5>
+                    {symbol} Percentages to Prices Conversion
+                </h5>
+                <div style={{width: '100%', borderBottom: '1px solid #F9C961'}}></div>
+                <div style={{textAlign: 'left', fontSize: '13px', marginTop: '10px', fontWeight: 'bold'}}>
+                    <span style={{color: action === 'Buy' ? 'blue' : 'red'}}>
+                        {action}  Trade
+                    </span>
+                </div>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Entry time:
+                    </Col>
+                    <Col>
+                        {timestamp}
+                    </Col>
+                </Row>
+                <br/>
+                <Label style={{textAlign: 'left'}}>Enter your broker's closing price at the stated entry time <span style={{color: 'red'}}>*</span></Label>
+                <InputGroup>
+                    <InputGroupText addonType="prepend">
+                        <FaMoneyBillWave style={{margin:'10px'}}/>
+                    </InputGroupText>
+                    <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                        placeholder="Use the 15 minute timeframe and below" name="user_closing_price_at_entry" id="user_closing_price_at_entry"
+                        value={this.state.user_closing_price_at_entry} onChange={this.HandleChange} type="number" 
+                    />
+                </InputGroup>
+                <br/><br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Takeprofit Price:
+                    </Col>
+                    <Col>
+                        {takeprofit_price}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Stoploss Price:
+                    </Col>
+                    <Col>
+                        {stoploss_price}
+                    </Col>
+                </Row>
+                <br/>
+                <Row style={{margin: '0px', textAlign: 'left'}}>
+                    <Col style={{fontWeight: 'bold'}}>
+                        Trade Closed At:
+                    </Col>
+                    <Col>
+                        {trade_close_price}
+                    </Col>
+                </Row>
+                <br/>
             </div>
         }
     }
@@ -447,7 +338,7 @@ class Analysis extends Component{
                 on_mobile: true
             })
         }
-        // this.GetCurrentMarketAnalysis(this.state.symbol)
+        this.GetCurrentMarketAnalysis(this.state.symbol)
     }
 
     render() {
@@ -461,14 +352,10 @@ class Analysis extends Component{
         var signals = market_analysis.map((item, index) => {
             // symbol icons
             var symbol_icons = this.GetSymbolIcons(item.symbol)
-
-            // model card modal content
-            var model_card_modal_content = this.ModelCardRender(item.symbol)
-
-            // percentages to price modal content
-            var percentages_to_price_modal_content = this.PercentagesToPriceRender()
-
-            return <div style={{marginBottom: '15px', border: '1px solid #F2B027', borderRadius: '20px'}}>
+            
+            return <div
+                style={{marginBottom: '15px', border: '1px solid #F2B027', borderRadius: '20px'}}
+            >
                 <Row style={{margin: '0px', textAlign: 'left', marginTop: '10px'}}>
                     <Col>
                         <h5>
@@ -476,7 +363,7 @@ class Analysis extends Component{
                         </h5>
                     </Col>
                     <Col>
-                        <a onClick={() => this.OpenModal(model_card_modal_content)} style={{color: 'inherit', cursor: 'pointer'}}>
+                        <a onClick={() => this.OpenModal('model_card')} style={{color: 'inherit', cursor: 'pointer'}}>
                             Click here to view the {item.symbol} AI model's performance card.
                         </a>
                     </Col>
@@ -488,7 +375,7 @@ class Analysis extends Component{
                         <br/>
                         <Row style={{margin: '0px'}}>
                             <Col>
-                                <h5>
+                                <h5 style={{color: item.action === 'Buy' ? 'blue' : 'red'}}>
                                     {item.action}
                                 </h5>
                             </Col>
@@ -573,7 +460,7 @@ class Analysis extends Component{
                                 {
                                     item.trade_close_percentage == null || item.trade_close_percentage == undefined
                                     ? <h5>To be updated.</h5>
-                                    : <h5 style={{color: item.trade_close_percentage < 0 ? 'red' : 'blue'}}>
+                                    : <h5 style={{color: item.action === 'Buy' ? item.trade_close_percentage < 0 ? 'red' : 'blue' : item.trade_close_percentage < 0 ? 'blue' : 'red'}}>
                                         {
                                             item.trade_close_percentage
                                         } %
@@ -585,10 +472,23 @@ class Analysis extends Component{
                 </Row>
                 <h6 style={{textAlign: 'left', marginLeft: '10px', marginTop: '5px', fontSize: '13px'}}>
                     Percentages are % distances from the entry price at the stated entry time. Prices vary according to the broker being used. {' '}
-                    <a onClick={() => this.OpenModal(percentages_to_price_modal_content)} style={{color: 'inherit', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold'}}>
+                    <a onClick={() => {this.setState({selected_signal: item});this.OpenModal('percentages_to_price')}} style={{color: 'inherit', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold'}}>
                         Click here to convert percentages to prices.
                     </a>
                 </h6>
+                <Modal isOpen={this.state.modal_open} onClose={this.CloseModal} handleChange={this.HandleChange}>
+                    {
+                        this.state.modal_selection === 'model_card'
+                        ? <ModelCardRender symbol={item.symbol} />
+                        : <div>
+                            {
+                                this.state.modal_selection === 'percentages_to_price'
+                                ? <this.PercentagesToPriceRender />
+                                : null
+                            }
+                        </div>
+                    }
+                </Modal>
             </div>
         })
 
@@ -659,9 +559,6 @@ class Analysis extends Component{
                                     </div>
                                     : <div>
                                         {signals}
-                                        <Modal isOpen={this.state.modal_open} onClose={this.CloseModal}>
-                                            {this.state.modal_content}
-                                        </Modal>
                                     </div>
                                 }
                             </div>

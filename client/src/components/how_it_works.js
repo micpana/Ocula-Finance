@@ -175,8 +175,10 @@ class HowItWorks extends Component{
                             <p style={{textAlign: 'justify'}}>
                                 While our process mirrors multitimeframe price action analysis, and various other technical analysis methods, we 
                                 have a critical edge. {Platform_Name} leverages the power of machine learning to go through huge amounts of data 
-                                and learn from it, inorder to make predictions based on the gained knowledge. This crucial difference amplifies the 
-                                effectiveness of our platform and the quality of the trades it gives. 
+                                and learn from it, inorder to make predictions based on the gained knowledge. This crucial difference amplifies 
+                                the effectiveness of our platform and the quality of the trades it gives. {' '}
+                                <a href='/ai-performance' style={{color: 'inherit'}}>Click here</a> for more insight on the performance of our 
+                                AI models.
                             </p>
                             <br/><br/>
                             <Row style={{margin: '0px'}}>

@@ -2,7 +2,22 @@
 node_modules/
 
 # datasets
-*.csv
+datasets/
+
+# logs
+logs/
+
+# model performance visual insights
+"model performance visual insights"/
+
+# models
+models/
+
+# model checkpoints
+"model checkpoints"/
+
+# scalers
+scalers/
 
 # compressed files
 *.7z

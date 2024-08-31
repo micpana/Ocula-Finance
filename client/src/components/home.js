@@ -163,7 +163,7 @@ class Home extends Component{
                                     {
                                         this.state.on_mobile === true
                                         ? <><br/><br/><br/></>
-                                        : <><br/><br/><br/><br/><br/></>
+                                        : <><br/><br/><br/></>
                                     }
                                     <h6 style={{fontWeight: 'bold'}}>
                                         Analyze, Predict, and Profit.
@@ -172,8 +172,11 @@ class Home extends Component{
                                     <p style={{textAlign: "justify"}}>
                                         {Platform_Name} is designed to deliver data-driven trade entries with a maximum holding time of 2 Hours. 
                                         Every trade comes with recommended takeprofit and stoploss percentages, sticking to a minimum risk-to-reward 
-                                        ratio of 1:2. Although it may not catch every market move, every trade our revolutionary platform gives 
+                                        ratio of 1:2. Although it may not catch every market move, every trade our revolutionary AI gives 
                                         comes after a careful examination of market dynamics, ensuring that you only get high probability trades.
+                                        Each instrument our AI analyses has its own seperate AI model, with its own win rate. For all the AI models, 
+                                        win rates range above 80%. <a href='/ai-performance' style={{color: 'inherit'}}>Click here</a> for more 
+                                        insight on the performance of our AI models.
                                         <br/><br/>
                                         Our goal is clear - to arm traders with easily accessible and effective tools that facilitate risk 
                                         minimization and reward maximization during trading. We have ensured that this AI powerhouse is 
@@ -214,7 +217,9 @@ class Home extends Component{
                                             perspective. Whether you're a seasoned trader or a beginner, the analysis provided by {Platform_Name} {' '}
                                             can form the bedrock of your investment decisions. The provided predictions can either act as 
                                             standalone trading decisions or they can complement your existing trading strategies by providing 
-                                            an additional, robust, statistics based analytical layer.
+                                            an additional, robust, statistics based analytical layer. {' '}
+                                            <a href='/ai-performance' style={{color: 'inherit'}}>Click here</a> for more insight on the 
+                                            performance of our AI models.
                                         </p>
                                         {
                                             this.state.on_mobile === true
@@ -269,7 +274,8 @@ class Home extends Component{
                                         models, taking on the burden of analysing vast amounts of multitimeframe data and indicators 
                                         in a matter of seconds to come up with simple buy or sell trading decisions that traders can act on. 
                                         Our strategic utilization of AI gives traders a remarkable statistical edge that keeps them profitable 
-                                        in the longrun.
+                                        in the longrun. <a href='/ai-performance' style={{color: 'inherit'}}>Click here</a> for more insight on 
+                                        the performance of our AI models.
                                     </p>
                                     {
                                         this.state.on_mobile === true
