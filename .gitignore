@@ -23,6 +23,7 @@ scalers/
 *.7z
 *.tar.xz
 *.zip
+*.rar
 
 # Log files
 *.log
