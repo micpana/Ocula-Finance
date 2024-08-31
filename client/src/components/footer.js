@@ -77,6 +77,10 @@ class Footer extends Component{
                                 Contact us
                             </a>
                             <br/><br/>
+                            <a href='/ai-performance' style={{color: 'inherit'}}>
+                                AI Performance
+                            </a>
+                            <br/><br/>
                             <a href='/signin' style={{color: 'inherit'}}>
                                 Signin
                             </a>
