@@ -210,27 +210,33 @@ def encrypted_code_files_extension():
 
     return extension
 
-# encypted feature engineering object path
-def get_feature_engineering_object_path():
-    path = 'feature_engineering' + encrypted_code_files_extension()
+# encypted x y feature engineering object path
+def get_x_y_feature_engineering_object_path():
+    path = 'x_y_feature_engineering' + encrypted_code_files_extension()
 
     return path
 
-# encypted training object path
-def get_training_object_path():
-    path = 'train' + encrypted_code_files_extension()
+# encypted x feature engineering object path
+def get_x_feature_engineering_object_path():
+    path = 'x_feature_engineering' + encrypted_code_files_extension()
 
     return path
 
-# encrypted prediction object path
-def get_prediction_object_path():
-    path = 'predict' + encrypted_code_files_extension()
+# encypted y feature engineering object path
+def get_y_feature_engineering_object_path():
+    path = 'y_feature_engineering' + encrypted_code_files_extension()
 
     return path
 
-# encrypted data object path
-def get_data_object_path():
-    path = 'data' + encrypted_code_files_extension()
+# encypted x y training object path
+def get_x_y_training_object_path():
+    path = 'x_y_train' + encrypted_code_files_extension()
+
+    return path
+
+# encrypted x y prediction object path
+def get_x_y_prediction_object_path():
+    path = 'x_y_predict' + encrypted_code_files_extension()
 
     return path
 

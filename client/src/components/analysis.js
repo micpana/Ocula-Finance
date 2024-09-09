@@ -65,6 +65,7 @@ class Analysis extends Component{
             network_error_message: '',
             retry_function: null,
             input_errors: {},
+            end_of_list: false,
             on_mobile: false,
             symbol: 'ALL',
             market_analysis: [],
@@ -80,7 +81,7 @@ class Analysis extends Component{
 
             // check if value is a symbol, if so load data for selected symbol
             if (Symbols.includes(e.target.value)){
-                this.GetCurrentMarketAnalysis(e.target.value)
+                this.GetCurrentMarketAnalysis(e.target.value, false)
             }
         };
 
@@ -123,19 +124,26 @@ class Analysis extends Component{
             this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
         }
 
-        this.GetCurrentMarketAnalysis = (symbol) => {
+        this.GetCurrentMarketAnalysis = (symbol, get_all) => {
             const { cookies } = this.props;
             this.LoadingOn()
             this.NetworkErrorScreenOff()
 
             var data = new FormData()
             data.append('symbol', symbol)
+            data.append('length_of_data_received', this.state.market_analysis.length)
+            data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
-                // set market analysis to state
-                this.setState({market_analysis: result})
+                if (get_all == true){
+                    // set market analysis to state
+                    this.setState({market_analysis: result})
+                }else{
+                    // append market analysis to state
+                    this.setState({market_analysis: this.state.market_analysis.concat(result)})
+                }
                 this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
@@ -154,19 +162,25 @@ class Analysis extends Component{
                         // redirect to sign in
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'end of list'){
+                        this.setState({end_of_list: true})
+                    }else if(result === 'invalid length of data received'){
+                        notification_message = 'Invalid length of data received'
+                        Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
                     }else if (result === 'not subscribed'){
                         this.setState({user_subscribed: false})
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, () => this.GetCurrentMarketAnalysis(symbol))
+                        this.NetworkErrorScreenOn(notification_message, () => this.GetCurrentMarketAnalysis(symbol, get_all))
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     Notification(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetCurrentMarketAnalysis(symbol))
+                    this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all))
                 }else{ // error occured during request setup ... no network access
                     Notification(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetCurrentMarketAnalysis(symbol))
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all))
                 }
                 this.LoadingOff()
             })
@@ -338,7 +352,7 @@ class Analysis extends Component{
                 on_mobile: true
             })
         }
-        this.GetCurrentMarketAnalysis(this.state.symbol)
+        this.GetCurrentMarketAnalysis(this.state.symbol, false)
     }
 
     render() {
@@ -559,6 +573,25 @@ class Analysis extends Component{
                                     </div>
                                     : <div>
                                         {signals}
+                                        <br/>
+                                        {
+                                            this.state.end_of_list === true
+                                            ? <p style={{color: '#00539C', fontWeight: 'bold'}}>All data loaded</p>
+                                            : <></>
+                                        }
+                                        <br/>
+                                        <Button onClick={() => {this.GetCurrentMarketAnalysis(this.state.symbol, false); this.setState({end_of_list: false})}} 
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                        >
+                                            Load more
+                                        </Button>
+                                        {/* {' '}
+                                        <Button onClick={() => {this.GetCurrentMarketAnalysis(this.state.symbol, true); this.setState({end_of_list: false})}} 
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                        >
+                                            Load all
+                                        </Button> */}
+                                        <br/><br/>
                                     </div>
                                 }
                             </div>

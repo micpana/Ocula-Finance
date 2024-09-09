@@ -1,10 +1,8 @@
-import pandas as pd
+import test2
 
-dict = {
-    'a': [1, 2, 3, 4, 5]
-}
+test2.a = 3
+test2.b = 10
 
-dataframe = pd.DataFrame(dict)
-print(dataframe)
-dataframe = dataframe.iloc[:-2]
-print(dataframe)
+from test2 import see
+
+see()

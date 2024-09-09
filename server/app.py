@@ -1062,7 +1062,7 @@ def getUserPaymentHistory():
         except: response = make_response('invalid start date'); response.status = 400; return response
 
         # proceed to get data
-        user_payment_history = [i for i in user_payment_history if i.date[0:10] >= start_date]
+        user_payment_history = [i for i in user_payment_history if i['date'][0:10] >= start_date]
 
     # if only end date has been given
     if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
@@ -1071,7 +1071,7 @@ def getUserPaymentHistory():
         except: response = make_response('invalid end date'); response.status = 400; return response
 
         # proceed to get data
-        user_payment_history = [i for i in user_payment_history if i.date[0:10] <= end_date]
+        user_payment_history = [i for i in user_payment_history if i['date'][0:10] <= end_date]
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
@@ -1082,7 +1082,7 @@ def getUserPaymentHistory():
         except: response = make_response('invalid end date'); response.status = 400; return response
 
         # proceed to get data
-        user_payment_history = [i for i in user_payment_history if i.date[0:10] >= start_date and i.date[0:10] <= end_date]
+        user_payment_history = [i for i in user_payment_history if i['date'][0:10] >= start_date and i['date'][0:10] <= end_date]
 
     # if client did not request all data
     if get_all == False:
@@ -1153,17 +1153,44 @@ def getMarketAnalysis():
         ): 
             response = make_response('not subscribed'); response.status = 403; return response
 
-    # proceed to get market analysis
-    market_analysis = MarketAnalysis.objects.filter(asset = symbol)
-    if len(market_analysis) > 0:
-        current_market_analysis = market_analysis[len(market_analysis)-1]
-        current_market_analysis_json = current_market_analysis.to_json()
-    else:
-        current_market_analysis = {}
-        current_market_analysis_json = jsonify(current_market_analysis)
+    # if its analysis for all symbols that has been requested
+    if symbol == 'ALL':
+        # get market analysis for all symbols
+        market_analysis = MarketAnalysis.objects.all()
 
-    # return current market analysis
-    response = make_response(current_market_analysis_json); response.status = 200; return response
+    # if its analysis for a particular symbol that has been requested
+    else:
+        # get market analysis for the stated symbol
+        market_analysis = MarketAnalysis.objects.filter(symbol = symbol)
+
+    # from mongo object to json object to python dict
+    market_analysis = json.loads(market_analysis.to_json())
+
+    # if client did not request all data
+    if get_all == False:
+        # if client has already received some data
+        if length_of_data_received != 0:
+            # current length of all data
+            length_of_all_data = len(market_analysis)
+
+            # length difference between all data and data received by client
+            data_length_difference = length_of_all_data - length_of_data_received
+
+            # if length difference is 0, it means client has received all available data
+            if data_length_difference == 0: response = make_response('end of list'); response.status = 409; return response
+
+            # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
+            if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
+
+            # proceed to get client load more increment number
+            client_load_more_increment = get_client_load_more_increment()
+
+            # only return payments client hasn't received yet
+            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            market_analysis = market_analysis[start_index:end_index]
+
+    # return market analysis list (signals)
+    response = make_response(jsonify(market_analysis)); response.status = 200; return response
 
 # admin functions *****************************************************************************************************
 # 13
@@ -2102,7 +2129,7 @@ def getPaymentsList():
         except: response = make_response('invalid start date'); response.status = 400; return response
         
         # proceed to get data
-        all_payments = [i for i in all_payments if i.date[0:10] >= start_date]
+        all_payments = [i for i in all_payments if i['date'][0:10] >= start_date]
 
     # if only end date has been given
     if (start_date == '' or start_date == None) and (end_date != '' and end_date != None):
@@ -2111,7 +2138,7 @@ def getPaymentsList():
         except: response = make_response('invalid end date'); response.status = 400; return response
         
         # proceed to get data
-        all_payments = [i for i in all_payments if i.date[0:10] <= end_date]
+        all_payments = [i for i in all_payments if i['date'][0:10] <= end_date]
 
     # if both dates have been given
     if (start_date != '' and start_date != None) and (end_date != '' and end_date != None):
@@ -2122,7 +2149,7 @@ def getPaymentsList():
         except: response = make_response('invalid end date'); response.status = 400; return response
         
         # proceed to get data
-        all_payments = [i for i in all_payments if i.date[0:10] >= start_date and i.date[0:10] <= end_date]
+        all_payments = [i for i in all_payments if i['date'][0:10] >= start_date and i['date'][0:10] <= end_date]
 
     # if client did not request all data
     if get_all == False:

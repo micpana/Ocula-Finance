@@ -8,7 +8,7 @@ platform_brand_name = platform_name()
 # get frontend url
 frontend_url = frontend_client_url()
 
-# get user's link to follow
+# get user's link to follow *****************************************************************************************************
 def get_link_to_follow(purpose, token): # purpose: verification / password recovery / signin / contact us
     link = ''
     if purpose == 'verification': link = frontend_url + '/verify-email/' + token
@@ -17,8 +17,9 @@ def get_link_to_follow(purpose, token): # purpose: verification / password recov
     if purpose == 'contact us': link = frontend_url + '/contact-us'
 
     return link
+# *******************************************************************************************************************************
 
-# function for actually sending crafted email ************************************************************************************
+# function for actually sending crafted email ***********************************************************************************
 def send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text):
     # send email
     send_via = sending_emails_via()
@@ -26,8 +27,9 @@ def send_crafted_email(user_email, firstname, subject, email_content_html, email
         mailjet_send_email(user_email, firstname, subject, email_content_html, email_content_text)
     elif send_via == 'gmail test smtp':
         gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
             
-# email confirmations on registration ********************************************************************************************
+# email confirmations on registration *******************************************************************************************
 def send_registration_email_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
     # email subject
     subject = platform_brand_name + ' Email Verification'
@@ -54,8 +56,9 @@ Regards, \n\n
 
     # send crafted email
     send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
 
-# email confirmations on password recovery ***************************************************************************************
+# email confirmations on password recovery **************************************************************************************
 def send_password_recovery_email(user_email, username, firstname, lastname, recovery_token, token_expiration_date):
     # email subject
     subject = platform_brand_name + ' Password Recovery'
@@ -82,8 +85,9 @@ Regards, \n\n
 
     # send crafted email
     send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
 
-# email confirmation on email change request *************************************************************************************
+# email confirmation on email change request ************************************************************************************
 def send_email_change_confirmation(user_email, username, firstname, lastname, verification_token, token_expiration_date):
     # email subject
     subject = platform_brand_name + ' Email Change Confirmation'
@@ -110,8 +114,9 @@ Regards, \n\n
 
     # send crafted email
     send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
 
-# login on new device email notification *****************************************************************************************
+# login on new device email notification ****************************************************************************************
 def send_login_on_new_device_email_notification(user_email, username, firstname, lastname, date_and_time, user_os, user_device, user_ip_address, user_browser):
     # email subject
     subject = platform_brand_name + ' New Device Login'
@@ -142,8 +147,9 @@ Regards, \n\n
 
     # send crafted email
     send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
 
-# account email change email notification ****************************************************************************************
+# account email change email notification ***************************************************************************************
 def send_account_email_change_email_notification(user_email, username, firstname, lastname, user_os, user_device, user_ip_address, user_browser):
     # email subject
     subject = platform_brand_name + ' Email Change Notification'
@@ -168,3 +174,4 @@ Regards, \n\n
 
     # send crafted email
     send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************

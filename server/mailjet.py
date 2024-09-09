@@ -9,7 +9,7 @@ api_secret = os.environ.get('MAILJET_SECRET')
 # initiate mailjet client
 mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 
-# function for sending emails
+# function for sending emails ***************************************************************************************************
 def mailjet_send_email(user_email, firstname, subject, email_content_html, email_content_text):
     data = {
         'Messages': [
@@ -34,3 +34,4 @@ def mailjet_send_email(user_email, firstname, subject, email_content_html, email
     result = mailjet.send.create(data=data)
     print(result.status_code)
     print(result.json())
+# *******************************************************************************************************************************

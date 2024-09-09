@@ -8,7 +8,7 @@ from settings import platform_name
 email = os.environ.get('GMAIL_TEST_SMTP_EMAIL')
 password = os.environ.get('GMAIL_TEST_SMTP_PASSWORD')
 
-# function for sending emails
+# function for sending emails ***************************************************************************************************
 def gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text):
 
     message = MIMEMultipart()
@@ -29,3 +29,4 @@ def gmail_test_smtp_send_email(user_email, firstname, subject, email_content_htm
     server.sendmail(fromaddr,toaddrs,message.as_string())
 
     server.quit()
+# *******************************************************************************************************************************
