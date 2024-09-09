@@ -1124,6 +1124,19 @@ def getMarketAnalysis():
     except: response = make_response('Symbol required'); response.status = 400; return response
     if symbol == '' or symbol == None: response = make_response('Symbol cannot be empty'); response.status = 400; return response
     if isinstance(symbol, str) == False: response = make_response('Symbol data type is invalid'); response.status = 400; return response
+    # length of data received
+    try: length_of_data_received = request.form['length_of_data_received'] 
+    except: response = make_response('Length of data received field required'); response.status = 400; return response
+    if length_of_data_received == '' or length_of_data_received == None: response = make_response('Length of data received cannot be empty'); response.status = 400; return response
+    try: length_of_data_received = int(length_of_data_received)
+    except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
+    if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # get all
+    try: get_all = request.form['get_all'] 
+    except: response = make_response('Get all field required'); response.status = 400; return response
+    if get_all == '' or get_all == None: response = make_response('Get all cannot be empty'); response.status = 400; return response
+    try: get_all = ast.literal_eval(str(get_all).capitalize())
+    except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
