@@ -150,7 +150,7 @@ class TermsOfService extends Component{
                                 brand focused on using Artificial Intelligence in analysing the financial markets. Our service comprises of a web 
                                 based software product that provides the user with detailed risk-to-reward profiles on a range of financial assets
                                 supported by the software. Our software has been trained with years of historical market data to
-                                determine "high probability trade entry points". In addition to that, our software continues to learn as it comes 
+                                determine high probability trade entry points. In addition to that, our software continues to learn as it comes 
                                 across new market data.
                             </p>
                             <br/>

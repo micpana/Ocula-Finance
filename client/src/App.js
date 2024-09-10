@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import {
+    Collapse, 
+    Nav, NavItem, NavLink, 
+    UncontrolledDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
+    Input, InputGroup, InputGroupText,
+    Button, Row, Col, Form, Container, Label
+} from "reactstrap";
+import {
   BrowserRouter,
   Routes,
   Route,
@@ -47,6 +54,13 @@ class App extends Component {
         <div className="App" style={{backgroundColor: '#FAFAFA', color: '#383838'}}>
             <BrowserRouter>
                 <NavBar />
+                <div>
+                    <br/>
+                    <Container>
+                        <span style={{fontWeight: 'bold'}}>Note:</span> This platform is still under construction, but we will be done soon.
+                    </Container>
+                    <br/>
+                </div>
                 <Routes>
                     <Route path='/' element={<Home />}/>
                     <Route path='/how-it-works' element={<HowItWorks />}/>
