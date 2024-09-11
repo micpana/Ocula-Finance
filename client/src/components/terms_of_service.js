@@ -126,7 +126,7 @@ class TermsOfService extends Component{
                             <p>
                                 Thank you for choosing {Platform_Name}. These Terms of Service constitute a legal agreement
                                 between you and {Platform_Name}. <span style={{fontWeight: 'bold'}}>"You"</span> means you as an individual or 
-                                any other entity you represent on {Platform_Name}, if any. <span style={{fontWeight: 'bold'}}>"Us"</span> or 
+                                any other entity you represent on {Platform_Name}, if any. <span style={{fontWeight: 'bold'}}>"Us"</span> or{' '}
                                 <span style={{fontWeight: 'bold'}}>"we"</span> or <span style={{fontWeight: 'bold'}}>"this platform"</span> 
                                 refers to {Platform_Name}. If you are accepting these terms on behalf of your employer or any other entity you 
                                 may represent, you warrant that you have full legal authority to bind that entity to this agreement, and you are
