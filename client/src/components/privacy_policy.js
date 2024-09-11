@@ -155,10 +155,10 @@ class PrivacyPolicy extends Component{
                             <br/>
                             <p>
                                 When you signup, we collect your firstname, lastname, email address, country and phonenumber.
-                                When you contact us with queries that might require more personal information we will inform you
+                                When you contact us with queries that might require more personal information, we will inform you
                                 about it first and why, we will only collect it if you disclose it. For example, if you paid for a
                                 subscription but your subscription wasn't automatically activated by our software, we will ask for
-                                your payment details.
+                                your payment's details.
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>How we use information we collect</h6>
@@ -178,7 +178,7 @@ class PrivacyPolicy extends Component{
                                 We use various standards of encryption to protect your information and where we store it. While we
                                 do our best to implement safeguards to protect your information, you need to understand that no
                                 security system is impenetrable, and due to the infrastructure of the internet, we cannot guarantee
-                                that the information being transmitted through the internet or stored on our systems is totaly safe
+                                that the information being transmitted through the internet or stored on our systems is totally safe
                                 from intruders.
                             </p>
                         </div>

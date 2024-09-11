@@ -78,7 +78,7 @@ class MarketAnalysis(Document):
     stoploss_hit = BooleanField(required=False)
     takeprofit_hit = BooleanField(required=False)
     trade_close_percentage = FloatField(required=False)
-    trade_won = StringField(required=False)
+    trade_won = BooleanField(required=False)
 
 class Payments(Document):
     meta = {'collection': 'payments'}

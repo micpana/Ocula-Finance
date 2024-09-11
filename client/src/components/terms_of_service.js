@@ -125,20 +125,20 @@ class TermsOfService extends Component{
                         <div style={{textAlign: 'left'}}>
                             <p>
                                 Thank you for choosing {Platform_Name}. These Terms of Service constitute a legal agreement
-                                between you and {Platform_Name}. <span style={{fontWeight: 'bold'}}>You</span> means you as an individual or any 
-                                other entity you represent on {Platform_Name}, if any. <span style={{fontWeight: 'bold'}}>Us</span> or 
-                                <span style={{fontWeight: 'bold'}}>we</span> or <span style={{fontWeight: 'bold'}}>this platform</span> refers 
-                                to {Platform_Name}. If you are accepting these terms on behalf of your employer or any other entity you may 
-                                represent, you warrant that you have full legal authority to bind that entity to this agreement, and you are
+                                between you and {Platform_Name}. <span style={{fontWeight: 'bold'}}>"You"</span> means you as an individual or 
+                                any other entity you represent on {Platform_Name}, if any. <span style={{fontWeight: 'bold'}}>"Us"</span> or 
+                                <span style={{fontWeight: 'bold'}}>"we"</span> or <span style={{fontWeight: 'bold'}}>"this platform"</span> 
+                                refers to {Platform_Name}. If you are accepting these terms on behalf of your employer or any other entity you 
+                                may represent, you warrant that you have full legal authority to bind that entity to this agreement, and you are
                                 agreeing to these Terms of Service on behalf of yourself and the entity you represent. If you do not
                                 have the legal authority to bind the entity to this agreement then do not proceed with signing up
-                                unless you choose to signup as an individual. If you have the legal authority to bind the entity,
-                                please note that <span style={{fontWeight: 'bold'}}>you</span> will refer to yourself and that entity, jointly. 
-                                By accepting this agreement (proceeding with signup), you acknowledge that your have read and understood all the 
+                                unless you choose to sign up as an individual. If you have the legal authority to bind the entity,
+                                please note that <span style={{fontWeight: 'bold'}}>"you"</span> will refer to yourself and that entity, jointly. 
+                                By accepting this agreement (proceeding with sign up), you acknowledge that you have read and understood all the 
                                 terms stated in this agreement.
                             </p>
                             <p>
-                                If you signup and {Platform_Name} changes these Terms of Service, you will be notified via the {Platform_Name}
+                                If you sign up and {Platform_Name} changes these Terms of Service, you will be notified via the {Platform_Name}
                                 platform, as well as via email, and you will be required to review and accept or reject the new terms. If you 
                                 accept the new terms, you can proceed with using the platform.
                             </p>
@@ -147,15 +147,15 @@ class TermsOfService extends Component{
                             <br/>
                             <p>
                                 <span style={{fontWeight: 'bold'}}>1.1</span> <u>Services we provide.</u> {Platform_Name} is a technology 
-                                brand focused on using Artificial Intelligence in analysing the financial markets. Our service comprises of a web 
-                                based software product that provides the user with detailed risk-to-reward profiles on a range of financial assets
-                                supported by the software. Our software has been trained with years of historical market data to
-                                determine high probability trade entry points. In addition to that, our software continues to learn as it comes 
-                                across new market data.
+                                brand focused on using Artificial Intelligence in analysing the financial markets. Our service comprises of a 
+                                web-based software product that provides the user with detailed AI generated trade entry signals on a range of 
+                                financial assets supported by the software. Our software has been trained with years of historical market data 
+                                to determine high probability trade entry points. In addition to that, our software continues to learn as it 
+                                comes across new market data.
                             </p>
                             <br/>
                             <p style={{fontWeight: 'bold'}}>
-                                IMPORTANT: {Platform_Name} is not a broker, hedgefund or trading firm, therefore we do not
+                                IMPORTANT: {Platform_Name} is not a broker, hedge fund or trading firm, therefore we do not
                                 by any means accept investments from any entities, nor will we ever ask you for money
                                 promising returns on our website or on any social media platform. The money users pay is a
                                 subscription fee for them to access our services, and all transactions are done on our website
@@ -165,13 +165,13 @@ class TermsOfService extends Component{
                             <br/>
                             <p>
                                 <span style={{fontWeight: 'bold'}}>1.2</span> <u>Access and use of our services.</u> In order to use our services, 
-                                you must signup using a valid email address which our software will send a verification link to inorder to verify 
+                                you must sign up using a valid email address which our software will send a verification link to in order to verify 
                                 that the email address  that you have provided truly belongs to you. Once you have completed the email verification
-                                process, you will be able to signin using the details you provided during signup. By default, every
+                                process, you will be able to sign in using the details you provided during sign up. By default, every
                                 new user is given 7 days of free access to our paid package, which means they’ll be able to fully
                                 access all analysis done by our AI for all financial assets available on {Platform_Name}. After you have
                                 completed the 7 days free trial, for all the financial assets available on our platform, analysis done
-                                by our AI will only be available if you have an active subscription.
+                                by our AI will only be accessible to you if you have an active subscription.
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>2. User requirements and conduct.</h6>

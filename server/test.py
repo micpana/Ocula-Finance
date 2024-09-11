@@ -6,3 +6,4 @@ test2.b = 10
 from test2 import see
 
 see()
+
