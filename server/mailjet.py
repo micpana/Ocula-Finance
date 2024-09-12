@@ -15,7 +15,7 @@ def mailjet_send_email(user_email, firstname, subject, email_content_html, email
         'Messages': [
             {
             "From": {
-                "Email": "oculafinance@gmail.com",
+                "Email": "no-reply@oculafinance.com",
                 "Name": platform_name()
             },
             "To": [
@@ -27,7 +27,7 @@ def mailjet_send_email(user_email, firstname, subject, email_content_html, email
             "Subject": subject,
             "TextPart": email_content_text,
             "HTMLPart": email_content_html,
-            "CustomID": "AppGettingStartedTest"
+            # "CustomID": "AppGettingStartedTest"
             }
         ]
     }

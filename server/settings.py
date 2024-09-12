@@ -240,6 +240,12 @@ def get_x_y_prediction_object_path():
 
     return path
 
+# encrypted manage expired open trades object path
+def get_manage_expired_open_trades_object_path():
+    path = 'manage_expired_open_trades' + encrypted_code_files_extension()
+
+    return path
+
 # encrypted unknown object path
 def get_unknown_object_path():
     path = 'encrypted_code' + encrypted_code_files_extension()

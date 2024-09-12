@@ -1,10 +1,12 @@
 import time
 
-a = None
-b = None
+fernet = None
 
-while True:
-    if a != None and b != None:
-        break
-        print('a =', a)
-        print('b = ', b)
+def update_fernet_variable(fernet_):
+    fernet = fernet_
+
+
+# while True:
+#     if fernet != None:
+#         print('fernet =', fernet)
+#         break
