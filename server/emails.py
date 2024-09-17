@@ -1,5 +1,5 @@
 from settings import platform_name, frontend_client_url, sending_emails_via
-from mailjet import mailjet_send_email
+from zoho_smtp import zoho_smtp_send_email
 from gmail_test_smtp import gmail_test_smtp_send_email
 
 # get platform name
@@ -23,8 +23,8 @@ def get_link_to_follow(purpose, token): # purpose: verification / password recov
 def send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text):
     # send email
     send_via = sending_emails_via()
-    if send_via == 'mailjet':
-        mailjet_send_email(user_email, firstname, subject, email_content_html, email_content_text)
+    if send_via == 'zoho_mail':
+        zoho_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
     elif send_via == 'gmail test smtp':
         gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
 # *******************************************************************************************************************************

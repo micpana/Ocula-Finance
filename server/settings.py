@@ -14,7 +14,7 @@ def frontend_client_url():
 
     return url
 
-# sending emails via ... mailjet / gmail test smtp
+# sending emails via ... zoho mail / gmail test smtp
 def sending_emails_via():
     send_via = 'gmail test smtp'
 

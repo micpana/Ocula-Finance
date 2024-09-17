@@ -5,14 +5,14 @@ from email.mime.text import MIMEText
 from settings import platform_name
 
 # credentials
-email = os.environ.get('GMAIL_TEST_SMTP_EMAIL')
-password = os.environ.get('GMAIL_TEST_SMTP_PASSWORD')
+email = os.environ.get('ZOHO_SMTP_EMAIL')
+password = os.environ.get('ZOHO_SMTP_PASSWORD')
 
 # function for sending emails ***************************************************************************************************
-def gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text):
-    # gmail login
-    server = smtplib.SMTP('smtp.gmail.com', port=587)
-    server.ehlo('Gmail')
+def zoho_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text):
+    # zoho mail login
+    server = smtplib.SMTP('smtppro.zoho.com', port=587) # port: 465 with SSL or port: 587 with TLS
+    server.ehlo('oculafinance.com')
     server.starttls()
     server.login(email, password)
 
@@ -20,7 +20,7 @@ def gmail_test_smtp_send_email(user_email, firstname, subject, email_content_htm
     message = MIMEMultipart()
     message["To"] = user_email
     message["From"] = email
-    message["Subject"] = '(Test Email) ' + subject
+    message["Subject"] = subject
     title = '<b> {platform_brand_name} </b>'.format(platform_brand_name = platform_name())
     messageText = MIMEText(email_content_html, 'html')
     message.attach(messageText)

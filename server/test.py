@@ -1,9 +1,5 @@
-import test2
-
-fernet = 9
-
-print(test2.fernet)
-
-test2.fernet = fernet
-
-print(test2.fernet)
+risk = 9
+risk = -risk
+print(
+    risk
+)
