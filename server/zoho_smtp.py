@@ -2,6 +2,7 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import formataddr
 from settings import platform_name
 
 # credentials
@@ -19,9 +20,8 @@ def zoho_smtp_send_email(user_email, firstname, subject, email_content_html, ema
     # construct email
     message = MIMEMultipart()
     message["To"] = user_email
-    message["From"] = email
+    message["From"] = formataddr((platform_name(), email))  # display brand name and email
     message["Subject"] = subject
-    title = '<b> {platform_brand_name} </b>'.format(platform_brand_name = platform_name())
     messageText = MIMEText(email_content_html, 'html')
     message.attach(messageText)
 

@@ -3,13 +3,14 @@ import yfinance as yf
 from datetime import datetime
 from datetime import timedelta
 import pytz
+from settings import system_timezone
 
 # get data
 def yahoo_fetch_data(symbol, timeframes, data_collection_days):
     # returned columns ... Date, Open, High, Low, Close, Volume, Dividends, Stock Splits
 
-    # set time zone to Harare
-    timezone = pytz.timezone("Africa/Harare")
+    # set time zone
+    timezone = pytz.timezone(system_timezone())
 
     # create 'datetime' range objects in Harare time zone to avoid the implementation of a local time zone offset
     days_back = data_collection_days

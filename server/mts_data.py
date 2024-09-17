@@ -3,6 +3,7 @@ import MetaTrader5 as mt5
 from datetime import datetime
 from datetime import timedelta
 import pytz
+from settings import system_timezone
 
 # get data
 def mt5_fetch_data(symbol, timeframes, data_collection_days):
@@ -17,8 +18,8 @@ def mt5_fetch_data(symbol, timeframes, data_collection_days):
         else:
             break
 
-    # set time zone to Harare
-    timezone = pytz.timezone("Africa/Harare")
+    # set time zone
+    timezone = pytz.timezone(system_timezone())
 
     # create 'datetime' range objects in Harare time zone to avoid the implementation of a local time zone offset
     days_back = data_collection_days
