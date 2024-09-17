@@ -23,7 +23,7 @@ def get_link_to_follow(purpose, token): # purpose: verification / password recov
 def send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text):
     # send email
     send_via = sending_emails_via()
-    if send_via == 'zoho_mail':
+    if send_via == 'zoho mail':
         zoho_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
     elif send_via == 'gmail test smtp':
         gmail_test_smtp_send_email(user_email, firstname, subject, email_content_html, email_content_text)
