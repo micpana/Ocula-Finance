@@ -9,8 +9,8 @@ def platform_name():
 
 # frontend url
 def frontend_client_url():
-    # url = 'https://oculafinance.com' # main url
-    url = 'https://oculafinance.netlify.app' # test url
+    url = 'https://oculafinance.com' # main url
+    # url = 'https://oculafinance.netlify.app' # test url
 
     return url
 
