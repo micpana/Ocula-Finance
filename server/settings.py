@@ -84,15 +84,15 @@ def get_client_load_more_increment():
 
     return client_load_more_increment
 
-# source for training data ... csv / mt5 / yahoo
+# source for training data ... csv / yahoo / mt5
 def training_data_source():
     source = 'csv'
 
     return source
 
-# source for prediction data ... csv / mt5 / yahoo
+# source for prediction data ... csv / yahoo / mt5
 def prediction_data_source():
-    source = 'yahoo'
+    source = 'mt5'
 
     return source
 
@@ -114,7 +114,7 @@ def print_live_predictions_to_console():
 
     return print_
 
-# get data collection days by intended purpose
+# get data collection days by intended purpose / call module = training / prediction
 def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':
         days =  2000 # if available ... if more is available, take all ... else take whats available if reasonable
