@@ -6,33 +6,15 @@ def yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to):
     # returned columns => Date/Datetime, Open, High, Low, Close, Volume, Dividends, Stock Splits
 
     # set interval ... valid = 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo ****************************************
-    if timeframe == 'Monthly':
-        interval = '1mo'
-        date_column_name = ''
-    elif timeframe == 'Weekly':
-        interval = '1wk'
-        date_column_name = ''
-    elif timeframe == 'Daily':
-        interval = '1d'
-        date_column_name = 'Date'
-    elif timeframe == 'H4':
-        interval = '1h' # yfinance has no 4hour timeframe, we'll collect 1hour data and then aggregate
-        date_column_name = 'Datetime'
-    elif timeframe == 'H1':
-        interval = '1h'
-        date_column_name = 'Datetime'
-    elif timeframe == 'M15':
-        interval = '15m'
-        date_column_name = 'Datetime'
-    elif timeframe == 'M5':
-        interval = '5m'
-        date_column_name = 'Datetime'
-    elif timeframe == 'M1':
-        interval = '1m'
-        date_column_name = 'Datetime'
-    else:
-        print('Timeframe not configured:', timeframe)
-        quit()
+    if timeframe == 'Monthly': interval = '1mo'; date_column_name = ''
+    elif timeframe == 'Weekly': interval = '1wk'; date_column_name = ''
+    elif timeframe == 'Daily': interval = '1d'; date_column_name = 'Date'
+    elif timeframe == 'H4': interval = '1h'; date_column_name = 'Datetime' # yfinance has no 4hour timeframe, we'll collect 1hour data and then aggregate
+    elif timeframe == 'H1': interval = '1h'; date_column_name = 'Datetime'
+    elif timeframe == 'M15': interval = '15m'; date_column_name = 'Datetime'
+    elif timeframe == 'M5': interval = '5m'; date_column_name = 'Datetime'
+    elif timeframe == 'M1': interval = '1m'; date_column_name = 'Datetime'
+    else: print('Timeframe not configured:', timeframe); quit()
     # ***************************************************************************************************************************
 
     # Get the OHLC data *********************************************************************************************************

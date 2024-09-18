@@ -125,7 +125,7 @@ class ContactUs extends Component{
                 this.LoadingOn()
 
                 // get message and replace new line characters with line breaks
-                let message = this.state.message.replace('\n', '<br/>')
+                // let message = this.state.message.replace('\n', '<br/>')
         
                 // template parameters
                 let templateParams = {
@@ -133,7 +133,7 @@ class ContactUs extends Component{
                     to_name: {Platform_Name},
                     reply_to: this.state.email,
                     subject: this.state.subject,
-                    message_html: message,
+                    message: this.state.message,
                 }
         
                 // send email
