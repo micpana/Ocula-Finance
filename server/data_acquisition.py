@@ -1,7 +1,4 @@
 from pandas import read_csv
-from csv_data import csv_fetch_data
-from yahoo_finance_data import yahoo_fetch_data
-from mt5_data import mt5_fetch_data
 from settings import get_data_collection_days_by_intended_purpose, training_data_source, prediction_data_source
 from datetime import datetime
 from datetime import timedelta
@@ -32,9 +29,15 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     # loop through timeframes
     for timeframe in timeframes:
         # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict
-        if data_source == 'csv': ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
-        elif data_source == 'yahoo': ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
-        elif data_source == 'mt5': ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to)
+        if data_source == 'csv': 
+            from csv_data import csv_fetch_data
+            ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
+        elif data_source == 'yahoo': 
+            from yahoo_finance_data import yahoo_fetch_data
+            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
+        elif data_source == 'mt5': 
+            from mt5_data import mt5_fetch_data 
+            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to)
 
     # return ohlc data dict
     return ohlc_data_dict

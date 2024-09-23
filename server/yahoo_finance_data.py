@@ -3,6 +3,7 @@ import yfinance as yf
 
 # get data ********************************************************************************************************************************
 def yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to):
+    print('Fetching', symbol, timeframe, 'data from Yahoo Finance ...')
     # returned columns => Date/Datetime, Open, High, Low, Close, Volume, Dividends, Stock Splits
 
     # set interval ... valid = 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo ****************************************
@@ -47,6 +48,8 @@ def yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to):
         # set h4 data to timeframe_ohlc_df
         timeframe_ohlc_df = h4_df
     # ***************************************************************************************************************************
+
+    print('Yahoo Finance data fetched.\n\n')
 
     # return timeframe ohlc df
     return timeframe_ohlc_df

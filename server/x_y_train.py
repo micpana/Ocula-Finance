@@ -6,24 +6,15 @@ from settings import get_x_y_training_object_path
 
 try: 
     # get key from user
-    passkey = getpass.getpass("\n\nEnter Passkey: ")
+    passkey = getpass.getpass("\n\nEnter Passkey (X Y Train): ")
     key = passkey.encode('utf-8')
     fernet = Fernet(key)
-
-    # add key to modules that also depend on it, ones that the encrypted code will call from this module **********************************
-    # module importations *******************************************************************************************************
-    import x_y_feature_engineering
-    # ***************************************************************************************************************************
-    # setting the fernet variable in each of the modules ************************************************************************
-    x_y_feature_engineering.fernet = fernet
-    # ***************************************************************************************************************************
-    # *************************************************************************************************************************************
 
     # decrypt the data
     try:
         # decrypt x y training file
         with open(get_x_y_training_object_path(), 'rb') as file:
-            loaded_data = pickle.loads(cipher_suite_training.decrypt(file.read()))
+            loaded_data = pickle.loads(fernet.decrypt(file.read()))
         print('Key Accepted in X Y Train')
 
         # training code execution

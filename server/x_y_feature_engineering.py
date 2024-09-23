@@ -4,23 +4,13 @@ import traceback
 from cryptography.fernet import Fernet
 from settings import get_x_y_feature_engineering_object_path
 
-"""
-    fernet variable loaded with the key encryption key should come from calling module, ie x_y_predict or x_y_train
-"""
-
-# add key to modules that also depend on it, ones that the encrypted code will call from this module **************************************
-# module importations ***********************************************************************************************************
-import x_feature_engineering
-import y_feature_engineering
-# *******************************************************************************************************************************
-# setting the fernet variable in each of the modules ****************************************************************************
-x_feature_engineering.fernet = fernet
-y_feature_engineering.fernet = fernet
-# *******************************************************************************************************************************
-# *****************************************************************************************************************************************
-
 # decrypt the data
 try:
+    # get key from user
+    passkey = getpass.getpass("\n\nEnter Passkey (X Y Feature Engineering): ")
+    key = passkey.encode('utf-8')
+    fernet = Fernet(key)
+
     # decrypt x y feature engineering file
     with open(get_x_y_feature_engineering_object_path(), 'rb') as file:
         loaded_data = pickle.loads(fernet.decrypt(file.read()))

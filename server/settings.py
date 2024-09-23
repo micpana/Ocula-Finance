@@ -114,10 +114,28 @@ def print_live_predictions_to_console():
 
     return print_
 
+# whether to printout timeframe timestamp alignment to the console or not
+def printout_timeframe_timestamp_alignment():
+    print_ = False
+
+    return print_
+
+# whether to quit after printing out timeframe timestamp alignment to the console or not
+def quit_after_printing_out_timeframe_timestamp_alignment():
+    quit_ = True
+
+    return quit_
+
+# number of timestamps to printout for alignment verification
+def number_of_timestamps_to_printout_for_alignment_verification():
+    number = 100
+
+    return number
+
 # get data collection days by intended purpose / call module = training / prediction
 def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':
-        days =  2000 # if available ... if more is available, take all ... else take whats available if reasonable
+        days =  1020 # if available ... if more is available, take all ... else take whats available if reasonable
     elif purpose == 'prediction':
         days = 200
 

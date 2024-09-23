@@ -4,12 +4,13 @@ import traceback
 from cryptography.fernet import Fernet
 from settings import get_x_feature_engineering_object_path
 
-"""
-    fernet variable loaded with the key encryption key should come from calling module, ie x_y_feature_engineering
-"""
-
 # decrypt the data
 try:
+    # get key from user
+    passkey = getpass.getpass("\n\nEnter Passkey (X Feature Engineering): ")
+    key = passkey.encode('utf-8')
+    fernet = Fernet(key)
+
     # decrypt x feature engineering file
     with open(get_x_feature_engineering_object_path(), 'rb') as file:
         loaded_data = pickle.loads(fernet.decrypt(file.read()))

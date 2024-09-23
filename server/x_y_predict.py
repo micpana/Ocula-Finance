@@ -6,20 +6,9 @@ from settings import get_x_y_prediction_object_path
 
 try: 
     # get key from user
-    passkey = getpass.getpass("\n\nEnter Passkey: ")
+    passkey = getpass.getpass("\n\nEnter Passkey (X Y Predict): ")
     key = passkey.encode('utf-8')
     fernet = Fernet(key)
-
-    # add key to modules that also depend on it, ones that the encrypted code will call from this module **********************************
-    # module importations *******************************************************************************************************
-    import x_y_feature_engineering
-    import manage_expired_open_trades
-    # ***************************************************************************************************************************
-    # setting the fernet variable in each of the modules ************************************************************************
-    x_y_feature_engineering.fernet = fernet
-    manage_expired_open_trades.fernet = fernet
-    # ***************************************************************************************************************************
-    # *************************************************************************************************************************************
 
     # decrypt the data
     try:
