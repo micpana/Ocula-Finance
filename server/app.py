@@ -1086,8 +1086,11 @@ def getUserPaymentHistory():
 
     # if client did not request all data
     if get_all == False:
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
         # if client has already received some data
-        if length_of_data_received != 0:
+        if length_of_data_received > 0:
             # current length of all data
             length_of_all_data = len(user_payment_history)
 
@@ -1100,11 +1103,14 @@ def getUserPaymentHistory():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # proceed to get client load more increment number
-            client_load_more_increment = get_client_load_more_increment()
-
             # only return payments client hasn't received yet
             start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            user_payment_history = user_payment_history[start_index:end_index]
+
+        # if client has not received any data yet
+        else:
+            # only return the first "client_load_more_increment" number of payments
+            start_index = 0; end_index = start_index + client_load_more_increment
             user_payment_history = user_payment_history[start_index:end_index]
 
     # return payment history
@@ -1181,8 +1187,11 @@ def getMarketAnalysis():
 
     # if client did not request all data
     if get_all == False:
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
         # if client has already received some data
-        if length_of_data_received != 0:
+        if length_of_data_received > 0:
             # current length of all data
             length_of_all_data = len(market_analysis)
 
@@ -1195,11 +1204,14 @@ def getMarketAnalysis():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # proceed to get client load more increment number
-            client_load_more_increment = get_client_load_more_increment()
-
-            # only return payments client hasn't received yet
+            # only return signals client hasn't received yet
             start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            market_analysis = market_analysis[start_index:end_index]
+
+        # if client has not received any data yet
+        else:
+            # only return the first "client_load_more_increment" number of signals
+            start_index = 0; end_index = start_index + client_load_more_increment
             market_analysis = market_analysis[start_index:end_index]
 
     # return market analysis list (signals)
@@ -1241,8 +1253,11 @@ def getAllUsers():
 
     # if client did not request all data
     if get_all == False:
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
         # if client has already received some data
-        if length_of_data_received != 0:
+        if length_of_data_received > 0:
             # current length of all data
             length_of_all_data = len(all_users)
 
@@ -1255,11 +1270,14 @@ def getAllUsers():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # proceed to get client load more increment number
-            client_load_more_increment = get_client_load_more_increment()
-
-            # only return payments client hasn't received yet
+            # only return users client hasn't received yet
             start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            all_users = all_users[start_index:end_index]
+
+        # if client has not received any data yet
+        else:
+            # only return the first "client_load_more_increment" number of users
+            start_index = 0; end_index = start_index + client_load_more_increment
             all_users = all_users[start_index:end_index]
 
     # return user list
@@ -1446,8 +1464,11 @@ def getUserPaymentHistoryByAccountId():
 
     # if client did not request all data
     if get_all == False:
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
         # if client has already received some data
-        if length_of_data_received != 0:
+        if length_of_data_received > 0:
             # current length of all data
             length_of_all_data = len(user_payment_history)
 
@@ -1460,11 +1481,14 @@ def getUserPaymentHistoryByAccountId():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # proceed to get client load more increment number
-            client_load_more_increment = get_client_load_more_increment()
-
             # only return payments client hasn't received yet
             start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            user_payment_history = user_payment_history[start_index:end_index]
+
+        # if client has not received any data yet
+        else:
+            # only return the first "client_load_more_increment" number of payments
+            start_index = 0; end_index = start_index + client_load_more_increment
             user_payment_history = user_payment_history[start_index:end_index]
 
     # return payment history
@@ -1520,8 +1544,11 @@ def searchForUser():
 
     # if client did not request all data
     if get_all == False:
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
         # if client has already received some data
-        if length_of_data_received != 0:
+        if length_of_data_received > 0:
             # current length of all data
             length_of_all_data = len(user_results)
 
@@ -1534,11 +1561,14 @@ def searchForUser():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # proceed to get client load more increment number
-            client_load_more_increment = get_client_load_more_increment()
-
-            # only return payments client hasn't received yet
+            # only return users client hasn't received yet
             start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            user_results = user_results[start_index:end_index]
+
+        # if client has not received any data yet
+        else:
+            # only return the first "client_load_more_increment" number of users
+            start_index = 0; end_index = start_index + client_load_more_increment
             user_results = user_results[start_index:end_index]
 
     # return user list
@@ -2166,8 +2196,11 @@ def getPaymentsList():
 
     # if client did not request all data
     if get_all == False:
+        # proceed to get client load more increment number
+        client_load_more_increment = get_client_load_more_increment()
+
         # if client has already received some data
-        if length_of_data_received != 0:
+        if length_of_data_received > 0:
             # current length of all data
             length_of_all_data = len(all_payments)
 
@@ -2180,11 +2213,14 @@ def getPaymentsList():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # proceed to get client load more increment number
-            client_load_more_increment = get_client_load_more_increment()
-
             # only return payments client hasn't received yet
             start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            all_payments = all_payments[start_index:end_index]
+
+        # if client has not received any data yet
+        else:
+            # only return the first "client_load_more_increment" number of payments
+            start_index = 0; end_index = start_index + client_load_more_increment
             all_payments = all_payments[start_index:end_index]
 
     # return response
