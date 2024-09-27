@@ -170,7 +170,7 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
 
 # whether to show plots during training or not
 def show_plots_during_training():
-    show = True
+    show = False
 
     return show
 
