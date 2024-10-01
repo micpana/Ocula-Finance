@@ -27,6 +27,9 @@ class Users(Document):
     unbanned_by = StringField(required=False)
     ban_time = StringField(required=False)
     unban_time = StringField(required=False)
+    telegram_connect_code = StringField(required=False)
+    telegram_connected = BooleanField(required=True)
+    telegram_id = StringField(required=False)
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}

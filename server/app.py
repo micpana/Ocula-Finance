@@ -15,6 +15,7 @@ from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
+from telegram import search_for_user_submitted_telegram_connect_code
 from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
 
 # Flask stuff
@@ -271,7 +272,8 @@ def signup():
         ban_reason = '',
         unbanned_by = '',
         ban_time = '',
-        unban_time = ''
+        unban_time = '',
+        telegram_connected = False
     )
     user_details.save()
     account_id = str(user_details.id)
@@ -724,6 +726,73 @@ def correctRegistrationEmail():
     # return response
     response = make_response('ok'); response.status = 200; return response
 
+# 29 
+@app.route('/getTelegramConnectCode', methods=['POST'])
+def getTelegramConnectCode():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # initialize response object
+    response_object = {'telegram_connect_code': None}
+
+    # get user's username
+    username = Users.objects.filter(id = user_id)[0].username
+
+    # function for generating unique telegram connect code ... let's do digits only
+    def generate_telegram_connect_code():
+        # loop generating codes, only use a code that's not attached to any other user currently
+        while True:
+            # generation
+            code_length = 6
+            code_characters = string.digits
+            code = "".join(random.choice(code_characters) for _ in range(code_length))
+            # if code hasn't been used yet, break loop and continue
+            if len(Users.objects.filter(telegram_connect_code = code)) == 0: break
+        # return unique code
+        return code
+    
+    # add telegram connect code to response object
+    response_object['telegram_connect_code'] = generate_telegram_connect_code()
+
+    # return telegram connect code
+    response = make_response(jsonify(response_object)); response.status = 200; return response
+
+# 30
+@app.route('/verifyTelegramConnection', methods=['POST'])
+def verifyTelegramConnection():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # initialize response object
+    response_object = {'telegram_connected': False}
+
+    # get user details
+    user = Users.objects.filter(id = user_id)[0]
+
+    # if hasn't been connected to telegram yet
+    if user.telegram_connected == False:
+        # get user's telegram connect code
+        telegram_connect_code = user.telegram_connect_code
+        
+        # search telegram messages for user's code and also get the sender id from the matching message if found
+        code_found, sender_id = search_for_user_submitted_telegram_connect_code(telegram_connect_code)
+
+        # add result to response object
+        response_object['telegram_connected'] = code_found
+
+        # add telegram id to the user's account, and change the user's telegram connection status to true
+        Users.objects(id = user_id).update(telegram_id = sender_id, telegram_connected = True)
+
+    # if user is already connected to telegram
+    else:
+        # mark telegram_connected as tru in response object
+        response_object['telegram_connected'] = True
+
+    # return telegram connect code
+    response = make_response(jsonify(response_object)); response.status = 200; return response
+
 # 6
 @app.route('/recoverPassword', methods=['POST'])
 def recoverPassword():
@@ -852,8 +921,9 @@ def getUserDetailsByAccessToken():
 
     # get user by user_id
     user = Users.objects.filter(id = user_id)[0]
-    # if user.email == 'michaelmudimbu@gmail.com':
-    #     Users.objects(id = user_id).update(role = 'admin')
+
+    if user.email == 'michaelmudimbu@gmail.com' and user.role != 'admin':
+        Users.objects(id = user_id).update(role = 'admin')
 
     # modify user object... delete password, add subscription status
     user = json.loads(user.to_json())

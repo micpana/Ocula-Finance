@@ -1,5 +1,10 @@
-ls = [0, 1, 2, 3, 4, 5]
+import string 
+import random 
 
-for i in ls:
-    if i == 3: break
-    print(i)
+def generate_telegram_connect_code():
+    token_length = 6
+    token_characters = string.digits
+    token = "".join(random.choice(token_characters) for _ in range(token_length))
+    return token
+print(generate_telegram_connect_code())
+
