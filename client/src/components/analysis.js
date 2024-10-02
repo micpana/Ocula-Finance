@@ -629,25 +629,25 @@ class Analysis extends Component{
                         {
                             this.state.telegram_verified === false
                             ? <div>
-                                <br/><br/><br/>
                                 <h6 style={{color: '#005fc9'}}>
                                     Please follow the steps below to connect your Telegram account and start your free trial. {' '}
                                     <Grid width='20px' style={{color: '#005fc9'}}/>
                                 </h6>
-                                <br/><br/><br/>
+                                <br/><br/>
                                 <ol>
                                     <li>
                                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                             Get your Telegram connect code using the button below:
                                         </h6>
-                                        <br/><br/>
                                         {
                                             this.state.telegram_connect_code === null
-                                            ? <Button onClick={this.GetTelegramConnectCode} 
-                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
-                                            >
-                                                Get code
-                                            </Button>
+                                            ? <div style={{textAlign: 'left'}}>
+                                                <Button onClick={this.GetTelegramConnectCode} 
+                                                    style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                                >
+                                                    Get code
+                                                </Button>
+                                            </div>
                                             : <div style={{textAlign: 'left'}}>
                                                 Your Telegram connect code is: <span style={{fontWeight: 'bold'}}>
                                                     {this.state.telegram_connect_code}
@@ -660,7 +660,6 @@ class Analysis extends Component{
                                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                             Send the code to our Telegram bot using any of the options below:
                                         </h6>
-                                        <br/><br/>
                                         <p style={{textAlign: 'justify'}}>
                                             Click on the following link: <a href='https://t.me/OculaFinanceBot' target='_blank' style={{color: 'inherit'}}>
                                                 https://t.me/OculaFinanceBot
@@ -680,12 +679,13 @@ class Analysis extends Component{
                                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                             Verify your Telegram connection using the button below:
                                         </h6>
-                                        <br/><br/>
-                                        <Button onClick={this.VerifyTelegramConnection} 
-                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
-                                        >
-                                            Verify connection
-                                        </Button>
+                                        <div style={{textAlign: 'left'}}>
+                                            <Button onClick={this.VerifyTelegramConnection} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Verify connection
+                                            </Button>
+                                        </div>
                                     </li>
                                 </ol>
                             </div>
