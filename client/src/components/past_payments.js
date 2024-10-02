@@ -254,13 +254,13 @@ class PastPayments extends Component{
                                 : <></>
                             }
                             <br/>
-                            <Button onClick={() => {this.GetPaymentsList(false); this.setState({end_of_list: false})}} 
+                            <Button onClick={() => {this.GetUserPastPayments(false); this.setState({end_of_list: false})}} 
                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                             >
                                 Load more
                             </Button>
                             {' '}
-                            <Button onClick={() => {this.GetEarningsReport(true); this.setState({end_of_list: false})}} 
+                            <Button onClick={() => {this.GetUserPastPayments(true); this.setState({end_of_list: false})}} 
                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                             >
                                 Load all
