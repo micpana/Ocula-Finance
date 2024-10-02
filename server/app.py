@@ -755,6 +755,9 @@ def getTelegramConnectCode():
     # add telegram connect code to response object
     response_object['telegram_connect_code'] = generate_telegram_connect_code()
 
+    # attach Telegram code to user's account
+    Users.objects(id = user_id).update(telegram_connect_code = code)
+
     # return telegram connect code
     response = make_response(jsonify(response_object)); response.status = 200; return response
 
@@ -779,8 +782,8 @@ def verifyTelegramConnection():
         # search telegram messages for user's code and also get the sender id from the matching message if found
         code_found, sender_id = search_for_user_submitted_telegram_connect_code(telegram_connect_code)
 
-        # if telegram id has already been used on another account
-        if len(Users.objects.filter(telegram_id = sender_id)) > 0:
+        # if code has been found and telegram id has already been used on another account
+        if code_found == True and len(Users.objects.filter(telegram_id = sender_id)) > 0:
             # notify user
             response = make_response('telegram id has already been used on another account'); response.status = 409; return response
 

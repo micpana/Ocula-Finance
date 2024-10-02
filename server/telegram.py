@@ -47,7 +47,7 @@ def search_for_user_submitted_telegram_connect_code(user_telegram_connect_code):
     messages = get_updates()
 
     # get all messages containing the user's telegram connect code
-    messages_containing_user_telegram_code = [i for i in messages if i['message']['text'] == user_telegram_connect_code]
+    messages_containing_user_telegram_code = [i for i in messages if str(i['message']['text']) == user_telegram_connect_code]
 
     # if code has been found
     if len(messages_containing_user_telegram_code) > 0:
