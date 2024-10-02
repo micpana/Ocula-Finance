@@ -30,7 +30,7 @@ def send_message(chat_id, message):
 def get_updates():
     while True:
         try:
-            request_url = api_url + "getUpdates?timeout=100"
+            request_url = api_url + "getUpdates" # removed long polling (defaults to 0 seconds): ?timeout=100
             request_result = requests.get(request_url)
             result = json.loads(request_result.content)
             messages = result['result']
