@@ -639,6 +639,7 @@ class Analysis extends Component{
                                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                             Get your Telegram connect code using the button below:
                                         </h6>
+                                        <br/>
                                         {
                                             this.state.telegram_connect_code === null
                                             ? <div style={{textAlign: 'left'}}>
@@ -655,11 +656,12 @@ class Analysis extends Component{
                                             </div>
                                         }
                                     </li>
-                                    <br/>
+                                    <br/><br/>
                                     <li>
                                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                             Send the code to our Telegram bot using any of the options below:
                                         </h6>
+                                        <br/>
                                         <p style={{textAlign: 'justify'}}>
                                             Click on the following link: <a href='https://t.me/OculaFinanceBot' target='_blank' style={{color: 'inherit'}}>
                                                 https://t.me/OculaFinanceBot
@@ -674,11 +676,12 @@ class Analysis extends Component{
                                             you've received above.
                                         </p>
                                     </li>
-                                    <br/>
+                                    <br/><br/>
                                     <li>
                                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                                             Verify your Telegram connection using the button below:
                                         </h6>
+                                        <br/>
                                         <div style={{textAlign: 'left'}}>
                                             <Button onClick={this.VerifyTelegramConnection} 
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
