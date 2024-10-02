@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DateTimeDisplay = ({ datetimeString }) => {
     const datetimeString = '2024-10-02 21:35:34.602129+02:00';
 
