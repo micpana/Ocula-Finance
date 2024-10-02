@@ -751,12 +751,15 @@ def getTelegramConnectCode():
             if len(Users.objects.filter(telegram_connect_code = code)) == 0: break
         # return unique code
         return code
+
+    # get telegram connect code
+    telegram_connect_code = generate_telegram_connect_code()
     
     # add telegram connect code to response object
-    response_object['telegram_connect_code'] = generate_telegram_connect_code()
+    response_object['telegram_connect_code'] = telegram_connect_code
 
     # attach Telegram code to user's account
-    Users.objects(id = user_id).update(telegram_connect_code = code)
+    Users.objects(id = user_id).update(telegram_connect_code = telegram_connect_code)
 
     # return telegram connect code
     response = make_response(jsonify(response_object)); response.status = 200; return response
