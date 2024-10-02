@@ -15,8 +15,8 @@ from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from telegram import search_for_user_submitted_telegram_connect_code
-from settings import frontend_client_url, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
+from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message
+from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
 
 # Flask stuff
 app = Flask(__name__)
@@ -779,15 +779,23 @@ def verifyTelegramConnection():
         # search telegram messages for user's code and also get the sender id from the matching message if found
         code_found, sender_id = search_for_user_submitted_telegram_connect_code(telegram_connect_code)
 
+        # if telegram id has already been used on another account
+        if len(Users.objects.filter(telegram_id = sender_id)) > 0:
+            # notify user
+            response = make_response('telegram id has already been used on another account'); response.status = 409; return response
+
         # add result to response object
         response_object['telegram_connected'] = code_found
 
         # add telegram id to the user's account, and change the user's telegram connection status to true
         Users.objects(id = user_id).update(telegram_id = sender_id, telegram_connected = True)
 
+        # notify user via telegram of the connection's success
+        send_user_successful_telegram_connection_message(sender_id, user.firstname) # inputs: user_telegram_id, user_firstname
+
     # if user is already connected to telegram
     else:
-        # mark telegram_connected as tru in response object
+        # mark telegram_connected as true in response object
         response_object['telegram_connected'] = True
 
     # return telegram connect code
@@ -1221,26 +1229,31 @@ def getMarketAnalysis():
     # date format
     date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
-    # administration exceptions
-    administration_exceptions = ['admin']
+    # get user details
+    user = Users.objects.filter(id = user_id)[0]
 
-    # exempt administration exceptions from subscription checks
-    if user_role not in administration_exceptions:
+    # user telegram verification check
+    if user.telegram_connected == False:
+        response = make_response('telegram not verified'); response.status = 403; return response
+    else:
         # user subscription test *****************************
-        # get user details
-        user = Users.objects.filter(id = user_id)[0]
-        # user registration date
-        user_registration_date = user.date_of_registration
-        # user subscription expiry date
-        user_subscription_expiration_date = user.subscription_expiry
-        # user free trial expiration date
-        user_free_trial_expiration_date = datetime.strptime(user_registration_date, date_format) + timedelta(days=get_number_of_free_trial_days())
-        # user subscription check using dates
-        if (
-            (user_subscription_expiration_date != '' and current_datetime > user_subscription_expiration_date) or 
-            current_datetime > str(user_free_trial_expiration_date)
-        ): 
-            response = make_response('not subscribed'); response.status = 403; return response
+        # administration exceptions
+        administration_exceptions = ['admin']
+
+        # exempt administration exceptions from subscription checks
+        if user_role not in administration_exceptions:
+            # user telegram verification date
+            user_telegram_verification_date = user.date_of_telegram_verification
+            # user subscription expiry date
+            user_subscription_expiration_date = user.subscription_expiry
+            # user free trial expiration date
+            user_free_trial_expiration_date = datetime.strptime(user_telegram_verification_date, date_format) + timedelta(days=get_number_of_free_trial_days())
+            # user subscription check using dates
+            if (
+                (user_subscription_expiration_date != '' and current_datetime > user_subscription_expiration_date) or 
+                current_datetime > str(user_free_trial_expiration_date)
+            ): 
+                response = make_response('not subscribed'); response.status = 403; return response
 
     # if its analysis for all symbols that has been requested
     if symbol == 'ALL':
@@ -1798,7 +1811,9 @@ def getUserMetrics():
         'users_not_subscribed': len([i for i in all_users if i['subscribed'] == False]),
         'banned_users': len([i for i in all_users if i['banned'] == True]),
         'verified_users': len([i for i in all_users if i['verified'] == True]),
-        'users_not_verified': len([i for i in all_users if i['verified'] == False])
+        'users_not_verified': len([i for i in all_users if i['verified'] == False]),
+        'verified_users_telegram': len([i for i in all_users if i['telegram_connected'] == True]),
+        'users_not_verified_telegram': len([i for i in all_users if i['telegram_connected'] == False])
     }
 
     # return statistics

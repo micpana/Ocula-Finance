@@ -52,7 +52,7 @@ class AllUsers extends Component{
             end_of_list: false,
             on_mobile: false,
             screen: 'users', // users / user / selected user payments
-            to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified'],
+            to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified', 'Verified Telegram', 'Unverified Telegram'],
             users_showing: 'All', // All / Subscribed / Not subscribed / Banned / Verified / Not verified
             all_users: [],
             user: null,
@@ -723,6 +723,8 @@ class AllUsers extends Component{
         if (to_show === 'Banned'){ users_to_show = all_users.filter(item => item.banned === true) }
         if (to_show === 'Verified'){ users_to_show = all_users.filter(item => item.verified === true) }
         if (to_show === 'Not verified'){ users_to_show = all_users.filter(item => item.verified === false) }
+        if (to_show === 'Verified Telegram'){ users_to_show = all_users.filter(item => item.telegram_connected === true) }
+        if (to_show === 'Unverified Telegram'){ users_to_show = all_users.filter(item => item.telegram_connected === false) }
 
         var users_to_show_map = users_to_show.map((item, index) => {
             return <tr onClick={() => {this.setState({user: item, screen: 'user'}); window.scrollTo(0, 0)}}
@@ -784,10 +786,16 @@ class AllUsers extends Component{
                                         <span style={{fontWeight: 'bold'}}>Banned:</span> {user_metrics.banned_users}
                                     </Col>
                                     <Col sm=''>
-                                        <span style={{fontWeight: 'bold'}}>Verified:</span> {user_metrics.verified_users}
+                                        <span style={{fontWeight: 'bold'}}>Email Verified:</span> {user_metrics.verified_users}
                                     </Col>
                                     <Col sm=''>
-                                        <span style={{fontWeight: 'bold'}}>Not verified:</span> {user_metrics.users_not_verified}
+                                        <span style={{fontWeight: 'bold'}}>Email Not verified:</span> {user_metrics.users_not_verified}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Telegram Verified:</span> {user_metrics.verified_users_telegram}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Telegram Not verified:</span> {user_metrics.users_not_verified_telegram}
                                     </Col>
                                 </Row>
                                 <br/><br/>
@@ -977,7 +985,7 @@ class AllUsers extends Component{
                                             <br/>
                                             <Row style={{margin: '0px', textAlign: 'left'}}>
                                                 <Col xs='6' style={{fontWeight: 'bold'}}>
-                                                    Verified:
+                                                    Email Verified:
                                                     <br/>
                                                 </Col>
                                                 <Col>
@@ -1115,6 +1123,31 @@ class AllUsers extends Component{
                                                 </Col>
                                                 <Col>
                                                     {user.unban_time}
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Telegram Verified:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {
+                                                        user.telegram_connected === true
+                                                        ? <>Yes</>
+                                                        : <>No</>
+                                                    }
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Date of Telegram verification:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {user.date_of_telegram_verification}
                                                     <br/>
                                                 </Col>
                                             </Row>

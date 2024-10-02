@@ -1,6 +1,10 @@
 import requests
 import json
 import os
+from settings import platform_name
+
+# get platform name
+platform_brand_name = platform_name()
 
 # telegram token
 token = os.environ.get('TELEGRAM_BOT_TOKEN')
@@ -69,4 +73,13 @@ def search_for_user_submitted_telegram_connect_code(user_telegram_connect_code):
 
     # return code found status and the sender's telegram id
     return code_found, sender_id
+# *******************************************************************************************************************************
+
+# user successful telegram connection message ***********************************************************************************
+def send_user_successful_telegram_connection_message(user_telegram_id, user_firstname):
+    # construct message
+    message = "Hello {}. Your connection was a success. Thank you for choosing {}.".format(user_firstname, platform_brand_name)
+    
+    # send message
+    send_message(user_telegram_id, message)
 # *******************************************************************************************************************************

@@ -70,6 +70,8 @@ class Analysis extends Component{
             symbol: 'ALL',
             market_analysis: [],
             user_subscribed: null,
+            telegram_verified: null,
+            telegram_connect_code: null,
             user_closing_price_at_entry: null,
             modal_open: false,
             modal_selection: null,
@@ -170,6 +172,8 @@ class Analysis extends Component{
                         this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
                     }else if (result === 'not subscribed'){
                         this.setState({user_subscribed: false})
+                    }else if (result === 'telegram not verified'){
+                        this.setState({telegram_verified: false})
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         Notification(notification_message, 'error')
@@ -343,6 +347,103 @@ class Analysis extends Component{
                 </Row>
                 <br/>
             </div>
+        }
+
+        this.GetTelegramConnectCode = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
+
+            axios.post(Backend_Server_Address + 'getTelegramConnectCode', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // set telegram connect code to state
+                this.setState({telegram_connect_code: result.telegram_connect_code})
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.GetTelegramConnectCode)
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetTelegramConnectCode)
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetTelegramConnectCode)
+                }
+                this.LoadingOff()
+            })
+        }
+
+        this.VerifyTelegramConnection = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
+
+            axios.post(Backend_Server_Address + 'verifyTelegramConnection', null, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // get telegram connection status
+                let telegram_connected = result.telegram_connected
+                // if connection was a success, reload GetCurrentMarketAnalysis function
+                if (telegram_connected == true){
+                    this.GetCurrentMarketAnalysis(this.state.symbol, false)
+                }else{
+                    // if connection was not a success, notify the user
+                    Notification('The Telegram connection could not be verified. Please verify that you sent the correct code to our bot and try again.', 'error')
+                }
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'telegram id has already been used on another account'){
+                        Notification('The Telegram account you used has already been linked to another account on this platform.', 'error')
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                        this.NetworkErrorScreenOn(notification_message, this.VerifyTelegramConnection)
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                    this.NetworkErrorScreenOn(Network_Error_Message, this.VerifyTelegramConnection)
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.VerifyTelegramConnection)
+                }
+                this.LoadingOff()
+            })
         }
     }
 
@@ -526,7 +627,69 @@ class Analysis extends Component{
                         </h5>
                         <br/><br/>
                         {
-                            this.state.user_subscribed === false
+                            this.state.telegram_verified === false
+                            ? <div>
+                                <br/><br/><br/>
+                                <h6 style={{color: '#005fc9'}}>
+                                    Please follow the steps below to connect your Telegram account and start your free trial. {' '}
+                                    <Grid width='20px' style={{color: '#005fc9'}}/>
+                                </h6>
+                                <br/><br/><br/>
+                                <ol>
+                                    <li>
+                                        <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
+                                            Get your Telegram connect code using the button below:
+                                        </h6>
+                                        <br/><br/>
+                                        {
+                                            this.state.telegram_connect_code === null
+                                            ? <Button onClick={this.GetTelegramConnectCode} 
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Get code
+                                            </Button>
+                                            : <div style={{textAlign: 'left'}}>
+                                                Your Telegram connect code is: <span style={{fontWeight: 'bold'}}>
+                                                    {this.state.telegram_connect_code}
+                                                </span>
+                                            </div>
+                                        }
+                                    </li>
+                                    <br/>
+                                    <li>
+                                        <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
+                                            Send the code to our Telegram bot using any of the options below:
+                                        </h6>
+                                        <br/><br/>
+                                        <p style={{textAlign: 'justify'}}>
+                                            Click on the following link: <a href='https://t.me/OculaFinanceBot' target='_blank' style={{color: 'inherit'}}>
+                                                https://t.me/OculaFinanceBot
+                                            </a>, once you're inside the chat, click on the start button, then send the telegram connect code 
+                                            you've received above.
+                                            <br/><br/>
+                                            Alternatively, you can open your Telegram app, head on to the search bar, and type in <span style={{fontWeight: 'bold'}}> 
+                                                oculafinance
+                                            </span>. On the search results, click on <span style={{fontWeight: 'bold'}}>
+                                                Ocula Finance Bot
+                                            </span>. Once you're inside the chat, click on the start button, then send the telegram connect code 
+                                            you've received above.
+                                        </p>
+                                    </li>
+                                    <br/>
+                                    <li>
+                                        <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
+                                            Verify your Telegram connection using the button below:
+                                        </h6>
+                                        <br/><br/>
+                                        <Button onClick={this.VerifyTelegramConnection} 
+                                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                        >
+                                            Verify connection
+                                        </Button>
+                                    </li>
+                                </ol>
+                            </div>
+                            : this.state.user_subscribed === false
                             ? <div>
                                 <br/><br/><br/>
                                 <h5 style={{color: '#005fc9'}}>You're not subscribed and your free trial expired.</h5>

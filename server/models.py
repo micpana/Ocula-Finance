@@ -30,6 +30,7 @@ class Users(Document):
     telegram_connect_code = StringField(required=False)
     telegram_connected = BooleanField(required=True)
     telegram_id = StringField(required=False)
+    date_of_telegram_verification = StringField(required=False)
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}
