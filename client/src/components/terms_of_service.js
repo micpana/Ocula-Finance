@@ -127,7 +127,7 @@ class TermsOfService extends Component{
                                 Thank you for choosing {Platform_Name}. These Terms of Service constitute a legal agreement
                                 between you and {Platform_Name}. <span style={{fontWeight: 'bold'}}>"You"</span> means you as an individual or 
                                 any other entity you represent on {Platform_Name}, if any. <span style={{fontWeight: 'bold'}}>"Us"</span> or{' '}
-                                <span style={{fontWeight: 'bold'}}>"we"</span> or <span style={{fontWeight: 'bold'}}>"this platform"</span> 
+                                <span style={{fontWeight: 'bold'}}>"we"</span> or <span style={{fontWeight: 'bold'}}>"this platform"</span>{' '}
                                 refers to {Platform_Name}. If you are accepting these terms on behalf of your employer or any other entity you 
                                 may represent, you warrant that you have full legal authority to bind that entity to this agreement, and you are
                                 agreeing to these Terms of Service on behalf of yourself and the entity you represent. If you do not
@@ -138,9 +138,9 @@ class TermsOfService extends Component{
                                 terms stated in this agreement.
                             </p>
                             <p>
-                                If you sign up and {Platform_Name} changes these Terms of Service, you will be notified via the {Platform_Name}
-                                platform, as well as via email, and you will be required to review and accept or reject the new terms. If you 
-                                accept the new terms, you can proceed with using the platform.
+                                If you sign up and {Platform_Name} changes these Terms of Service, you will be notified via the {Platform_Name}{' '}
+                                platform, via email, as well as via Telegram, and you will be required to review and accept or reject the new 
+                                terms. If you accept the new terms, you can proceed with using the platform.
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>1. Services.</h6>
@@ -166,12 +166,14 @@ class TermsOfService extends Component{
                             <p>
                                 <span style={{fontWeight: 'bold'}}>1.2</span> <u>Access and use of our services.</u> In order to use our services, 
                                 you must sign up using a valid email address which our software will send a verification link to in order to verify 
-                                that the email address  that you have provided truly belongs to you. Once you have completed the email verification
-                                process, you will be able to sign in using the details you provided during sign up. By default, every
-                                new user is given 7 days of free access to our paid package, which means they’ll be able to fully
-                                access all analysis done by our AI for all financial assets available on {Platform_Name}. After you have
-                                completed the 7 days free trial, for all the financial assets available on our platform, analysis done
-                                by our AI will only be accessible to you if you have an active subscription.
+                                that the email address that you have provided truly belongs to you. Once you have completed the email verification 
+                                process, you will be able to sign in using the details you provided during sign up. Once inside, you will be 
+                                required to link your {Platform_Name} account to your Telegram account as a means of phone number verification, as 
+                                well as to receive trade alerts and other important notifications. By default, every new user is given 7 days of 
+                                free access to our paid package, which means they’ll be able to fully access all analysis done by our AI for all 
+                                financial assets available on {Platform_Name}. After you have completed the 7 days free trial, for all the 
+                                financial assets available on our platform, analysis done  by our AI will only be accessible to you if you have 
+                                an active subscription.
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>2. User requirements and conduct.</h6>
@@ -207,7 +209,7 @@ class TermsOfService extends Component{
                                 mathematical probabilities calculated by our Artificial Intelligence using market data. Section 2.1 of
                                 our Terms of Service clearly states that the user should have a basic knowledge on what trading is
                                 as well as the risks associated with it. Forex and Cryptocurrency trading involves significant risk to
-                                your invested capital, losses can and will be encountered. <span style={{fontWeight: 'bold'}}>{Platform_Name} 
+                                your invested capital, losses can and will be encountered. <span style={{fontWeight: 'bold'}}>{Platform_Name}{' '}
                                 shall not be liable for any losses you may encounter, or any disputes you may encounter with the broker of 
                                 your choosing, or any money lost to scammers disguised as {Platform_Name} (as highlighted in section
                                 1.1 of our Terms of Service).</span>
