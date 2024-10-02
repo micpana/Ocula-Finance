@@ -768,6 +768,10 @@ def verifyTelegramConnection():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # get current datetime
+    current_datetime_object = datetime.now(timezone(system_timezone()))
+    current_datetime = str(current_datetime_object)
+
     # initialize response object
     response_object = {'telegram_connected': False}
 
@@ -791,7 +795,7 @@ def verifyTelegramConnection():
         response_object['telegram_connected'] = code_found
 
         # add telegram id to the user's account, and change the user's telegram connection status to true
-        Users.objects(id = user_id).update(telegram_id = sender_id, telegram_connected = True)
+        Users.objects(id = user_id).update(telegram_id = sender_id, telegram_connected = True, date_of_telegram_verification = current_datetime)
 
         # notify user via telegram of the connection's success
         send_user_successful_telegram_connection_message(sender_id, user.firstname) # inputs: user_telegram_id, user_firstname
