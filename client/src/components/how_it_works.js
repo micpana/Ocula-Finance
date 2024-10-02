@@ -163,7 +163,8 @@ class HowItWorks extends Component{
                                             <li>Recommended stoploss percentages.</li><br/>
                                             <li>Recommended takeprofit percentages.</li><br/>
                                             <li>Reliable risk-to-reward ratios, sticking to a minimum of 1:2.</li><br/>
-                                            <li>Telegram alerts.</li><br/>
+                                            <li>Trade alerts via the {Platform_Name} platform.</li><br/>
+                                            <li>Trade alerts via Telegram.</li><br/>
                                         </ul>
                                     </p>
                                 </Col>
