@@ -673,7 +673,7 @@ class Analysis extends Component{
                                             </span>. On the search results, click on <span style={{fontWeight: 'bold'}}>
                                                 Ocula Finance Bot
                                             </span>. Once you're inside the chat, click on the start button, then send the telegram connect code 
-                                            you've received above.
+                                            you received above.
                                         </p>
                                     </li>
                                     <br/><br/>
