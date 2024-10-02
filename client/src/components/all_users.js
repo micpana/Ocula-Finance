@@ -1126,6 +1126,7 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                             </Row>
+                                            <br/>
                                             <Row style={{margin: '0px', textAlign: 'left'}}>
                                                 <Col xs='6' style={{fontWeight: 'bold'}}>
                                                     Telegram Verified:
