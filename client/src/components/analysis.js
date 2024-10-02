@@ -403,9 +403,10 @@ class Analysis extends Component{
                 let result = res.data
                 // get telegram connection status
                 let telegram_connected = result.telegram_connected
-                // if connection was a success, reload GetCurrentMarketAnalysis function
+                // if connection was a success, reload GetCurrentMarketAnalysis function, set telegram_verified state to true
                 if (telegram_connected == true){
                     this.GetCurrentMarketAnalysis(this.state.symbol, false)
+                    this.setState({telegram_verified: true})
                 }else{
                     // if connection was not a success, notify the user
                     Notification('The Telegram connection could not be verified. Please verify that you sent the correct code to our bot and try again.', 'error')
