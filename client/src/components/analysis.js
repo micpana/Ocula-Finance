@@ -792,7 +792,7 @@ class Analysis extends Component{
                                     <Col>
                                         <span style={{fontSize: '13px'}}>
                                             {this.state.user_device_time} {this.state.user_device_timezone} Timezone 
-                                            (matches your device clock, therefore all timestamps inside dashboard are being displayed in your 
+                                            (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
                                             local time.)
                                         </span>
                                         <br/>
