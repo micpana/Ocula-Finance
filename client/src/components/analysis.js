@@ -88,7 +88,7 @@ class Analysis extends Component{
 
             // check if value is a symbol, if so load data for selected symbol
             if (Symbols.includes(e.target.value)){
-                this.GetCurrentMarketAnalysis(e.target.value, false, false, true)
+                this.GetCurrentMarketAnalysis(e.target.value, false, true, true)
             }
         };
 
@@ -131,14 +131,14 @@ class Analysis extends Component{
             this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
         }
 
-        this.GetCurrentMarketAnalysis = (symbol, get_all, rerun_or_initial, show_loading_screen) => {
+        this.GetCurrentMarketAnalysis = (symbol, get_all, bypass_time_check, show_loading_screen) => {
             // get current minutes from time
             const now = new Date();
             const current_minutes = String(now.getMinutes());
 
-            // if this is a rerun_or_initial (retry/first request) or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
+            // if there's a time check bypass or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
             if (
-                rerun_or_initial == true ||
+                bypass_time_check == true ||
                 current_minutes == '00' || current_minutes == '15' || current_minutes == '30' || current_minutes == '45'
             ){
                 const { cookies } = this.props;
@@ -433,7 +433,7 @@ class Analysis extends Component{
                 let telegram_connected = result.telegram_connected
                 // if connection was a success, reload GetCurrentMarketAnalysis function, set telegram_verified state to true
                 if (telegram_connected == true){
-                    this.GetCurrentMarketAnalysis(this.state.symbol, false, false, true)
+                    this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true)
                     this.setState({telegram_verified: true})
                     Notification('Telegram verification successful.', 'success')
                 }else{
@@ -827,7 +827,7 @@ class Analysis extends Component{
                                             : <></>
                                         }
                                         <br/>
-                                        <Button onClick={() => {this.GetCurrentMarketAnalysis(this.state.symbol, false, false, true); this.setState({end_of_list: false})}} 
+                                        <Button onClick={() => {this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true); this.setState({end_of_list: false})}} 
                                             style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                         >
                                             Load more
