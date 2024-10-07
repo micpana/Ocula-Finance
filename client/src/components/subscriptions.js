@@ -33,6 +33,9 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
+import DateTimeDisplay from './timezone_conversion'
+import Ecocash from '../images/ecocash.png'
+import OneMoney from '../images/one_money.jpeg'
 
 class Subscriptions extends Component{
     static propTypes = {
@@ -199,7 +202,7 @@ class Subscriptions extends Component{
                                             You've never subscribed before
                                         </>
                                         : <>
-                                            {this.state.user_details.subscription_expiry}
+                                            <DateTimeDisplay datetimeString={this.state.user_details.subscription_expiry} />
                                         </>
                                     }
                                 </div>
@@ -209,7 +212,16 @@ class Subscriptions extends Component{
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
+                        <br/><br/>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='4'>
+                                <Container
+                                    
+                                >
 
+                                </Container>
+                            </Col>
+                        </Row>
                     </div>
                 }
             </div>

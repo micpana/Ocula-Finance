@@ -34,6 +34,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
+import DateTimeDisplay from './timezone_conversion'
 import { User_Roles, Payment_Purposes, Payment_Methods } from './lists'
 import { FaEdit, FaKey, FaMoneyBill, FaMoneyCheckAlt, FaNotesMedical, FaSearch } from 'react-icons/fa';
 
@@ -741,7 +742,7 @@ class AllUsers extends Component{
         var user_payments = this.state.user_payments
         var user_payments_map = user_payments.map((item, index) => {
             return <tr style={{borderBottom: '1px solid silver'}}>
-                <td>{item.date}</td>
+                <td><DateTimeDisplay datetimeString={item.date} /></td>
                 <td>{item.purpose}</td>
                 <td>{item.payment_method}</td>
                 <td>$ {item.amount}</td>
@@ -978,7 +979,7 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    {user.date_of_registration}
+                                                    <DateTimeDisplay datetimeString={user.date_of_registration} />
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1019,7 +1020,7 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    {user.subscription_date}
+                                                    <DateTimeDisplay datetimeString={user.subscription_date} />
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1030,7 +1031,7 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    {user.subscription_expiry}
+                                                    <DateTimeDisplay datetimeString={user.subscription_expiry} />
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1111,7 +1112,11 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    {user.ban_time}
+                                                    {
+                                                        user.ban_time === null || user.ban_time === undefined || user.ban_time === ''
+                                                        ? <></>
+                                                        : <DateTimeDisplay datetimeString={user.ban_time} />
+                                                    }
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1122,7 +1127,10 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    {user.unban_time}
+                                                    {   user.unban_time === null || user.unban_time === undefined || user.unban_time === ''
+                                                        ? <></>
+                                                        : <DateTimeDisplay datetimeString={user.unban_time} />
+                                                    }
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1148,7 +1156,11 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    {user.date_of_telegram_verification}
+                                                    {
+                                                        user.telegram_connected === true
+                                                        ? <DateTimeDisplay datetimeString={user.date_of_telegram_verification} />
+                                                        : <></>
+                                                    }
                                                     <br/>
                                                 </Col>
                                             </Row>

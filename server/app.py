@@ -16,7 +16,8 @@ from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveri
 from encryption import encrypt_password, verify_encrypted_password
 from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
 from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message
-from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone
+from user_subscription_check import validate_subscription
+from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, user_roles_exempted_from_subscribing
 
 # Flask stuff
 app = Flask(__name__)
@@ -1225,6 +1226,12 @@ def getMarketAnalysis():
     try: length_of_data_received = int(length_of_data_received)
     except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
+    # timestamp of the most recent signal received
+    timestamp_of_most_recent_signal_received
+    try: timestamp_of_most_recent_signal_received = request.form['timestamp_of_most_recent_signal_received'] 
+    except: response = make_response('Timestamp of most recent signal received required'); response.status = 400; return response
+    if timestamp_of_most_recent_signal_received == None: response = make_response('Timestamp of most recent signal received cannot be none'); response.status = 400; return response
+    if isinstance(timestamp_of_most_recent_signal_received, str) == False: response = make_response('Timestamp of most recent signal received data type is invalid'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
@@ -1246,24 +1253,14 @@ def getMarketAnalysis():
     if user.telegram_connected == False:
         response = make_response('telegram not verified'); response.status = 403; return response
     else:
-        # user subscription test *****************************
-        # administration exceptions
-        administration_exceptions = ['admin']
+        # user subscription test ********************************************************
+        # get user subscription status
+        user_subscribed = validate_subscription(user)
 
-        # exempt administration exceptions from subscription checks
-        if user_role not in administration_exceptions:
-            # user telegram verification date
-            user_telegram_verification_date = user.date_of_telegram_verification
-            # user subscription expiry date
-            user_subscription_expiration_date = user.subscription_expiry
-            # user free trial expiration date
-            user_free_trial_expiration_date = datetime.strptime(user_telegram_verification_date, date_format) + timedelta(days=get_number_of_free_trial_days())
-            # user subscription check using dates
-            if (
-                (user_subscription_expiration_date != '' and current_datetime > user_subscription_expiration_date) or 
-                current_datetime > str(user_free_trial_expiration_date)
-            ): 
-                response = make_response('not subscribed'); response.status = 403; return response
+        # if a user is not subscribed and is not exempted from subscribing because of their role
+        if user_subscribed == False and user_role not in user_roles_exempted_from_subscribing():
+            response = make_response('not subscribed'); response.status = 403; return response
+        # *******************************************************************************
 
     # if its analysis for all symbols that has been requested
     if symbol == 'ALL':
@@ -1275,8 +1272,11 @@ def getMarketAnalysis():
         # get market analysis for the stated symbol
         market_analysis = MarketAnalysis.objects.filter(symbol = symbol)
 
-    # from mongo object to json object to python dict
+    # from mongo object to json object to python object
     market_analysis = json.loads(market_analysis.to_json())
+
+    # reverse market_analysis list ... we want the most recent signals to appear first
+    market_analysis = reversed(market_analysis)
 
     # if client did not request all data
     if get_all == False:
@@ -1297,9 +1297,28 @@ def getMarketAnalysis():
             # if length difference is negative, it means client has set an invalid length of data received, received data cannot be greater than all available data
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
-            # only return signals client hasn't received yet
-            start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            # only return signals client hasn't received yet **********************************************************
+            # if timestamp_of_most_recent_signal_received is not ''
+            if timestamp_of_most_recent_signal_received != '':
+                # find the index of the timestamp in market_analysis list, index of first occurance
+                timestamp_index = next((i for i, signal in enumerate(market_analysis) if signal['timestamp'] == timestamp_of_most_recent_signal_received), None)
+                # if index has been found
+                if timestamp_index != None:
+                    # make its the end index
+                    end_index = timestamp_index; start_index = end_index - client_load_more_increment
+                    # if the start index happens to be negative, make it 0
+                    if start_index < 0: start_index = 0
+                # if index has not been found, use default indexing for data fetch
+                else:
+                    start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            # if timestamp_of_most_recent_signal_received is ''
+            else:
+                # use default indexing for data fetch
+                start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+            
+            # perform data fetch by supplied indexes
             market_analysis = market_analysis[start_index:end_index]
+            # *********************************************************************************************************
 
         # if client has not received any data yet
         else:
@@ -2320,6 +2339,10 @@ def getPaymentsList():
 
     # return response
     response = make_response(jsonify(all_payments)); response.status = 200; return response
+
+# payment functions ***********************************************************************************************************************
+
+# *****************************************************************************************************************************************
 
 if __name__ == '__main__':
     init_db()

@@ -117,24 +117,6 @@ const ModelCardRender = ({ symbol }) => {
             <br/>
             <Row style={{margin: '0px', textAlign: 'left'}}>
                 <Col style={{fontWeight: 'bold'}}>
-                    Maximum number of consecutive wins:
-                </Col>
-                <Col>
-                    {symbol_model_card["Maximum number of consecutive wins"]}
-                </Col>
-            </Row>
-            <br/>
-            <Row style={{margin: '0px', textAlign: 'left'}}>
-                <Col style={{fontWeight: 'bold'}}>
-                    Maximum number of consecutive losses:
-                </Col>
-                <Col>
-                    {symbol_model_card["Maximum number of consecutive losses"]}
-                </Col>
-            </Row>
-            <br/>
-            <Row style={{margin: '0px', textAlign: 'left'}}>
-                <Col style={{fontWeight: 'bold'}}>
                     Average number of consecutive wins:
                 </Col>
                 <Col>
@@ -148,6 +130,24 @@ const ModelCardRender = ({ symbol }) => {
                 </Col>
                 <Col>
                     {symbol_model_card["Average number of consecutive losses"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Maximum number of consecutive wins:
+                </Col>
+                <Col>
+                    {symbol_model_card["Maximum number of consecutive wins"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Maximum number of consecutive losses:
+                </Col>
+                <Col>
+                    {symbol_model_card["Maximum number of consecutive losses"]}
                 </Col>
             </Row>
             <br/>

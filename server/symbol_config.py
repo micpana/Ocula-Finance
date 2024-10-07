@@ -9,46 +9,46 @@ symbols_and_their_config = {
     # Forex Pairs ***************************************************************************************************************
     'EURUSD': {
         'type': 'Forex Pair',
-        'target': 0.20,
+        'target': 0.25,
         'risk_target_divisor': default_risk_target_divisor,
         'forecast_period': default_forecast_period
     },
-    'GBPUSD': {
-        'type': 'Forex Pair',
-        'target': 0.30,
-        'risk_target_divisor': default_risk_target_divisor,
-        'forecast_period': default_forecast_period
-    }, 
-    'USDJPY': {
-        'type': 'Forex Pair',
-        'target': 0.50,
-        'risk_target_divisor': default_risk_target_divisor,
-        'forecast_period': default_forecast_period
-    }, 
-    'USDCHF': {
-        'type': 'Forex Pair',
-        'target': 0.30,
-        'risk_target_divisor': default_risk_target_divisor,
-        'forecast_period': default_forecast_period
-    }, 
-    'AUDUSD': {
-        'type': 'Forex Pair',
-        'target': 0.40,
-        'risk_target_divisor': default_risk_target_divisor,
-        'forecast_period': default_forecast_period
-    }, 
-    'USDCAD': {
-        'type': 'Forex Pair',
-        'target': 0.20,
-        'risk_target_divisor': default_risk_target_divisor,
-        'forecast_period': default_forecast_period
-    }, 
-    'USDZAR': {
-        'type': 'Forex Pair',
-        'target': 0.50,
-        'risk_target_divisor': default_risk_target_divisor,
-        'forecast_period': default_forecast_period
-    },
+    # 'GBPUSD': {
+    #     'type': 'Forex Pair',
+    #     'target': 0.30,
+    #     'risk_target_divisor': default_risk_target_divisor,
+    #     'forecast_period': default_forecast_period
+    # }, 
+    # 'USDJPY': {
+    #     'type': 'Forex Pair',
+    #     'target': 0.50,
+    #     'risk_target_divisor': default_risk_target_divisor,
+    #     'forecast_period': default_forecast_period
+    # }, 
+    # 'USDCHF': {
+    #     'type': 'Forex Pair',
+    #     'target': 0.30,
+    #     'risk_target_divisor': default_risk_target_divisor,
+    #     'forecast_period': default_forecast_period
+    # }, 
+    # 'AUDUSD': {
+    #     'type': 'Forex Pair',
+    #     'target': 0.40,
+    #     'risk_target_divisor': default_risk_target_divisor,
+    #     'forecast_period': default_forecast_period
+    # }, 
+    # 'USDCAD': {
+    #     'type': 'Forex Pair',
+    #     'target': 0.20,
+    #     'risk_target_divisor': default_risk_target_divisor,
+    #     'forecast_period': default_forecast_period
+    # }, 
+    # 'USDZAR': {
+    #     'type': 'Forex Pair',
+    #     'target': 0.50,
+    #     'risk_target_divisor': default_risk_target_divisor,
+    #     'forecast_period': default_forecast_period
+    # },
     # ***************************************************************************************************************************
     # Crypto Pairs (to be added) ************************************************************************************************
     # ***************************************************************************************************************************

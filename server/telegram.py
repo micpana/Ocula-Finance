@@ -1,7 +1,17 @@
 import requests
 import json
 import os
-from settings import platform_name
+from collections import deque
+from models import Users
+from database import init_db
+from user_subscription_check import validate_subscription
+from settings import platform_name, send_out_prediction_alerts_via_telegram, user_roles_exempted_from_subscribing
+
+# initialize database connection in this module *******************************************************************************************
+# proceed if prediction alerts are being sent out via telegram
+if send_out_prediction_alerts_via_telegram() == True:
+    init_db()
+# *****************************************************************************************************************************************
 
 # get platform name
 platform_brand_name = platform_name()
@@ -82,4 +92,30 @@ def send_user_successful_telegram_connection_message(user_telegram_id, user_firs
     
     # send message
     send_message(user_telegram_id, message)
+# *******************************************************************************************************************************
+
+# trade signals telegram alerts *************************************************************************************************
+def send_trade_signal_alerts_via_telegram(predictions_string):
+    # get all users with their telegram connected *********************************************************************
+    users_with_their_telegram_connected = Users.objects.filter(telegram_connected = True)
+    users_with_their_telegram_connected = json.loads(users_with_their_telegram_connected.to_json())
+    users_with_their_telegram_connected = deque(users_with_their_telegram_connected) # conversion to deque array for faster looping
+    # *****************************************************************************************************************
+
+    # loop through users who connected their telegram *****************************************************************
+    for user in users_with_their_telegram_connected:
+        # get user telegram id
+        user_telegram_id = user['telegram_id']
+
+        # get user role
+        user_role = user['role']
+
+        # get user subscription status
+        user_subscribed = validate_subscription(user)
+
+        # if a user is subscribed or is exempted from subscribing because of their role
+        if user_subscribed == True or user_role in user_roles_exempted_from_subscribing():
+            # send a telegram trade signal(s) alert
+            send_message(user_telegram_id, predictions_string)
+    # *****************************************************************************************************************
 # *******************************************************************************************************************************

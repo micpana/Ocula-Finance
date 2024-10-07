@@ -64,6 +64,12 @@ def get_user_roles():
 
     return user_roles
 
+# list of user roles exempted from subscribing
+def user_roles_exempted_from_subscribing():
+    roles = ['admin']
+
+    return roles
+
 # list of payment purposes
 def get_payment_purposes():
     payment_purposes = ['subscription']
@@ -96,6 +102,18 @@ def prediction_data_source():
 
     return source
 
+# whether to send out prediction alerts via telegram or not
+def send_out_prediction_alerts_via_telegram():
+    send = True
+
+    return send
+
+# whether to trim excessive data from other timeframes before feature engineering or not
+def trim_excessive_data_from_other_timeframes_before_feature_engineering():
+    trim = False
+
+    return trim
+
 # whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
 def remove_last_n_values_without_full_forecast():
     remove = False
@@ -104,7 +122,7 @@ def remove_last_n_values_without_full_forecast():
 
 # whether to save live predictions to the database or not
 def save_live_predictions_to_database():
-    save = False
+    save = True
 
     return save
 
@@ -173,6 +191,12 @@ def show_plots_during_training():
     show = False
 
     return show
+
+# whether to save plot images during training or not
+def save_plots_during_training():
+    save = False
+
+    return save
 
 # get custom system extension for saving objects as files
 def custom_system_extension():

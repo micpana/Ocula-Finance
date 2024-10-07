@@ -1,10 +1,11 @@
-import string 
-import random 
+animals = [{'hunts': 'yes', 'name': 'cat'}, 
+           {'hunts': 'yes', 'name': 'cat'}, 
+           {'hunts': 'maybe', 'name': 'rabbit'}, 
+           {'hunts': 'no', 'name': 'horse'},
+           {'hunts': 'no', 'name': 'cow'}
+           ]
 
-def generate_telegram_connect_code():
-    token_length = 6
-    token_characters = string.digits
-    token = "".join(random.choice(token_characters) for _ in range(token_length))
-    return token
-print(generate_telegram_connect_code())
+# Find the index where 'hunts' is 'no'
+index = next((i for i, animal in enumerate(animals) if animal['hunts'] == 'no'), None)
 
+print(index)

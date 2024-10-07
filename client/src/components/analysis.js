@@ -51,6 +51,7 @@ import XRP from '../images/xrp.png'
 import Modal from './modal';
 import { Model_Cards } from './model_cards'
 import ModelCardRender from './model_card_render'
+import DateTimeDisplay from './timezone_conversion'
 import { FaMonero, FaMoneyBillWave } from 'react-icons/fa';
 
 class Analysis extends Component{
@@ -60,7 +61,7 @@ class Analysis extends Component{
     constructor(props) { 
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
             network_error_screen: false,
             network_error_message: '',
             retry_function: null,
@@ -75,7 +76,11 @@ class Analysis extends Component{
             user_closing_price_at_entry: null,
             modal_open: false,
             modal_selection: null,
-            selected_signal: {}
+            selected_signal: {},
+            user_device_time: null, 
+            user_device_timezone: null,
+            user_time_by_id_address: null, 
+            user_timezone_by_id_address: null
         };
 
         this.HandleChange = (e) => {
@@ -83,7 +88,7 @@ class Analysis extends Component{
 
             // check if value is a symbol, if so load data for selected symbol
             if (Symbols.includes(e.target.value)){
-                this.GetCurrentMarketAnalysis(e.target.value, false)
+                this.GetCurrentMarketAnalysis(e.target.value, false, false, true)
             }
         };
 
@@ -126,68 +131,91 @@ class Analysis extends Component{
             this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
         }
 
-        this.GetCurrentMarketAnalysis = (symbol, get_all) => {
-            const { cookies } = this.props;
-            this.LoadingOn()
-            this.NetworkErrorScreenOff()
+        this.GetCurrentMarketAnalysis = (symbol, get_all, rerun, show_loading_screen) => {
+            // get current minutes from time
+            const now = new Date();
+            const current_minutes = String(now.getMinutes());
 
-            var data = new FormData()
-            data.append('symbol', symbol)
-            data.append('length_of_data_received', this.state.market_analysis.length)
-            data.append('get_all', get_all) // bool
+            // if this is a rerun (retry) or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
+            if (
+                rerun == true ||
+                current_minutes == '00' || current_minutes == '15' || current_minutes == '30' || current_minutes == '45'
+            ){
+                const { cookies } = this.props;
+                if (show_loading_screen == true){
+                    this.LoadingOn()
+                }
+                this.NetworkErrorScreenOff()
 
-            axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
-            .then((res) => {
-                let result = res.data
-                if (get_all == true){
-                    // set market analysis to state
-                    this.setState({market_analysis: result})
+                var data = new FormData()
+                data.append('symbol', symbol)
+                data.append('length_of_data_received', this.state.market_analysis.length)
+                data.append('get_all', get_all) // bool
+                // timestamp of the most recent trade signal received
+                if (this.state.market_analysis.length > 0 && symbol == 'ALL'){
+                    data.append('timestamp_of_most_recent_signal_received', this.state.market_analysis[0].timestamp)
+                }else if (this.state.market_analysis.filter(item => item.symbol === symbol).length > 0){
+                    data.append('timestamp_of_most_recent_signal_received', this.state.market_analysis.filter(item => item.symbol === symbol)[0].timestamp)
                 }else{
-                    // append market analysis to state
-                    this.setState({market_analysis: this.state.market_analysis.concat(result)})
+                    data.append('timestamp_of_most_recent_signal_received', '')
                 }
-                this.LoadingOff()
-            }).catch((error) => {
-                console.log(error)
-                if (error.response){ // server responded with a non-2xx status code
-                    let status_code = error.response.status
-                    let result = error.response.data
-                    var notification_message = ''
-                    if(
-                        result === 'access token disabled via signout' ||
-                        result === 'access token expired' ||
-                        result === 'not authorized to access this' ||
-                        result === 'invalid token'
-                    ){ 
-                        // delete token from user cookies
-                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
-                        // redirect to sign in
-                        let port = (window.location.port ? ':' + window.location.port : '');
-                        window.location.href = '//' + window.location.hostname + port + '/signin';
-                    }else if(result === 'end of list'){
-                        this.setState({end_of_list: true})
-                    }else if(result === 'invalid length of data received'){
-                        notification_message = 'Invalid length of data received'
-                        Notification(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
-                    }else if (result === 'not subscribed'){
-                        this.setState({user_subscribed: false})
-                    }else if (result === 'telegram not verified'){
-                        this.setState({telegram_verified: false})
+
+                axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    if (get_all == true){
+                        // set market analysis to state
+                        this.setState({market_analysis: result})
                     }else{
-                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        Notification(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, () => this.GetCurrentMarketAnalysis(symbol, get_all))
+                        // append market analysis to state
+                        this.setState({market_analysis: this.state.market_analysis.concat(result)})
                     }
-                }else if (error.request){ // request was made but no response was received ... network error
-                    Notification(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all))
-                }else{ // error occured during request setup ... no network access
-                    Notification(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all))
-                }
-                this.LoadingOff()
-            })
+                    this.LoadingOff()
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'end of list'){
+                            this.setState({end_of_list: true})
+                        }else if(result === 'invalid length of data received'){
+                            notification_message = 'Invalid length of data received'
+                            Notification(notification_message, 'error')
+                            this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
+                        }else if (result === 'not subscribed'){
+                            this.setState({user_subscribed: false})
+                        }else if (result === 'telegram not verified'){
+                            this.setState({telegram_verified: false})
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                            // this.NetworkErrorScreenOn(notification_message, () => this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen))
+                            this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen)
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                        // this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen))
+                        this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen)
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
+                        // this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen))
+                        this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen)
+                    }
+                    this.LoadingOff()
+                })
+            }
         }
 
         this.GetSymbolIcons = (symbol) => {
@@ -405,7 +433,7 @@ class Analysis extends Component{
                 let telegram_connected = result.telegram_connected
                 // if connection was a success, reload GetCurrentMarketAnalysis function, set telegram_verified state to true
                 if (telegram_connected == true){
-                    this.GetCurrentMarketAnalysis(this.state.symbol, false)
+                    this.GetCurrentMarketAnalysis(this.state.symbol, false, false, true)
                     this.setState({telegram_verified: true})
                     Notification('Telegram verification successful.', 'success')
                 }else{
@@ -447,6 +475,43 @@ class Analysis extends Component{
                 this.LoadingOff()
             })
         }
+
+        // function to get the user's time and timezone using their device's close
+        this.GetUserTimeByDeviceClock = () => {
+            // get the device's time
+            const now = new Date();
+            const formatted_datetime = now.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',  // Use '2-digit' for numerical month (01, 02, etc.)
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false // Change to false for 24-hour format
+            });
+            // get the device's timezone
+            const device_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            
+            // set time data to state
+            this.setState({user_device_time: formatted_datetime, user_device_timezone: device_timezone})
+        }
+
+        // function to fetch the current date and time based on the user's IP
+        this.GetUserTimeByIpAddress = async () => {
+            try {
+                // fetching data from the WorldTimeAPI
+                const response = await fetch('http://worldtimeapi.org/api/ip');
+                const data = await response.json();
+                
+                // extracting the datetime and timezone info from the response
+                const userDateTime = data.datetime;  // The date and time in ISO 8601 format
+                const userTimezone = data.timezone;  // The user's timezone
+                
+                // set time data to state
+                this.setState({user_time_by_id_address: userDateTime, user_timezone_by_id_address: userTimezone})
+            } catch (error) {
+                console.error('Error fetching time:', error);
+            }
+        }
     }
 
     componentDidMount() {
@@ -455,7 +520,12 @@ class Analysis extends Component{
                 on_mobile: true
             })
         }
-        this.GetCurrentMarketAnalysis(this.state.symbol, false)
+        // get user device's datetime data, and run the function every 3 seconds
+        setInterval(this.GetUserTimeByDeviceClock, 3000);
+        // get user ip address' datetime data, and run the function every 3 seconds
+        setInterval(this.GetUserTimeByIpAddress, 3000);
+        // get market analysis, and run the function every 3 seconds
+        setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
     }
 
     render() {
@@ -549,7 +619,7 @@ class Analysis extends Component{
                             </Col>
                             <Col>
                                 <h5>
-                                    {item.timestamp}
+                                    <DateTimeDisplay datetimeString={item.timestamp} />
                                 </h5>
                             </Col>
                         </Row>
@@ -717,7 +787,14 @@ class Analysis extends Component{
                                         </select>
                                         <br/>
                                     </Col>
-                                    <Col><br/></Col>
+                                    <Col>
+                                        <span style={{fontSize: '13px'}}>
+                                            {this.state.user_device_time} {this.state.user_device_timezone} Timezone 
+                                            (matches your device clock, therefore all timestamps inside dashboard are being displayed in your 
+                                            local time.)
+                                        </span>
+                                        <br/>
+                                    </Col>
                                     <Col sm='2' style={{textAlign: 'right'}}>
                                         {
                                             this.state.symbol == 'ALL'
@@ -748,7 +825,7 @@ class Analysis extends Component{
                                             : <></>
                                         }
                                         <br/>
-                                        <Button onClick={() => {this.GetCurrentMarketAnalysis(this.state.symbol, false); this.setState({end_of_list: false})}} 
+                                        <Button onClick={() => {this.GetCurrentMarketAnalysis(this.state.symbol, false, false, true); this.setState({end_of_list: false})}} 
                                             style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                         >
                                             Load more

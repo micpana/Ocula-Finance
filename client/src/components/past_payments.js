@@ -34,6 +34,7 @@ import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
 import Notification from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
+import DateTimeDisplay from './timezone_conversion'
 import { FaCalendarDay, FaCalendarWeek } from 'react-icons/fa';
 
 class PastPayments extends Component{
@@ -173,7 +174,7 @@ class PastPayments extends Component{
         var past_payments = this.state.past_payments
         var past_payments_map = past_payments.map((item, index) => {
             return <tr style={{borderBottom: '1px solid silver'}}>
-                <td>{item.date}</td>
+                <td><DateTimeDisplay datetimeString={item.date} /></td>
                 <td>{item.purpose}</td>
                 <td>{item.payment_method}</td>
                 <td>$ {item.amount}</td>
