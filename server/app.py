@@ -1227,7 +1227,6 @@ def getMarketAnalysis():
     except: response = make_response('Length of data received data type is invalid'); response.status = 400; return response
     if length_of_data_received < 0: response = make_response('invalid length of data received'); response.status = 400; return response
     # timestamp of the most recent signal received
-    timestamp_of_most_recent_signal_received
     try: timestamp_of_most_recent_signal_received = request.form['timestamp_of_most_recent_signal_received'] 
     except: response = make_response('Timestamp of most recent signal received required'); response.status = 400; return response
     if timestamp_of_most_recent_signal_received == None: response = make_response('Timestamp of most recent signal received cannot be none'); response.status = 400; return response
