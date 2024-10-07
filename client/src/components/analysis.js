@@ -499,7 +499,7 @@ class Analysis extends Component{
         this.GetUserTimeByIpAddress = async () => {
             try {
                 // fetching data from the WorldTimeAPI
-                const response = await fetch('http://worldtimeapi.org/api/ip');
+                const response = await fetch('https://worldtimeapi.org/api/ip');
                 const data = await response.json();
                 
                 // extracting the datetime and timezone info from the response
@@ -524,8 +524,10 @@ class Analysis extends Component{
         setInterval(this.GetUserTimeByDeviceClock, 3000);
         // get user ip address' datetime data, and run the function every 3 seconds
         setInterval(this.GetUserTimeByIpAddress, 3000);
-        // get market analysis, and run the function every 3 seconds
-        setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, true, false), 3000);
+        // initial request for market analysis data
+        this.GetCurrentMarketAnalysis(this.state.symbol, false, true, false)
+        // run the market analysis retrieval function every 3 seconds
+        setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
     }
 
     render() {
