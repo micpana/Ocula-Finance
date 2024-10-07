@@ -787,7 +787,7 @@ class Analysis extends Component{
                                                 })
                                             }
                                         </select>
-                                        <br/>
+                                        <br/><br/>
                                     </Col>
                                     <Col>
                                         <span style={{fontSize: '13px'}}>
@@ -795,20 +795,19 @@ class Analysis extends Component{
                                             (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
                                             local time.)
                                         </span>
-                                        <br/>
+                                        <br/><br/>
                                     </Col>
                                     <Col sm='2' style={{textAlign: 'right'}}>
                                         {
                                             this.state.symbol == 'ALL'
-                                            ? <div></div>
+                                            ? <div><br/></div>
                                             : <div>
                                                 {selected_symbol_icons}
-                                                <br/>
+                                                <br/><br/>
                                             </div>
                                         }
                                     </Col>
                                 </Row>
-                                <br/>
                                 {
                                     market_analysis.length === 0
                                     ? <div>
