@@ -6,6 +6,6 @@ animals = [{'hunts': 'yes', 'name': 'cat'},
            ]
 
 # Find the index where 'hunts' is 'no'
-index = next((i for i, animal in enumerate(animals) if animal['hunts'] == 'no'), None)
+index = next((i for i, animal in enumerate(animals) if animal['hunts'] == 'no' and animal['name'] == 'cow'), None)
 
 print(index)

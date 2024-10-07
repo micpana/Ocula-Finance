@@ -151,13 +151,16 @@ class Analysis extends Component{
                 data.append('symbol', symbol)
                 data.append('length_of_data_received', this.state.market_analysis.length)
                 data.append('get_all', get_all) // bool
-                // timestamp of the most recent trade signal received
+                // timestamp and symbol of the most recent trade signal received
                 if (this.state.market_analysis.length > 0 && symbol == 'ALL'){
                     data.append('timestamp_of_most_recent_signal_received', this.state.market_analysis[0].timestamp)
+                    data.append('symbol_of_most_recent_signal_received', this.state.market_analysis[0].symbol)
                 }else if (this.state.market_analysis.filter(item => item.symbol === symbol).length > 0){
                     data.append('timestamp_of_most_recent_signal_received', this.state.market_analysis.filter(item => item.symbol === symbol)[0].timestamp)
+                    data.append('symbol_of_most_recent_signal_received', symbol)
                 }else{
                     data.append('timestamp_of_most_recent_signal_received', '')
+                    data.append('symbol_of_most_recent_signal_received', '')
                 }
 
                 axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })

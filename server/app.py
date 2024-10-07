@@ -1231,6 +1231,11 @@ def getMarketAnalysis():
     except: response = make_response('Timestamp of most recent signal received required'); response.status = 400; return response
     if timestamp_of_most_recent_signal_received == None: response = make_response('Timestamp of most recent signal received cannot be none'); response.status = 400; return response
     if isinstance(timestamp_of_most_recent_signal_received, str) == False: response = make_response('Timestamp of most recent signal received data type is invalid'); response.status = 400; return response
+    # symbol of the most recent signal received
+    try: symbol_of_most_recent_signal_received = request.form['symbol_of_most_recent_signal_received'] 
+    except: response = make_response('Symbol of most recent signal received required'); response.status = 400; return response
+    if symbol_of_most_recent_signal_received == None: response = make_response('Symbol of most recent signal received cannot be none'); response.status = 400; return response
+    if isinstance(symbol_of_most_recent_signal_received, str) == False: response = make_response('Symbol of most recent signal received data type is invalid'); response.status = 400; return response
     # get all
     try: get_all = request.form['get_all'] 
     except: response = make_response('Get all field required'); response.status = 400; return response
@@ -1297,10 +1302,10 @@ def getMarketAnalysis():
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
             # only return signals client hasn't received yet **********************************************************
-            # if timestamp_of_most_recent_signal_received is not ''
-            if timestamp_of_most_recent_signal_received != '':
+            # if timestamp_of_most_recent_signal_received and symbol_of_most_recent_signal_received are not ''
+            if timestamp_of_most_recent_signal_received != '' and symbol_of_most_recent_signal_received != '':
                 # find the index of the timestamp in market_analysis list, index of first occurance
-                timestamp_index = next((i for i, signal in enumerate(market_analysis) if signal['timestamp'] == timestamp_of_most_recent_signal_received), None)
+                timestamp_index = next((i for i, signal in enumerate(market_analysis) if signal['timestamp'] == timestamp_of_most_recent_signal_received and signal['symbol'] == symbol_of_most_recent_signal_received), None)
                 # if index has been found
                 if timestamp_index != None:
                     # make its the end index
