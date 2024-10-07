@@ -2,16 +2,8 @@ import requests
 import json
 import os
 from collections import deque
-from models import Users
-from database import init_db
 from user_subscription_check import validate_subscription
-from settings import platform_name, send_out_prediction_alerts_via_telegram, user_roles_exempted_from_subscribing
-
-# initialize database connection in this module *******************************************************************************************
-# proceed if prediction alerts are being sent out via telegram
-if send_out_prediction_alerts_via_telegram() == True:
-    init_db()
-# *****************************************************************************************************************************************
+from settings import platform_name, user_roles_exempted_from_subscribing
 
 # get platform name
 platform_brand_name = platform_name()
@@ -95,13 +87,7 @@ def send_user_successful_telegram_connection_message(user_telegram_id, user_firs
 # *******************************************************************************************************************************
 
 # trade signals telegram alerts *************************************************************************************************
-def send_trade_signal_alerts_via_telegram(predictions_string):
-    # get all users with their telegram connected *********************************************************************
-    users_with_their_telegram_connected = Users.objects.filter(telegram_connected = True)
-    users_with_their_telegram_connected = json.loads(users_with_their_telegram_connected.to_json())
-    users_with_their_telegram_connected = deque(users_with_their_telegram_connected) # conversion to deque array for faster looping
-    # *****************************************************************************************************************
-
+def send_trade_signal_alerts_via_telegram(predictions_string, users_with_their_telegram_connected):
     # loop through users who connected their telegram *****************************************************************
     for user in users_with_their_telegram_connected:
         # get user telegram id
