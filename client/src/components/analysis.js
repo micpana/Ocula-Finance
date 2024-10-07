@@ -131,14 +131,14 @@ class Analysis extends Component{
             this.setState({network_error_screen: false, network_error_message: '', retry_function: null})
         }
 
-        this.GetCurrentMarketAnalysis = (symbol, get_all, rerun, show_loading_screen) => {
+        this.GetCurrentMarketAnalysis = (symbol, get_all, rerun_or_initial, show_loading_screen) => {
             // get current minutes from time
             const now = new Date();
             const current_minutes = String(now.getMinutes());
 
-            // if this is a rerun (retry) or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
+            // if this is a rerun_or_initial (retry/first request) or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
             if (
-                rerun == true ||
+                rerun_or_initial == true ||
                 current_minutes == '00' || current_minutes == '15' || current_minutes == '30' || current_minutes == '45'
             ){
                 const { cookies } = this.props;
@@ -525,7 +525,7 @@ class Analysis extends Component{
         // get user ip address' datetime data, and run the function every 3 seconds
         setInterval(this.GetUserTimeByIpAddress, 3000);
         // get market analysis, and run the function every 3 seconds
-        setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
+        setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, true, false), 3000);
     }
 
     render() {
