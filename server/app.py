@@ -1275,7 +1275,7 @@ def getMarketAnalysis():
     market_analysis = json.loads(market_analysis.to_json())
 
     # reverse market_analysis list ... we want the most recent signals to appear first
-    market_analysis = reversed(market_analysis)
+    market_analysis = list(reversed(market_analysis))
 
     # if client did not request all data
     if get_all == False:
