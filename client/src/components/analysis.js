@@ -523,7 +523,7 @@ class Analysis extends Component{
         // get user device's datetime data, and run the function every 3 seconds
         setInterval(this.GetUserTimeByDeviceClock, 3000);
         // get user ip address' datetime data, and run the function every 3 seconds
-        setInterval(this.GetUserTimeByIpAddress, 3000);
+        // setInterval(this.GetUserTimeByIpAddress, 3000);
         // initial request for market analysis data
         this.GetCurrentMarketAnalysis(this.state.symbol, false, true, false)
         // run the market analysis retrieval function every 3 seconds
