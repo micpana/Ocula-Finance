@@ -110,7 +110,7 @@ def send_out_prediction_alerts_via_telegram():
 
 # whether to trim excessive data from other timeframes before feature engineering or not
 def trim_excessive_data_from_other_timeframes_before_feature_engineering():
-    trim = False
+    trim = True
 
     return trim
 

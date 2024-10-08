@@ -138,8 +138,13 @@ class Analysis extends Component{
 
             // if there's a time check bypass or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
             if (
-                bypass_time_check == true ||
-                current_minutes == '00' || current_minutes == '15' || current_minutes == '30' || current_minutes == '45'
+                (bypass_time_check === true) ||
+                (
+                    (current_minutes === '00') ||
+                    (current_minutes === '15') ||
+                    (current_minutes === '30') ||
+                    (current_minutes === '45')
+                )
             ){
                 const { cookies } = this.props;
                 if (show_loading_screen == true){
@@ -528,7 +533,7 @@ class Analysis extends Component{
         // get user ip address' datetime data, and run the function every 3 seconds
         // setInterval(this.GetUserTimeByIpAddress, 3000);
         // initial request for market analysis data
-        this.GetCurrentMarketAnalysis(this.state.symbol, false, true, false)
+        this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true)
         // run the market analysis retrieval function every 3 seconds
         setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
     }

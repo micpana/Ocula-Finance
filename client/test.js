@@ -1,8 +1,10 @@
-function getRoundedMinutes() {
-    const now = new Date();
-    const minutes = String(now.getMinutes());
-    
-    return String(minutes)
-}
+const now = new Date();
+const minutes = String(now.getMinutes());
   
-console.log("Current Rounded Minutes:", getRoundedMinutes());
+console.log("Current Rounded Minutes:", minutes);
+
+if (minutes === '25'){
+    console.log('yes')
+}else{
+    console.log('no')
+}
