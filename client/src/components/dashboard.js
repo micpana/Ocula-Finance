@@ -137,14 +137,14 @@ class Dashboard extends Component{
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        Notification(notification_message, 'error')
+                        // Notification(notification_message, 'error')
                         this.NetworkErrorScreenOn(notification_message, this.CheckAccessTokenValidity)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    Notification(Network_Error_Message, 'error')
+                    // Notification(Network_Error_Message, 'error')
                     this.NetworkErrorScreenOn(Network_Error_Message, this.CheckAccessTokenValidity)
                 }else{ // error occured during request setup ... no network access
-                    Notification(No_Network_Access_Message, 'error')
+                    // Notification(No_Network_Access_Message, 'error')
                     this.NetworkErrorScreenOn(No_Network_Access_Message, this.CheckAccessTokenValidity)
                 }
                 this.LoadingOff()
