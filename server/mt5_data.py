@@ -1,8 +1,9 @@
 import pandas as pd
 import MetaTrader5 as mt5
+from settings import get_mt5_program_path_according_to_symbol_type
 
 # get data ********************************************************************************************************************************
-def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to):
+def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
     print('Fetching', symbol, timeframe, 'data from MT5 ...')
     
     # display data on the MetaTrader 5 package **********************************************************************************
@@ -10,12 +11,20 @@ def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to):
     print("MetaTrader5 package version: ", mt5.__version__)
     # ***************************************************************************************************************************
 
+    # mt5 program path according to symbol type *********************************************************************************
+    mt5_program_path = get_mt5_program_path_according_to_symbol_type(symbol_type)
+    # ***************************************************************************************************************************
+
     # establish connection to MetaTrader 5 terminal *****************************************************************************
     while True:
-        if not mt5.initialize():
-            print("initialize() failed, error code =", mt5.last_error())
+        # if program path is None or '', use the system's default installed mt5 program
+        if mt5_program_path == None or mt5_program_path == '':
+            if not mt5.initialize(): print("initialize() failed, error code =", mt5.last_error())
+            else: break
+        # if a program path was supplied
         else:
-            break
+            if not mt5.initialize(mt5_program_path): print("initialize() failed, error code =", mt5.last_error())
+            else: break
     # ***************************************************************************************************************************
 
     # get data for each stated timeframe ****************************************************************************************

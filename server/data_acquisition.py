@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 import pytz
 from settings import system_timezone
+from symbol_config import get_symbol_config
 
 def acquire_data(symbol, timeframes, call_module): # call module = training / prediction
     # initialize ohlc data dict
@@ -12,9 +13,16 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     # get data collection days according to call module
     data_collection_days = get_data_collection_days_by_intended_purpose(call_module)
 
-    # get data source according to call module
-    if call_module == 'training':  data_source = training_data_source()
-    elif call_module == 'prediction': data_source = prediction_data_source()
+    # get data source according to call module ... csv / yahoo / mt5
+    if call_module == 'training':  data_source = training_data_source(); yahoo_override_synthetic_source = 'csv'
+    elif call_module == 'prediction': data_source = prediction_data_source(); yahoo_override_synthetic_source = 'mt5'
+
+    # get the symbol's symbol type ... Forex Pair / Crypto Pair / Synthetic Index
+    symbol_type = get_symbol_config(symbol)['type']
+
+    # if symbol type = Synthetic Index and the data source is yahoo, override it to csv (for training) and mt5 (for prediction)
+    if symbol_type == 'Synthetic Index' and data_source == 'yahoo':
+        data_source = yahoo_override_synthetic_source
 
     # set time zone
     timezone = pytz.timezone(system_timezone())
@@ -37,7 +45,7 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
             ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
         elif data_source == 'mt5': 
             from mt5_data import mt5_fetch_data 
-            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to)
+            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type)
 
     # return ohlc data dict
     return ohlc_data_dict

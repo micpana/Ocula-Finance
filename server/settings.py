@@ -90,17 +90,26 @@ def get_client_load_more_increment():
 
     return client_load_more_increment
 
-# source for training data ... csv / yahoo / mt5
-def training_data_source():
+# source for training data ... csv / yahoo (will be overridden if symbol is a synthetic index) / mt5
+def training_data_source(): # yahoo will be overridden to csv for synthetic indices
     source = 'csv'
 
     return source
 
-# source for prediction data ... csv / yahoo / mt5
-def prediction_data_source():
+# source for prediction data ...  csv / yahoo (will be overidden if symbol is a synthetic index) / mt5
+def prediction_data_source(): # yahoo will be overridden to mt5 for synthetic indices
     source = 'mt5'
 
     return source
+
+# mt5 program path according to symbol type ... a program path of None or '' means use the system's default installed mt5 program
+def get_mt5_program_path_according_to_symbol_type(symbol_type): # Forex Pair / Crypto Pair / Synthetic Index
+    if symbol_type == 'Forex Pair' or symbol_type == 'Crypto Pair': 
+        path = None
+    elif symbol_type == 'Synthetic Index':
+        path = ''
+
+    return path
 
 # whether to send out prediction alerts via telegram or not
 def send_out_prediction_alerts_via_telegram():
