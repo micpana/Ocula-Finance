@@ -80,7 +80,9 @@ class Analysis extends Component{
             user_device_time: null, 
             user_device_timezone: null,
             user_time_by_id_address: null, 
-            user_timezone_by_id_address: null
+            user_timezone_by_id_address: null,
+            notification_permission_granted: false,
+            initial_request: true
         };
 
         this.HandleChange = (e) => {
@@ -175,8 +177,18 @@ class Analysis extends Component{
                         // set market analysis to state
                         this.setState({market_analysis: result})
                     }else{
-                        // append market analysis to state
-                        this.setState({market_analysis: this.state.market_analysis.concat(result)})
+                        // append market analysis to state ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
+                        this.setState({market_analysis: result.concat(this.state.market_analysis)})
+
+                        // trade signal(s) browser notification ... only if this is not the initial request
+                        if (this.state.initial_request === false){
+                            this.ShowTradeSignalsNotification(result)
+                        }
+
+                        // set initial request to false ... only if its current set to true
+                        if (this.state.initial_request === true){
+                            this.setState({initial_request: false})
+                        }
                     }
                     this.LoadingOff()
                 }).catch((error) => {
@@ -520,6 +532,33 @@ class Analysis extends Component{
                 console.error('Error fetching time:', error);
             }
         }
+
+        // check if the user has granted us permission to show notifications
+        this.CheckIfNotificationPermissionsAreGranted = () => {
+            if (Notification.permission === "granted"){ // default (user has not been asked yet), granted, denied
+                this.setState({notification_permission_granted: true})
+            }else{
+                this.setState({notification_permission_granted: false})
+            }
+        }
+
+        // request permission to show notifications
+        this.RequestNotificationPermission = () => {
+            Notification.requestPermission().then((result) => {
+                if (result === 'granted'){ // granted, denied, default (user decision is unknown)
+                    this.setState({notification_permission_granted: true})
+                }
+            });              
+        }
+
+        this.ShowTradeSignalsNotification = (new_signals) => {
+            if (this.state.notification_permission_granted === true && new_signals.length > 0){
+                const img = '/favicon.png'; // notification icon ... public folder is the root folder and the favicon is located inside it
+                const title = 'New Trading Signals Available | Ocula Finance' // notification title
+                let text = new_signals.map(item => `${item.action} ${item.symbol}`).join(', '); // notification body
+                const notification = new Notification(title, {body: text, icon: img});
+            }
+        }
     }
 
     componentDidMount() {
@@ -532,10 +571,12 @@ class Analysis extends Component{
         setInterval(this.GetUserTimeByDeviceClock, 3000);
         // get user ip address' datetime data, and run the function every 3 seconds
         // setInterval(this.GetUserTimeByIpAddress, 3000);
+        // check if the user has granted us permission to show notifications
+        this.CheckIfNotificationPermissionsAreGranted()
         // initial request for market analysis data
         this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true)
         // run the market analysis retrieval function every 3 seconds
-        setInterval(this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
+        setInterval(() => this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
     }
 
     render() {
@@ -816,6 +857,19 @@ class Analysis extends Component{
                                         }
                                     </Col>
                                 </Row>
+                                {
+                                    this.state.notification_permission_granted === false
+                                    ? <div style={{fontSize: '13px', textAlign: 'justify'}}>
+                                        If you wish to turn on browser notifications for our AI's trade signal alerts,  
+                                        <span onClick={this.RequestNotificationPermission}
+                                            style={{fontWeight: 'bold', cursor: 'pointer'}}
+                                        >
+                                            click here
+                                        </span>.
+                                        <br/>
+                                    </div>
+                                    : <></>
+                                }
                                 {
                                     market_analysis.length === 0
                                     ? <div>

@@ -124,11 +124,15 @@ class Signin extends Component{
                 .then((res) => {
                     let result = res.data
                     var user_access_token = result
+                    // cookie expiry date construction, should expire in 90 days
+                    const in90Days = new Date();
+                    in90Days.setDate(in90Days.getDate() + 90);
                     // set user access token to cookies
                     const { cookies } = this.props;
                     cookies.set(Access_Token_Cookie_Name, user_access_token, { 
                         path: '/',
-                        // sameSite: true,
+                        expires: in90Days,
+                        sameSite: 'strict',
                         // httpOnly: true
                     })
                     // redirect to user dashboard
