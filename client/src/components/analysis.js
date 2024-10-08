@@ -860,11 +860,11 @@ class Analysis extends Component{
                                 {
                                     this.state.notification_permission_granted === false
                                     ? <div style={{fontSize: '13px', textAlign: 'justify'}}>
-                                        If you wish to turn on browser notifications for our AI's trade signal alerts,  
+                                        If you wish to turn on browser notifications for our AI's trade signal alerts,
                                         <span onClick={this.RequestNotificationPermission}
                                             style={{fontWeight: 'bold', cursor: 'pointer'}}
                                         >
-                                            click here
+                                            {' '}click here
                                         </span>.
                                         <br/><br/>
                                     </div>
