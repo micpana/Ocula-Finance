@@ -535,7 +535,7 @@ class Analysis extends Component{
 
         // check if the user has granted us permission to show notifications
         this.CheckIfNotificationPermissionsAreGranted = () => {
-            if (Notification.permission === "granted"){ // default (user has not been asked yet), granted, denied
+            if (Notification?.permission === "granted"){ // default (user has not been asked yet), granted, denied
                 this.setState({notification_permission_granted: true})
             }else{
                 this.setState({notification_permission_granted: false})
@@ -544,7 +544,7 @@ class Analysis extends Component{
 
         // request permission to show notifications
         this.RequestNotificationPermission = () => {
-            Notification.requestPermission().then((result) => {
+            Notification.requestPermission((result) => {
                 if (result === 'granted'){ // granted, denied, default (user decision is unknown)
                     this.setState({notification_permission_granted: true})
                 }
@@ -556,7 +556,7 @@ class Analysis extends Component{
                 const img = '/favicon.png'; // notification icon ... public folder is the root folder and the favicon is located inside it
                 const title = 'New Trading Signals Available | Ocula Finance' // notification title
                 let text = new_signals.map(item => `${item.action} ${item.symbol}`).join(', '); // notification body
-                const notification = new Notification(title, {body: text, icon: img});
+                const notification = new Notification(title, {body: text, icon: img, tag: 'new_signals_alert'});
             }
         }
     }
@@ -836,7 +836,7 @@ class Analysis extends Component{
                                                 })
                                             }
                                         </select>
-                                        <br/>
+                                        <br/><br/>
                                     </Col>
                                     <Col>
                                         <span style={{fontSize: '13px'}}>
@@ -844,7 +844,7 @@ class Analysis extends Component{
                                             (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
                                             local time.)
                                         </span>
-                                        <br/>
+                                        <br/><br/>
                                     </Col>
                                     <Col sm='2' style={{textAlign: 'right'}}>
                                         {
@@ -852,7 +852,7 @@ class Analysis extends Component{
                                             ? <div><br/></div>
                                             : <div>
                                                 {selected_symbol_icons}
-                                                <br/>
+                                                <br/><br/>
                                             </div>
                                         }
                                     </Col>
@@ -868,7 +868,7 @@ class Analysis extends Component{
                                         </span>.
                                         <br/><br/>
                                     </div>
-                                    : <><br/></>
+                                    : <></>
                                 }
                                 {
                                     market_analysis.length === 0
