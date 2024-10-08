@@ -836,7 +836,7 @@ class Analysis extends Component{
                                                 })
                                             }
                                         </select>
-                                        <br/><br/>
+                                        <br/>
                                     </Col>
                                     <Col>
                                         <span style={{fontSize: '13px'}}>
@@ -844,7 +844,7 @@ class Analysis extends Component{
                                             (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
                                             local time.)
                                         </span>
-                                        <br/><br/>
+                                        <br/>
                                     </Col>
                                     <Col sm='2' style={{textAlign: 'right'}}>
                                         {
@@ -852,7 +852,7 @@ class Analysis extends Component{
                                             ? <div><br/></div>
                                             : <div>
                                                 {selected_symbol_icons}
-                                                <br/><br/>
+                                                <br/>
                                             </div>
                                         }
                                     </Col>
@@ -866,9 +866,9 @@ class Analysis extends Component{
                                         >
                                             click here
                                         </span>.
-                                        <br/>
+                                        <br/><br/>
                                     </div>
-                                    : <></>
+                                    : <><br/></>
                                 }
                                 {
                                     market_analysis.length === 0
