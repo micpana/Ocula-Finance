@@ -31,7 +31,7 @@ import axios from 'axios';
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
-import Notification from './notification_alert';
+import NotificationAlert from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
 import { Symbols } from './lists'
 import USD from '../images/usd_flag.png'
@@ -212,7 +212,7 @@ class Analysis extends Component{
                             this.setState({end_of_list: true})
                         }else if(result === 'invalid length of data received'){
                             notification_message = 'Invalid length of data received'
-                            Notification(notification_message, 'error')
+                            NotificationAlert(notification_message, 'error')
                             this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
                         }else if (result === 'not subscribed'){
                             this.setState({user_subscribed: false})
@@ -220,16 +220,16 @@ class Analysis extends Component{
                             this.setState({telegram_verified: false})
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                            // Notification(notification_message, 'error')
+                            // NotificationAlert(notification_message, 'error')
                             // this.NetworkErrorScreenOn(notification_message, () => this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen))
                             this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen)
                         }
                     }else if (error.request){ // request was made but no response was received ... network error
-                        // Notification(Network_Error_Message, 'error')
+                        // NotificationAlert(Network_Error_Message, 'error')
                         // this.NetworkErrorScreenOn(Network_Error_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen))
                         this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen)
                     }else{ // error occured during request setup ... no network access
-                        // Notification(No_Network_Access_Message, 'error')
+                        // NotificationAlert(No_Network_Access_Message, 'error')
                         // this.NetworkErrorScreenOn(No_Network_Access_Message, () => this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen))
                         this.GetCurrentMarketAnalysis(symbol, get_all, true, show_loading_screen)
                     }
@@ -427,14 +427,14 @@ class Analysis extends Component{
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        Notification(notification_message, 'error')
+                        NotificationAlert(notification_message, 'error')
                         this.NetworkErrorScreenOn(notification_message, this.GetTelegramConnectCode)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    Notification(Network_Error_Message, 'error')
+                    NotificationAlert(Network_Error_Message, 'error')
                     this.NetworkErrorScreenOn(Network_Error_Message, this.GetTelegramConnectCode)
                 }else{ // error occured during request setup ... no network access
-                    Notification(No_Network_Access_Message, 'error')
+                    NotificationAlert(No_Network_Access_Message, 'error')
                     this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetTelegramConnectCode)
                 }
                 this.LoadingOff()
@@ -455,10 +455,10 @@ class Analysis extends Component{
                 if (telegram_connected == true){
                     this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true)
                     this.setState({telegram_verified: true})
-                    Notification('Telegram verification successful.', 'success')
+                    NotificationAlert('Telegram verification successful.', 'success')
                 }else{
                     // if connection was not a success, notify the user
-                    Notification('The Telegram connection could not be verified. Please verify that you sent the correct code to our bot and try again.', 'error')
+                    NotificationAlert('The Telegram connection could not be verified. Please verify that you sent the correct code to our bot and try again.', 'error')
                 }
                 this.LoadingOff()
             }).catch((error) => {
@@ -479,17 +479,17 @@ class Analysis extends Component{
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
                     }else if(result === 'telegram id has already been used on another account'){
-                        Notification('The Telegram account you used has already been linked to another account on this platform.', 'error')
+                        NotificationAlert('The Telegram account you used has already been linked to another account on this platform.', 'error')
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
-                        Notification(notification_message, 'error')
+                        NotificationAlert(notification_message, 'error')
                         this.NetworkErrorScreenOn(notification_message, this.VerifyTelegramConnection)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
-                    Notification(Network_Error_Message, 'error')
+                    NotificationAlert(Network_Error_Message, 'error')
                     this.NetworkErrorScreenOn(Network_Error_Message, this.VerifyTelegramConnection)
                 }else{ // error occured during request setup ... no network access
-                    Notification(No_Network_Access_Message, 'error')
+                    NotificationAlert(No_Network_Access_Message, 'error')
                     this.NetworkErrorScreenOn(No_Network_Access_Message, this.VerifyTelegramConnection)
                 }
                 this.LoadingOff()
@@ -535,7 +535,7 @@ class Analysis extends Component{
 
         // check if the user has granted us permission to show notifications
         this.CheckIfNotificationPermissionsAreGranted = () => {
-            if (Notification?.permission === "granted"){ // default (user has not been asked yet), granted, denied
+            if (Notification.permission === "granted"){ // default (user has not been asked yet), granted, denied
                 this.setState({notification_permission_granted: true})
             }else{
                 this.setState({notification_permission_granted: false})
