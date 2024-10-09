@@ -104,10 +104,11 @@ def prediction_data_source(): # yahoo will be overridden to mt5 for synthetic in
 
 # mt5 program path according to symbol type ... a program path of None or '' means use the system's default installed mt5 program
 def get_mt5_program_path_according_to_symbol_type(symbol_type): # Forex Pair / Crypto Pair / Synthetic Index
+    # eg "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
     if symbol_type == 'Forex Pair' or symbol_type == 'Crypto Pair': 
         path = None
     elif symbol_type == 'Synthetic Index':
-        path = ''
+        path = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
 
     return path
 
