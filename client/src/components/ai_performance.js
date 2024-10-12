@@ -47,6 +47,7 @@ import BTC from '../images/bitcoin.png'
 import ETH from '../images/ethereum.png'
 import LTC from '../images/lite_coin.png'
 import XRP from '../images/xrp.png'
+import Deriv from '../images/deriv.png'
 import { Model_Cards } from './model_cards'
 import ModelCardRender from './model_card_render'
 
@@ -137,14 +138,25 @@ class AIPerformance extends Component{
             if(symbol === 'LTCUSD'){ base = LTC; quote = USD }
             if(symbol === 'XRPUSD'){ base = XRP; quote = USD }
 
-            return <Row style={{margin: '0px'}}>
-                <Col xs='6'>
-                    <img src={base} style={{width: '30px', height: '30px'}} />
-                </Col>
-                <Col xs='6'>
-                    <img src={quote} style={{width: '30px', height: '30px'}} />
-                </Col>
-            </Row>
+            if (base === '' && quote === ''){ // for synthetic indices
+                return <Row style={{margin: '0px'}}>
+                    <Col xs='6'>
+                        
+                    </Col>
+                    <Col xs='6'>
+                        <img src={Deriv} style={{width: '30px', height: '30px'}} />
+                    </Col>
+                </Row>
+            }else{ // for forex and crypto pairs
+                return <Row style={{margin: '0px'}}>
+                    <Col xs='6'>
+                        <img src={base} style={{width: '30px', height: '30px'}} />
+                    </Col>
+                    <Col xs='6'>
+                        <img src={quote} style={{width: '30px', height: '30px'}} />
+                    </Col>
+                </Row>
+            }
         }
     }
 
