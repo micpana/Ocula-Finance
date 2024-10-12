@@ -50,15 +50,15 @@ symbols_and_their_config = {
         'forecast_period': default_forecast_period
     },
     # ***************************************************************************************************************************
-    # Crypto Pairs (to be added) ************************************************************************************************
+    # Crypto Pairs **************************************************************************************************************
     # ***************************************************************************************************************************
-    # Synthentic Indices (disabled for now) *************************************************************************************
-    # 'Volatility 75 (1s) Index': {
-    #     'type': 'Synthetic Index',
-    #     'target': 1.9, # 1.8 did extremely well, 1.9 did much better
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period
-    # },
+    # Synthentic Indices ********************************************************************************************************
+    'Volatility 75 (1s) Index': {
+        'type': 'Synthetic Index',
+        'target': 1.9, # 1.8 did extremely well, 1.9 did much better
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period
+    },
     # ***************************************************************************************************************************
 }
 

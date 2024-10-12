@@ -112,6 +112,12 @@ def get_mt5_program_path_according_to_symbol_type(symbol_type): # Forex Pair / C
 
     return path
 
+# y features type ... buy or sell / minimum maximum
+def y_features_type():
+    y_type = 'buy or sell'
+
+    return y_type
+
 # whether to send out prediction alerts via telegram or not
 def send_out_prediction_alerts_via_telegram():
     send = True

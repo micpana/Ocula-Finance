@@ -2,7 +2,7 @@
 
 // symbols
 export const Symbols = [
-    'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR'
+    'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR', 'Volatility 75 (1s) Index'
 ]
 
 // user roles
