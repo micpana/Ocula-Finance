@@ -17,9 +17,16 @@ const ModelCardRender = ({ symbol }) => {
     // model card render
     return (
         <div>
-            <h5>
-                {symbol} AI Model's Performance Card <SymbolIconsRender symbol={symbol} />
-            </h5>
+            <Row style={{margin: '0px'}}>
+                <Col style={{textAlign: 'left'}}>
+                    <h5>
+                        {symbol} AI Model's Performance Card
+                    </h5>
+                </Col>
+                <Col sm='3' style={{textAlign: 'right'}}>
+                    <SymbolIconsRender symbol={symbol} />
+                </Col>
+            </Row>
             <div style={{width: '100%', borderBottom: '1px solid #F9C961'}}></div>
             <br/>
             <p style={{fontSize: '13px', textAlign: 'left'}}>
