@@ -1,4 +1,4 @@
-export const Facebook = 'https://facebook.com/OculaFinance'
+export const Facebook = 'https://facebook.com/OculaFinanceAI'
 export const X = 'https://x.com/OculaFinance'
 export const Instagram = 'https://instagram.com/OculaFinance_'
 export const LinkedIn = 'https://www.linkedin.com/company/oculafinance'
