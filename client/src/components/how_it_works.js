@@ -27,6 +27,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
+import { Maximum_Holding_Time } from './maximum_holding_time'
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
@@ -134,8 +135,8 @@ class HowItWorks extends Component{
                             <p style={{textAlign: 'justify'}}>
                                 Welcome to {Platform_Name} - the Advanced SAAS platform that revolutionizes the way you approach 
                                 financial markets, primarily forex. Powered by cutting-edge AI, our platform provides you with high quality 
-                                trades that have a maximum recommended holding time of 3.5 hours, addable to any trading arsenal you may already 
-                                have. Here's how our system works:
+                                trades that have a maximum recommended holding time of {Maximum_Holding_Time}, addable to any trading arsenal 
+                                you may already have. Here's how our system works:
                             </p>
                             <br/><br/>
                             <Row style={{margin: '0px'}}>

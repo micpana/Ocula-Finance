@@ -27,6 +27,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
+import { Maximum_Holding_Time } from './maximum_holding_time'
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
@@ -170,7 +171,7 @@ class Home extends Component{
                                     </h6>
                                     <br/><br/>
                                     <p style={{textAlign: "justify"}}>
-                                        {Platform_Name} is designed to deliver data-driven trade entries with a maximum holding time of 3.5 hours. 
+                                        {Platform_Name} is designed to deliver data-driven trade entries with a maximum holding time of {Maximum_Holding_Time}. 
                                         Every trade comes with recommended takeprofit and stoploss percentages, sticking to a minimum risk-to-reward 
                                         ratio of 1:2. Although it may not catch every market move, every trade our revolutionary AI gives 
                                         comes after a careful examination of market dynamics, ensuring that you only get high probability trades.

@@ -27,6 +27,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Platform_Name } from '../platform_name';
 import { Backend_Server_Address } from '../backend_server_url';
 import { Access_Token_Cookie_Name } from '../access_token_cookie_name';
+import { Maximum_Holding_Time } from './maximum_holding_time'
 import { Unknown_Non_2xx_Message, Network_Error_Message, No_Network_Access_Message } from '../network_error_messages';
 import LoadingScreen from './loading_screen';
 import InputErrors from './input_errors';
@@ -130,8 +131,8 @@ class Pricing extends Component{
                                 Welcome to the {Platform_Name} pricing page. Our advanced AI-powered platform provides high quality trade entries 
                                 at cost-effective rates, empowering traders to enhance their trading strategies with decisive data. Analyzing 
                                 mostly forex markets, our system provides trades accompanied by their stoploss and takeprofit percentages, with 
-                                a maximum recommended holding time of 3.5 hours. Our AI uses reliable risk-to-reward ratios, sticking to a minimum 
-                                of 1:2, ensuring that you remain profitable in the longrun.
+                                a maximum recommended holding time of {Maximum_Holding_Time}. Our AI uses reliable risk-to-reward ratios, 
+                                sticking to a minimum of 1:2, ensuring that you remain profitable in the longrun.
                             </p>
                             <br/><br/><br/>
                             <Row style={{margin: '0px'}}>
