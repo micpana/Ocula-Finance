@@ -8,6 +8,7 @@ import {
     Button, Row, Col, Form, Container, Label
 } from "reactstrap";
 import { Model_Cards } from './model_cards'
+import SymbolIconsRender from './symbol_icons_render';
 
 const ModelCardRender = ({ symbol }) => {
     // symbol's model card
@@ -17,7 +18,7 @@ const ModelCardRender = ({ symbol }) => {
     return (
         <div>
             <h5>
-                {symbol} AI Model's Performance Card
+                {symbol} AI Model's Performance Card <SymbolIconsRender symbol={symbol} />
             </h5>
             <div style={{width: '100%', borderBottom: '1px solid #F9C961'}}></div>
             <br/>
