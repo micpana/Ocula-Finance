@@ -170,7 +170,7 @@ class Home extends Component{
                                     </h6>
                                     <br/><br/>
                                     <p style={{textAlign: "justify"}}>
-                                        {Platform_Name} is designed to deliver data-driven trade entries with a maximum holding time of 2 Hours. 
+                                        {Platform_Name} is designed to deliver data-driven trade entries with a maximum holding time of 3.5 hours. 
                                         Every trade comes with recommended takeprofit and stoploss percentages, sticking to a minimum risk-to-reward 
                                         ratio of 1:2. Although it may not catch every market move, every trade our revolutionary AI gives 
                                         comes after a careful examination of market dynamics, ensuring that you only get high probability trades.

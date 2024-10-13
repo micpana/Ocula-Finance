@@ -21,7 +21,7 @@ symbols_and_their_config = {
     }, 
     'USDJPY': {
         'type': 'Forex Pair',
-        'target': 0.50,
+        'target': 0.55, # 0.5 was the initial one but its taking less trades and has a 79.24% accuracy, 0.35 gave 20% overall winrate, 0.45 did 77% and had less trades too
         'risk_target_divisor': default_risk_target_divisor,
         'forecast_period': default_forecast_period
     }, 

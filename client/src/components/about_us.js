@@ -148,8 +148,8 @@ class AboutUs extends Component{
                                 </Col>
                                 <Col>
                                     <p style={{textAlign: 'justify'}}>
-                                        Our SAAS platform employs sophisticated AI models to provide high probability trading signals. Every 15 
-                                        minutes, our AI analyses the current market dynamics in search of good trading opportunities, and alerts 
+                                        Our SAAS platform employs sophisticated AI models to provide high probability trading signals. Our AI continuously 
+                                        analyses the current market dynamics in search of good trading opportunities, and alerts 
                                         our users if it finds any.
                                     </p>
                                     <p style={{textAlign: 'justify'}}>

@@ -130,7 +130,7 @@ class Pricing extends Component{
                                 Welcome to the {Platform_Name} pricing page. Our advanced AI-powered platform provides high quality trade entries 
                                 at cost-effective rates, empowering traders to enhance their trading strategies with decisive data. Analyzing 
                                 mostly forex markets, our system provides trades accompanied by their stoploss and takeprofit percentages, with 
-                                a maximum recommended holding time of 2 hours. Our AI uses reliable risk-to-reward ratios, sticking to a minimum 
+                                a maximum recommended holding time of 3.5 hours. Our AI uses reliable risk-to-reward ratios, sticking to a minimum 
                                 of 1:2, ensuring that you remain profitable in the longrun.
                             </p>
                             <br/><br/><br/>

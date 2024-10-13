@@ -134,7 +134,7 @@ class HowItWorks extends Component{
                             <p style={{textAlign: 'justify'}}>
                                 Welcome to {Platform_Name} - the Advanced SAAS platform that revolutionizes the way you approach 
                                 financial markets, primarily forex. Powered by cutting-edge AI, our platform provides you with high quality 
-                                trades that have a maximum recommended holding time of 2 hours, addable to any trading arsenal you may already 
+                                trades that have a maximum recommended holding time of 3.5 hours, addable to any trading arsenal you may already 
                                 have. Here's how our system works:
                             </p>
                             <br/><br/>
