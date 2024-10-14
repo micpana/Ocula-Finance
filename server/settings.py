@@ -59,14 +59,14 @@ def get_number_of_free_trial_days():
 # list of user roles
 def get_user_roles():
     user_roles = [
-        'user', 'admin'
+        'user', 'admin', 'free user'
     ]
 
     return user_roles
 
 # list of user roles exempted from subscribing
 def user_roles_exempted_from_subscribing():
-    roles = ['admin']
+    roles = ['admin', 'free user']
 
     return roles
 
@@ -171,7 +171,7 @@ def get_data_collection_days_by_intended_purpose(purpose):
     if purpose == 'training':
         days =  1020 # if available ... if more is available, take all ... else take whats available if reasonable
     elif purpose == 'prediction':
-        days = 200
+        days = 150
 
     return days
 

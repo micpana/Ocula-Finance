@@ -91,7 +91,7 @@ def save_login_trials(account_id, email, username, firstname, lastname, device, 
     return 'ok'
 
 # function for checking a user access token's validity
-def check_user_access_token_validity(request_data, expected_user_role):
+def check_user_access_token_validity(request_data, expected_user_roles):
     try:
         # get user access token
         user_access_token = request_data.headers.get('Access-Token')
@@ -128,7 +128,7 @@ def check_user_access_token_validity(request_data, expected_user_role):
         elif current_datetime > token_details.expiry_date:
             access_token_status = 'access token expired'
         # check if user account's role matches expected user role
-        elif user_role not in expected_user_role.split('/'): 
+        elif user_role not in expected_user_roles.split('/'): 
             access_token_status = 'not authorized to access this'
         # check if user has not been banned
         elif user_banned == True:
@@ -731,7 +731,7 @@ def correctRegistrationEmail():
 @app.route('/getTelegramConnectCode', methods=['POST'])
 def getTelegramConnectCode():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # initialize response object
@@ -769,7 +769,7 @@ def getTelegramConnectCode():
 @app.route('/verifyTelegramConnection', methods=['POST'])
 def verifyTelegramConnection():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
@@ -931,7 +931,7 @@ def setNewPassword():
 @app.route('/getUserDetailsByAccessToken', methods=['POST'])
 def getUserDetailsByAccessToken():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
@@ -955,7 +955,7 @@ def getUserDetailsByAccessToken():
 @app.route('/signout', methods=['POST'])
 def signout():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # disable used access token
@@ -969,7 +969,7 @@ def signout():
 @app.route('/editProfile', methods=['POST'])
 def editProfile():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
     # input field validation ********************
@@ -1112,7 +1112,7 @@ def editProfile():
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1210,7 +1210,7 @@ def getUserPaymentHistory():
 @app.route('/getMarketAnalysis', methods=['POST'])
 def getMarketAnalysis():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1314,11 +1314,11 @@ def getMarketAnalysis():
                     if start_index < 0: start_index = 0
                 # if index has not been found, use default indexing for data fetch
                 else:
-                    start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+                    start_index = 0; end_index = start_index + client_load_more_increment
             # if timestamp_of_most_recent_signal_received is ''
             else:
                 # use default indexing for data fetch
-                start_index = length_of_data_received; end_index = start_index + client_load_more_increment
+                start_index = 0; end_index = start_index + client_load_more_increment
             
             # perform data fetch by supplied indexes
             market_analysis = market_analysis[start_index:end_index]
@@ -1338,7 +1338,7 @@ def getMarketAnalysis():
 @app.route('/getAllUsers', methods=['POST'])
 def getAllUsers():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
     
     # input field validation ********************
@@ -1403,7 +1403,7 @@ def getAllUsers():
 @app.route('/getUserCountryRanking', methods=['POST'])
 def getUserCountryRanking():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get user list
@@ -1423,7 +1423,7 @@ def getUserCountryRanking():
 @app.route('/getNewUserRegistrationStatistics', methods=['POST'])
 def getNewUserRegistrationStatistics():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1487,7 +1487,7 @@ def getNewUserRegistrationStatistics():
 @app.route('/getNewSubscribedUserCountStatistics', methods=['POST'])
 def getNewSubscribedUserCountStatistics():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1551,7 +1551,7 @@ def getNewSubscribedUserCountStatistics():
 @app.route('/getUserPaymentHistoryByAccountId', methods=['POST'])
 def getUserPaymentHistoryByAccountId():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1614,7 +1614,7 @@ def getUserPaymentHistoryByAccountId():
 @app.route('/searchForUser', methods=['POST'])
 def searchForUser():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1694,7 +1694,7 @@ def searchForUser():
 @app.route('/getUserCountStatistics', methods=['POST'])
 def getUserCountStatistics():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1758,7 +1758,7 @@ def getUserCountStatistics():
 @app.route('/getUserSubscriptionStatistics', methods=['POST'])
 def getUserSubscriptionStatistics():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1823,7 +1823,7 @@ def getUserSubscriptionStatistics():
 @app.route('/getUserMetrics', methods=['POST'])
 def getUserMetrics():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # get current datetime
@@ -1856,7 +1856,7 @@ def getUserMetrics():
 @app.route('/banUser', methods=['POST'])
 def banUser():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1909,7 +1909,7 @@ def banUser():
 @app.route('/unbanUser', methods=['POST'])
 def unbanUser():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -1956,7 +1956,7 @@ def unbanUser():
 @app.route('/changeUserRole', methods=['POST'])
 def changeUserRole():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -2008,7 +2008,7 @@ def changeUserRole():
 @app.route('/manuallyEnterUserPayment', methods=['POST'])
 def manuallyEnterUserPayment():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -2138,7 +2138,7 @@ def manuallyEnterUserPayment():
 @app.route('/getEarningsReport', methods=['POST'])
 def getEarningsReport():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************
@@ -2239,7 +2239,7 @@ def getEarningsReport():
 @app.route('/getPaymentsList', methods=['POST'])
 def getPaymentsList():
     # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user role
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'admin') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
     # input field validation ********************

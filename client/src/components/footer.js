@@ -51,7 +51,9 @@ class Footer extends Component{
                             <br/><br/>
                             <FaWhatsapp /> <a href="https://wa.me/+263784111412" style={{color: 'inherit'}}>+263 784 111 412</a>
                             <br/><br/>
-                            <FaPhoneAlt /> <a href="tel:+263784111412" style={{color: 'inherit'}}>+263 784 111 412</a>
+                            <FaTelegram /> <a href={Telegram} style={{color: 'inherit'}}>+263 784 111 412</a>
+                            {/* <br/><br/>
+                            <FaPhoneAlt /> <a href="tel:+263784111412" style={{color: 'inherit'}}>+263 784 111 412</a> */}
                         </Col>
                         <Col sm='3'>
                             <br/><br/>
@@ -107,10 +109,6 @@ class Footer extends Component{
                             <br/><br/>
                             <FaLinkedin /> <a href={LinkedIn} target='_blank' style={{color: 'inherit'}}>
                                 LinkedIn
-                            </a>
-                            <br/><br/>
-                            <FaTelegram /> <a href={Telegram} target='_blank' style={{color: 'inherit'}}>
-                                Telegram
                             </a>
                         </Col>
                         <Col sm=''>

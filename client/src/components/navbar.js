@@ -269,8 +269,12 @@ class NavBar extends Component{
                                             <span style={{fontSize: '10px', color: '#005fc9', fontWeight: 'bold'}}>{user_details.firstname} {user_details.lastname}</span>
                                             <br/>
                                             {
-                                                user_details.subscribed === true
+                                                user_details.role === 'admin'
+                                                ? <span style={{fontWeight: 'bold', fontSize: '10px'}}>Admin Access</span>
+                                                : user_details.subscribed === true
                                                 ? <span style={{fontWeight: 'bold', fontSize: '10px'}}>Subscribed</span>
+                                                : user_details.role === 'free user'
+                                                ? <span style={{fontWeight: 'bold', fontSize: '10px'}}>Free Access</span>
                                                 : <span style={{fontWeight: 'bold', fontSize: '10px'}}>Not subscribed</span>
                                             }
                                         </DropdownToggle>

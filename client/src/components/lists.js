@@ -6,7 +6,7 @@ export const Symbols = [
 ]
 
 // user roles
-export const User_Roles = ['user', 'admin']
+export const User_Roles = ['user', 'admin', 'free user']
 
 // payment purposes
 export const Payment_Purposes = ['subscription']

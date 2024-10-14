@@ -231,16 +231,28 @@ class ContactUs extends Component{
                                     </Row>
                                     <Row style={{margin: '0px', textAlign: 'left'}}>
                                         <Col sm='6'>
-                                            <span style={{fontWeight: 'bold'}}>Calls:</span>
+                                            <span style={{fontWeight: 'bold'}}>Telegram:</span>
                                             <br/>
                                         </Col>
                                         <Col>
-                                            <a href="tel:" style={{color: 'inherit'}}>
+                                            <a href={Telegram} style={{color: 'inherit'}}>
                                                 +263 784 111 412
                                             </a>
                                             <br/><br/>
                                         </Col>
                                     </Row>
+                                    {/* <Row style={{margin: '0px', textAlign: 'left'}}>
+                                        <Col sm='6'>
+                                            <span style={{fontWeight: 'bold'}}>Calls:</span>
+                                            <br/>
+                                        </Col>
+                                        <Col>
+                                            <a href="tel:+263784111412" style={{color: 'inherit'}}>
+                                                +263 784 111 412
+                                            </a>
+                                            <br/><br/>
+                                        </Col>
+                                    </Row> */}
                                     <br/>
                                     <Row style={{margin: '0px'}}>
                                         <Col xs=''>
@@ -261,11 +273,6 @@ class ContactUs extends Component{
                                         <Col xs=''>
                                             <a href={LinkedIn} target='_blank' style={{color: 'inherit'}}>
                                                 <FaLinkedin /> 
-                                            </a>
-                                        </Col>
-                                        <Col xs=''>
-                                            <a href={Telegram} target='_blank' style={{color: 'inherit'}}>
-                                                <FaTelegram /> 
                                             </a>
                                         </Col>
                                     </Row>

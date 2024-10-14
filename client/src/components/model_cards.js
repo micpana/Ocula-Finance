@@ -4,6 +4,7 @@ export const Model_Cards = {
     // EURUSD *************************************************************************************
     'EURUSD': {
         "Symbol": "EURUSD",
+        "Symbol Type": "Forex Pair",
         "Starting account balance (example in $)": 100.0,
         "Account balance after trades ($)": 453.8278416351762,
         "Number of trades taken": 211,

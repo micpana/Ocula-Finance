@@ -35,6 +35,15 @@ const ModelCardRender = ({ symbol }) => {
             <br/><br/>
             <Row style={{margin: '0px', textAlign: 'left'}}>
                 <Col style={{fontWeight: 'bold'}}>
+                    Symbol Type:
+                </Col>
+                <Col>
+                    {symbol_model_card["Symbol Type"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
                     Initial account balance:
                 </Col>
                 <Col>
