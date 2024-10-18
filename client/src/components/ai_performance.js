@@ -207,7 +207,7 @@ class AIPerformance extends Component{
                             <p style={{textAlign: 'justify'}}>
                                 Each instrument our AI analyses has its own seperate AI model, and each model has its own win rate. All our 
                                 AI models have win rates that range above 80%, sticking to a minimum risk-to-reward ratio of 1:2. The performance 
-                                metrics for each of our AI models are listed below. Please note that during these test trades were purely based 
+                                metrics for each of our AI models are listed below. Please note that these test trades were purely based 
                                 on our AI's technical analysis. No news, reports, or outside sentiments were taken into account.
                             </p>
                             <br/><br/>
