@@ -190,7 +190,7 @@ class TermsOfService extends Component{
                             <p>
                                 <span style={{fontWeight: 'bold'}}>2.2</span> <u>User conduct.</u> Market analysis done by our software is 
                                 meant to be received and used by entities registered on {Platform_Name}, via their accounts. 
-                                <span style={{fontWeight: 'bold'}}>Reselling or even redistributing our AI’s analysis to outside entities is 
+                                <span style={{fontWeight: 'bold'}}> Reselling or even redistributing our AI’s analysis to outside entities is 
                                 strictly prohibited and will result in the termination of your account even if it has an active subscription.
                                 </span>
                             </p>

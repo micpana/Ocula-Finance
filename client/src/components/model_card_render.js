@@ -71,6 +71,15 @@ const ModelCardRender = ({ symbol }) => {
             <br/>
             <Row style={{margin: '0px', textAlign: 'left'}}>
                 <Col style={{fontWeight: 'bold'}}>
+                    Maximum holding time for each trade:
+                </Col>
+                <Col>
+                    {symbol_model_card["Maximum holding time for each trade"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
                     Trades won:
                 </Col>
                 <Col>
@@ -84,6 +93,15 @@ const ModelCardRender = ({ symbol }) => {
                 </Col>
                 <Col>
                     {symbol_model_card["Trades lost"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Trades still open on training completion:
+                </Col>
+                <Col>
+                    {symbol_model_card["Trades still open on training completion"]}
                 </Col>
             </Row>
             <br/>
@@ -161,10 +179,55 @@ const ModelCardRender = ({ symbol }) => {
             <br/>
             <Row style={{margin: '0px', textAlign: 'left'}}>
                 <Col style={{fontWeight: 'bold'}}>
+                    Maximum number of consecutive wins occured:
+                </Col>
+                <Col>
+                    {symbol_model_card["Maximum number of consecutive wins occured (n times)"]} time(s)
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
                     Maximum number of consecutive losses:
                 </Col>
                 <Col>
                     {symbol_model_card["Maximum number of consecutive losses"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Maximum number of consecutive losses occured:
+                </Col>
+                <Col>
+                    {symbol_model_card["Maximum number of consecutive losses occured (n times)"]} time(s)
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Maximum waiting time without a trade:
+                </Col>
+                <Col>
+                    {symbol_model_card["Maximum waiting time without a trade"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Average waiting time without a trade:
+                </Col>
+                <Col>
+                    {symbol_model_card["Average waiting time without a trade"]}
+                </Col>
+            </Row>
+            <br/>
+            <Row style={{margin: '0px', textAlign: 'left'}}>
+                <Col style={{fontWeight: 'bold'}}>
+                    Minimum waiting time without a trade:
+                </Col>
+                <Col>
+                    {symbol_model_card["Minimum waiting time without a trade"]}
                 </Col>
             </Row>
             <br/>

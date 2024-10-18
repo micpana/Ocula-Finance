@@ -130,6 +130,30 @@ def trim_excessive_data_from_other_timeframes_before_feature_engineering():
 
     return trim
 
+# predictions filter config ... filtering predictions using a probability threshold
+def predictions_filter_config():
+    # whether to filter or not
+    filter_predictions_using_a_probability_threshold = True
+    # probability threshold
+    prediction_probability_threshold = 0.8 # 1.0 is 100 %
+
+    return filter_predictions_using_a_probability_threshold, prediction_probability_threshold
+
+# config for printing test predictions result arrays
+def test_predictions_result_arrays_printing_config():
+    # win / lose results
+    print_win_lose_results_array = False
+    # consecutive wins
+    print_consecutive_wins_array = False
+    # consecutive losses
+    print_consecutive_losses_array = False
+    # waiting times array
+    print_waiting_times_array = False
+    # balances array
+    print_balances_array = False
+
+    return print_win_lose_results_array, print_consecutive_wins_array, print_consecutive_losses_array, print_waiting_times_array, print_balances_array
+
 # whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
 def remove_last_n_values_without_full_forecast():
     remove = False
