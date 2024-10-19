@@ -1218,7 +1218,7 @@ class AllUsers extends Component{
                                             <h6 style={{fontWeight: 'bold', color: '#00539C'}}>Change User Role</h6>
                                             <br/>
                                             <Label>New role: <span style={{color: 'red'}}>*</span></Label>
-                                            <select name='symbol' value={this.state.new_role} onChange={this.HandleChange}
+                                            <select name='new_role' value={this.state.new_role} onChange={this.HandleChange}
                                                 style={{marginTop: '28px', border: 'none', borderBottom: '1px solid #828884', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
                                             >
                                                 <option value=''>Select new user role</option>
