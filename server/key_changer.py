@@ -45,7 +45,7 @@ try:
             encrypted_data = new_fernet.encrypt(decrypted_file)
             print('New Key Accepted.')
             # save the encrypted data back to the file
-            with open(os.path.join('..', encrypted_file_name), 'wb') as file:
+            with open(encrypted_file_name, 'wb') as file:
                 file.write(encrypted_data)
             # notify user of reencryption completion
             print('Done!')
