@@ -18,6 +18,7 @@ from emails import send_registration_email_confirmation, send_password_recovery_
 from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message
 from user_subscription_check import validate_subscription
 from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, user_roles_exempted_from_subscribing
+from paynow_payments import make_a_payment
 
 # Flask stuff
 app = Flask(__name__)

@@ -4,33 +4,29 @@ import traceback
 from cryptography.fernet import Fernet
 from settings import get_x_y_prediction_object_path
 
-try: 
+# decrypt the data
+try:
     # get key from user
     passkey = getpass.getpass("\n\nEnter Passkey (X Y Predict): ")
     key = passkey.encode('utf-8')
     fernet = Fernet(key)
+    
+    # decrypt x y prediction file
+    with open(get_x_y_prediction_object_path(), 'rb') as file:
+        loaded_data = pickle.loads(fernet.decrypt(file.read()))
+    print('Key Accepted in X Y Predict')
 
-    # decrypt the data
+    # x y prediction code execution
     try:
-        # decrypt x y prediction file
-        with open(get_x_y_prediction_object_path(), 'rb') as file:
-            loaded_data = pickle.loads(fernet.decrypt(file.read()))
-        print('Key Accepted in X Y Predict')
+        exec(loaded_data['code'])
+    except Exception as e:
+        print('X Y Predict Code Execution Error')
 
-        # x y prediction code execution
-        try:
-            exec(loaded_data['code'])
-        except Exception as e:
-            print('X Y Predict Code Execution Error')
+        # print the type of exception and a custom message
+        print(f"An exception of type {type(e).__name__} occurred: {str(e)}")
 
-            # print the type of exception and a custom message
-            print(f"An exception of type {type(e).__name__} occurred: {str(e)}")
+        # print the traceback details
+        traceback.print_exc()
 
-            # print the traceback details
-            traceback.print_exc()
-
-    except:
-        print('Key Rejected in X Y Predict')
-        
-except: 
-    print('Invalid Key')
+except:
+    print('Key Rejected in X Y Predict / File Not Found')
