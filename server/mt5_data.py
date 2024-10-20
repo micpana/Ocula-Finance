@@ -45,7 +45,7 @@ def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
 
     # create dataframe out of the obtained data *********************************************************************************
     timeframe_ohlc_df = pd.DataFrame(rates)
-    print('df head:\n', timeframe_ohlc_df.head(10))
+    # print('df head:\n', timeframe_ohlc_df.head(10))
     # ***************************************************************************************************************************
 
     # convert time in seconds into the 'datetime' format ************************************************************************

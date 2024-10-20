@@ -30,7 +30,7 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     # create 'datetime' range objects in system's time zone to avoid the implementation of a local time zone offset
     days_back = data_collection_days
     start_date = datetime.now() - timedelta(days=+days_back)
-    end_date = datetime.now()+ timedelta(minutes=+6) # some additional time to make sure all current data is included
+    end_date = datetime.now() + timedelta(minutes=+6) # some additional time to make sure all current data is included
     timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
     timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
 

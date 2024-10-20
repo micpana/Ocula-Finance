@@ -1,5 +1,5 @@
 from pandas import read_csv
-from settings import get_training_price_data_csvs_folder_path, get_error_logs_path, get_data_length_by_number_of_days_and_timeframe
+from settings import get_training_price_data_csvs_folder_path, get_error_logs_path
 
 # get data ********************************************************************************************************************************
 def csv_fetch_data(symbol, timeframe):
