@@ -210,24 +210,24 @@ def get_data_collection_days_by_intended_purpose(purpose):
 
     return data_collection_days, trading_days_needed
 
-# get data length by number of days and timeframe
+# get data length by number of trading days and timeframe
 def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         if timeframe == 'Monthly':
-            data_length = int(days / 30) # a month has around 30 days
+            data_length = int(days / 30) + 1 # a month has around 30 days
         elif timeframe == 'Weekly':
-            data_length = int(days / 7 ) # a week has 7 days
+            data_length = int(days / 7 ) + 1 # a week has 7 days
         elif timeframe == 'Daily':
-            data_length = int(days * 1) # self
+            data_length = int(days * 1) + 1 # self
         elif timeframe == 'H4':
-            data_length = int(days * 6) # 6 4hour segments in a day
+            data_length = int(days * 6) + 1 # 6 4hour segments in a day
         elif timeframe == 'H1':
-            data_length = int(days * 24) # 24 hours in a day
+            data_length = int(days * 24) + 1 # 24 hours in a day
         elif timeframe == 'M15':
-            data_length = int(days * 96) # 96 15m segments in a day
+            data_length = int(days * 96) + 1 # 96 15m segments in a day
         elif timeframe == 'M5':
-            data_length = int(days * 288) # 288 5min segments in a day
+            data_length = int(days * 288) + 1 # 288 5min segments in a day
         elif timeframe == 'M1':
-            data_length = int(days * 1440) # 1440 minutes in a day
+            data_length = int(days * 1440) + 1 # 1440 minutes in a day
         else:
             print('Timeframe not configured:', timeframe)
 
