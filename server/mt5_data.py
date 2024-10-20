@@ -7,8 +7,8 @@ def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
     print('Fetching', symbol, timeframe, 'data from MT5 ...')
     
     # display data on the MetaTrader 5 package **********************************************************************************
-    print("MetaTrader5 package author: ", mt5.__author__)
-    print("MetaTrader5 package version: ", mt5.__version__)
+    # print("MetaTrader5 package author: ", mt5.__author__)
+    # print("MetaTrader5 package version: ", mt5.__version__)
     # ***************************************************************************************************************************
 
     # mt5 program path according to symbol type *********************************************************************************

@@ -190,44 +190,24 @@ def number_of_timestamps_to_printout_for_alignment_verification():
 
     return number
 
-# get data collection days by intended purpose / call module = training / prediction
-def get_data_collection_days_by_intended_purpose(purpose):
-    """
-        For symbols / instruments that don't trade 7 days a week eg forex pairs and stocks, data retrieved via data_collection_days will not 
-        match n(data_collection_days*timeframe's segments in a day) bars due to weekends. Trading holidays have the same effect. Therefore, the 
-        difference between data_collection_days count and trading_days_needed count has to take that into consideration.
-    """
-    if purpose == 'training':
-        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
-        data_collection_days = 1020
-        # trading days needed, for determining the number of bars needed after data has been collected
-        trading_days_needed = None # None if parameter is not in use
-    elif purpose == 'prediction':
-        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
-        data_collection_days = 300
-        # trading days needed, for determining the number of bars needed after data has been collected
-        trading_days_needed = 150 # None if parameter is not in use
-
-    return data_collection_days, trading_days_needed
-
 # get data length by number of trading days and timeframe
 def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         if timeframe == 'Monthly':
-            data_length = int(days / 30) + 1 # a month has around 30 days
+            data_length = int(days / 30) # a month has around 30 days
         elif timeframe == 'Weekly':
-            data_length = int(days / 7 ) + 1 # a week has 7 days
+            data_length = int(days / 7 ) # a week has 7 days
         elif timeframe == 'Daily':
-            data_length = int(days * 1) + 1 # self
+            data_length = int(days * 1) # self
         elif timeframe == 'H4':
-            data_length = int(days * 6) + 1 # 6 4hour segments in a day
+            data_length = int(days * 6) # 6 4hour segments in a day
         elif timeframe == 'H1':
-            data_length = int(days * 24) + 1 # 24 hours in a day
+            data_length = int(days * 24) # 24 hours in a day
         elif timeframe == 'M15':
-            data_length = int(days * 96) + 1 # 96 15m segments in a day
+            data_length = int(days * 96) # 96 15m segments in a day
         elif timeframe == 'M5':
-            data_length = int(days * 288) + 1 # 288 5min segments in a day
+            data_length = int(days * 288) # 288 5min segments in a day
         elif timeframe == 'M1':
-            data_length = int(days * 1440) + 1 # 1440 minutes in a day
+            data_length = int(days * 1440) # 1440 minutes in a day
         else:
             print('Timeframe not configured:', timeframe)
 
@@ -236,6 +216,32 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
             data_length = 1
         
         return data_length
+
+# get data collection days by intended purpose / call module = training / prediction, and the timeframe
+def get_data_collection_days_by_intended_purpose(purpose, timeframe):
+    """
+        For symbols / instruments that don't trade 7 days a week eg forex pairs and stocks, data retrieved via data_collection_days will not 
+        match n(data_collection_days*timeframe's segments in a day) bars due to weekends. Trading holidays have the same effect. Therefore, the 
+        difference between data_collection_days count and trading_days_needed count has to take that into consideration.
+    """
+
+    if purpose == 'training':
+        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
+        data_collection_days = 1020
+        # trading days needed, for determining the number of bars needed after data has been collected
+        trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+
+    elif purpose == 'prediction':
+        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
+        data_collection_days = 300
+        # trading days needed, for determining the number of bars needed after data has been collected
+        trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+
+    # get the number of bars needed by number of trading days needed
+    if trading_days_needed == None: number_of_bars_needed = data_collection_days
+    else: number_of_bars_needed = get_data_length_by_number_of_days_and_timeframe(trading_days_needed, timeframe)
+
+    return data_collection_days, number_of_bars_needed
 
 # whether to show plots during training or not
 def show_plots_during_training():
