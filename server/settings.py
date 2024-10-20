@@ -192,12 +192,50 @@ def number_of_timestamps_to_printout_for_alignment_verification():
 
 # get data collection days by intended purpose / call module = training / prediction
 def get_data_collection_days_by_intended_purpose(purpose):
+    """
+        For symbols / instruments that don't trade 7 days a week eg forex pairs and stocks, data retrieved via data_collection_days will not 
+        match n(data_collection_days*timeframe's segments in a day) bars due to weekends. Trading holidays have the same effect. Therefore, the 
+        difference between data_collection_days count and trading_days_needed count has to take that into consideration.
+    """
     if purpose == 'training':
-        days =  1020 # if available ... if more is available, take all ... else take whats available if reasonable
+        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
+        data_collection_days = 1020
+        # trading days needed, for determining the number of bars needed after data has been collected
+        trading_days_needed = None # None if parameter is not in use
     elif purpose == 'prediction':
-        days = 200
+        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
+        data_collection_days = 300
+        # trading days needed, for determining the number of bars needed after data has been collected
+        trading_days_needed = 150 # None if parameter is not in use
 
-    return days
+    return data_collection_days, trading_days_needed
+
+# get data length by number of days and timeframe
+def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
+        if timeframe == 'Monthly':
+            data_length = int(days / 30) # a month has around 30 days
+        elif timeframe == 'Weekly':
+            data_length = int(days / 7 ) # a week has 7 days
+        elif timeframe == 'Daily':
+            data_length = int(days * 1) # self
+        elif timeframe == 'H4':
+            data_length = int(days * 6) # 6 4hour segments in a day
+        elif timeframe == 'H1':
+            data_length = int(days * 24) # 24 hours in a day
+        elif timeframe == 'M15':
+            data_length = int(days * 96) # 96 15m segments in a day
+        elif timeframe == 'M5':
+            data_length = int(days * 288) # 288 5min segments in a day
+        elif timeframe == 'M1':
+            data_length = int(days * 1440) # 1440 minutes in a day
+        else:
+            print('Timeframe not configured:', timeframe)
+
+        # handle instances where the days are so little that Monthly and Weekly will be rounded off to 0 during int conversion
+        if data_length == 0:
+            data_length = 1
+        
+        return data_length
 
 # whether to show plots during training or not
 def show_plots_during_training():

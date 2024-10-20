@@ -1,5 +1,5 @@
 from pandas import read_csv
-from settings import get_data_collection_days_by_intended_purpose, training_data_source, prediction_data_source
+from settings import get_data_collection_days_by_intended_purpose, training_data_source, prediction_data_source, get_data_length_by_number_of_days_and_timeframe
 from datetime import datetime
 from datetime import timedelta
 import pytz
@@ -10,8 +10,8 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     # initialize ohlc data dict
     ohlc_data_dict = {}
 
-    # get data collection days according to call module
-    data_collection_days = get_data_collection_days_by_intended_purpose(call_module)
+    # get data collection days, and the trading days needed, according to call module
+    data_collection_days, trading_days_needed = get_data_collection_days_by_intended_purpose(call_module)
 
     # get data source according to call module ... csv / yahoo / mt5
     if call_module == 'training':  data_source = training_data_source(); yahoo_override_synthetic_source = 'csv'
@@ -28,24 +28,27 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     timezone = pytz.timezone(system_timezone())
 
     # create 'datetime' range objects in system's time zone to avoid the implementation of a local time zone offset
-    days_back = data_collection_days
-    start_date = datetime.now() - timedelta(days=+days_back)
+    start_date = datetime.now() - timedelta(days=+data_collection_days)
     end_date = datetime.now() + timedelta(minutes=+6) # some additional time to make sure all current data is included
     timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
     timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
 
     # loop through timeframes
     for timeframe in timeframes:
-        # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict
+        # get the number of bars needed by number of trading days needed
+        if trading_days_needed == None: number_of_bars_needed = data_collection_days
+        else: number_of_bars_needed = get_data_length_by_number_of_days_and_timeframe(trading_days_needed, timeframe)
+
+        # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict according to number_of_bars_needed
         if data_source == 'csv': 
             from csv_data import csv_fetch_data
-            ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
+            ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe).tail(number_of_bars_needed)
         elif data_source == 'yahoo': 
             from yahoo_finance_data import yahoo_fetch_data
-            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
+            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to).tail(number_of_bars_needed)
         elif data_source == 'mt5': 
-            from mt5_data import mt5_fetch_data 
-            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type)
+            from mt5_data import mt5_fetch_data
+            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type).tail(number_of_bars_needed)
 
     # return ohlc data dict
     return ohlc_data_dict
