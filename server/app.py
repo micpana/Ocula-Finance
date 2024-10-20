@@ -18,7 +18,7 @@ from emails import send_registration_email_confirmation, send_password_recovery_
 from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message
 from user_subscription_check import validate_subscription
 from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, user_roles_exempted_from_subscribing
-from paynow_payments import make_a_payment
+from paynow_payments import make_a_payment, check_transaction_status
 
 # Flask stuff
 app = Flask(__name__)
@@ -1108,6 +1108,20 @@ def editProfile():
 
     # return return_string
     response = make_response(return_string); response.status = 200; return response
+
+# 31
+@app.route('/makePayment', methods=['POST'])
+def makePayment():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+# 32
+@app.route('/checkTransactionStatus', methods=['POST'])
+def checkTransactionStatus():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
 # 12
 @app.route('/getUserPaymentHistory', methods=['POST'])
