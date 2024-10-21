@@ -273,6 +273,12 @@ def get_training_log_path(symbol):
 
     return path
 
+# get label encoder path
+def get_label_encoder_path(symbol):
+    path = 'label encoders/' + symbol + '-Label-Encoder' + custom_system_extension()
+
+    return path
+
 # get scalers path
 def get_scaler_path(symbol):
     path = 'scalers/' + symbol + '-Scaler' + custom_system_extension()
