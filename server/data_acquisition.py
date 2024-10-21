@@ -35,16 +35,19 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
         timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
         timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
 
-        # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict according to number_of_bars_needed
+        # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict according to number_of_bars_needed (for predictions only)
         if data_source == 'csv': 
             from csv_data import csv_fetch_data
-            ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe).tail(number_of_bars_needed)
+            ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
+            if call_module == 'prediction': ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'yahoo': 
             from yahoo_finance_data import yahoo_fetch_data
-            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to).tail(number_of_bars_needed)
+            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
+            if call_module == 'prediction': ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'mt5': 
             from mt5_data import mt5_fetch_data
-            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type).tail(number_of_bars_needed)
+            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type)
+            if call_module == 'prediction': ohlc_data_dict[timeframe].tail(number_of_bars_needed)
 
     # return ohlc data dict
     return ohlc_data_dict
