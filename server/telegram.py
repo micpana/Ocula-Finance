@@ -22,7 +22,7 @@ def send_message(chat_id, message):
     while message_sent == False:
         try:
             request_url = api_url + 'sendMessage?chat_id={}&text={}'.format(chat_id, message)
-            requests.get(request_url)
+            requests.get(request_url, verify=True) # verify=True to verify SSL certificate, ie to ensure end to end encryption
             message_sent = True
         except:
             print('\n\nSomething went wrong while trying to send a Telegram message. Trying again ...\n\n')
@@ -33,7 +33,7 @@ def get_updates():
     while True:
         try:
             request_url = api_url + "getUpdates" # removed long polling (defaults to 0 seconds): ?timeout=100
-            request_result = requests.get(request_url)
+            request_result = requests.get(request_url, verify=True) # verify=True to verify SSL certificate, ie to ensure end to end encryption
             result = json.loads(request_result.content)
             messages = result['result']
             break
