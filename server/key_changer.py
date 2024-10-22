@@ -1,7 +1,7 @@
 import os
 import getpass
 from cryptography.fernet import Fernet
-from settings import get_x_y_feature_engineering_object_path, get_x_feature_engineering_object_path, get_y_feature_engineering_object_path, get_x_y_prediction_object_path, get_x_y_training_object_path, get_manage_expired_open_trades_object_path, get_scaler_path, get_model_path
+from settings import get_x_y_feature_engineering_object_path, get_x_feature_engineering_object_path, get_y_feature_engineering_object_path, get_x_y_prediction_object_path, get_x_y_training_object_path, get_manage_expired_open_trades_object_path, get_label_encoder_path, get_scaler_path, get_model_path
 from symbol_config import get_symbol_list
 
 # optional list of other encrypted files to reencrypt apart from scalers and models (these are reencrypted by default) ********************
@@ -55,13 +55,17 @@ try:
     # ***************************************************************************************************************************
 
         
-    # reencrypt scalers and models for all symbols ******************************************************************************
-    print('\n\nRe-encrypting symbol files (scalers and models)...')
+    # reencrypt label encoders, scalers and models for all symbols **************************************************************
+    print('\n\nRe-encrypting symbol files (label encoders, scalers and models)...')
     for symbol in list_of_symbols:
+        # label encoder path
+        label_encoder_path = get_label_encoder_path(symbol)
         # scaler path
         scaler_path = get_scaler_path(symbol)
         # model path
         model_path = get_model_path(symbol)
+        # reencrypt label encoder
+        reencrypt(label_encoder_path)
         # reencrypt scaler
         reencrypt(scaler_path)
         # reencrypt model
