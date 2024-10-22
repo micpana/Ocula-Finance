@@ -190,52 +190,54 @@ def number_of_timestamps_to_printout_for_alignment_verification():
 
     return number
 
+# if we're using yahoo finance, limit number of days for data collection according to yahoo finance's limits
+def yahoo_finance_n_days_limitor(timeframe, days):
+    # if timeframe == 'Monthly': if days > : days = # can go back several decades
+    # elif timeframe == 'Weekly': if days > : days = # can go back several decades
+    # elif timeframe == 'Daily': if days > : days = # can go back several decades
+    if timeframe == 'H4' and days >= 730: days = 728 # up to 730 days
+    elif timeframe == 'H1' and days >= 730: days = 728 # up to 730 days
+    elif timeframe == 'M15' and days >= 60: days = 58 # up to 60 days
+    elif timeframe == 'M30' and days >= 60: days = 58 # up to 60 days
+    elif timeframe == 'M5' and days >= 60: days = 58 # up to 60 days
+    elif timeframe == 'M1' and days >= 7: days = 5 # up to 7 days
+
+    return days
+
 # get data length by number of trading days and timeframe
 def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
-        if timeframe == 'Monthly':
-            data_length = int(days / 30) # a month has around 30 days
-        elif timeframe == 'Weekly':
-            data_length = int(days / 7 ) # a week has 7 days
-        elif timeframe == 'Daily':
-            data_length = int(days * 1) # self
-        elif timeframe == 'H4':
-            data_length = int(days * 6) # 6 4hour segments in a day
-        elif timeframe == 'H1':
-            data_length = int(days * 24) # 24 hours in a day
-        elif timeframe == 'M15':
-            data_length = int(days * 96) # 96 15m segments in a day
-        elif timeframe == 'M5':
-            data_length = int(days * 288) # 288 5min segments in a day
-        elif timeframe == 'M1':
-            data_length = int(days * 1440) # 1440 minutes in a day
-        else:
-            print('Timeframe not configured:', timeframe)
+        if timeframe == 'Monthly': data_length = int(days / 30) # a month has around 30 days
+        elif timeframe == 'Weekly': data_length = int(days / 7 ) # a week has 7 days
+        elif timeframe == 'Daily': data_length = int(days * 1) # self
+        elif timeframe == 'H4': data_length = int(days * 6) # 6 4hour segments in a day
+        elif timeframe == 'H1': data_length = int(days * 24) # 24 hours in a day
+        elif timeframe == 'M30': data_length = int(days * 48) # 48 40m segments in a day
+        elif timeframe == 'M15': data_length = int(days * 96) # 96 15m segments in a day
+        elif timeframe == 'M5': data_length = int(days * 288) # 288 5min segments in a day
+        elif timeframe == 'M1': data_length = int(days * 1440) # 1440 minutes in a day
+        else: print('Timeframe not configured:', timeframe)
 
         # handle instances where the days are so little that Monthly and Weekly will be rounded off to 0 during int conversion
-        if data_length == 0:
-            data_length = 1
+        if data_length == 0: data_length = 1
         
         return data_length
 
-# get data collection days by intended purpose / call module = training / prediction, and the timeframe
-def get_data_collection_days_by_intended_purpose(purpose, timeframe):
+# get data collection days + trading days needed by intended purpose / call module = training / prediction, the timeframe, and the datasource
+def get_data_collection_days_by_intended_purpose(purpose, timeframe, data_source):
     """
         For symbols / instruments that don't trade 7 days a week eg forex pairs and stocks, data retrieved via data_collection_days will not 
         match n(data_collection_days*timeframe's segments in a day) bars due to weekends. Trading holidays have the same effect. Therefore, the 
         difference between data_collection_days count and trading_days_needed count has to take that into consideration.
+        data_collection_days -> for building a data collection date range, inclusive of weekends and trading holidays.
+        trading days needed -> for determining the number of bars needed after data has been collected
     """
 
-    if purpose == 'training':
-        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
-        data_collection_days = 1020
-        # trading days needed, for determining the number of bars needed after data has been collected
-        trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+    if purpose == 'training': data_collection_days = 1020; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+    elif purpose == 'prediction': data_collection_days = 300; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
 
-    elif purpose == 'prediction':
-        # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
-        data_collection_days = 600
-        # trading days needed, for determining the number of bars needed after data has been collected
-        trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+    # yahoo finance has low data collection n days limits depending on the timeframe... limit max days when using yahoo finance
+    if data_source == 'yahoo': data_collection_days = yahoo_finance_n_days_limitor(timeframe, data_collection_days)
+    if data_source == 'yahoo' and trading_days_needed != None: trading_days_needed = yahoo_finance_n_days_limitor(timeframe, trading_days_needed)
 
     # get the number of bars needed by number of trading days needed
     if trading_days_needed == None: number_of_bars_needed = data_collection_days

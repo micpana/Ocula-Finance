@@ -27,7 +27,7 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     # loop through timeframes
     for timeframe in timeframes:
         # get data collection days, and the number of bars needed per timeframe, according to call module and current timeframe
-        data_collection_days, number_of_bars_needed = get_data_collection_days_by_intended_purpose(call_module, timeframe)
+        data_collection_days, number_of_bars_needed = get_data_collection_days_by_intended_purpose(call_module, timeframe, data_source)
 
         # create 'datetime' range objects in system's time zone to avoid the implementation of a local time zone offset
         start_date = datetime.now() - timedelta(days=+data_collection_days)
@@ -35,19 +35,26 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
         timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
         timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
 
+        """
+            MT5 brings in even forming candles, ie ones that haven't closed yet. It's candlestick timestamps marks the candlestick's 
+            opening time. Therefore to get data for only closed bars when using mt5, delete the last row.
+            Yahoo Finance seems to bring in forming candles as well. Not sure if its timestamp is for the opening or closing. More 
+            investigation needed.
+        """
+
         # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict according to number_of_bars_needed (for predictions only)
         if data_source == 'csv': 
             from csv_data import csv_fetch_data
             ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
-            if call_module == 'prediction': ohlc_data_dict[timeframe].tail(number_of_bars_needed)
+            if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'yahoo': 
             from yahoo_finance_data import yahoo_fetch_data
-            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
-            if call_module == 'prediction': ohlc_data_dict[timeframe].tail(number_of_bars_needed)
+            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to).head(-1) # removing the last row since its a bar still forming, as stated above
+            if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'mt5': 
             from mt5_data import mt5_fetch_data
-            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type)
-            if call_module == 'prediction': ohlc_data_dict[timeframe].tail(number_of_bars_needed)
+            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type).head(-1) # removing the last row since its a bar still forming, as stated above
+            if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
 
     # return ohlc data dict
     return ohlc_data_dict
