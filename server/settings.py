@@ -233,7 +233,7 @@ def get_data_collection_days_by_intended_purpose(purpose, timeframe):
 
     elif purpose == 'prediction':
         # data collection days, for building a data collection date range, inclusive of weekends and trading holidays
-        data_collection_days = 300
+        data_collection_days = 600
         # trading days needed, for determining the number of bars needed after data has been collected
         trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
 
