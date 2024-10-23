@@ -113,6 +113,8 @@ class PastPayments extends Component{
             axios.post(Backend_Server_Address + 'getUserPaymentHistory', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
+                // set end of list to false
+                this.setState({end_of_list: false})
                 if (get_all == true){
                     // set past payments to state
                     this.setState({past_payments: result})

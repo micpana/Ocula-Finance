@@ -169,6 +169,8 @@ class Analysis extends Component{
                 axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
+                    // set end of list to false
+                    this.setState({end_of_list: false})
                     // if we're clearing the current market_analysis state first
                     if(clear_market_analysis_state_first == true){
                         var market_analysis = []
@@ -317,7 +319,7 @@ class Analysis extends Component{
                         Entry time:
                     </Col>
                     <Col>
-                        {timestamp}
+                        <DateTimeDisplay datetimeString={timestamp} />
                     </Col>
                 </Row>
                 <br/>

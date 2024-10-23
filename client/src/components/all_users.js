@@ -135,6 +135,8 @@ class AllUsers extends Component{
             axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
+                // set end of list to false
+                this.setState({end_of_list: false})
                 // if we're clearing the current all_users state first
                 if(clear_all_users_state_first == true){
                     var all_users = []
@@ -201,6 +203,8 @@ class AllUsers extends Component{
             axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
+                // set end of list to false
+                this.setState({end_of_list: false})
                 if (get_all == true){
                     // set user payments to state and switch to user payments screen
                     this.setState({user_payments: result, screen: 'selected user payments'})
@@ -276,6 +280,8 @@ class AllUsers extends Component{
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
+                    // set end of list to false
+                    this.setState({end_of_list: false})
                     // if we're clearing the current all_users state first
                     if(clear_all_users_state_first == true){
                         var all_users = []
