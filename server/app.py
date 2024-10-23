@@ -21,10 +21,6 @@ from settings import frontend_client_url, platform_name, verification_token_expi
 # from paynow_payments import paynow_payment, paynow_status
 # from oxapay_payments import oxapay_payment, oxapay_status
 
-
-if __name__ == '__main__':
-    init_db()
-
 # Flask stuff
 app = Flask(__name__)
 app.debug = True
@@ -2369,7 +2365,7 @@ def getPaymentsList():
 # *****************************************************************************************************************************************
 
 if __name__ == '__main__':
-    # init_db()
+    init_db()
     app.run(host='0.0.0.0') # for development
     # app.run(host=os.environ.get("BACKEND_HOST", "0.0.0.0"), port=5000) # for development use in docker
     # from waitress import serve
