@@ -319,7 +319,7 @@ class Analysis extends Component{
                         Entry time:
                     </Col>
                     <Col>
-                        <DateTimeDisplay datetimeString={timestamp} />
+                        <DateTimeDisplay datetimeString={timestamp} /> ({this.state.user_device_timezone} Timezone)
                     </Col>
                 </Row>
                 <br/>
