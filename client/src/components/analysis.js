@@ -76,8 +76,8 @@ class Analysis extends Component{
         this.HandleChange = (e) => {
             this.setState({[e.target.name]: e.target.value});
 
-            // check if value is a symbol, if so load data for selected symbol
-            if (Symbols.includes(e.target.value)){
+            // check if value is a symbol, or ALL, if so load data for selected symbol
+            if (Symbols.includes(e.target.value) || e.target.value === 'ALL'){
                 this.GetCurrentMarketAnalysis(e.target.value, false, true, true)
             }
         };
