@@ -170,7 +170,7 @@ class Analysis extends Component{
                 .then((res) => {
                     let result = res.data
                     // if we're clearing the current market_analysis state first
-                    if(clear_market_analysis_state_first === true){
+                    if(clear_market_analysis_state_first == true){
                         // clear market_analysis state
                         this.setState({market_analysis: []})
                     }

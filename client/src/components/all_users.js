@@ -136,7 +136,7 @@ class AllUsers extends Component{
             .then((res) => {
                 let result = res.data
                 // if we're clearing the current all_users state first
-                if(clear_all_users_state_first === true){
+                if(clear_all_users_state_first == true){
                     // clear all_users state
                     this.setState({all_users: []})
                 }
@@ -276,7 +276,7 @@ class AllUsers extends Component{
                 .then((res) => {
                     let result = res.data
                     // if we're clearing the current all_users state first
-                    if(clear_all_users_state_first === true){
+                    if(clear_all_users_state_first == true){
                         // clear all_users state
                         this.setState({all_users: []})
                     }

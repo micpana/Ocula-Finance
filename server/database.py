@@ -35,7 +35,7 @@ def connect_to_database():
     elif selected_database == 'live':
         # live db connection
         connect_url = 'mongodb+srv://'+live_db_username+':'+urllib.parse.quote(live_db_password)+live_db_url
-        connect(host=connect_url, ssl=True, ssl_cert_reqs='CERT_NONE') # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard
+        connect(host=connect_url, tls=True) # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard
     else:
         print('UNKNOWN DATABASE SELECTION:', selected_database)
 # *****************************************************************************************************************************************
