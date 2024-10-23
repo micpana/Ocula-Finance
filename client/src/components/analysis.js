@@ -328,6 +328,7 @@ class Analysis extends Component{
                         <br/>
                     </Col>
                 </Row>
+                <br/>
                 <Label style={{textAlign: 'left'}}>Enter your broker's closing price at the stated entry time <span style={{color: 'red'}}>*</span></Label>
                 <InputGroup>
                     <InputGroupText addonType="prepend">
