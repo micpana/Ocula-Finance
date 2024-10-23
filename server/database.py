@@ -35,7 +35,7 @@ def connect_to_database():
     elif selected_database == 'live':
         # live db connection
         connect_url = 'mongodb+srv://'+live_db_username+':'+urllib.parse.quote(live_db_password)+live_db_url
-        connect(host=connect_url, tls=True) # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard
+        connect(host=connect_url, ssl=True, ssl_cert_reqs='CERT_NONE') # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard ... worked on Render Flask server but had issues verifying the certificate on Servarica AI server
     else:
         print('UNKNOWN DATABASE SELECTION:', selected_database)
 # *****************************************************************************************************************************************
@@ -47,23 +47,23 @@ try:
     client = get_connection()
     # check if the connection is already established
     if client is None:
-        print("No client connection available. Attempting to connect...")
+        print("\n\nNo client connection available. Attempting to connect...")
         connect_to_database()
         print("New database connection established.")
     else:
-        print("Client connection retrieved.")
+        print("\n\nClient connection retrieved.")
         # if client is not None, check if it's primary
         if client.is_primary:
             print("Already connected to the primary database.")
         else:
             print("Connected to a secondary node.")
 except mongoengine.connection.ConnectionFailure as e:
-    print(f'Connection failed: {e}')
+    print(f'\n\nConnection failed: {e}')
     print('Establishing new database connection.')
     connect_to_database()
     print("New database connection established.")
 except Exception as e:
-    print(f"An unexpected error occurred: {e}")
+    print(f"\n\nAn unexpected error occurred: {e}")
     connect_to_database()
 # *****************************************************************************************************************************************
 
