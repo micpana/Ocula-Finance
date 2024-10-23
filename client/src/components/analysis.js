@@ -666,7 +666,7 @@ class Analysis extends Component{
                         </Row>
                     </Col>
                 </Row>
-                <h6 style={{textAlign: 'left', marginLeft: '10px', marginTop: '5px', fontSize: '13px'}}>
+                <h6 style={{textAlign: 'left', marginLeft: '10px', marginTop: '15px', fontSize: '13px'}}>
                     Percentages are % distances from the entry price at the stated entry time. Prices vary according to the broker being used. {' '}
                     <a onClick={() => {this.setState({selected_signal: item});this.OpenModal('percentages_to_price')}} style={{color: 'inherit', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold'}}>
                         Click here to convert percentages to prices.
