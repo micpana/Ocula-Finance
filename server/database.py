@@ -1,4 +1,5 @@
 from models import Users
+import mongoengine
 from mongoengine import connect, connection, get_connection, disconnect
 from mongomock import MongoClient
 import dns
@@ -34,7 +35,7 @@ def connect_to_database():
     elif selected_database == 'live':
         # live db connection
         connect_url = 'mongodb+srv://'+live_db_username+':'+urllib.parse.quote(live_db_password)+live_db_url
-        connect(host=connect_url, ssl=True, ssl_cert_reqs='CERT_NONE')
+        connect(host=connect_url, tls=True) # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard
     else:
         print('UNKNOWN DATABASE SELECTION:', selected_database)
 # *****************************************************************************************************************************************
@@ -42,15 +43,29 @@ def connect_to_database():
 # initialize database *********************************************************************************************************************
 def init_db():
     # connect to db *************************************************************************************************************
+    # get the MongoDB client from the MongoEngine connection
     try:
-        # attempt to get the current database connection
-        connection._get_db()
-    except connection.ConnectionFailure: # except connection.ConnectionFailure
-        # if not connected, establish a new connection
+        # client
+        client = get_connection()
+        # check if the connection is already established
+        if client is None:
+            print("No client connection available. Attempting to connect...")
+            connect_to_database()
+            print("New database connection established.")
+        else:
+            print("Client connection retrieved.")
+            # if client is not None, check if it's primary
+            if client.is_primary:
+                print("Already connected to the primary database.")
+            else:
+                print("Connected to a secondary node.")
+    except mongoengine.connection.ConnectionFailure as e:
+        print(f'Connection failed: {e}')
+        print('Establishing new database connection.')
         connect_to_database()
-    except Exception as e: # catch any other exceptions
-        print(f"An unexpected error occurred while trying to connect to the database url: {e}")
-        connect_to_database()
+        print("New database connection established.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
     # ***************************************************************************************************************************
     # get all users *************************************************************************************************************
     users = Users.objects.all()
