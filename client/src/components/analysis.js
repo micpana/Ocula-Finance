@@ -588,7 +588,7 @@ class Analysis extends Component{
                             </Col>
                         </Row>
                     </Col>
-                    <Col>
+                    <Col sm='5'>
                         <br/>
                         <Row style={{margin: '0px'}}>
                             <Col sm='6'>
@@ -629,7 +629,7 @@ class Analysis extends Component{
                             </Col>
                         </Row>
                     </Col>
-                    <Col>
+                    <Col sm='5'>
                         <br/>
                         <Row style={{margin: '0px'}}>
                             <Col sm='6'>
