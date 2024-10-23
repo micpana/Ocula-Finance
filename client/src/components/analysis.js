@@ -319,7 +319,11 @@ class Analysis extends Component{
                         Entry time:
                     </Col>
                     <Col>
-                        <DateTimeDisplay datetimeString={timestamp} /> ({this.state.user_device_timezone} Timezone)
+                        <span style={{fontSize: '13px'}}>
+                            <DateTimeDisplay datetimeString={timestamp} /> {this.state.user_device_timezone} Timezone 
+                            (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
+                            local time. <span style={{fontWeight: 'bold'}}>Your broker's timezone maybe different from yours.</span>)
+                        </span>
                     </Col>
                 </Row>
                 <br/>
@@ -809,7 +813,7 @@ class Analysis extends Component{
                                         <span style={{fontSize: '13px'}}>
                                             {this.state.user_device_time} {this.state.user_device_timezone} Timezone 
                                             (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
-                                            local time.)
+                                            local time. <span style={{fontWeight: 'bold'}}>Your broker's timezone maybe different from yours.</span>)
                                         </span>
                                         <br/><br/>
                                     </Col>
