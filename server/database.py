@@ -1,5 +1,5 @@
 from models import Users
-from mongoengine import connect, connection, get_connection, ConnectionFailure, disconnect
+from mongoengine import connect, connection, get_connection, disconnect
 from mongomock import MongoClient
 import dns
 import urllib
@@ -45,7 +45,7 @@ def init_db():
     try:
         # attempt to get the current database connection
         connection._get_db()
-    except ConnectionFailure: # except connection.ConnectionFailure
+    except connection.ConnectionFailure: # except connection.ConnectionFailure
         # if not connected, establish a new connection
         connect_to_database()
     except Exception as e: # catch any other exceptions
