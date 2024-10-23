@@ -166,7 +166,7 @@ class Pricing extends Component{
                                             </ul>
                                             <br/><br/><br/>
                                             <div style={{textAlign: 'center'}}>
-                                                <Button href=''
+                                                <Button href='/dashboard'
                                                     style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
                                                 >
                                                     Subscribe now
@@ -207,7 +207,7 @@ class Pricing extends Component{
                                             </ul>
                                             <br/><br/><br/>
                                             <div style={{textAlign: 'center'}}>
-                                                <Button href=''
+                                                <Button href='/dashboard'
                                                     style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#005fc9', color: '#ffffff'}}
                                                 >
                                                     Subscribe now
@@ -248,7 +248,7 @@ class Pricing extends Component{
                                             </ul>
                                             <br/><br/><br/>
                                             <div style={{textAlign: 'center'}}>
-                                                <Button href=''
+                                                <Button href='/dashboard'
                                                     style={{border: '1px solid #005fc9', borderRadius: '20px', backgroundColor: '#ffffff', color: 'inherit'}}
                                                 >
                                                     Subscribe now

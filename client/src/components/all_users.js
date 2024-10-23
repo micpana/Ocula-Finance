@@ -122,10 +122,12 @@ class AllUsers extends Component{
             this.NetworkErrorScreenOff()
 
             var data = new FormData()
-            if(this.state.showing_search_results === true){
+            if(this.state.showing_search_results === true){ // current users state contains data from a search
                 var length_of_data_received = 0
-            }else{
+                var clear_all_users_state_first = true
+            }else{ // current users state contains data from this very same function
                 var length_of_data_received = this.state.all_users.length
+                var clear_all_users_state_first = false
             }
             data.append('length_of_data_received', length_of_data_received)
             data.append('get_all', get_all) // bool
@@ -133,6 +135,11 @@ class AllUsers extends Component{
             axios.post(Backend_Server_Address + 'getAllUsers', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
             .then((res) => {
                 let result = res.data
+                // if we're clearing the current all_users state first
+                if(clear_all_users_state_first === true){
+                    // clear all_users state
+                    this.setState({all_users: []})
+                }
                 if (get_all == true){
                     // set users to state, also set showing search results to false => so that we know users showing are not from a search
                     this.setState({all_users: result, showing_search_results: false})
@@ -257,8 +264,10 @@ class AllUsers extends Component{
                 data.append('search_query', this.state.search_query)
                 if(this.state.showing_search_results === true && this.state.search_query === this.state.search_results_owner_query){ // continuing search
                     var length_of_data_received = this.state.all_users.length
+                    var clear_all_users_state_first = false
                 }else{ // new search
                     var length_of_data_received = 0
+                    var clear_all_users_state_first = true
                 }
                 data.append('length_of_data_received', length_of_data_received)
                 data.append('get_all', get_all) // bool
@@ -266,6 +275,11 @@ class AllUsers extends Component{
                 axios.post(Backend_Server_Address + 'searchForUser', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
+                    // if we're clearing the current all_users state first
+                    if(clear_all_users_state_first === true){
+                        // clear all_users state
+                        this.setState({all_users: []})
+                    }
                     if (get_all == true){
                         // set user results to state, also set showing search results to true => so that we know users showing are from a search
                         this.setState({all_users: result, showing_search_results: true, search_results_owner_query: this.state.search_query})

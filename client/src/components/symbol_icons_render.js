@@ -55,10 +55,10 @@ const SymbolIconsRender = ({ symbol }) => {
     if (base === '' && quote === ''){ // for synthetic indices
         return <Row style={{margin: '0px'}}>
             <Col xs='6'>
-                
+                <img src={Deriv} style={{width: '30px', height: '30px'}} />
             </Col>
             <Col xs='6'>
-                <img src={Deriv} style={{width: '30px', height: '30px'}} />
+                
             </Col>
         </Row>
     }else{ // for forex and crypto pairs

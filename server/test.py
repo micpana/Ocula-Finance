@@ -1,2 +1,3 @@
-if True: print(1)
-else: print(2)
+from mongoengine import connection, get_connection, disconnect
+
+print(dir(disconnect()))

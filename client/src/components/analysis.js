@@ -55,6 +55,7 @@ class Analysis extends Component{
             input_errors: {},
             end_of_list: false,
             on_mobile: false,
+            queried_symbol: 'ALL',
             symbol: 'ALL',
             market_analysis: [],
             user_subscribed: null,
@@ -141,9 +142,17 @@ class Analysis extends Component{
                 }
                 this.NetworkErrorScreenOff()
 
+                if (symbol != this.state.queried_symbol){ // current selected symbol is not the one that one previously queried
+                    var length_of_data_received = 0
+                    var clear_market_analysis_state_first = true
+                }else{ // same symbol selection
+                    var length_of_data_received = this.state.market_analysis.length
+                    var clear_market_analysis_state_first = false
+                }
+
                 var data = new FormData()
                 data.append('symbol', symbol)
-                data.append('length_of_data_received', this.state.market_analysis.length)
+                data.append('length_of_data_received', length_of_data_received)
                 data.append('get_all', get_all) // bool
                 // timestamp and symbol of the most recent trade signal received
                 if (this.state.market_analysis.length > 0 && symbol == 'ALL'){
@@ -160,6 +169,11 @@ class Analysis extends Component{
                 axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
                     let result = res.data
+                    // if we're clearing the current market_analysis state first
+                    if(clear_market_analysis_state_first === true){
+                        // clear market_analysis state
+                        this.setState({market_analysis: []})
+                    }
                     if (get_all == true){
                         // set market analysis to state
                         this.setState({market_analysis: result})
@@ -177,6 +191,8 @@ class Analysis extends Component{
                             this.setState({initial_request: false})
                         }
                     }
+                    // update queried_symbol to symbol
+                    this.setState({queried_symbol: symbol})
                     this.LoadingOff()
                 }).catch((error) => {
                     console.log(error)
@@ -570,9 +586,9 @@ class Analysis extends Component{
                                 </h6>
                             </Col>
                             <Col>
-                                <h5 style={{color: 'red'}}>
+                                <h6 style={{color: 'red'}}>
                                     {item.stoploss_percentage} %
-                                </h5>
+                                </h6>
                             </Col>
                         </Row>
                         <br/>
@@ -583,9 +599,9 @@ class Analysis extends Component{
                                 </h6>
                             </Col>
                             <Col>
-                                <h5 style={{color: 'blue'}}>
+                                <h6 style={{color: 'blue'}}>
                                     {item.takeprofit_percentage} %
-                                </h5>
+                                </h6>
                             </Col>
                         </Row>
                         <br/>
@@ -596,9 +612,9 @@ class Analysis extends Component{
                                 </h6>
                             </Col>
                             <Col>
-                                <h5>
+                                <h6>
                                     {item.risk_to_reward_ratio}
-                                </h5>
+                                </h6>
                             </Col>
                         </Row>
                     </Col>
@@ -611,9 +627,9 @@ class Analysis extends Component{
                                 </h6>
                             </Col>
                             <Col>
-                                <h5>
+                                <h6>
                                     <DateTimeDisplay datetimeString={item.timestamp} />
-                                </h5>
+                                </h6>
                             </Col>
                         </Row>
                         <br/>
@@ -624,9 +640,9 @@ class Analysis extends Component{
                                 </h6>
                             </Col>
                             <Col>
-                                <h5>
+                                <h6>
                                     {item.maximum_holding_time}
-                                </h5>
+                                </h6>
                             </Col>
                         </Row>
                         <br/>
@@ -639,12 +655,12 @@ class Analysis extends Component{
                             <Col>
                                 {
                                     item.trade_close_percentage == null || item.trade_close_percentage == undefined
-                                    ? <h5>To be updated.</h5>
-                                    : <h5 style={{color: item.action === 'Buy' ? item.trade_close_percentage < 0 ? 'red' : 'blue' : item.trade_close_percentage < 0 ? 'blue' : 'red'}}>
+                                    ? <h6>To be updated.</h6>
+                                    : <h6 style={{color: item.action === 'Buy' ? item.trade_close_percentage < 0 ? 'red' : 'blue' : item.trade_close_percentage < 0 ? 'blue' : 'red'}}>
                                         {
                                             item.trade_close_percentage
                                         } %
-                                    </h5>
+                                    </h6>
                                 }
                             </Col>
                         </Row>
@@ -655,6 +671,10 @@ class Analysis extends Component{
                     <a onClick={() => {this.setState({selected_signal: item});this.OpenModal('percentages_to_price')}} style={{color: 'inherit', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold'}}>
                         Click here to convert percentages to prices.
                     </a>
+                    <br/>
+                    Chart timezones also vary according to the broker being used, keep that in mind when backtesting or just scrolling back to find an old entry.
+                    <br/>
+                    Utilize an appropriate lot size to maintain effective risk management practices.
                 </h6>
                 <Modal isOpen={this.state.modal_open} onClose={this.CloseModal} handleChange={this.HandleChange}>
                     {
