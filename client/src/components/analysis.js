@@ -315,8 +315,9 @@ class Analysis extends Component{
                 </div>
                 <br/>
                 <Row style={{margin: '0px', textAlign: 'left'}}>
-                    <Col style={{fontWeight: 'bold'}}>
+                    <Col style={{fontWeight: 'bold'}} sm='3'>
                         Entry time:
+                        <br/>
                     </Col>
                     <Col>
                         <span style={{fontSize: '13px'}}>
@@ -324,9 +325,9 @@ class Analysis extends Component{
                             (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
                             local time. <span style={{fontWeight: 'bold'}}>Your broker's timezone maybe different from yours.</span>)
                         </span>
+                        <br/>
                     </Col>
                 </Row>
-                <br/>
                 <Label style={{textAlign: 'left'}}>Enter your broker's closing price at the stated entry time <span style={{color: 'red'}}>*</span></Label>
                 <InputGroup>
                     <InputGroupText addonType="prepend">
@@ -795,7 +796,7 @@ class Analysis extends Component{
                             </div>
                             : <div>
                                 <Row style={{margin: '0px', textAlign: 'left'}}>
-                                    <Col sm='3'>
+                                    <Col sm='2'>
                                         <Label style={{fontWeight: 'bold'}}>Symbol:</Label>
                                         <select name='symbol' value={this.state.symbol} onChange={this.HandleChange}
                                             style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
@@ -809,7 +810,7 @@ class Analysis extends Component{
                                         </select>
                                         <br/><br/>
                                     </Col>
-                                    <Col>
+                                    <Col sm=''>
                                         <span style={{fontSize: '13px'}}>
                                             {this.state.user_device_time} {this.state.user_device_timezone} Timezone 
                                             (matches your device clock, therefore all timestamps inside the dashboard are being displayed in your 
