@@ -591,7 +591,7 @@ class Analysis extends Component{
                     <Col sm='5'>
                         <br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
+                            <Col>
                                 <h6>
                                     Stoploss Percentage:
                                 </h6>
@@ -604,7 +604,7 @@ class Analysis extends Component{
                         </Row>
                         <br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
+                            <Col>
                                 <h6>
                                     Takeprofit Percentage:
                                 </h6>
@@ -617,7 +617,7 @@ class Analysis extends Component{
                         </Row>
                         <br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
+                            <Col>
                                 <h6>
                                     Risk to reward ratio:
                                 </h6>
@@ -632,7 +632,7 @@ class Analysis extends Component{
                     <Col sm='5'>
                         <br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
+                            <Col>
                                 <h6>
                                     Entry time:
                                 </h6>
@@ -645,7 +645,7 @@ class Analysis extends Component{
                         </Row>
                         <br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
+                            <Col>
                                 <h6>
                                     Maximum Holding Time:
                                 </h6>
@@ -658,7 +658,7 @@ class Analysis extends Component{
                         </Row>
                         <br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='6'>
+                            <Col>
                                 <h6>
                                     Trade Closed At:
                                 </h6>
