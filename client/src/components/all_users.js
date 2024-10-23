@@ -137,15 +137,16 @@ class AllUsers extends Component{
                 let result = res.data
                 // if we're clearing the current all_users state first
                 if(clear_all_users_state_first == true){
-                    // clear all_users state
-                    this.setState({all_users: []})
+                    var all_users = []
+                }else{
+                    var all_users = this.state.all_users
                 }
                 if (get_all == true){
                     // set users to state, also set showing search results to false => so that we know users showing are not from a search
                     this.setState({all_users: result, showing_search_results: false})
                 }else{
                     // append users to state, also set showing search results to false => so that we know users showing are not from a search
-                    this.setState({all_users: this.state.all_users.concat(result), showing_search_results: false})
+                    this.setState({all_users: all_users.concat(result), showing_search_results: false})
                 }
                 this.LoadingOff()
                 this.GetUserMetrics()
@@ -277,15 +278,16 @@ class AllUsers extends Component{
                     let result = res.data
                     // if we're clearing the current all_users state first
                     if(clear_all_users_state_first == true){
-                        // clear all_users state
-                        this.setState({all_users: []})
+                        var all_users = []
+                    }else{
+                        var all_users = this.state.all_users
                     }
                     if (get_all == true){
                         // set user results to state, also set showing search results to true => so that we know users showing are from a search
                         this.setState({all_users: result, showing_search_results: true, search_results_owner_query: this.state.search_query})
                     }else{
                         // append user results to state, also set showing search results to true => so that we know users showing are from a search
-                        this.setState({all_users: this.state.all_users.concat(result), showing_search_results: true, search_results_owner_query: this.state.search_query})
+                        this.setState({all_users: all_users.concat(result), showing_search_results: true, search_results_owner_query: this.state.search_query})
                     }
                     this.LoadingOff()
                 }).catch((error) => {

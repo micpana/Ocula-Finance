@@ -171,18 +171,19 @@ class Analysis extends Component{
                     let result = res.data
                     // if we're clearing the current market_analysis state first
                     if(clear_market_analysis_state_first == true){
-                        // clear market_analysis state
-                        this.setState({market_analysis: []})
+                        var market_analysis = []
+                    }else{
+                        var market_analysis = this.state.market_analysis
                     }
                     if (get_all == true){
                         // set market analysis to state
                         this.setState({market_analysis: result})
                     }else{
-                        // append market analysis to state ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
-                        this.setState({market_analysis: result.concat(this.state.market_analysis)})
+                        // add market analysis to state ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
+                        this.setState({market_analysis: result.concat(market_analysis)})
 
-                        // trade signal(s) browser notification ... only if this is not the initial request
-                        if (this.state.initial_request === false){
+                        // trade signal(s) browser notification ... only if this is not the initial request and this is a function recall for the same symbol
+                        if (this.state.initial_request === false && symbol == this.state.queried_symbol){
                             this.ShowTradeSignalsNotification(result)
                         }
 
@@ -559,7 +560,9 @@ class Analysis extends Component{
                         </h5>
                     </Col>
                     <Col>
-                        <a onClick={() => this.OpenModal('model_card')} style={{color: 'inherit', cursor: 'pointer'}}>
+                        <a onClick={() => this.OpenModal('model_card')} 
+                            style={{color: 'inherit', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold'}}
+                        >
                             Click here to view the {item.symbol} AI model's performance card.
                         </a>
                     </Col>
