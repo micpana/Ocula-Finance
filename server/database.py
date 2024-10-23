@@ -9,20 +9,20 @@ from datetime import datetime
 import os
 from settings import database_selection
 
+# get live database credentials from environment variables
+live_db_username = os.environ.get('LIVE_DB_USERNAME')
+live_db_password = os.environ.get('LIVE_DB_PASSWORD')
+live_db_url = os.environ.get('LIVE_DB_URL')
+
+# get test database credentials from environment variables
+test_db_username = os.environ.get('TEST_DB_USERNAME')
+test_db_password = os.environ.get('TEST_DB_PASSWORD')
+
+# get selected database ... mock / test / live
+selected_database = database_selection()
+
 # function to connect to the database *****************************************************************************************************
 def connect_to_database():
-    # get live database credentials from environment variables
-    live_db_username = os.environ.get('LIVE_DB_USERNAME')
-    live_db_password = os.environ.get('LIVE_DB_PASSWORD')
-    live_db_url = os.environ.get('LIVE_DB_URL')
-
-    # get test database credentials from environment variables
-    test_db_username = os.environ.get('TEST_DB_USERNAME')
-    test_db_password = os.environ.get('TEST_DB_PASSWORD')
-
-    # get selected database ... mock / test / live
-    selected_database = database_selection()
-
     if selected_database == 'mock':
         # mock db connection
         client = MongoClient(mongo_client_class=MongoClient, db_name="ocula-finance-mock")
@@ -35,7 +35,7 @@ def connect_to_database():
     elif selected_database == 'live':
         # live db connection
         connect_url = 'mongodb+srv://'+live_db_username+':'+urllib.parse.quote(live_db_password)+live_db_url
-        connect(host=connect_url, tls=True) # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard
+        connect(host=connect_url, tls=True, alias='default') # removed ssl=True, ssl_cert_reqs='CERT_NONE', in favor of tls=True which is more secure and a morden standard
     else:
         print('UNKNOWN DATABASE SELECTION:', selected_database)
 # *****************************************************************************************************************************************
