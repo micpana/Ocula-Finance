@@ -49,11 +49,11 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
             if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'yahoo': 
             from yahoo_finance_data import yahoo_fetch_data
-            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to).head(-1) # removing the last row since its a bar still forming, as stated above
+            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to) # removing the last row since its a bar still forming, as stated above
             if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'mt5': 
             from mt5_data import mt5_fetch_data
-            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type).head(-1) # removing the last row since its a bar still forming, as stated above
+            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type) # removing the last row since its a bar still forming, as stated above
             if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
 
     # return ohlc data dict
