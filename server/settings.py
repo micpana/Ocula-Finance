@@ -233,7 +233,7 @@ def get_data_collection_days_by_intended_purpose(purpose, timeframe, data_source
     """
 
     if purpose == 'training': data_collection_days = 1020; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
-    elif purpose == 'prediction': data_collection_days = 300; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+    elif purpose == 'prediction': data_collection_days = 500; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
 
     # yahoo finance has low data collection n days limits depending on the timeframe... limit max days when using yahoo finance
     if data_source == 'yahoo': data_collection_days = yahoo_finance_n_days_limitor(timeframe, data_collection_days)
