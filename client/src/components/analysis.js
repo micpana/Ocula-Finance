@@ -184,8 +184,8 @@ class Analysis extends Component{
                         // add market analysis to state ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
                         this.setState({market_analysis: result.concat(market_analysis)})
 
-                        // trade signal(s) browser notification ... only if this is not the initial request and this is a function recall for the same symbol
-                        if (this.state.initial_request === false && symbol == this.state.queried_symbol){
+                        // trade signal(s) browser notification ... only if we have new signals, this is not the initial request, and this is a function recall for the same symbol
+                        if (result.length > 0 && this.state.initial_request === false && symbol == this.state.queried_symbol){
                             this.ShowTradeSignalsNotification(result)
                         }
 
