@@ -169,55 +169,65 @@ class Subscriptions extends Component{
                             Subscriptions
                         </h5>
                         <br/><br/>
-                        <Row style={{margin: '0px', textAlign: 'left'}}>
-                            <Col sm='4'>
-                                <h6 style={{fontWeight: 'bold'}}>
-                                    Your current subscription status:
-                                </h6>
+                        <Row style={{margin: '0px', textAlign: 'left', fontSize: '13px'}}>
+                            <Col sm='6'>
+                                <Row style={{margin: '0px'}}>
+                                    <Col sm='4'>
+                                        <h6 style={{fontWeight: 'bold'}}>
+                                            Your current subscription status:
+                                        </h6>
+                                    </Col>
+                                    <Col>
+                                        {
+                                            this.state.user_details.subscribed === true
+                                            ? <div style={{fontWeight: 'bold', color: 'green'}}>
+                                                Subscribed
+                                            </div> 
+                                            : <div style={{fontWeight: 'bold', color: 'red'}}>
+                                                Not subscribed
+                                            </div>
+                                        }
+                                    </Col>
+                                </Row>
+                                <br/>
                             </Col>
                             <Col>
-                                {
-                                    this.state.user_details.subscribed === true
-                                    ? <div style={{fontWeight: 'bold', color: 'green'}}>
-                                        Subscribed
-                                    </div> 
-                                    : <div style={{fontWeight: 'bold', color: 'red'}}>
-                                        Not subscribed
-                                    </div>
-                                }
+                                <Row style={{margin: '0px'}}>
+                                    <Col sm='4'>
+                                        <h6 style={{fontWeight: 'bold'}}>
+                                            Subscription expiry date:
+                                        </h6>
+                                    </Col>
+                                    <Col>
+                                        <div style={{fontWeight: 'bold', color: '#00539C'}}>
+                                            {
+                                                this.state.user_details.subscription_expiry === ''
+                                                ? <>
+                                                    You've never subscribed before
+                                                </>
+                                                : <>
+                                                    <DateTimeDisplay datetimeString={this.state.user_details.subscription_expiry} />
+                                                </>
+                                            }
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <br/>
                             </Col>
                         </Row>
-                        <br/>
-                        <Row style={{margin: '0px', textAlign: 'left'}}>
-                            <Col sm='4'>
-                                <h6 style={{fontWeight: 'bold'}}>
-                                    Subscription expiry date:
-                                </h6>
-                            </Col>
-                            <Col>
-                                <div style={{fontWeight: 'bold', color: '#00539C'}}>
-                                    {
-                                        this.state.user_details.subscription_expiry === ''
-                                        ? <>
-                                            You've never subscribed before
-                                        </>
-                                        : <>
-                                            <DateTimeDisplay datetimeString={this.state.user_details.subscription_expiry} />
-                                        </>
-                                    }
-                                </div>
-                            </Col>
-                        </Row>
-                        <br/><br/><br/>
+                        <br/><br/>
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
                         <br/><br/>
                         <Row style={{margin: '0px'}}>
-                            <Col sm='4'>
-                                <Container
-                                    
-                                >
+                            <Col sm='6'>
+                                <Container>
+
+                                </Container>
+                            </Col>
+                            <Col>
+                                <Container>
 
                                 </Container>
                             </Col>

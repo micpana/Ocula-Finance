@@ -1110,20 +1110,6 @@ def editProfile():
     # return return_string
     response = make_response(return_string); response.status = 200; return response
 
-# 31
-@app.route('/makePayment', methods=['POST'])
-def makePayment():
-    # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
-    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
-
-# 32
-@app.route('/checkTransactionStatus', methods=['POST'])
-def checkTransactionStatus():
-    # check user access token's validity
-    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
-    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
-
 # 12
 @app.route('/getUserPaymentHistory', methods=['POST'])
 def getUserPaymentHistory():
@@ -2361,7 +2347,19 @@ def getPaymentsList():
     response = make_response(jsonify(all_payments)); response.status = 200; return response
 
 # payment functions ***********************************************************************************************************************
+# 31
+@app.route('/initiatePaynowPayment', methods=['POST'])
+def initiatePaynowPayment():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+# 32
+@app.route('/checkPaynowTransactionStatus', methods=['POST'])
+def checkPaynowTransactionStatus():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 # *****************************************************************************************************************************************
 
 if __name__ == '__main__':

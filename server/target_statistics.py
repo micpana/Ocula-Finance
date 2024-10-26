@@ -12,7 +12,7 @@ percentile_value_to_investigate = 92.798 # to be selected from the percentile of
 list_of_symbols = get_symbol_list()
 list_of_symbols = ['Volatility 75 (1s) Index'] # override ... comment it out when not in use
 # printout the list of symbols being used
-print('\n\nRunning y statistics for the following symbols:', list_of_symbols)
+print('\n\nRunning target statistics for the following symbols:', list_of_symbols)
 # *****************************************************************************************************************************************
 
 # state entry timeframe ... choose between Monthly, Weekly, Daily, H4, H1, M30, M15, M5, and M1 *******************************************
