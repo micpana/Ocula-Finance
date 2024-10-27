@@ -243,16 +243,16 @@ class Subscriptions extends Component{
                                         Pay using Crypto
                                     </span>
                                     <br/><br/>
-                                    <p style={{textAlign: 'justify'}}>
-                                        We accept Bitcoin<img src={Bitcoin} style={{width: '20px'}}/> 
-                                        Ethereum<img src={Ethereum} style={{width: '20px'}}/> USD Coin<img src={USDCoin} style={{width: '20px'}}/>
-                                        Tron<img src={Tron} style={{width: '20px'}}/> Tether<img src={Tether} style={{width: '20px'}}/>
-                                        BNB<img src={BNB} style={{width: '20px'}}/> Dogecoin<img src={Dogecoin} style={{width: '20px'}}/> 
-                                        Litecoin<img src={Litecoin} style={{width: '20px'}}/> Digibyte<img src={Digibyte} style={{width: '20px'}}/>
-                                        Monero<img src={Monero} style={{width: '20px'}}/> Ton<img src={Ton} style={{width: '20px'}}/>
-                                        Polygon<img src={Polygon} style={{width: '20px'}}/> Bitcoin Cash<img src={BitcoinCash} style={{width: '20px'}}/>
-                                        Shiba Inu<img src={ShibaInu} style={{width: '20px'}}/> Solana<img src={Solana} style={{width: '20px'}}/>
-                                        Notcoin<img src={Notcoin} style={{width: '20px'}}/> Dogs<img src={Dogs} style={{width: '20px'}}/>
+                                    <p style={{textAlign: 'left'}}>
+                                        We accept <img src={Bitcoin} style={{width: '20px'}}/> Bitcoin,
+                                        {' '}<img src={Ethereum} style={{width: '20px'}}/> Ethereum, <img src={USDCoin} style={{width: '20px'}}/> USD Coin,
+                                        {' '}<img src={Tron} style={{width: '20px'}}/> Tron, <img src={Tether} style={{width: '20px'}}/> Tether,
+                                        {' '}<img src={BNB} style={{width: '20px'}}/> BNB, <img src={Dogecoin} style={{width: '20px'}}/> Dogecoin,
+                                        {' '}<img src={Litecoin} style={{width: '20px'}}/>Litecoin, <img src={Digibyte} style={{width: '20px'}}/> Digibyte,
+                                        {' '}<img src={Monero} style={{width: '20px'}}/> Monero, <img src={Ton} style={{width: '20px'}}/> Ton,
+                                        {' '}<img src={Polygon} style={{width: '20px'}}/> Polygon, <img src={BitcoinCash} style={{width: '20px'}}/> Bitcoin Cash,
+                                        {' '}<img src={ShibaInu} style={{width: '20px'}}/> Shiba Inu, <img src={Solana} style={{width: '20px'}}/> Solana,
+                                        {' '}<img src={Notcoin} style={{width: '20px'}}/> Notcoin, <img src={Dogs} style={{width: '20px'}}/> Dogs
                                     </p>
                                 </Container>
                             </Col>
@@ -263,9 +263,9 @@ class Subscriptions extends Component{
                                         <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
                                     </span>
                                     <br/><br/>
-                                    <p style={{textAlign: 'justify'}}>
-                                        We accept both USD and ZWG on EcoCash <img src={Ecocash} style={{width: '20px'}}/>, and only ZWG on 
-                                        OneMoney <img src={OneMoney} style={{width: '20px'}}/>
+                                    <p style={{textAlign: 'left'}}>
+                                        We accept both USD and ZWG on <img src={Ecocash} style={{width: '20px'}}/> EcoCash, and only ZWG on
+                                        {' '}<img src={OneMoney} style={{width: '20px'}}/> OneMoney
                                     </p>
                                 </Container>
                             </Col>
