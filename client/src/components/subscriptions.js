@@ -173,9 +173,9 @@ class Subscriptions extends Component{
                             <Col sm='6'>
                                 <Row style={{margin: '0px'}}>
                                     <Col sm='6'>
-                                        <h6 style={{fontWeight: 'bold'}}>
+                                        <span style={{fontWeight: 'bold'}}>
                                             Your current subscription status:
-                                        </h6>
+                                        </span>
                                     </Col>
                                     <Col>
                                         {
@@ -194,9 +194,9 @@ class Subscriptions extends Component{
                             <Col>
                                 <Row style={{margin: '0px'}}>
                                     <Col sm='6'>
-                                        <h6 style={{fontWeight: 'bold'}}>
+                                        <span style={{fontWeight: 'bold'}}>
                                             Subscription expiry date:
-                                        </h6>
+                                        </span>
                                     </Col>
                                     <Col>
                                         <div style={{fontWeight: 'bold', color: '#00539C'}}>
@@ -222,12 +222,16 @@ class Subscriptions extends Component{
                         <Row style={{margin: '0px'}}>
                             <Col sm='6'>
                                 <Container>
-
+                                    <h6>
+                                        Pay using Crypto
+                                    </h6>
                                 </Container>
                             </Col>
                             <Col>
                                 <Container>
-
+                                    <h6>
+                                        Pay using Ecocash (USD / ZWG) and Onemoney (ZWG)
+                                    </h6>
                                 </Container>
                             </Col>
                         </Row>

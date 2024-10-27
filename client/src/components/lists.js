@@ -12,4 +12,7 @@ export const User_Roles = ['user', 'admin', 'free user']
 export const Payment_Purposes = ['Monthly Subscription', 'Yearly Subscription']
 
 // payment methods
-export const Payment_Methods = ['Cash', 'Innbucks', 'Ecocash USD', 'Paypal', 'Bitcoin', 'Ethereum']
+export const Payment_Methods = [
+    'Ecocash USD', 'Ecocash ZWG', 'Onemoney ZWG', 'Innbucks', 'Cash', 'Mukuru', 'Deriv P2P',
+    'BTC', 'ETH', 'USDC', 'TRX', 'USDT', 'BNB', 'DOGE', 'LTC', 'DGB', 'XMR', 'TON', 'POL', 'BCH', 'SHIB', 'SOL', 'NOT', 'DOGS' 
+]
