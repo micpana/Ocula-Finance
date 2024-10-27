@@ -219,13 +219,12 @@ class Subscriptions extends Component{
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
-                        <br/>
-                        <Row style={{margin: '0px'}}>
+                        <Row style={{margin: '0px', marginTop: '10px'}}>
                             <Col sm='6'>
                                 <Container>
-                                    <h6>
+                                    <span style={{fontWeight: 'bold'}}>
                                         Pay using Crypto
-                                    </h6>
+                                    </span>
                                     <br/>
                                     We accept Bitcoin, Ethereum, USD Coin, Tron, Tether, BNB, Dogecoing, Litecoin, Digibyte, Monero, 
                                     Ton, Polygon, Bitcoin Cash, Shiba Inu, Solana, Notcoin, Dogs
@@ -233,9 +232,10 @@ class Subscriptions extends Component{
                             </Col>
                             <Col>
                                 <Container>
-                                    <h6>
-                                        Pay using Ecocash and Onemoney
-                                    </h6>
+                                    <span style={{fontWeight: 'bold'}}>
+                                        Pay using <span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>cash</span> and 
+                                        <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
+                                    </span>
                                     <br/>
                                 </Container>
                             </Col>

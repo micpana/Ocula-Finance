@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-binancecoin">
+      <rect width="30" height="30"/>
+    </clipPath>
+  </defs>
+  <g id="binancecoin" clip-path="url(#clip-binancecoin)">
+    <g id="Layer_51" data-name="Layer 51" transform="translate(-2.654 -2.654)">
+      <g id="Group_14" data-name="Group 14" transform="translate(2.654 2.654)">
+        <rect id="Rectangle_6" data-name="Rectangle 6" width="30" height="30" rx="7" fill="#ffcd00"/>
+        <path id="Intersection_1" data-name="Intersection 1" d="M0,7A7,7,0,0,1,7,0h6.658a16.541,16.541,0,0,1,.824,5.172A16.555,16.555,0,0,1,0,21.6Z" transform="translate(0 0)" fill="#ffda44"/>
+      </g>
+      <g id="Group_15" data-name="Group 15" transform="translate(7.476 7.474)">
+        <path id="Path_12" data-name="Path 12" d="M26.16,16.564l4,4,2.182-2.181L26.16,12.2l-6.181,6.181,2.182,2.181Z" transform="translate(-15.978 -12.201)" fill="#f1f2f2"/>
+        <path id="Path_13" data-name="Path 13" d="M26.16,39.535l-4-4-2.182,2.181L26.16,43.9l6.181-6.181-2.182-2.181Z" transform="translate(-15.978 -23.538)" fill="#f1f2f2"/>
+        <path id="Path_14" data-name="Path 14" d="M0,0H3.085V3.085H0Z" transform="translate(7.998 10.18) rotate(-45)" fill="#f1f2f2"/>
+        <path id="Path_15" data-name="Path 15" d="M0,0H3.085V3.085H0Z" transform="translate(15.996 10.181) rotate(-45)" fill="#f1f2f2"/>
+        <path id="Path_16" data-name="Path 16" d="M0,0H3.085V3.085H0Z" transform="translate(0 10.179) rotate(-45)" fill="#f1f2f2"/>
+      </g>
+    </g>
+  </g>
+</svg>
