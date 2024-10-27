@@ -66,7 +66,6 @@ class AllUsers extends Component{
             purpose: '',
             payment_method: '',
             transaction_id: '',
-            verified: false,
             discount_applied: 0,
             amount: 0,
             showing_search_results: false,
@@ -640,7 +639,6 @@ class AllUsers extends Component{
             if (this.state.purpose === ''){ this.SetInputError('purpose', 'required'); data_checks_out = false }
             if (this.state.payment_method === ''){ this.SetInputError('payment_method', 'required'); data_checks_out = false }
             if (this.state.transaction_id === ''){ this.SetInputError('transaction_id', 'required'); data_checks_out = false }
-            if (this.state.verified === ''){ this.SetInputError('verified', 'required'); data_checks_out = false }
             if (this.state.discount_applied === null){ this.SetInputError('discount_applied', 'required'); data_checks_out = false }
             if (this.state.discount_applied < 0 || this.state.discount_applied > 100){ this.SetInputError('discount_applied', 'invalid'); data_checks_out = false }
             if (this.state.amount === 0 || this.state.amount === null){ this.SetInputError('amount', 'required'); data_checks_out = false }
@@ -659,7 +657,6 @@ class AllUsers extends Component{
                 data.append('purpose', this.state.purpose)
                 data.append('payment_method', this.state.payment_method)
                 data.append('transaction_id', this.state.transaction_id)
-                data.append('verified', this.state.verified)
                 data.append('discount_applied', this.state.discount_applied)
                 data.append('amount', this.state.amount)
                 data.append('password', this.state.password)
@@ -672,7 +669,6 @@ class AllUsers extends Component{
                         purpose: '',
                         payment_method: '',
                         transaction_id: '',
-                        verified: false,
                         discount_applied: 0,
                         amount: 0,
                         password: '',
@@ -1376,15 +1372,7 @@ class AllUsers extends Component{
                                         <br/>
                                     </Col>
                                     <Col>
-                                        <Label>Verified <span style={{color: 'red'}}>*</span></Label>
-                                        <select name='verified' value={this.state.verified} onChange={this.HandleChange}
-                                            style={{marginTop: '28px', border: 'none', borderBottom: '1px solid #828884', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
-                                        >
-                                            <option value={false}>False</option>
-                                            <option value={true}>True</option>
-                                        </select>
-                                        <InputErrors field_error_state={this.state.input_errors['verified']} field_label='Verified' />
-                                        <br/>
+                                        
                                     </Col>
                                 </Row>
                                 <br/>

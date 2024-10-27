@@ -26,8 +26,11 @@ def validate_subscription(user):
         subscription_valid = True
     else:
         subscription_valid = False
+    # subscription expiry date ... pick the most recent date between user_subscription_expiration_date and user_free_trial_expiration_date
+    if user_subscription_expiration_date > str(user_free_trial_expiration_date): subcription_expiry_date = user_subscription_expiration_date
+    else: subcription_expiry_date = str(user_free_trial_expiration_date)
     # ***************************************************************************************************************************
 
     # return subscription status
-    return subscription_valid
+    return subscription_valid, subcription_expiry_date
 # *****************************************************************************************************************************************

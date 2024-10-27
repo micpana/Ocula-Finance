@@ -18,8 +18,8 @@ from emails import send_registration_email_confirmation, send_password_recovery_
 from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message
 from user_subscription_check import validate_subscription
 from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, user_roles_exempted_from_subscribing
-# from paynow_payments import paynow_payment, paynow_status
-# from oxapay_payments import oxapay_payment, oxapay_status
+from paynow_payments import paynow_payment, paynow_status
+from oxapay_payments import oxapay_payment, oxapay_status
 
 # Flask stuff
 app = Flask(__name__)
@@ -1139,7 +1139,7 @@ def getUserPaymentHistory():
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
 
     # collect payment history by user_id
-    user_payment_history = Payments.objects.filter(user_id = user_id)
+    user_payment_history = Payments.objects.filter(user_id = user_id, verified=True)
     user_payment_history = json.loads(user_payment_history.to_json())
 
     # if no dates have been given
@@ -1260,8 +1260,8 @@ def getMarketAnalysis():
         response = make_response('telegram not verified'); response.status = 403; return response
     else:
         # user subscription test ********************************************************
-        # get user subscription status
-        user_subscribed = validate_subscription(user)
+        # get user subscription status and subscription expiry date (free trial counts)
+        user_subscribed, subcription_expiry_date = validate_subscription(user)
 
         # if a user is not subscribed and is not exempted from subscribing because of their role
         if user_subscribed == False and user_role not in user_roles_exempted_from_subscribing():
@@ -1506,7 +1506,7 @@ def getNewSubscribedUserCountStatistics():
     if isinstance(category, str) == False: response = make_response('Category data type is invalid'); response.status = 400; return response
     
     # get subscriptions list
-    all_subscriptions = Payments.objects.filter(purpose = 'subscription')
+    all_subscriptions = Payments.objects.filter(purpose = 'subscription', verified=True)
 
     # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
     new_subscribed_user_statistics = []
@@ -1577,7 +1577,7 @@ def getUserPaymentHistoryByAccountId():
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # collect payment history by user_id
-    user_payment_history = Payments.objects.filter(user_id = account_id)
+    user_payment_history = Payments.objects.filter(user_id = account_id, verified=True)
     user_payment_history = json.loads(user_payment_history.to_json())
 
     # if client did not request all data
@@ -1776,8 +1776,11 @@ def getUserSubscriptionStatistics():
     if category == '' or category == None: response = make_response('Category cannot be empty'); response.status = 400; return response
     if isinstance(category, str) == False: response = make_response('Category data type is invalid'); response.status = 400; return response
     
+    # get all payments
+    all_payments = Payments.objects.filter(verified=True)
+
     # get subscriptions list
-    all_subscriptions = Payments.objects.filter(purpose = 'subscription')
+    all_subscriptions = [i for i in all_payments if 'subscription' in i.purpose.lower()]
 
     # return empty list if there are no subscriptions yet ... inorder to avoid errors by indexing empty list
     subscribed_user_statistics = []
@@ -2036,12 +2039,6 @@ def manuallyEnterUserPayment():
     except: response = make_response('Transaction ID field required'); response.status = 400; return response
     if transaction_id == '' or transaction_id == None: response = make_response('Transaction ID cannot be empty'); response.status = 400; return response
     if isinstance(transaction_id, str) == False: response = make_response('Transaction ID data type is invalid'); response.status = 400; return response
-    # verified
-    try: verified = request.form['verified']
-    except: response = make_response('Verified field required'); response.status = 400; return response
-    if verified == '' or verified == None: response = make_response('Verified cannot be empty'); response.status = 400; return response
-    try: verified = ast.literal_eval(str(verified).capitalize())
-    except: response = make_response('Verified data type is invalid'); response.status = 400; return response
     # discount applied
     try: discount_applied = request.form['discount_applied']
     except: response = make_response('Discount applied field required'); response.status = 400; return response
@@ -2086,33 +2083,35 @@ def manuallyEnterUserPayment():
     except:
         response = make_response('invalid account id'); response.status = 404; return response
 
-    # if purpose == subscription
+    # if purpose is a Monthly Subscription / Yearly Subscription
     expiry_date = ''
-    if purpose == 'subscription':
+    if 'subscription' in purpose.lower():
         # check if amount is sufficient
-        if amount < 10 or amount % 10 != 0 and amount != 86:
+        if amount < 10 or amount % 10 != 0 and amount != 96:
             response = make_response('enter sufficient amount for a subscription'); response.status = 404; return response
         
         # check if amount does not exceed max subscription package
-        if amount > 86:
+        if amount > 96:
             response = make_response('subscription amount cannot be more than max subscription'); response.status = 404; return response
 
+        # determine subscription expiry *****************************************************************************************
         # get subscription months by amount
-        if amount == 86:
-            subscription_months = 12
-        else:
-            subscription_months = amount / 10
+        if amount == 96: subscription_months = 12
+        else: subscription_months = amount / 10
 
         # get subscription weeks
         subscription_weeks = subscription_months * 4
 
-        # check if user has an active subscription and calculate subscription expiry date
-        if current_datetime > user.subscription_expiry: # no active subscription
-            expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
-        elif current_datetime <= user.subscription_expiry: # active subscription
-            expiry_date = str(datetime.strptime(user.subscription_expiry, date_format) + timedelta(weeks = subscription_weeks))
+        # get user subscription status and subscription expiry date (free trial counts)
+        user_subscribed, subcription_expiry_date = validate_subscription(user)
+
+        # if user has an active subscription or free trial
+        if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
+        # if user has no active subscription
+        else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
+        # ***********************************************************************************************************************
         
-        # set user subscription status to true... set subscription date and subscription expiry
+        # set new subscription and subscription expiry dates to the user's account
         Users.objects(id = account_id).update(
             subscription_date = current_datetime,
             subscription_expiry = expiry_date
@@ -2125,9 +2124,9 @@ def manuallyEnterUserPayment():
         purpose = purpose,
         payment_method = payment_method,
         transaction_id = transaction_id,
-        verified = verified,
+        verified = True,
         discount_applied = discount_applied,
-        amount = amount,
+        amount = float(amount),
         expiry_date = expiry_date,
         entered_by = admin_name_and_username
     )
@@ -2152,7 +2151,7 @@ def getEarningsReport():
     except: response = make_response('End date field required'); response.status = 400; return response
 
     # get all payments
-    all_payments = Payments.objects.all()
+    all_payments = Payments.objects.filter(verified = True)
 
     # initialize earnings report variable
     earnings_report = {}
@@ -2164,7 +2163,7 @@ def getEarningsReport():
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription'])
+        subscriptions = sum([i.amount for i in all_payments if 'subscription' in i.purpose.lower()])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
@@ -2183,7 +2182,7 @@ def getEarningsReport():
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date[0:10] >= start_date])
+        subscriptions = sum([i.amount for i in all_payments if 'subscription' in i.purpose.lower() and i.date[0:10] >= start_date])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
@@ -2203,7 +2202,7 @@ def getEarningsReport():
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription' and i.date[0:10] <= end_date])
+        subscriptions = sum([i.amount for i in all_payments if 'subscription' in i.purpose.lower() and i.date[0:10] <= end_date])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
@@ -2225,7 +2224,7 @@ def getEarningsReport():
         earnings_report['total_earnings'] = total_earnings
 
         # subscriptions
-        subscriptions = sum([i.amount for i in all_payments if i.purpose == 'subscription'and i.date[0:10] >= start_date and i.date[0:10] <= end_date])
+        subscriptions = sum([i.amount for i in all_payments if 'subscription' in i.purpose.lower()and i.date[0:10] >= start_date and i.date[0:10] <= end_date])
         earnings_report['subscriptions'] = subscriptions
 
         # payment methods
@@ -2274,7 +2273,7 @@ def getPaymentsList():
     current_datetime = str(current_datetime_object)
 
     # get all payments
-    all_payments = Payments.objects.all()
+    all_payments = Payments.objects.filter(verified = True)
     all_payments = json.loads(all_payments.to_json())
 
     # if entered by has been given
@@ -2347,6 +2346,7 @@ def getPaymentsList():
     response = make_response(jsonify(all_payments)); response.status = 200; return response
 
 # payment functions ***********************************************************************************************************************
+# Paynow ************************************************************************************************************************
 # 31
 @app.route('/initiatePaynowPayment', methods=['POST'])
 def initiatePaynowPayment():
@@ -2354,17 +2354,339 @@ def initiatePaynowPayment():
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
 
+    # input field validation ********************
+    # method ... ecocash / onemoney
+    try: method = request.form['method'] 
+    except: response = make_response('Method field required'); response.status = 400; return response
+    if method == '' or method == None: response = make_response('Method cannot be empty'); response.status = 400; return response
+    if isinstance(method, str) == False: response = make_response('Method data type is invalid'); response.status = 400; return response
+    # phonenumber ... 07XX XXX XXX
+    try: phonenumber = request.form['phonenumber'] 
+    except: response = make_response('Phonenumber field required'); response.status = 400; return response
+    if phonenumber == '' or phonenumber == None: response = make_response('Phonenumber cannot be empty'); response.status = 400; return response
+    if isinstance(phonenumber, str) == False: response = make_response('Phonenumber data type is invalid'); response.status = 400; return response
+    # currency ... USD / ZWG
+    try: currency = request.form['currency'] 
+    except: response = make_response('Currency field required'); response.status = 400; return response
+    if currency == '' or currency == None: response = make_response('Currency cannot be empty'); response.status = 400; return response
+    if isinstance(currency, str) == False: response = make_response('Currency data type is invalid'); response.status = 400; return response
+    # subscription type ... Monthly Subscription, Yearly Subscription
+    try: subscription_type = request.form['subscription_type'] 
+    except: response = make_response('Subscription type field required'); response.status = 400; return response
+    if subscription_type == '' or subscription_type == None: response = make_response('Subscription type cannot be empty'); response.status = 400; return response
+    if isinstance(subscription_type, str) == False: response = make_response('Subscription type data type is invalid'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now(timezone(system_timezone()))
+    current_datetime = str(current_datetime_object)
+
+    # user details
+    user = Users.objects.filter(id = user_id)[0]
+
+    # determine amount by subscription_type
+    if subscription_type == 'Monthly Subscription': amount = 10.00; discount_applied = 0
+    elif subscription_type == 'Yearly Subscription': amount = 96.00; discount_applied = 0
+    else: response = make_response('unknown subscription type'); response.status = 404; return response
+
+    # initiate Paynow transaction
+    transaction_initiation_successful, poll_url = paynow_payment(
+        subscription_type, # purpose
+        subscription_type, # item
+        user.email, # user email ... use account email for sandbox tests
+        method, # payment method ... ecocash / onemoey
+        phonenumber, # payment phonenumber
+        amount, # amount
+        currency # currency ... USD / ZWG
+    )
+
+    # if transaction failed to initiate
+    if transaction_initiation_successful == False: response = make_response('failed to initiate'); response.status = 404; return response
+
+    # if transaction was initiated successfully, add it as an unverified payment to Payments
+    if transaction_initiation_successful == True:
+        # determine subscription expiry *****************************************************************************************
+        # get subscription months by amount
+        if amount == 96: subscription_months = 12
+        else: subscription_months = amount / 10
+
+        # get subscription weeks
+        subscription_weeks = subscription_months * 4
+
+        # get user subscription status and subscription expiry date (free trial counts)
+        user_subscribed, subcription_expiry_date = validate_subscription(user)
+
+        # if user has an active subscription or free trial
+        if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
+        # if user has no active subscription
+        else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
+        # ***********************************************************************************************************************
+
+        # add user payment
+        payment_details = Payments(
+            date = current_datetime,
+            user_id = user_id,
+            purpose = subscription_type,
+            payment_method = method,
+            transaction_id = poll_url,
+            verified = False, # will be verified if status is found as paid in checkPaynowTransactionStatus
+            discount_applied = discount_applied,
+            amount = float(amount),
+            expiry_date = expiry_date,
+            entered_by = 'system (Paynow Gateway)'
+        )
+        payment_details.save()
+
+        # return response
+        response = make_response('initiation successful'); response.status = 200; return response
+
 # 32
 @app.route('/checkPaynowTransactionStatus', methods=['POST'])
 def checkPaynowTransactionStatus():
     # check user access token's validity
     access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
     if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # if request was made by an admin account ***********************************************************************************
+    if user_role == 'admin':
+        # input field validation ********************
+        # account id
+        try: account_id = request.form['account_id '] 
+        except: response = make_response('Account ID field required'); response.status = 400; return response
+        # if request is not for the admin's own account
+        if account_id != '' and account_id != None and account_id != 'null': user_id = account_id
+
+        # validation of supplied account id
+        try: account = Users.objects.filter(id = account_id)[0]
+        except: response = make_response('invalid account id'); response.status = 404; return response
+    # ***************************************************************************************************************************
+    
+    # get current datetime
+    current_datetime_object = datetime.now(timezone(system_timezone()))
+    current_datetime = str(current_datetime_object)
+
+    # user details
+    user = Users.objects.filter(id = user_id)
+
+    # if user's most recent transaction has been verified already ***************************************************************
+    # get all user payments
+    user_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Paynow Gateway)')
+    # get user's most recent payment's verification status
+    if len(user_payments) > 0: most_recent_payment_verified = user_payments[-1].verified
+    # ***************************************************************************************************************************
+
+    # user's pending payments
+    user_pending_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Paynow Gateway)', verified = False)
+
+    # if user has no pending payments or user's most recent payment's verification status = True
+    if len(user_pending_payments) == 0 or most_recent_payment_verified = True: response = make_response('no pending payments'); response.status = 404; return response
+
+    # user's most recent pending payment
+    most_recent_pending_payment = user_pending_payments[-1]
+
+    # get user's most recent poll url
+    most_recent_poll_url = most_recent_pending_payment.transaction_id
+
+    # get user's most recent payment amount
+    amount = most_recent_pending_payment.amount
+
+    # check Paynow transaction status ... sent / paid / cancelled
+    payment_status = paynow_status(most_recent_poll_url)
+
+    # if transaction has not been paid
+    if payment_status != 'paid': response = make_response('not paid'); response.status = 404; return response
+
+    # if transaction has been paid
+    if payment_status == 'paid':
+        # determine subscription expiry *****************************************************************************************
+        # get subscription months by amount
+        if amount == 96: subscription_months = 12
+        else: subscription_months = amount / 10
+
+        # get subscription weeks
+        subscription_weeks = subscription_months * 4
+
+        # get user subscription status and subscription expiry date (free trial counts)
+        user_subscribed, subcription_expiry_date = validate_subscription(user)
+
+        # if user has an active subscription or free trial
+        if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
+        # if user has no active subscription
+        else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
+        # ***********************************************************************************************************************
+
+        # set new subscription and subscription expiry dates to the user's account
+        Users.objects(id = user_id).update(
+            subscription_date = current_datetime,
+            subscription_expiry = expiry_date
+        )
+
+        # return response 
+        response = make_response('paid'); response.status = 200; return response
+# *******************************************************************************************************************************
+# Oxapay ************************************************************************************************************************
+# 33
+@app.route('/initiateOxapayPayment', methods=['POST'])
+def initiateOxapayPayment():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # input field validation ********************
+    # subscription type ... Monthly Subscription, Yearly Subscription
+    try: subscription_type = request.form['subscription_type'] 
+    except: response = make_response('Subscription type field required'); response.status = 400; return response
+    if subscription_type == '' or subscription_type == None: response = make_response('Subscription type cannot be empty'); response.status = 400; return response
+    if isinstance(subscription_type, str) == False: response = make_response('Subscription type data type is invalid'); response.status = 400; return response
+    
+    # get current datetime
+    current_datetime_object = datetime.now(timezone(system_timezone()))
+    current_datetime = str(current_datetime_object)
+
+    # user details
+    user = Users.objects.filter(id = user_id)[0]
+
+    # determine amount by subscription_type
+    if subscription_type == 'Monthly Subscription': amount = 10.00; discount_applied = 0
+    elif subscription_type == 'Yearly Subscription': amount = 96.00; discount_applied = 0
+    else: response = make_response('unknown subscription type'); response.status = 404; return response
+
+    # initiate Oxapay transaction
+    transaction_initiation_successful, track_id, paylink = oxapay_payment(
+        amount, # amount
+        subscription_type, # description
+        user.email + '-' + current_datetime, # order id
+        user.email # user email
+    )
+
+    # if transaction failed to initiate
+    if transaction_initiation_successful == False: response = make_response('failed to initiate'); response.status = 404; return response
+
+    # if transaction was initiated successfully, add it as an unverified payment to Payments
+    if transaction_initiation_successful == True:
+        # determine subscription expiry *****************************************************************************************
+        # get subscription months by amount
+        if amount == 96: subscription_months = 12
+        else: subscription_months = amount / 10
+
+        # get subscription weeks
+        subscription_weeks = subscription_months * 4
+
+        # get user subscription status and subscription expiry date (free trial counts)
+        user_subscribed, subcription_expiry_date = validate_subscription(user)
+
+        # if user has an active subscription or free trial
+        if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
+        # if user has no active subscription
+        else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
+        # ***********************************************************************************************************************
+
+        # add user payment
+        payment_details = Payments(
+            date = current_datetime,
+            user_id = user_id,
+            purpose = subscription_type,
+            payment_method = 'to be confirmed after user has paid',
+            transaction_id = track_id,
+            verified = False, # will be verified if status is found as paid in checkOxapayTransactionStatus
+            discount_applied = discount_applied,
+            amount = float(amount),
+            expiry_date = expiry_date,
+            entered_by = 'system (Oxapay Gateway)'
+        )
+        payment_details.save()
+
+        # return response
+        response = make_response('initiation successful'); response.status = 200; return response
+
+# 34
+@app.route('/checkOxapayTransactionStatus', methods=['POST'])
+def checkOxapayTransactionStatus():
+    # check user access token's validity
+    access_token_status, user_id, user_role = check_user_access_token_validity(request, 'user/admin/free user') # request data, expected user roles separated by "/" if more than one
+    if access_token_status != 'ok':  response = make_response(access_token_status); response.status = 401; return response
+
+    # if request was made by an admin account ***********************************************************************************
+    if user_role == 'admin':
+        # input field validation ********************
+        # account id
+        try: account_id = request.form['account_id '] 
+        except: response = make_response('Account ID field required'); response.status = 400; return response
+        # if request is not for the admin's own account
+        if account_id != '' and account_id != None and account_id != 'null': user_id = account_id
+
+        # validation of supplied account id
+        try: account = Users.objects.filter(id = account_id)[0]
+        except: response = make_response('invalid account id'); response.status = 404; return response
+    # ***************************************************************************************************************************
+    
+    # get current datetime
+    current_datetime_object = datetime.now(timezone(system_timezone()))
+    current_datetime = str(current_datetime_object)
+
+    # user details
+    user = Users.objects.filter(id = user_id)
+
+    # if user's most recent transaction has been verified already ***************************************************************
+    # get all user payments
+    user_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Oxapay Gateway)')
+    # get user's most recent payment's verification status
+    if len(user_payments) > 0: most_recent_payment_verified = user_payments[-1].verified
+    # ***************************************************************************************************************************
+
+    # user's pending payments
+    user_pending_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Oxapay Gateway)', verified = False)
+
+    # if user has no pending payments or user's most recent payment's verification status = True
+    if len(user_pending_payments) == 0 or most_recent_payment_verified = True: response = make_response('no pending payments'); response.status = 404; return response
+
+    # user's most recent pending payment
+    most_recent_pending_payment = user_pending_payments[-1]
+
+    # get user's most recent track id
+    most_recent_track_id = most_recent_pending_payment.transaction_id
+
+    # get user's most recent payment amount
+    amount = most_recent_pending_payment.amount
+
+    # check oxapay transaction status ... status of the payment (e.g., \"New,\" \"Waiting,\" \"Confirming,\" \"Paid,\" \"Expired,\" etc.)
+    transaction_status_check_successful, status, network = oxapay_status(most_recent_track_id)
+
+    # if transaction has not been paid
+    if status != 'Paid' or transaction_status_check_successful != True: response = make_response('not paid'); response.status = 404; return response
+
+    # if transaction has been paid
+    if status == 'Paid' and transaction_status_check_successful == True:
+        # determine subscription expiry *****************************************************************************************
+        # get subscription months by amount
+        if amount == 96: subscription_months = 12
+        else: subscription_months = amount / 10
+
+        # get subscription weeks
+        subscription_weeks = subscription_months * 4
+
+        # get user subscription status and subscription expiry date (free trial counts)
+        user_subscribed, subcription_expiry_date = validate_subscription(user)
+
+        # if user has an active subscription or free trial
+        if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
+        # if user has no active subscription
+        else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
+        # ***********************************************************************************************************************
+
+        # set new subscription and subscription expiry dates to the user's account
+        Users.objects(id = user_id).update(
+            subscription_date = current_datetime,
+            subscription_expiry = expiry_date
+        )
+
+        # return response 
+        response = make_response('paid'); response.status = 200; return response
+# *******************************************************************************************************************************
 # *****************************************************************************************************************************************
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0') # for development
+    # app.run(host='0.0.0.0') # for development
     # app.run(host=os.environ.get("BACKEND_HOST", "0.0.0.0"), port=5000) # for development use in docker
     # from waitress import serve
     # serve(app, host='0.0.0.0') # use waitress... for production

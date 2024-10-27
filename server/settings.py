@@ -72,7 +72,7 @@ def user_roles_exempted_from_subscribing():
 
 # list of payment purposes
 def get_payment_purposes():
-    payment_purposes = ['subscription']
+    payment_purposes = ['Monthly Subscription', 'Yearly Subscription']
 
     return payment_purposes
 

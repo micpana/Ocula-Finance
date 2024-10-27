@@ -9,7 +9,7 @@ export const Symbols = [
 export const User_Roles = ['user', 'admin', 'free user']
 
 // payment purposes
-export const Payment_Purposes = ['subscription']
+export const Payment_Purposes = ['Monthly Subscription', 'Yearly Subscription']
 
 // payment methods
 export const Payment_Methods = ['Cash', 'Innbucks', 'Ecocash USD', 'Paypal', 'Bitcoin', 'Ethereum']
