@@ -215,7 +215,6 @@ class Subscriptions extends Component{
                                 <br/>
                             </Col>
                         </Row>
-                        <br/><br/>
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
