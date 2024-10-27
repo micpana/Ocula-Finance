@@ -263,6 +263,10 @@ class Subscriptions extends Component{
                                         <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
                                     </span>
                                     <br/><br/>
+                                    <p style={{textAlign: 'left'}}>
+                                        We accept both USD and ZWG on EcoCash <img src={Ecocash} style={{width: '20px'}}/>, and only ZWG on 
+                                        OneMoney <img src={OneMoney} style={{width: '20px'}}/>
+                                    </p>
                                 </Container>
                             </Col>
                         </Row>
