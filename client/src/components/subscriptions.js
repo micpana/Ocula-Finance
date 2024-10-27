@@ -36,6 +36,16 @@ import NetworkErrorScreen from './network_error_screen';
 import DateTimeDisplay from './timezone_conversion'
 import Ecocash from '../images/ecocash.png'
 import OneMoney from '../images/one_money.jpeg'
+import Bitcoin from '../images/bitcoin.svg'
+import Ethereum from '../images/ethereum.svg'
+import USDCoin from '../images/usd-coin.svg'
+import Tron from '../images/tron.svg'
+import Tether from '../images/tether.svg'
+import BNB from '../images/bnb.svg'
+import Dogecoin from '../images/dogecoin.svg'
+import Litecoin from '../images/litecoin.svg'
+import Digibyte from '../images/digibyte.svg'
+import Monero from '../images/monero.svg'
 
 class Subscriptions extends Component{
     static propTypes = {
@@ -233,7 +243,7 @@ class Subscriptions extends Component{
                             <Col>
                                 <Container>
                                     <span style={{fontWeight: 'bold'}}>
-                                        Pay using <span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>cash</span> and 
+                                        Pay using <span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>cash</span> and {' '}
                                         <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
                                     </span>
                                     <br/>
