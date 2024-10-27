@@ -46,6 +46,13 @@ import Dogecoin from '../images/dogecoin.svg'
 import Litecoin from '../images/litecoin.svg'
 import Digibyte from '../images/digibyte.svg'
 import Monero from '../images/monero.svg'
+import Ton from '../images/ton.svg'
+import Polygon from '../images/polygon.svg'
+import BitcoinCash from '../images/bitcoin-cash.svg'
+import ShibaInu from '../images/shiba-inu.svg'
+import Solana from '../images/solana.svg'
+import Notcoin from '../images/notcoin.svg'
+import Dogs from '../images/dogs.svg'
 
 class Subscriptions extends Component{
     static propTypes = {
@@ -235,9 +242,16 @@ class Subscriptions extends Component{
                                     <span style={{fontWeight: 'bold'}}>
                                         Pay using Crypto
                                     </span>
-                                    <br/>
-                                    We accept Bitcoin, Ethereum, USD Coin, Tron, Tether, BNB, Dogecoing, Litecoin, Digibyte, Monero, 
-                                    Ton, Polygon, Bitcoin Cash, Shiba Inu, Solana, Notcoin, Dogs
+                                    <br/><br/>
+                                    We accept Bitcoin <img src={Bitcoin} style={{width: '40px'}}/>, 
+                                    Ethereum <img src={Ethereum} style={{width: '40px'}}/>, USD Coin <img src={USDCoin} style={{width: '40px'}}/>, 
+                                    Tron <img src={Tron} style={{width: '40px'}}/>, Tether <img src={Tether} style={{width: '40px'}}/>, 
+                                    BNB <img src={BNB} style={{width: '40px'}}/>, Dogecoin <img src={Dogecoin} style={{width: '40px'}}/>, 
+                                    Litecoin <img src={Litecoin} style={{width: '40px'}}/>, Digibyte <img src={Digibyte} style={{width: '40px'}}/>, 
+                                    Monero <img src={Monero} style={{width: '40px'}}/>, Ton <img src={Ton} style={{width: '40px'}}/>, 
+                                    Polygon <img src={Polygon} style={{width: '40px'}}/>, Bitcoin Cash <img src={BitcoinCash} style={{width: '40px'}}/>, 
+                                    Shiba Inu <img src={ShibaInu} style={{width: '40px'}}/>, Solana <img src={Solana} style={{width: '40px'}}/>, 
+                                    Notcoin <img src={Notcoin} style={{width: '40px'}}/>, Dogs <img src={Dogs} style={{width: '40px'}}/>
                                 </Container>
                             </Col>
                             <Col>
@@ -246,7 +260,7 @@ class Subscriptions extends Component{
                                         Pay using <span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>cash</span> and {' '}
                                         <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
                                     </span>
-                                    <br/>
+                                    <br/><br/>
                                 </Container>
                             </Col>
                         </Row>
