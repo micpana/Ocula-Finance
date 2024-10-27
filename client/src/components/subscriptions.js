@@ -236,22 +236,22 @@ class Subscriptions extends Component{
                         <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
                             Top up your subscription below
                         </h6>
-                        <Row style={{margin: '0px', marginTop: '10px'}}>
+                        <Row style={{margin: '0px', marginTop: '15px'}}>
                             <Col sm='6'>
                                 <Container>
                                     <span style={{fontWeight: 'bold'}}>
                                         Pay using Crypto
                                     </span>
                                     <br/><br/>
-                                    We accept Bitcoin <img src={Bitcoin} style={{width: '15px'}}/>, 
-                                    Ethereum <img src={Ethereum} style={{width: '15px'}}/>, USD Coin <img src={USDCoin} style={{width: '15px'}}/>, 
-                                    Tron <img src={Tron} style={{width: '15px'}}/>, Tether <img src={Tether} style={{width: '15px'}}/>, 
-                                    BNB <img src={BNB} style={{width: '15px'}}/>, Dogecoin <img src={Dogecoin} style={{width: '15px'}}/>, 
-                                    Litecoin <img src={Litecoin} style={{width: '15px'}}/>, Digibyte <img src={Digibyte} style={{width: '15px'}}/>, 
-                                    Monero <img src={Monero} style={{width: '15px'}}/>, Ton <img src={Ton} style={{width: '15px'}}/>, 
-                                    Polygon <img src={Polygon} style={{width: '15px'}}/>, Bitcoin Cash <img src={BitcoinCash} style={{width: '15px'}}/>, 
-                                    Shiba Inu <img src={ShibaInu} style={{width: '15px'}}/>, Solana <img src={Solana} style={{width: '15px'}}/>, 
-                                    Notcoin <img src={Notcoin} style={{width: '15px'}}/>, Dogs <img src={Dogs} style={{width: '15px'}}/>
+                                    We accept Bitcoin <img src={Bitcoin} style={{width: '20px'}}/>, 
+                                    Ethereum <img src={Ethereum} style={{width: '20px'}}/>, USD Coin <img src={USDCoin} style={{width: '20px'}}/>, 
+                                    Tron <img src={Tron} style={{width: '20px'}}/>, Tether <img src={Tether} style={{width: '20px'}}/>, 
+                                    BNB <img src={BNB} style={{width: '20px'}}/>, Dogecoin <img src={Dogecoin} style={{width: '20px'}}/>, 
+                                    Litecoin <img src={Litecoin} style={{width: '20px'}}/>, Digibyte <img src={Digibyte} style={{width: '20px'}}/>, 
+                                    Monero <img src={Monero} style={{width: '20px'}}/>, Ton <img src={Ton} style={{width: '20px'}}/>, 
+                                    Polygon <img src={Polygon} style={{width: '20px'}}/>, Bitcoin Cash <img src={BitcoinCash} style={{width: '20px'}}/>, 
+                                    Shiba Inu <img src={ShibaInu} style={{width: '20px'}}/>, Solana <img src={Solana} style={{width: '20px'}}/>, 
+                                    Notcoin <img src={Notcoin} style={{width: '20px'}}/>, Dogs <img src={Dogs} style={{width: '20px'}}/>
                                 </Container>
                             </Col>
                             <Col>
