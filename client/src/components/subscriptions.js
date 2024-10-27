@@ -243,7 +243,7 @@ class Subscriptions extends Component{
                                         Pay using Crypto
                                     </span>
                                     <br/><br/>
-                                    <p style={{textAlign: 'left'}}>
+                                    <p style={{textAlign: 'justify'}}>
                                         We accept Bitcoin<img src={Bitcoin} style={{width: '20px'}}/> 
                                         Ethereum<img src={Ethereum} style={{width: '20px'}}/> USD Coin<img src={USDCoin} style={{width: '20px'}}/>
                                         Tron<img src={Tron} style={{width: '20px'}}/> Tether<img src={Tether} style={{width: '20px'}}/>
@@ -263,7 +263,7 @@ class Subscriptions extends Component{
                                         <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
                                     </span>
                                     <br/><br/>
-                                    <p style={{textAlign: 'left'}}>
+                                    <p style={{textAlign: 'justify'}}>
                                         We accept both USD and ZWG on EcoCash <img src={Ecocash} style={{width: '20px'}}/>, and only ZWG on 
                                         OneMoney <img src={OneMoney} style={{width: '20px'}}/>
                                     </p>
