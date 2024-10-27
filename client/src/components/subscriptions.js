@@ -172,7 +172,7 @@ class Subscriptions extends Component{
                         <Row style={{margin: '0px', textAlign: 'left', fontSize: '13px'}}>
                             <Col sm='6'>
                                 <Row style={{margin: '0px'}}>
-                                    <Col sm='4'>
+                                    <Col sm='6'>
                                         <h6 style={{fontWeight: 'bold'}}>
                                             Your current subscription status:
                                         </h6>
@@ -193,7 +193,7 @@ class Subscriptions extends Component{
                             </Col>
                             <Col>
                                 <Row style={{margin: '0px'}}>
-                                    <Col sm='4'>
+                                    <Col sm='6'>
                                         <h6 style={{fontWeight: 'bold'}}>
                                             Subscription expiry date:
                                         </h6>
