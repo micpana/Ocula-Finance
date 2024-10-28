@@ -73,7 +73,8 @@ class Subscriptions extends Component{
             methods: ['EcoCash', 'OneMoney'],
             phonenumber: '',
             currency: 'USD', // USD / ZWG
-            currencies: ['USD', 'ZWG'],
+            ecocash_currencies: ['USD', 'ZWG'],
+            onemoney_currencies: ['ZWG'],
             subscription_type: 'Monthly Subscription', // Monthly Subscription / Yearly Subscription
             subscription_types: ['Monthly Subscription', 'Yearly Subscription']
         };
@@ -353,7 +354,11 @@ class Subscriptions extends Component{
                                                 style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
                                             >
                                                 {
-                                                    this.state.currencies.map((item) => {
+                                                    this.state.method === 'EcoCash'
+                                                    ? this.state.ecocash_currencies.map((item) => {
+                                                        return<option value={item}>{item}</option>
+                                                    })
+                                                    : this.state.onemoney_currencies.map((item) => {
                                                         return<option value={item}>{item}</option>
                                                     })
                                                 }
