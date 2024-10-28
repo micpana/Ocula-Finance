@@ -395,7 +395,7 @@ class Subscriptions extends Component{
                                             >
                                                 Pay
                                             </Button>
-                                            <br/>
+                                            <br/><br/>
                                         </Col>
                                         <Col>
                                             <Button onClick={() => this.VerifyPaynowPayment()}
@@ -403,7 +403,7 @@ class Subscriptions extends Component{
                                             >
                                                 Verify payment
                                             </Button>
-                                            <br/>
+                                            <br/><br/>
                                         </Col>
                                     </Row>
                                 </Container>
