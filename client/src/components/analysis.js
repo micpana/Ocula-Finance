@@ -41,6 +41,11 @@ import SymbolIconsRender from './symbol_icons_render';
 import DateTimeDisplay from './timezone_conversion'
 import { FaMonero, FaMoneyBillWave } from 'react-icons/fa';
 
+// initialize variable for timestamp of the most recent signal received
+var timestamp_of_most_recent_signal_received = null
+// initialize variable for symbol of the most recent signal received
+var symbol_of_most_recent_signal_received = null
+
 class Analysis extends Component{
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
@@ -145,26 +150,21 @@ class Analysis extends Component{
                 if (symbol != this.state.queried_symbol){ // current selected symbol is not the one that one previously queried
                     var length_of_data_received = 0
                     var clear_market_analysis_state_first = true
+                    timestamp_of_most_recent_signal_received = ''
+                    symbol_of_most_recent_signal_received = ''
                 }else{ // same symbol selection
                     var length_of_data_received = this.state.market_analysis.length
                     var clear_market_analysis_state_first = false
+                    timestamp_of_most_recent_signal_received = timestamp_of_most_recent_signal_received
+                    symbol_of_most_recent_signal_received = symbol_of_most_recent_signal_received
                 }
 
                 var data = new FormData()
                 data.append('symbol', symbol)
                 data.append('length_of_data_received', length_of_data_received)
                 data.append('get_all', get_all) // bool
-                // timestamp and symbol of the most recent trade signal received
-                if (this.state.market_analysis.length > 0 && symbol == 'ALL'){
-                    data.append('timestamp_of_most_recent_signal_received', this.state.market_analysis[0].timestamp)
-                    data.append('symbol_of_most_recent_signal_received', this.state.market_analysis[0].symbol)
-                }else if (this.state.market_analysis.filter(item => item.symbol === symbol).length > 0){
-                    data.append('timestamp_of_most_recent_signal_received', this.state.market_analysis.filter(item => item.symbol === symbol)[0].timestamp)
-                    data.append('symbol_of_most_recent_signal_received', symbol)
-                }else{
-                    data.append('timestamp_of_most_recent_signal_received', '')
-                    data.append('symbol_of_most_recent_signal_received', '')
-                }
+                data.append('timestamp_of_most_recent_signal_received', timestamp_of_most_recent_signal_received)
+                data.append('symbol_of_most_recent_signal_received', symbol_of_most_recent_signal_received)
 
                 axios.post(Backend_Server_Address + 'getMarketAnalysis', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
                 .then((res) => {
@@ -186,7 +186,12 @@ class Analysis extends Component{
 
                         // trade signal(s) browser notification ... only if we have new signals, this is not the initial request, and this is a function recall for the same symbol
                         if (result.length > 0 && this.state.initial_request === false && symbol == this.state.queried_symbol){
+                            // show browser notifications
                             this.ShowTradeSignalsNotification(result)
+                            // set timestamp of the most recent signal received
+                            timestamp_of_most_recent_signal_received = result[0].timestamp
+                            // set symbol of the most recent signal received
+                            symbol_of_most_recent_signal_received = result[0].symbol
                         }
 
                         // set initial request to false ... only if its current set to true

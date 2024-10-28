@@ -156,6 +156,22 @@ class Subscriptions extends Component{
                 this.LoadingOff()
             })
         }
+
+        this.InitializeOxapayPayment = () => {
+
+        }
+
+        this.VerifyOxapayPayment = () => {
+
+        }
+
+        this.InitializePaynowPayment = () => {
+
+        }
+
+        this.VerifyPaynowPayment = () => {
+
+        }
     }
 
     componentDidMount() {
@@ -254,6 +270,28 @@ class Subscriptions extends Component{
                                         {' '}<img src={ShibaInu} style={{width: '20px'}}/>Shiba Inu, <img src={Solana} style={{width: '20px'}}/>Solana,
                                         {' '}<img src={Notcoin} style={{width: '20px'}}/>Notcoin, <img src={Dogs} style={{width: '20px'}}/>Dogs
                                     </p>
+                                    <br/>
+                                    <p style={{textAlign: 'left', fontSize: '13px'}}>
+                                        Click on 'Pay' to make a payment, you'll be taken to a Oxapay page to make a payment using your preferred 
+                                        currency. After you've successfully made a payment, you can come back here and click on 'Verify payment'.
+                                    </p>
+                                    <br/><br/>
+                                    <Row style={{margin: '0px'}}>
+                                        <Col sm='6'>
+                                            <Button onClick={() => this.InitializeOxapayPayment()}
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Pay
+                                            </Button>
+                                        </Col>
+                                        <Col>
+                                            <Button onClick={() => this.VerifyOxapayPayment()}
+                                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Verify payment
+                                            </Button>
+                                        </Col>
+                                    </Row>
                                 </Container>
                             </Col>
                             <Col>
