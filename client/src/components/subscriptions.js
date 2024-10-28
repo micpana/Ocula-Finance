@@ -270,7 +270,6 @@ class Subscriptions extends Component{
                                 </select>
                             </Col>
                         </Row>
-                        <br/>
                         <Row style={{margin: '0px', marginTop: '15px'}}>
                             <Col sm='6'>
                                 <Container>
@@ -357,7 +356,7 @@ class Subscriptions extends Component{
                                         </Col>
                                     </Row>
                                     <br/>
-                                    <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
+                                    <Label style={{fontWeight: 'bold', textAlign: 'left'}}>Phonenumber <span style={{color: 'red'}}>*</span></Label>
                                     <InputGroup>
                                         <InputGroupText addonType="prepend">
                                             <FaMoneyBill style={{margin:'10px'}}/>
@@ -368,6 +367,12 @@ class Subscriptions extends Component{
                                         />
                                     </InputGroup>
                                     <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
+                                    <br/>
+                                    <p style={{textAlign: 'left', fontSize: '13px'}}>
+                                        Click on 'Pay' to make a payment, you'll be prompted to enter your EcoCash or OneMoney pin on your 
+                                        mobile device to confirm the payment. After you've successfully made a payment, you can come back here 
+                                        and click on 'Verify payment'.
+                                    </p>
                                     <br/>
                                     <Row style={{margin: '0px'}}>
                                         <Col sm='6'>
