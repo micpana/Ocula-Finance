@@ -2394,7 +2394,7 @@ def initiatePaynowPayment():
         subscription_type, # item
         user.email, # user email ... use account email for sandbox tests
         method.lower(), # payment method ... ecocash / onemoney
-        phonenumber, # payment phonenumber
+        phonenumber.replace(' ', ''), # payment phonenumber
         amount, # amount
         currency # currency ... USD / ZWG
     )

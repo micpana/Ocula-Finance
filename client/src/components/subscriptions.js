@@ -256,6 +256,7 @@ class Subscriptions extends Component{
                                 <br/>
                             </Col>
                         </Row>
+                        <br/>
                         <Row style={{margin: '0px'}}>
                             <Col sm='3' style={{textAlign: 'left'}}>
                                 <Label style={{fontWeight: 'bold'}}>Subscription Package:</Label>
@@ -356,17 +357,19 @@ class Subscriptions extends Component{
                                         </Col>
                                     </Row>
                                     <br/>
-                                    <Label style={{fontWeight: 'bold', textAlign: 'left'}}>Phonenumber <span style={{color: 'red'}}>*</span></Label>
-                                    <InputGroup>
-                                        <InputGroupText addonType="prepend">
-                                            <FaMoneyBill style={{margin:'10px'}}/>
-                                        </InputGroupText>
-                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
-                                            placeholder="eg 0777000111 / 0717000111" name="phonenumber" id="phonenumber"
-                                            value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
-                                        />
-                                    </InputGroup>
-                                    <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
+                                    <div style={{textAlign: 'left'}}>
+                                        <Label style={{fontWeight: 'bold'}}>Phonenumber <span style={{color: 'red'}}>*</span></Label>
+                                        <InputGroup>
+                                            <InputGroupText addonType="prepend">
+                                                <FaMoneyBill style={{margin:'10px'}}/>
+                                            </InputGroupText>
+                                            <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                                placeholder="eg 0777000111 / 0717000111" name="phonenumber" id="phonenumber"
+                                                value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
+                                            />
+                                        </InputGroup>
+                                        <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
+                                    </div>
                                     <br/>
                                     <p style={{textAlign: 'left', fontSize: '13px'}}>
                                         Click on 'Pay' to make a payment, you'll be prompted to enter your EcoCash or OneMoney pin on your 

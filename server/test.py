@@ -1,3 +1,3 @@
-a = 'PPPHe'
+a = 'P p'
 
-print(a.lower())
+print(a.replace(' ', ''))
