@@ -13,6 +13,6 @@ export const Payment_Purposes = ['Monthly Subscription', 'Yearly Subscription']
 
 // payment methods
 export const Payment_Methods = [
-    'Ecocash USD', 'Ecocash ZWG', 'Onemoney ZWG', 'Innbucks', 'Cash', 'Mukuru', 'Deriv P2P',
+    'EcoCash USD', 'EcoCash ZWG', 'OneMoney ZWG', 'Innbucks', 'Cash', 'Mukuru', 'Deriv P2P',
     'BTC', 'ETH', 'USDC', 'TRX', 'USDT', 'BNB', 'DOGE', 'LTC', 'DGB', 'XMR', 'TON', 'POL', 'BCH', 'SHIB', 'SOL', 'NOT', 'DOGS' 
 ]

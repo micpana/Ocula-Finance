@@ -79,7 +79,7 @@ def get_payment_purposes():
 # list of payment methods
 def get_payment_methods():
     payment_methods = [
-        'Ecocash USD', 'Ecocash ZWG', 'Onemoney ZWG', 'Innbucks', 'Cash', 'Mukuru', 'Deriv P2P',
+        'EcoCash USD', 'EcoCash ZWG', 'OneMoney ZWG', 'Innbucks', 'Cash', 'Mukuru', 'Deriv P2P',
         'BTC', 'ETH', 'USDC', 'TRX', 'USDT', 'BNB', 'DOGE', 'LTC', 'DGB', 'XMR', 'TON', 'POL', 'BCH', 'SHIB', 'SOL', 'NOT', 'DOGS'
     ]
 

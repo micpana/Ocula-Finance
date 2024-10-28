@@ -2393,11 +2393,14 @@ def initiatePaynowPayment():
         subscription_type, # purpose
         subscription_type, # item
         user.email, # user email ... use account email for sandbox tests
-        method, # payment method ... ecocash / onemoey
+        method.lower(), # payment method ... ecocash / onemoney
         phonenumber, # payment phonenumber
         amount, # amount
         currency # currency ... USD / ZWG
     )
+
+    # structure payment method in a way that matches its representation in get_payment_methods() within settings.py
+    method = method + ' ' + Currency
 
     # if transaction failed to initiate
     if transaction_initiation_successful == False: response = make_response('failed to initiate'); response.status = 404; return response

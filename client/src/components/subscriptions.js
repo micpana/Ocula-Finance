@@ -53,6 +53,7 @@ import ShibaInu from '../images/shiba-inu.svg'
 import Solana from '../images/solana.svg'
 import Notcoin from '../images/notcoin.svg'
 import Dogs from '../images/dogs.svg'
+import { FaMoneyBill, FaPhone } from 'react-icons/fa';
 
 class Subscriptions extends Component{
     static propTypes = {
@@ -67,7 +68,14 @@ class Subscriptions extends Component{
             retry_function: null,
             input_errors: {},
             on_mobile: false,
-            user_details: {}
+            user_details: {},
+            method: 'EcoCash', // EcoCash / OneMoney
+            methods: ['EcoCash', 'OneMoney'],
+            phonenumber: '',
+            currency: 'USD', // USD / ZWG
+            currencies: ['USD', 'ZWG'],
+            subscription_type: 'Monthly Subscription', // Monthly Subscription / Yearly Subscription
+            subscription_types: ['Monthly Subscription', 'Yearly Subscription']
         };
 
         this.HandleChange = (e) => {
@@ -248,10 +256,21 @@ class Subscriptions extends Component{
                                 <br/>
                             </Col>
                         </Row>
+                        <Row style={{margin: '0px'}}>
+                            <Col sm='3' style={{textAlign: 'left'}}>
+                                <Label style={{fontWeight: 'bold'}}>Subscription Package:</Label>
+                                <select name='subscription_type' value={this.state.subscription_type} onChange={this.HandleChange}
+                                    style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                >
+                                    {
+                                        this.state.subscription_types.map((item) => {
+                                            return<option value={item}>{item}</option>
+                                        })
+                                    }
+                                </select>
+                            </Col>
+                        </Row>
                         <br/>
-                        <h6 style={{textAlign: 'left', fontWeight: 'bold'}}>
-                            Top up your subscription below
-                        </h6>
                         <Row style={{margin: '0px', marginTop: '15px'}}>
                             <Col sm='6'>
                                 <Container>
@@ -297,7 +316,7 @@ class Subscriptions extends Component{
                             <Col>
                                 <Container>
                                     <span style={{fontWeight: 'bold'}}>
-                                        Pay using <span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>cash</span> and {' '}
+                                        Pay using <span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>Cash</span> and {' '}
                                         <span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span>
                                     </span>
                                     <br/><br/>
@@ -305,6 +324,67 @@ class Subscriptions extends Component{
                                         We accept both USD and ZWG on <img src={Ecocash} style={{width: '20px'}}/>EcoCash, and only ZWG on
                                         {' '}<img src={OneMoney} style={{width: '20px'}}/>OneMoney
                                     </p>
+                                    <Row style={{margin: '0px'}}>
+                                        <Col sm='6' style={{textAlign: 'left'}}>
+                                            <Label style={{fontWeight: 'bold'}}>Method:</Label>
+                                            <select name='method' value={this.state.method} onChange={this.HandleChange}
+                                                style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                            >
+                                                {
+                                                    this.state.methods.map((item) => {
+                                                        return<option value={item}>
+                                                            {
+                                                                item == 'EcoCash'
+                                                                ? <><span style={{color: '#0052A4'}}>Eco</span><span style={{color: '#E90000'}}>Cash</span></>
+                                                                : <><span style={{color: '#F6BE72'}}>One</span><span style={{color: '#061008'}}>Money</span></>
+                                                            }
+                                                        </option>
+                                                    })
+                                                }
+                                            </select>
+                                        </Col>
+                                        <Col style={{textAlign: 'left'}}>
+                                            <Label style={{fontWeight: 'bold'}}>Currency:</Label>
+                                            <select name='currency' value={this.state.currency} onChange={this.HandleChange}
+                                                style={{border: 'none', borderBottom: '1px solid #F2B027', width: '100%', backgroundColor: 'inherit', color: '#00539C', outline: 'none'}}
+                                            >
+                                                {
+                                                    this.state.currencies.map((item) => {
+                                                        return<option value={item}>{item}</option>
+                                                    })
+                                                }
+                                            </select>
+                                        </Col>
+                                    </Row>
+                                    <br/>
+                                    <Label>Phonenumber <span style={{color: 'red'}}>*</span></Label>
+                                    <InputGroup>
+                                        <InputGroupText addonType="prepend">
+                                            <FaMoneyBill style={{margin:'10px'}}/>
+                                        </InputGroupText>
+                                        <Input style={{border: 'none', borderBottom: '1px solid #828884', backgroundColor: 'inherit'}}
+                                            placeholder="eg 0777000111 / 0717000111" name="phonenumber" id="phonenumber"
+                                            value={this.state.phonenumber} onChange={this.HandleChange} type="text" 
+                                        />
+                                    </InputGroup>
+                                    <InputErrors field_error_state={this.state.input_errors['phonenumber']} field_label='Phonenumber' />
+                                    <br/>
+                                    <Row style={{margin: '0px'}}>
+                                        <Col sm='6'>
+                                            <Button onClick={() => this.InitializePaynowPayment()}
+                                                style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Pay
+                                            </Button>
+                                        </Col>
+                                        <Col>
+                                            <Button onClick={() => this.VerifyPaynowPayment()}
+                                                style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                                            >
+                                                Verify payment
+                                            </Button>
+                                        </Col>
+                                    </Row>
                                 </Container>
                             </Col>
                         </Row>
