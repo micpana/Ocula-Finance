@@ -274,6 +274,7 @@ class Subscriptions extends Component{
                                         Click on 'Pay' to make a payment, you'll be taken to a Oxapay page to make a payment using your preferred 
                                         currency. After you've successfully made a payment, you can come back here and click on 'Verify payment'.
                                     </p>
+                                    <br/>
                                     <Row style={{margin: '0px'}}>
                                         <Col sm='6'>
                                             <Button onClick={() => this.InitializeOxapayPayment()}
