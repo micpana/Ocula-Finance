@@ -271,7 +271,8 @@ class Subscriptions extends Component{
                                 </select>
                             </Col>
                         </Row>
-                        <Row style={{margin: '0px', marginTop: '15px'}}>
+                        <br/><br/>
+                        <Row style={{margin: '0px'}}>
                             <Col sm='6'>
                                 <Container>
                                     <span style={{fontWeight: 'bold'}}>
@@ -301,6 +302,7 @@ class Subscriptions extends Component{
                                             >
                                                 Pay
                                             </Button>
+                                            <br/>
                                         </Col>
                                         <Col>
                                             <Button onClick={() => this.VerifyOxapayPayment()}
@@ -308,10 +310,11 @@ class Subscriptions extends Component{
                                             >
                                                 Verify payment
                                             </Button>
+                                            <br/>
                                         </Col>
                                     </Row>
                                 </Container>
-                                <br/><br/>
+                                <br/>
                             </Col>
                             <Col>
                                 <Container>
@@ -342,6 +345,7 @@ class Subscriptions extends Component{
                                                     })
                                                 }
                                             </select>
+                                            <br/>
                                         </Col>
                                         <Col style={{textAlign: 'left'}}>
                                             <Label style={{fontWeight: 'bold'}}>Currency:</Label>
@@ -354,9 +358,9 @@ class Subscriptions extends Component{
                                                     })
                                                 }
                                             </select>
+                                            <br/>
                                         </Col>
                                     </Row>
-                                    <br/>
                                     <div style={{textAlign: 'left'}}>
                                         <Label style={{fontWeight: 'bold'}}>Phonenumber <span style={{color: 'red'}}>*</span></Label>
                                         <InputGroup>
@@ -384,6 +388,7 @@ class Subscriptions extends Component{
                                             >
                                                 Pay
                                             </Button>
+                                            <br/>
                                         </Col>
                                         <Col>
                                             <Button onClick={() => this.VerifyPaynowPayment()}
@@ -391,9 +396,11 @@ class Subscriptions extends Component{
                                             >
                                                 Verify payment
                                             </Button>
+                                            <br/>
                                         </Col>
                                     </Row>
                                 </Container>
+                                <br/>
                             </Col>
                         </Row>
                     </div>
