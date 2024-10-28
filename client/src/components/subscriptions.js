@@ -266,7 +266,13 @@ class Subscriptions extends Component{
                                 >
                                     {
                                         this.state.subscription_types.map((item) => {
-                                            return<option value={item}>{item}</option>
+                                            return <option value={item}>
+                                                {
+                                                    item === 'Monthly Subscription'
+                                                    ? <>$10.00 {item}</>
+                                                    : <>$96.00 {item}</>
+                                                }
+                                            </option>
                                         })
                                     }
                                 </select>
