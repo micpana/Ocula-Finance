@@ -57,7 +57,7 @@ class App extends Component {
                 <div>
                     <br/>
                     <Container>
-                        <span style={{fontWeight: 'bold'}}>Note:</span> This platform is still under construction, but we will be done soon.
+                        <span style={{fontWeight: 'bold'}}>Note:</span> This platform is still under construction and testing, but we will be done soon.
                     </Container>
                     <br/>
                 </div>
