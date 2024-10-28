@@ -292,6 +292,7 @@ class Subscriptions extends Component{
                                         </Col>
                                     </Row>
                                 </Container>
+                                <br/><br/>
                             </Col>
                             <Col>
                                 <Container>
