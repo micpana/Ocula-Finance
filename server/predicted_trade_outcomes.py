@@ -1,4 +1,6 @@
+import numpy as np
 from collections import deque
+from tqdm import tqdm
 from symbol_config import get_symbol_list, get_symbol_config
 from settings import predictions_filter_config, test_predictions_result_arrays_printing_config
 from minutes_to_hours_and_minutes import minutes_to_hours_and_minutes
@@ -74,7 +76,8 @@ def get_trade_outcome(
 
 # get trade outcomes **********************************************************************************************************************
 def get_trade_outcomes(
-        symbol, entry_timeframe_minutes_in_a_single_bar, test_closes, y_test, y_predicted, y_predicted_probabilities
+        symbol, entry_timeframe_minutes_in_a_single_bar, test_closes, test_trade_closing_percentages, test_max_percentages_down, 
+        test_max_percentages_up, y_test, y_predicted, y_predicted_probabilities
     ):
     # get symbol data ***********************************************************************************************************
     # get symbol config
