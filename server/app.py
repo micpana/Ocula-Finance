@@ -2455,10 +2455,10 @@ def checkPaynowTransactionStatus():
     if user_role == 'admin':
         # input field validation ********************
         # account id
-        try: account_id = request.form['account_id '] 
+        try: account_id = request.form['account_id'] 
         except: response = make_response('Account ID field required'); response.status = 400; return response
         # if request is not for the admin's own account
-        if account_id != '' and account_id != None and account_id != 'null': user_id = account_id
+        if account_id != 'self' account_id != '' and account_id != None and account_id != 'null': user_id = account_id
 
         # validation of supplied account id
         try: account = Users.objects.filter(id = account_id)[0]
@@ -2601,7 +2601,7 @@ def initiateOxapayPayment():
             date = current_datetime,
             user_id = user_id,
             purpose = subscription_type,
-            payment_method = 'to be confirmed after user has paid',
+            payment_method = 'To be confirmed after user has paid',
             transaction_id = track_id,
             verified = False, # will be verified if status is found as paid in checkOxapayTransactionStatus
             discount_applied = discount_applied,
