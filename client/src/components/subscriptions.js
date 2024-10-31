@@ -178,7 +178,9 @@ class Subscriptions extends Component{
             .then((res) => {
                 let result = res.data
                 // open paylink in new tab ... result is the paylink string
-                window.open(result, '_blank')
+                // window.open(result, '_blank')
+                // redirect user to the paylink in current tab ... result is the paylink string
+                window.location.href = result
                 this.LoadingOff()
             }).catch((error) => {
                 console.log(error)
@@ -515,7 +517,7 @@ class Subscriptions extends Component{
                                         {' '}<img src={Notcoin} style={{width: '20px'}}/>Notcoin, <img src={Dogs} style={{width: '20px'}}/>Dogs
                                     </p>
                                     <p style={{textAlign: 'left', fontSize: '13px'}}>
-                                        Click on 'Pay' to make a payment, you'll be taken to a Oxapay page to make a payment using your preferred 
+                                        Click on 'Pay' to make a payment, you'll be taken to a OxaPay page to make a payment using your preferred 
                                         currency. After you've successfully made a payment, you can come back here and click on 'Verify payment'.
                                     </p>
                                     <br/>

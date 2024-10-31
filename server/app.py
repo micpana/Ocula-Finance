@@ -2601,7 +2601,7 @@ def initiateOxapayPayment():
             date = current_datetime,
             user_id = user_id,
             purpose = subscription_type,
-            payment_method = 'To be confirmed after user has paid',
+            payment_method = 'To be confirmed after user has paid (via Oxapay)',
             transaction_id = track_id,
             verified = False, # will be verified if status is found as paid in checkOxapayTransactionStatus
             discount_applied = discount_applied,
