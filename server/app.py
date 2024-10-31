@@ -2486,7 +2486,7 @@ def checkPaynowTransactionStatus():
     user_pending_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Paynow Gateway)', verified = False)
 
     # if user has no pending payments or user's most recent payment's verification status = True
-    if len(user_pending_payments) == 0 or most_recent_payment_verified = True: response = make_response('no pending payments'); response.status = 404; return response
+    if len(user_pending_payments) == 0 or most_recent_payment_verified == True: response = make_response('no pending payments'); response.status = 404; return response
 
     # user's most recent pending payment
     most_recent_pending_payment = user_pending_payments[-1]
