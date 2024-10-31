@@ -2628,7 +2628,7 @@ def checkOxapayTransactionStatus():
         try: account_id = request.form['account_id'] 
         except: response = make_response('Account ID field required'); response.status = 400; return response
         # if request is not for the admin's own account
-        if account_id != 'self' and and account_id != '' and account_id != None and account_id != 'null': user_id = account_id
+        if account_id != 'self' and account_id != '' and account_id != None and account_id != 'null': user_id = account_id
 
         # validation of supplied account id
         try: account = Users.objects.filter(id = account_id)[0]
