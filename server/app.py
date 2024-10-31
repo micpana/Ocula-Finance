@@ -2478,7 +2478,7 @@ def checkPaynowTransactionStatus():
     # get all user payments
     user_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Paynow Gateway)')
     # get user's most recent payment's verification status
-    if len(user_payments) > 0: most_recent_payment_verified = user_payments[-1].verified
+    if len(user_payments) > 0: most_recent_payment_verified = user_payments[len(user_payments)-1].verified
     else: most_recent_payment_verified = False
     # ***************************************************************************************************************************
 
@@ -2489,7 +2489,7 @@ def checkPaynowTransactionStatus():
     if len(user_pending_payments) == 0 or most_recent_payment_verified == True: response = make_response('no pending payments'); response.status = 404; return response
 
     # user's most recent pending payment
-    most_recent_pending_payment = user_pending_payments[-1]
+    most_recent_pending_payment = user_pending_payments[len(user_pending_payments)-1]
 
     # get user's most recent poll url
     most_recent_poll_url = most_recent_pending_payment.transaction_id
@@ -2648,7 +2648,7 @@ def checkOxapayTransactionStatus():
     # get all user payments
     user_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Oxapay Gateway)')
     # get user's most recent payment's verification status
-    if len(user_payments) > 0: most_recent_payment_verified = user_payments[-1].verified
+    if len(user_payments) > 0: most_recent_payment_verified = user_payments[len(user_payments)-1].verified
     else: most_recent_payment_verified = False
     # ***************************************************************************************************************************
 
@@ -2659,7 +2659,7 @@ def checkOxapayTransactionStatus():
     if len(user_pending_payments) == 0 or most_recent_payment_verified == True: response = make_response('no pending payments'); response.status = 404; return response
 
     # user's most recent pending payment
-    most_recent_pending_payment = user_pending_payments[-1]
+    most_recent_pending_payment = user_pending_payments[len(user_pending_payments)-1]
 
     # get user's most recent track id
     most_recent_track_id = most_recent_pending_payment.transaction_id
