@@ -85,6 +85,12 @@ def get_payment_methods():
 
     return payment_methods
 
+# USD to ZWG rate ... 1USD to ZWG
+def one_usd_to_zwg():
+    one_usd_to_zwg = 35.00
+
+    return one_usd_to_zwg
+
 # increment number for client load more feature
 def get_client_load_more_increment():
     client_load_more_increment = 50

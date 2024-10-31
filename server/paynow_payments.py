@@ -1,6 +1,7 @@
 import os
 from paynow import Paynow
 import time
+from settings import one_usd_to_zwg
 
 # paynow credentials **********************************************************************************************************************
 # USD ***************************************************************************************************************************
@@ -20,6 +21,9 @@ def paynow_payment(purpose, item, user_email, payment_method, payment_phonenumbe
 
     # integration key
     integration_key = usd_integration_key if currency == 'USD' else zwg_integration_key
+
+    # if currency is ZWG, convert USD amount to ZWG
+    if currency == 'ZWG': amount = amount * one_usd_to_zwg()
 
     # create an instance of the Paynow class optionally setting the result and return url(s)
     paynow = Paynow(
@@ -91,13 +95,15 @@ def paynow_status(poll_url, currency):
 
 # testing (to be commented out after testing) *********************************************************************************************
 # currency = 'USD'
+# amount = 10.00
+# if currency == 'ZWG': amount = amount * one_usd_to_zwg()
 # transaction_initiation_successful, poll_url = paynow_payment(
 #     'Subscription', # purpose
 #     'MonthlyPackage', # item
 #     'michaelmudimbu@gmail.com', # user email ... use account email for sandbox tests
 #     'ecocash', # payment method
 #     '0782464219', # payment phonenumber ... for sandbox tests, use phonenumbers on https://developers.paynow.co.zw/docs/test_mode.html
-#     10.00, # amount
+#     amount, # amount
 #     currency # currency ... USD / ZWG
 # )
 # print('Transaction initiated successfully:', transaction_initiation_successful, '| Poll url:', poll_url)

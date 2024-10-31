@@ -294,10 +294,17 @@ class Subscriptions extends Component{
                 this.LoadingOn()
                 this.NetworkErrorScreenOff()
 
+                // force ZWG currency when method is OneMoney ... since Paynow only has ZWG for OneMoney
+                if (this.state.method == 'OneMoney'){
+                    var currency = 'ZWG'
+                }else{
+                    var currency = this.state.currency
+                }
+
                 var data = new FormData()
                 data.append('method', this.state.method)
                 data.append('phonenumber', this.state.method)
-                data.append('currency', this.state.currency)
+                data.append('currency', currency)
                 data.append('subscription_type', this.state.subscription_type)
 
                 axios.post(Backend_Server_Address + 'initiatePaynowPayment', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
