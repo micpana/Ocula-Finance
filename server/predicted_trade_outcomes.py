@@ -1,13 +1,17 @@
 from collections import deque
 from symbol_config import get_symbol_list, get_symbol_config
-from settings import predictions_filter_config
+from settings import predictions_filter_config, test_predictions_result_arrays_printing_config
+from minutes_to_hours_and_minutes import minutes_to_hours_and_minutes
 
 # filtering predictions using a probability threshold *************************************************************************************
 filter_predictions_using_a_probability_threshold, prediction_probability_threshold = predictions_filter_config()
 # *****************************************************************************************************************************************
 
 # get trade outcome ***********************************************************************************************************************
-def get_trade_outcome(symbol, trade_action, trade_maximum_percentage_up, trade_maximum_percentage_down, trade_session_closing_percentage):
+def get_trade_outcome(
+        symbol, predicted_trade_action, actual_trade_action, trade_maximum_percentage_up, trade_maximum_percentage_down, 
+        trade_session_closing_percentage
+    ):
     # get symbol data ***********************************************************************************************************
     # get symbol config
     symbol_config = get_symbol_config(symbol)
@@ -31,24 +35,37 @@ def get_trade_outcome(symbol, trade_action, trade_maximum_percentage_up, trade_m
     symbol_type = symbol_config['type']
     # ***************************************************************************************************************************
 
-    # check if trade was a win or lose ******************************************************************************************
-    # if trade was a buy
-    if trade_action == 'Buy':
-        # if takeprofit was hit
-        if trade_maximum_percentage_up >= reward: takeprofit_hit = True; stoploss_hit = False; trade_close_percentage = reward; trade_won = True
-        # if stoploss was hit
-        elif trade_maximum_percentage_down <= -risk: takeprofit_hit = False; stoploss_hit = True; trade_close_percentage = -risk; trade_won = False
-    
-    # if trade was a sell
-    elif trade_action == 'Sell':
-        # if takeprofit was hit
-        if trade_maximum_percentage_down <= -reward: takeprofit_hit = True; stoploss_hit = False; trade_close_percentage = -reward; trade_won = True
-        # check if stoploss was hit
-        elif trade_maximum_percentage_up >= risk: takeprofit_hit = False; stoploss_hit = True; trade_close_percentage = risk; trade_won = False
-        
-    # if both takeprofit and stoploss were not hit
-    if (trade_action == 'Buy' or trade_action == 'Sell') and (takeprofit_hit != True and stoploss_hit != True):
-        takeprofit_hit = False; stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage; trade_won = False
+    # check if predicted trade was a win or lose ********************************************************************************
+    # if trade was a win **********************************************************************************************
+    if predicted_trade_action == actual_trade_action:
+        # set takeprofit hit to true
+        takeprofit_hit = True
+        # set stoploss hit to false
+        stoploss_hit = False
+        # set trade closing percentage
+        trade_close_percentage = reward
+        # set trade won to true
+        trade_won = True
+    # *****************************************************************************************************************
+    # if trade was a lose *********************************************************************************************
+    else:
+        # set takeprofit hit to false
+        takeprofit_hit = False
+        # set trade won to false
+        trade_won = False
+        # check if stoploss was hit or not ******************************************************************
+        # for buys ********************************************************************************
+        if predicted_trade_action == 'Buy': 
+            if trade_maximum_percentage_down <= -risk: stoploss_hit = True; trade_close_percentage = risk
+            else: stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage
+        # *****************************************************************************************
+        # for sells *******************************************************************************
+        if predicted_trade_action == 'Sell': 
+            if trade_maximum_percentage_up >= risk: stoploss_hit = True; trade_close_percentage = risk
+            else: stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage
+        # *****************************************************************************************
+        # ***************************************************************************************************
+    # *****************************************************************************************************************
     # ***************************************************************************************************************************
 
     # return takeprofit_hit, stoploss_hit, trade_close_percentage, trade_won
@@ -56,7 +73,9 @@ def get_trade_outcome(symbol, trade_action, trade_maximum_percentage_up, trade_m
 # *****************************************************************************************************************************************
 
 # get trade outcomes **********************************************************************************************************************
-def get_trade_outcomes(symbol, y_test, y_predicted, y_predicted_probabilities):
+def get_trade_outcomes(
+        symbol, entry_timeframe_minutes_in_a_single_bar, test_closes, y_test, y_predicted, y_predicted_probabilities
+    ):
     # get symbol data ***********************************************************************************************************
     # get symbol config
     symbol_config = get_symbol_config(symbol)
@@ -322,8 +341,165 @@ def get_trade_outcomes(symbol, y_test, y_predicted, y_predicted_probabilities):
     waiting_times_in_minutes = np.array(waiting_times_in_minutes)
     # ***************************************************************************************************************************
 
-    # return current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
-    return current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
+    # return initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
+    return initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
 # *****************************************************************************************************************************************
 
-#
+# trade statistics ************************************************************************************************************************
+def get_trade_statistics(
+        symbol, entry_timeframe, entry_timeframe_minutes_in_a_single_bar, train_dates, test_dates, x_train_shape_before_balancing_classes, 
+        train_dataset_length, test_dataset_length, initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, 
+        consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, 
+        takeprofit_missed_statuses, waiting_times_in_minutes
+    ):
+    # get symbol data ***********************************************************************************************************
+    # get symbol config
+    symbol_config = get_symbol_config(symbol)
+
+    # reward ... minimum buy or sell target percentage
+    reward = symbol_config['target']
+
+    # risk target divisor
+    risk_target_divisor = symbol_config['risk_target_divisor']
+
+    # risk:reward
+    risk_to_reward_ratio = '1:'+str(risk_target_divisor)
+
+    # risk ... stoploss
+    risk = reward / risk_target_divisor
+                
+    # forecast period
+    forecast_period = symbol_config['forecast_period']
+
+    # symbol type
+    symbol_type = symbol_config['type']
+    # ***************************************************************************************************************************
+
+    # trade holding time metrics ************************************************************************************************
+    # maximum trade holding time in minutes
+    maximum_trade_holding_time_in_minutes = entry_timeframe_minutes_in_a_single_bar * forecast_period
+
+    # maximum holding time in hours and minutes (string)
+    maximum_trade_holding_time_in_hours_and_minutes = minutes_to_hours_and_minutes(maximum_trade_holding_time_in_minutes)
+    # ***************************************************************************************************************************
+
+    # get the to_trading_days_divisor based on the entry timeframe **************************************************************
+    if entry_timeframe == 'Daily': to_trading_days_divisor = 1
+    elif entry_timeframe == 'H4': to_trading_days_divisor = 6
+    elif entry_timeframe == 'H1': to_trading_days_divisor = 24
+    elif entry_timeframe == 'M30': to_trading_days_divisor = 48
+    elif entry_timeframe == 'M15': to_trading_days_divisor = 96
+    elif entry_timeframe == 'M5': to_trading_days_divisor = 288
+    elif entry_timeframe == 'M1': to_trading_days_divisor = 1440
+    # ***************************************************************************************************************************
+
+    # insights, with Python native data types ***********************************************************************************
+    # starting account balance
+    starting_account_balance = float(initial_balance)
+    # account balance after trades
+    account_balance_after_trades = float(current_balance)
+    # number of trades taken
+    number_of_trades_taken = int(len(win_lose_results))
+    # trades won
+    trades_won = int(len(np.where(win_lose_results == 'win')[0]))
+    # trades lost
+    trades_lost = int(len(np.where(win_lose_results == 'lose')[0]))
+    # trades still open on training completion
+    trades_still_open_on_training_completion = int(number_of_trades_taken - (trades_won + trades_lost))
+    # number of stoploss hits
+    stoploss_hits = int(len(np.where(stoploss_hit_statuses == True)[0]))
+    # number of stoploss misses
+    stoploss_misses = int(len(np.where(stoploss_missed_statuses == True)[0]))
+    # number of takeprofit misses
+    takeprofit_misses = int(len(np.where(takeprofit_missed_statuses == True)[0]))
+    # overall win rate
+    overall_win_rate = float((len(np.where(win_lose_results == 'win')[0]) / len(win_lose_results)) * 100)
+    # maximum number of consecutive wins
+    maximum_number_of_consecutive_wins = int(np.max(consecutive_wins))
+    # number of times the maximum number of consecutive wins occured
+    number_of_times_the_maximum_number_of_consecutive_wins_occured = int(len(np.where(consecutive_wins == maximum_number_of_consecutive_wins)[0]))
+    # maximum number of consecutive losses
+    maximum_number_of_consecutive_losses = int(np.max(consecutive_losses))
+    # number of times the maximum number of consecutive losses occured
+    number_of_times_the_maximum_number_of_consecutive_losses_occured = int(len(np.where(consecutive_losses == maximum_number_of_consecutive_losses)[0]))
+    # average number of consecutive wins
+    average_number_of_consecutive_wins = float(np.mean(consecutive_wins))
+    # average number of consecutive losses
+    average_number_of_consecutive_losses = float(np.mean(consecutive_losses))
+    # maximum waiting time without a trade, in hours and minutes
+    maximum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.max(waiting_times_in_minutes))
+    # average waiting time without a trade, in hours and minutes
+    average_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.mean(waiting_times_in_minutes))
+    # minimum waiting time without a trade, in hours and minutes
+    minimum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.min(waiting_times_in_minutes))
+    # number of features
+    number_of_features = int(x_train_shape_before_balancing_classes[1])
+    # training data start date
+    training_data_start_date = str(train_dates[0])
+    # training data end date
+    training_data_end_date = str(train_dates[-1])
+    # training data number of trading days
+    training_data_number_of_trading_days = float(train_dataset_length / to_trading_days_divisor)
+    # test data start date
+    test_data_start_date = str(test_dates[0])
+    # test data end date
+    test_data_end_date = str(test_dates[-1])
+    # test data number of trading days
+    test_data_number_of_trading_days = float(test_dataset_length / to_trading_days_divisor)
+    # win / lose results, list
+    win_lose_results = win_lose_results.tolist()
+    # consecutive wins, list
+    consecutive_wins = consecutive_wins.tolist()
+    # consecutive losses, list
+    consecutive_losses = consecutive_losses.tolist()
+    # waiting times in minutes, list
+    waiting_times_in_minutes = waiting_times_in_minutes.tolist()
+    # balances, list
+    balances = current_balances.tolist()
+    # ***************************************************************************************************************************
+
+    # config for printing test predictions result arrays ************************************************************************
+    print_win_lose_results_array, print_consecutive_wins_array, print_consecutive_losses_array, print_waiting_times_array, print_balances_array = test_predictions_result_arrays_printing_config()
+    # ***************************************************************************************************************************
+
+    # print out insight on the predicted trades *********************************************************************************
+    print('\n\nSymbol:', symbol)
+    print('Symbol Type:', symbol_type)
+    print('Starting account balance (example in $):', starting_account_balance)
+    print('Account balance after trades ($):', account_balance_after_trades)
+    print('Number of trades taken:', number_of_trades_taken)
+    print('Maximum holding time for each trade:', maximum_trade_holding_time_in_hours_and_minutes)
+    print('Trades won:', trades_won)
+    print('Trades lost:', trades_lost)
+    print('Trades still open on training completion:', trades_still_open_on_training_completion)
+    print('Overall Win Rate %:', overall_win_rate)
+    print('Risk:Reward:', risk_to_reward_ratio)
+    print('Stoploss Hits:', stoploss_hits)
+    print('Stoploss Misses:', stoploss_misses)
+    print('Takeprofit Misses:', takeprofit_misses)
+    print('Average number of consecutive wins:', average_number_of_consecutive_wins)
+    print('Average number of consecutive losses:', average_number_of_consecutive_losses)
+    print('Maximum number of consecutive wins:', maximum_number_of_consecutive_wins)
+    print('Maximum number of consecutive wins occured (n times):', number_of_times_the_maximum_number_of_consecutive_wins_occured)
+    print('Maximum number of consecutive losses:', maximum_number_of_consecutive_losses)
+    print('Maximum number of consecutive losses occured (n times):', number_of_times_the_maximum_number_of_consecutive_losses_occured)
+    print('Maximum waiting time without a trade:', maximum_waiting_time_without_a_trade_in_hours_and_minutes)
+    print('Average waiting time without a trade:', average_waiting_time_without_a_trade_in_hours_and_minutes)
+    print('Minimum waiting time without a trade:', minimum_waiting_time_without_a_trade_in_hours_and_minutes)
+    print('Number of features:', number_of_features)
+    print('Training data start date:', training_data_start_date)
+    print('Training data end date:', training_data_end_date)
+    print('Training data number of days:', training_data_number_of_trading_days)
+    print('Test data start date:', test_data_start_date)
+    print('Test data end date:', test_data_end_date)
+    print('Test data number of days:', test_data_number_of_trading_days)
+    if print_win_lose_results_array == True: print('Win / Lose Results:', win_lose_results)
+    if print_consecutive_wins_array == True: print('Consecutive wins:', consecutive_wins)
+    if print_consecutive_losses_array == True: print('Consecutive losses:', consecutive_losses)
+    if print_waiting_times_array == True: print('Waiting times in minutes:', waiting_times_in_minutes)
+    if print_balances_array == True: print('Balances ($):', balances)
+    # ***************************************************************************************************************************
+
+    # return maximum_trade_holding_time_in_hours_and_minutes, symbol, symbol_type, starting_account_balance, account_balance_after_trades, number_of_trades_taken, maximum_trade_holding_time_in_hours_and_minutes, trades_won, trades_lost, trades_still_open_on_training_completion, overall_win_rate, risk_to_reward_ratio, stoploss_hits, stoploss_misses, takeprofit_misses, average_number_of_consecutive_wins, average_number_of_consecutive_losses, maximum_number_of_consecutive_wins, number_of_times_the_maximum_number_of_consecutive_wins_occured, maximum_number_of_consecutive_losses, number_of_times_the_maximum_number_of_consecutive_losses_occured, maximum_waiting_time_without_a_trade_in_hours_and_minutes, average_waiting_time_without_a_trade_in_hours_and_minutes, minimum_waiting_time_without_a_trade_in_hours_and_minutes, number_of_features, training_data_start_date, training_data_end_date, training_data_number_of_trading_days, test_data_start_date, test_data_end_date, test_data_number_of_trading_days, win_lose_results, consecutive_wins, consecutive_losses, waiting_times_in_minutes, balances
+    return maximum_trade_holding_time_in_hours_and_minutes, symbol, symbol_type, starting_account_balance, account_balance_after_trades, number_of_trades_taken, maximum_trade_holding_time_in_hours_and_minutes, trades_won, trades_lost, trades_still_open_on_training_completion, overall_win_rate, risk_to_reward_ratio, stoploss_hits, stoploss_misses, takeprofit_misses, average_number_of_consecutive_wins, average_number_of_consecutive_losses, maximum_number_of_consecutive_wins, number_of_times_the_maximum_number_of_consecutive_wins_occured, maximum_number_of_consecutive_losses, number_of_times_the_maximum_number_of_consecutive_losses_occured, maximum_waiting_time_without_a_trade_in_hours_and_minutes, average_waiting_time_without_a_trade_in_hours_and_minutes, minimum_waiting_time_without_a_trade_in_hours_and_minutes, number_of_features, training_data_start_date, training_data_end_date, training_data_number_of_trading_days, test_data_start_date, test_data_end_date, test_data_number_of_trading_days, win_lose_results, consecutive_wins, consecutive_losses, waiting_times_in_minutes, balances
+# *****************************************************************************************************************************************
