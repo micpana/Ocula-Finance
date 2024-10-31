@@ -41,6 +41,8 @@ import SymbolIconsRender from './symbol_icons_render';
 import DateTimeDisplay from './timezone_conversion'
 import { FaMonero, FaMoneyBillWave } from 'react-icons/fa';
 
+// initialize variable for stating whether the current request is the page's initial request or not
+var initial_request = true
 // initialize variable for timestamp of the most recent signal received
 var timestamp_of_most_recent_signal_received = null
 // initialize variable for symbol of the most recent signal received
@@ -74,8 +76,7 @@ class Analysis extends Component{
             user_device_timezone: null,
             user_time_by_id_address: null, 
             user_timezone_by_id_address: null,
-            notification_permission_granted: false,
-            initial_request: true
+            notification_permission_granted: false
         };
 
         this.HandleChange = (e) => {
@@ -147,7 +148,7 @@ class Analysis extends Component{
                 }
                 this.NetworkErrorScreenOff()
 
-                if (symbol != this.state.queried_symbol){ // current selected symbol is not the one that one previously queried
+                if (symbol != this.state.queried_symbol || initial_request == true){ // current selected symbol is not the one that one previously queried / this is the initial request
                     var length_of_data_received = 0
                     var clear_market_analysis_state_first = true
                     timestamp_of_most_recent_signal_received = ''
@@ -193,14 +194,14 @@ class Analysis extends Component{
                         }
 
                         // trade signal(s) browser notification ... only if we have new signals, this is not the initial request, and this is a function recall for the same symbol
-                        if (result.length > 0 && this.state.initial_request === false && symbol == this.state.queried_symbol){
+                        if (result.length > 0 && initial_request === false && symbol === this.state.queried_symbol){
                             // show browser notifications
                             this.ShowTradeSignalsNotification(result)
                         }
 
                         // set initial request to false ... only if its current set to true
-                        if (this.state.initial_request === true){
-                            this.setState({initial_request: false})
+                        if (initial_request === true){
+                            initial_request = false
                         }
                     }
                     // update queried_symbol to symbol
