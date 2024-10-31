@@ -190,13 +190,19 @@ class AllUsers extends Component{
             })
         }
 
-        this.GetSelectedUserPayments = (user_id, get_all) => {
+        this.GetSelectedUserPayments = (user_id, get_all, fresh_reload) => {
             const { cookies } = this.props;
             this.LoadingOn()
+
+            if (fresh_reload === true){
+                var length_of_data_received = 0
+            }else{
+                var length_of_data_received = this.state.user_payments.length
+            }
             
             var data = new FormData()
             data.append('account_id', user_id)
-            data.append('length_of_data_received', this.state.user_payments.length)
+            data.append('length_of_data_received', length_of_data_received)
             data.append('get_all', get_all) // bool
 
             axios.post(Backend_Server_Address + 'getUserPaymentHistoryByAccountId', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
@@ -674,6 +680,9 @@ class AllUsers extends Component{
                         password: '',
                         screen: 'user'
                     })
+                    // reload selected user's payments
+                    this.GetSelectedUserPayments(this.state.user._id.$oid, false, true)
+                    this.setState({end_of_list: false})
                     // success notification + loading off
                     Notification('Payment addition successful.', 'success')
                     this.LoadingOff()
@@ -716,6 +725,152 @@ class AllUsers extends Component{
                     this.LoadingOff()
                 })
             }
+        }
+
+        this.VerifyOxapayPayment = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
+
+            var data = new FormData()
+            data.append('account_id', this.state.user._id.$oid)
+
+            axios.post(Backend_Server_Address + 'checkOxapayTransactionStatus', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // reload selected user's payments
+                this.GetSelectedUserPayments(this.state.user._id.$oid, false, true)
+                this.setState({end_of_list: false})
+                // update user details in state
+                var all_users = this.state.all_users
+                all_users.map((item, index) => {
+                    if (item._id.$oid === this.state.user._id.$oid){
+                        // update user details
+                        var user = item
+                        user['subscribed '] = true
+                        user['subscription_date '] = 'updated by admin in current state'
+                        user['subscription_expiry'] = 'updated by admin in current state'
+                        // modify user details in main list
+                        all_users[index] = user
+                        // set modified list to state
+                        this.setState({
+                            all_users: all_users
+                        })
+                    }
+                })
+                // notify admin of the transaction's success
+                Notification("User's payment has been confirmed and their subscription data has been updated.", 'success')
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'no pending payments'){
+                        notification_message = 'User has no pending payments.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'not paid'){
+                        notification_message = 'No succcessful payment found.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'invalid account id'){
+                        notification_message = 'Invalid user account ID supplied.'
+                        Notification(notification_message, 'error')
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.LoadingOff()
+            })
+        }
+
+        this.VerifyPaynowPayment = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
+
+            var data = new FormData()
+            data.append('account_id', this.state.user._id.$oid)
+
+            axios.post(Backend_Server_Address + 'checkPaynowTransactionStatus', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // reload selected user's payments
+                this.GetSelectedUserPayments(this.state.user._id.$oid, false, true)
+                this.setState({end_of_list: false})
+                // update user details in state
+                var all_users = this.state.all_users
+                all_users.map((item, index) => {
+                    if (item._id.$oid === this.state.user._id.$oid){
+                        // update user details
+                        var user = item
+                        user['subscribed '] = true
+                        user['subscription_date '] = 'updated by admin in current state'
+                        user['subscription_expiry'] = 'updated by admin in current state'
+                        // modify user details in main list
+                        all_users[index] = user
+                        // set modified list to state
+                        this.setState({
+                            all_users: all_users
+                        })
+                    }
+                })
+                // notify admin of the transaction's success
+                Notification("User's payment has been confirmed and their subscription data has been updated.", 'success')
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'no pending payments'){
+                        notification_message = 'User has no pending payments.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'not paid'){
+                        notification_message = 'No succcessful payment found.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'invalid account id'){
+                        notification_message = 'Invalid user account ID supplied.'
+                        Notification(notification_message, 'error')
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.LoadingOff()
+            })
         }
     }
     
@@ -764,6 +919,23 @@ class AllUsers extends Component{
                 <td>{item.purpose}</td>
                 <td>{item.payment_method}</td>
                 <td>$ {item.amount}</td>
+                <td>
+                    {
+                        item.verified === true
+                        ? <>Payment Verified</>
+                        : item.payment_method.includes('Oxapay')
+                        ? <Button onClick={() => this.VerifyOxapayPayment()}
+                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                        >
+                            Verify payment
+                        </Button>
+                        : <Button onClick={() => this.VerifyPaynowPayment()}
+                            style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                        >
+                            Verify payment
+                        </Button>
+                    }
+                </td>
             </tr>
         })
         // users metrics
@@ -1038,7 +1210,17 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    <DateTimeDisplay datetimeString={user.subscription_date} />
+                                                    {
+                                                        user.subscription_date != '' || user.subscription_date != null || user.subscription_date != undefined
+                                                        ? <DateTimeDisplay datetimeString={user.subscription_date} />
+                                                        : user.subscription_date == 'updated by admin in current state'
+                                                        ? <>
+                                                            Subscription date changed. Reload the tab to get the user's new subscription date.
+                                                        </>
+                                                        : <>
+                                                            User has never subscribed before.
+                                                        </>
+                                                    }
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1049,7 +1231,17 @@ class AllUsers extends Component{
                                                     <br/>
                                                 </Col>
                                                 <Col>
-                                                    <DateTimeDisplay datetimeString={user.subscription_expiry} />
+                                                    {
+                                                        user.subscription_expiry != '' || user.subscription_expiry != null || user.subscription_expiry != undefined
+                                                        ? <DateTimeDisplay datetimeString={user.subscription_expiry} />
+                                                        : user.subscription_expiry == 'updated by admin in current state'
+                                                        ? <>
+                                                            Subscription expiry date changed. Reload the tab to get the user's new subscription expiry date.
+                                                        </>
+                                                        : <>
+                                                            User has never subscribed before.
+                                                        </>
+                                                    }
                                                     <br/>
                                                 </Col>
                                             </Row>
@@ -1190,7 +1382,7 @@ class AllUsers extends Component{
                                             <br/>
                                             <h6 style={{fontWeight: 'bold', color: '#00539C'}}>User Payments</h6>
                                             <br/>
-                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false); this.setState({end_of_list: false}); window.scrollTo(0, 0)}}
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false, false); this.setState({end_of_list: false}); window.scrollTo(0, 0)}}
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 <FaMoneyCheckAlt /> View user payments
@@ -1286,10 +1478,11 @@ class AllUsers extends Component{
                                             <Table>
                                                 <thead>
                                                     <tr style={{borderBottom: '1px solid silver'}}>
-                                                        <th width='25%'>Date</th>
-                                                        <th width='25%'>Purpose</th>
-                                                        <th width='25%'>Method</th>
-                                                        <th width='25%'>Amount</th>
+                                                        <th width='20%'>Date</th>
+                                                        <th width='20%'>Purpose</th>
+                                                        <th width='20%'>Method</th>
+                                                        <th width='15%'>Amount</th>
+                                                        <th width='25%'>Verification</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody style={{textAlign: 'left'}}>
@@ -1303,13 +1496,13 @@ class AllUsers extends Component{
                                                 : <></>
                                             }
                                             <br/>
-                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false); this.setState({end_of_list: false})}} 
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, false, false); this.setState({end_of_list: false})}} 
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 Load more
                                             </Button>
                                             {' '}
-                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, true); this.setState({end_of_list: false})}} 
+                                            <Button onClick={() => {this.GetSelectedUserPayments(user._id.$oid, true, false); this.setState({end_of_list: false})}} 
                                                 style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
                                             >
                                                 Load all

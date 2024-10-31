@@ -1577,7 +1577,7 @@ def getUserPaymentHistoryByAccountId():
     except: response = make_response('Get all data type is invalid'); response.status = 400; return response
     
     # collect payment history by user_id
-    user_payment_history = Payments.objects.filter(user_id = account_id, verified=True)
+    user_payment_history = Payments.objects.filter(user_id = account_id) # here we are not using verified=True because we want to be able to see unverified payments, and click a button to verify them, if the user gets in touch with us after paying but their payment wasn't updated when they tried verifying on their end
     user_payment_history = json.loads(user_payment_history.to_json())
 
     # if client did not request all data
@@ -2379,6 +2379,8 @@ def initiatePaynowPayment():
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
+    # date format
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # user details
     user = Users.objects.filter(id = user_id)[0]
@@ -2466,6 +2468,8 @@ def checkPaynowTransactionStatus():
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
+    # date format
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # user details
     user = Users.objects.filter(id = user_id)
@@ -2475,6 +2479,7 @@ def checkPaynowTransactionStatus():
     user_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Paynow Gateway)')
     # get user's most recent payment's verification status
     if len(user_payments) > 0: most_recent_payment_verified = user_payments[-1].verified
+    else: most_recent_payment_verified = False
     # ***************************************************************************************************************************
 
     # user's pending payments
@@ -2492,8 +2497,14 @@ def checkPaynowTransactionStatus():
     # get user's most recent payment amount
     amount = most_recent_pending_payment.amount
 
+    # get user's most recent payment method
+    method = most_recent_pending_payment.method
+
+    # get user's most recent payment currency
+    currency = 'USD' if 'USD' in method else 'ZWG'
+
     # check Paynow transaction status ... sent / paid / cancelled
-    payment_status = paynow_status(most_recent_poll_url)
+    payment_status = paynow_status(most_recent_poll_url, currency)
 
     # if transaction has not been paid
     if payment_status != 'paid': response = make_response('not paid'); response.status = 404; return response
@@ -2544,6 +2555,8 @@ def initiateOxapayPayment():
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
+    # date format
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # user details
     user = Users.objects.filter(id = user_id)[0]
@@ -2599,7 +2612,7 @@ def initiateOxapayPayment():
         payment_details.save()
 
         # return response
-        response = make_response('initiation successful'); response.status = 200; return response
+        response = make_response(paylink); response.status = 200; return response
 
 # 34
 @app.route('/checkOxapayTransactionStatus', methods=['POST'])
@@ -2625,6 +2638,8 @@ def checkOxapayTransactionStatus():
     # get current datetime
     current_datetime_object = datetime.now(timezone(system_timezone()))
     current_datetime = str(current_datetime_object)
+    # date format
+    date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # user details
     user = Users.objects.filter(id = user_id)
@@ -2634,6 +2649,7 @@ def checkOxapayTransactionStatus():
     user_payments = Payments.objects.filter(user_id = user_id, entered_by = 'system (Oxapay Gateway)')
     # get user's most recent payment's verification status
     if len(user_payments) > 0: most_recent_payment_verified = user_payments[-1].verified
+    else: most_recent_payment_verified = False
     # ***************************************************************************************************************************
 
     # user's pending payments

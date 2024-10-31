@@ -167,19 +167,236 @@ class Subscriptions extends Component{
         }
 
         this.InitializeOxapayPayment = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
+            var data = new FormData()
+            data.append('subscription_type', this.state.subscription_type)
+
+            axios.post(Backend_Server_Address + 'initiateOxapayPayment', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // open paylink in new tab ... result is the paylink string
+                window.open(result, '_blank')
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'unknown subscription type'){
+                        notification_message = 'Unknown subscription type.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'failed to initiate'){
+                        notification_message = 'Failed to initiate payment. Please try again.'
+                        Notification(notification_message, 'error')
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.LoadingOff()
+            })
         }
 
         this.VerifyOxapayPayment = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
+            var data = new FormData()
+            var user_role = this.state.user_details === null ? null : this.state.user_details.role
+            if (user_role === 'admin'){
+                data.append('account_id', 'self')
+            }
+
+            axios.post(Backend_Server_Address + 'checkOxapayTransactionStatus', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // reload user details
+                this.GetUserDetails()
+                // notify user of the transaction's success
+                Notification('Your payment has been confirmed and your subscription data has been updated. Thank you for choosing '+Platform_Name+'. Happy trading.', 'success')
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'no pending payments'){
+                        notification_message = "You have no pending payments. If you wish to make a new payment, click on 'Pay'."
+                        Notification(notification_message, 'error')
+                    }else if(result === 'not paid'){
+                        notification_message = 'No succcessful payment found. If you think this is an error on our part, please contact our support team on any of our communication channels.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'invalid account id'){
+                        notification_message = 'Invalid user account ID supplied.'
+                        Notification(notification_message, 'error')
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.LoadingOff()
+            })
         }
 
         this.InitializePaynowPayment = () => {
+            // initialize variable to store input validation status
+            var data_checks_out = true
 
+            // clear existing input errors if any
+            this.ClearInputErrors()
+
+            // validate input data
+            if (this.state.phonenumber === ''){ this.SetInputError('phonenumber', 'required'); data_checks_out = false }
+
+            // check data collection status
+            if (data_checks_out === false){ // user needs to check their input data
+                Notification('Check input fields for errors.', 'error')
+            }else{ // send data to server
+                const { cookies } = this.props;
+                this.LoadingOn()
+                this.NetworkErrorScreenOff()
+
+                var data = new FormData()
+                data.append('method', this.state.method)
+                data.append('phonenumber', this.state.method)
+                data.append('currency', this.state.currency)
+                data.append('subscription_type', this.state.subscription_type)
+
+                axios.post(Backend_Server_Address + 'initiatePaynowPayment', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+                .then((res) => {
+                    let result = res.data
+                    // notify user of successful payment initiation
+                    Notification('Payment initiated successfully.', 'success')
+                    this.LoadingOff()
+                }).catch((error) => {
+                    console.log(error)
+                    if (error.response){ // server responded with a non-2xx status code
+                        let status_code = error.response.status
+                        let result = error.response.data
+                        var notification_message = ''
+                        if(
+                            result === 'access token disabled via signout' ||
+                            result === 'access token expired' ||
+                            result === 'not authorized to access this' ||
+                            result === 'invalid token'
+                        ){ 
+                            // delete token from user cookies
+                            cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                            // redirect to sign in
+                            let port = (window.location.port ? ':' + window.location.port : '');
+                            window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if(result === 'unknown subscription type'){
+                            notification_message = 'Unknown subscription type.'
+                            Notification(notification_message, 'error')
+                        }else if(result === 'failed to initiate'){
+                            notification_message = 'Failed to initiate payment. Please try again.'
+                            Notification(notification_message, 'error')
+                        }else{
+                            notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                            Notification(notification_message, 'error')
+                        }
+                    }else if (error.request){ // request was made but no response was received ... network error
+                        Notification(Network_Error_Message, 'error')
+                    }else{ // error occured during request setup ... no network access
+                        Notification(No_Network_Access_Message, 'error')
+                    }
+                    this.LoadingOff()
+                })
+            }
         }
 
         this.VerifyPaynowPayment = () => {
+            const { cookies } = this.props;
+            this.LoadingOn()
+            this.NetworkErrorScreenOff()
 
+            var data = new FormData()
+            var user_role = this.state.user_details === null ? null : this.state.user_details.role
+            if (user_role === 'admin'){
+                data.append('account_id', 'self')
+            }
+
+            axios.post(Backend_Server_Address + 'checkPaynowTransactionStatus', data, { headers: { 'Access-Token': cookies.get(Access_Token_Cookie_Name) }  })
+            .then((res) => {
+                let result = res.data
+                // reload user details
+                this.GetUserDetails()
+                // notify user of the transaction's success
+                Notification('Your payment has been confirmed and your subscription data has been updated. Thank you for choosing '+Platform_Name+'. Happy trading.', 'success')
+                this.LoadingOff()
+            }).catch((error) => {
+                console.log(error)
+                if (error.response){ // server responded with a non-2xx status code
+                    let status_code = error.response.status
+                    let result = error.response.data
+                    var notification_message = ''
+                    if(
+                        result === 'access token disabled via signout' ||
+                        result === 'access token expired' ||
+                        result === 'not authorized to access this' ||
+                        result === 'invalid token'
+                    ){ 
+                        // delete token from user cookies
+                        cookies.remove(Access_Token_Cookie_Name, { path: '/' });
+                        // redirect to sign in
+                        let port = (window.location.port ? ':' + window.location.port : '');
+                        window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if(result === 'no pending payments'){
+                        notification_message = "You have no pending payments. If you wish to make a new payment, click on 'Pay'."
+                        Notification(notification_message, 'error')
+                    }else if(result === 'not paid'){
+                        notification_message = 'No succcessful payment found. If you think this is an error on our part, please contact our support team on any of our communication channels.'
+                        Notification(notification_message, 'error')
+                    }else if(result === 'invalid account id'){
+                        notification_message = 'Invalid user account ID supplied.'
+                        Notification(notification_message, 'error')
+                    }else{
+                        notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
+                        Notification(notification_message, 'error')
+                    }
+                }else if (error.request){ // request was made but no response was received ... network error
+                    Notification(Network_Error_Message, 'error')
+                }else{ // error occured during request setup ... no network access
+                    Notification(No_Network_Access_Message, 'error')
+                }
+                this.LoadingOff()
+            })
         }
     }
 

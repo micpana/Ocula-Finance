@@ -6,8 +6,6 @@ datasets/
 
 # logs
 logs/
-paynow_payments.py
-oxapay_payments.py
 
 # model performance visual insights
 "model performance visual insights"/

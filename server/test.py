@@ -1,3 +1,1 @@
-a = 'P p'
-
-print(a.replace(' ', ''))
+print(((1 / (2 / abs(-3))) * 1))

@@ -410,14 +410,11 @@ class Analysis extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         NotificationAlert(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, this.GetTelegramConnectCode)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     NotificationAlert(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, this.GetTelegramConnectCode)
                 }else{ // error occured during request setup ... no network access
                     NotificationAlert(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.GetTelegramConnectCode)
                 }
                 this.LoadingOff()
             })
@@ -465,14 +462,11 @@ class Analysis extends Component{
                     }else{
                         notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                         NotificationAlert(notification_message, 'error')
-                        this.NetworkErrorScreenOn(notification_message, this.VerifyTelegramConnection)
                     }
                 }else if (error.request){ // request was made but no response was received ... network error
                     NotificationAlert(Network_Error_Message, 'error')
-                    this.NetworkErrorScreenOn(Network_Error_Message, this.VerifyTelegramConnection)
                 }else{ // error occured during request setup ... no network access
                     NotificationAlert(No_Network_Access_Message, 'error')
-                    this.NetworkErrorScreenOn(No_Network_Access_Message, this.VerifyTelegramConnection)
                 }
                 this.LoadingOff()
             })
