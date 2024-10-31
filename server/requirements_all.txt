@@ -26,3 +26,4 @@ numpy==1.26.4
 pandas==2.2.1
 matplotlib==3.9.1
 mplfinance==0.12.10b0
+paynow==1.0.8
