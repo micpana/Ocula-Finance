@@ -920,21 +920,23 @@ class AllUsers extends Component{
                 <td>{item.payment_method}</td>
                 <td>$ {item.amount}</td>
                 <td>
-                    {
-                        item.verified === true
-                        ? <>Payment Verified</>
-                        : item.payment_method.includes('Paynow')
-                        ? <Button onClick={() => this.VerifyPaynowPayment()}
-                            style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
-                        >
-                            Verify payment
-                        </Button>
-                        : <Button onClick={() => this.VerifyOxapayPayment()}
-                            style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
-                        >
-                            Verify payment
-                        </Button>
-                    }
+                    <div style={{textAlign: 'center'}}>
+                        {
+                            item.verified === true
+                            ? <>Payment Verified</>
+                            : item.payment_method.includes('Paynow')
+                            ? <Button onClick={() => this.VerifyPaynowPayment()}
+                                style={{width: '180px', border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                            >
+                                Verify payment
+                            </Button>
+                            : <Button onClick={() => this.VerifyOxapayPayment()}
+                                style={{border: '1px solid #00539C', borderRadius: '20px', color: '#ffffff', fontWeight: 'bold', backgroundColor: '#00539C'}}
+                            >
+                                Verify payment
+                            </Button>
+                        }
+                    </div>
                 </td>
             </tr>
         })
