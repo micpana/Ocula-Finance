@@ -546,6 +546,10 @@ class Analysis extends Component{
         }
         // set initial request to true
         initial_request = true
+        // set timestamp of the most recent signal received to null
+        timestamp_of_most_recent_signal_received = null
+        // set symbol of the most recent signal received to null
+        symbol_of_most_recent_signal_received = null
         // get user device's datetime data, and run the function every 3 seconds
         setInterval(this.GetUserTimeByDeviceClock, 3000);
         // get user ip address' datetime data, and run the function every 3 seconds
