@@ -92,7 +92,7 @@ class Payments(Document):
     payment_method = StringField(required=True)
     transaction_id = StringField(required=True)
     verified = BooleanField(required=True)
-    discount_supplied = FloatField(required=True)
+    discount_applied = FloatField(required=True)
     amount = FloatField(required=True)
     expiry_date = StringField(required=True)
     entered_by = StringField(required=True)
