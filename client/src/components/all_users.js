@@ -1211,7 +1211,7 @@ class AllUsers extends Component{
                                                 </Col>
                                                 <Col>
                                                     {
-                                                        user.subscription_date != '' || user.subscription_date != null || user.subscription_date != undefined
+                                                        user.subscription_date != '' && user.subscription_date != null && user.subscription_date != undefined
                                                         ? <DateTimeDisplay datetimeString={user.subscription_date} />
                                                         : user.subscription_date == 'updated by admin in current state'
                                                         ? <>
@@ -1232,7 +1232,7 @@ class AllUsers extends Component{
                                                 </Col>
                                                 <Col>
                                                     {
-                                                        user.subscription_expiry != '' || user.subscription_expiry != null || user.subscription_expiry != undefined
+                                                        user.subscription_expiry != '' && user.subscription_expiry != null && user.subscription_expiry != undefined
                                                         ? <DateTimeDisplay datetimeString={user.subscription_expiry} />
                                                         : user.subscription_expiry == 'updated by admin in current state'
                                                         ? <>
