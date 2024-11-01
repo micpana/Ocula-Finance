@@ -11,33 +11,18 @@ filter_predictions_using_a_probability_threshold, prediction_probability_thresho
 
 # get trade outcome ***********************************************************************************************************************
 def get_trade_outcome(
-        symbol, predicted_trade_action, actual_trade_action, trade_maximum_percentage_up, trade_maximum_percentage_down, 
-        trade_session_closing_percentage
+        predicted_trade_action, predicted_trade_stoploss_percentage, predicted_trade_takeprofit_percentage,  
+        trade_maximum_percentage_up, trade_maximum_percentage_down, trade_session_closing_percentage
     ):
-    # get symbol data ***********************************************************************************************************
-    # get symbol config
-    symbol_config = get_symbol_config(symbol)
-
-    # reward ... minimum buy or sell target percentage
-    reward = symbol_config['target']
-
-    # risk target divisor
-    risk_target_divisor = symbol_config['risk_target_divisor']
-
-    # risk:reward
-    risk_to_reward_ratio = '1:'+str(risk_target_divisor)
-
-    # risk ... stoploss
-    risk = reward / risk_target_divisor
-                
-    # forecast period
-    forecast_period = symbol_config['forecast_period']
-
-    # symbol type
-    symbol_type = symbol_config['type']
-    # ***************************************************************************************************************************
-
     # check if predicted trade was a win or lose ********************************************************************************
+    # determine what the actual trading action should have been *******************************************************
+    # buy
+    if trade_maximum_percentage_up >= predicted_trade_takeprofit_percentage and trade_maximum_percentage_down > predicted_trade_stoploss_percentage: actual_trade_action = 'Buy'
+    # sell
+    elif trade_maximum_percentage_down <= predicted_trade_takeprofit_percentage and trade_maximum_percentage_up < predicted_trade_stoploss_percentage: actual_trade_action = 'Sell'
+    # nothing
+    else: actual_trade_action = 'Nothing'
+    # *****************************************************************************************************************
     # if trade was a win **********************************************************************************************
     if predicted_trade_action == actual_trade_action:
         # set takeprofit hit to true
@@ -45,7 +30,7 @@ def get_trade_outcome(
         # set stoploss hit to false
         stoploss_hit = False
         # set trade closing percentage
-        trade_close_percentage = reward
+        trade_close_percentage = predicted_trade_takeprofit_percentage
         # set trade won to true
         trade_won = True
     # *****************************************************************************************************************
@@ -58,12 +43,12 @@ def get_trade_outcome(
         # check if stoploss was hit or not ******************************************************************
         # for buys ********************************************************************************
         if predicted_trade_action == 'Buy': 
-            if trade_maximum_percentage_down <= -risk: stoploss_hit = True; trade_close_percentage = risk
+            if trade_maximum_percentage_down <= predicted_trade_stoploss_percentage: stoploss_hit = True; trade_close_percentage = predicted_trade_stoploss_percentage
             else: stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage
         # *****************************************************************************************
         # for sells *******************************************************************************
         if predicted_trade_action == 'Sell': 
-            if trade_maximum_percentage_up >= risk: stoploss_hit = True; trade_close_percentage = risk
+            if trade_maximum_percentage_up >= predicted_trade_stoploss_percentage: stoploss_hit = True; trade_close_percentage = predicted_trade_stoploss_percentage
             else: stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage
         # *****************************************************************************************
         # ***************************************************************************************************

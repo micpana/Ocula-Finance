@@ -1,1 +1,6 @@
-print(((1 / (2 / abs(-3))) * 1))
+def ab(
+       a, b, c 
+    ):
+    print(a, b, c)
+
+ab(1, 2, 3)

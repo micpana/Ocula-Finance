@@ -5,12 +5,12 @@ from data_acquisition import acquire_data
 from symbol_config import get_symbol_list, get_symbol_config
 
 # percentile value to investigate *********************************************************************************************************
-percentile_value_to_investigate = 92.798 # to be selected from the percentile of the best performing symbol's set target and forecast period, as per desired/chosen performance metrics
+percentile_value_to_investigate = 90.7205 # to be selected from the percentile of the best performing symbol's set target and forecast period, as per desired/chosen performance metrics
 # *****************************************************************************************************************************************
 
 # get list of symbols *********************************************************************************************************************
 list_of_symbols = get_symbol_list()
-list_of_symbols = ['Volatility 75 (1s) Index'] # override ... comment it out when not in use
+# list_of_symbols = ['Volatility 75 (1s) Index'] # override ... comment it out when not in use
 # printout the list of symbols being used
 print('\n\nRunning target statistics for the following symbols:', list_of_symbols)
 # *****************************************************************************************************************************************
@@ -41,7 +41,7 @@ for symbol in list_of_symbols:
                 
     # forecast period
     forecast_period = symbol_config['forecast_period']
-    forecast_period = 7 # override ... comment it out when not in use
+    forecast_period = 8 # override ... comment it out when not in use
     # ***************************************************************************************************************************
 
     # get symbol's ohlc data dict with every stated timeframe's ohlc df *********************************************************
