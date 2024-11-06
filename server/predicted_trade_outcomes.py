@@ -12,17 +12,8 @@ filter_predictions_using_a_probability_threshold, prediction_probability_thresho
 # get trade outcome ***********************************************************************************************************************
 def get_trade_outcome(
         predicted_trade_action, predicted_trade_stoploss_percentage, predicted_trade_takeprofit_percentage,  
-        trade_maximum_percentage_up, trade_maximum_percentage_down, trade_session_closing_percentage
+        actual_trade_action, trade_maximum_percentage_up, trade_maximum_percentage_down, trade_session_closing_percentage
     ):
-    # check if predicted trade was a win or lose ********************************************************************************
-    # determine what the actual trading action should have been *******************************************************
-    # buy
-    if trade_maximum_percentage_up >= predicted_trade_takeprofit_percentage and trade_maximum_percentage_down > predicted_trade_stoploss_percentage: actual_trade_action = 'Buy'
-    # sell
-    elif trade_maximum_percentage_down <= predicted_trade_takeprofit_percentage and trade_maximum_percentage_up < predicted_trade_stoploss_percentage: actual_trade_action = 'Sell'
-    # nothing
-    else: actual_trade_action = 'Nothing'
-    # *****************************************************************************************************************
     # if trade was a win **********************************************************************************************
     if predicted_trade_action == actual_trade_action:
         # set takeprofit hit to true
@@ -82,6 +73,9 @@ def get_trade_outcomes(
                 
     # forecast period
     forecast_period = symbol_config['forecast_period']
+    
+    # holding period
+    holding_period = symbol_config['holding_period']
 
     # symbol type
     symbol_type = symbol_config['type']
@@ -358,6 +352,9 @@ def get_trade_statistics(
                 
     # forecast period
     forecast_period = symbol_config['forecast_period']
+    
+    # holding period
+    holding_period = symbol_config['holding_period']
 
     # symbol type
     symbol_type = symbol_config['type']
@@ -365,7 +362,7 @@ def get_trade_statistics(
 
     # trade holding time metrics ************************************************************************************************
     # maximum trade holding time in minutes
-    maximum_trade_holding_time_in_minutes = entry_timeframe_minutes_in_a_single_bar * forecast_period
+    maximum_trade_holding_time_in_minutes = entry_timeframe_minutes_in_a_single_bar * holding_period
 
     # maximum holding time in hours and minutes (string)
     maximum_trade_holding_time_in_hours_and_minutes = minutes_to_hours_and_minutes(maximum_trade_holding_time_in_minutes)

@@ -167,6 +167,12 @@ def remove_last_n_values_without_full_forecast():
 
     return remove
 
+# whether to backtests to the database or not
+def save_backtests_to_database():
+    save = True
+
+    return save
+
 # whether to save live predictions to the database or not
 def save_live_predictions_to_database():
     save = True
@@ -264,6 +270,12 @@ def save_plots_during_training():
 
     return save
 
+# whether to show ohlc graph during backtesting or not
+def show_ohlc_graph_during_backtesting():
+    show = True
+
+    return show
+
 # get custom system extension for saving objects as files
 def custom_system_extension():
     extension = '.ocula_finance'
@@ -279,6 +291,12 @@ def get_training_price_data_csvs_folder_path():
 # get training logs path
 def get_training_log_path(symbol):
     path = 'logs/training logs/' + symbol + '-Training-Log.json'
+
+    return path
+
+# get backtest logs path
+def get_backtest_log_path(symbol):
+    path = 'logs/backtesting logs/' + symbol + '-Backtesting-Log.json'
 
     return path
 
@@ -357,6 +375,12 @@ def get_x_y_prediction_object_path():
 # encrypted manage expired open trades object path
 def get_manage_expired_open_trades_object_path():
     path = 'manage_expired_open_trades' + encrypted_code_files_extension()
+
+    return path
+
+# encrypted backtesting object path
+def get_backtesting_object_path():
+    path = 'backtesting' + encrypted_code_files_extension()
 
     return path
 

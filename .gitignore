@@ -54,3 +54,4 @@ dec_y_feature_engineering.py
 dec_x_y_train.py
 dec_x_y_predict.py
 dec_manage_expired_open_trades.py
+dec_backtest.py
