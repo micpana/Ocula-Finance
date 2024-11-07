@@ -1,7 +1,7 @@
 import os
 import getpass
 from cryptography.fernet import Fernet
-from settings import get_x_y_feature_engineering_object_path, get_x_feature_engineering_object_path, get_y_feature_engineering_object_path, get_x_y_prediction_object_path, get_x_y_training_object_path, get_manage_expired_open_trades_object_path, get_label_encoder_path, get_scaler_path, get_model_path
+from settings import get_x_y_feature_engineering_object_path, get_x_feature_engineering_object_path, get_y_feature_engineering_object_path, get_x_y_prediction_object_path, get_x_y_training_object_path, get_manage_expired_open_trades_object_path, get_backtesting_object_path, get_label_encoder_path, get_scaler_path, get_model_path
 from symbol_config import get_symbol_list
 
 # optional list of other encrypted files to reencrypt apart from scalers and models (these are reencrypted by default) ********************
@@ -12,6 +12,7 @@ other_encrypted_files_to_reencrypt = [
     # get_x_y_prediction_object_path(), 
     # get_x_y_training_object_path(), 
     # get_manage_expired_open_trades_object_path(),
+    # get_backtesting_object_path()
 ]
 # *****************************************************************************************************************************************
 

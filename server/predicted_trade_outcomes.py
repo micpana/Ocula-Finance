@@ -417,14 +417,14 @@ def get_trade_statistics(
     average_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.mean(waiting_times_in_minutes))
     # minimum waiting time without a trade, in hours and minutes
     minimum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.min(waiting_times_in_minutes))
-    # number of features
-    number_of_features = int(x_train_shape_before_balancing_classes[1])
-    # training data start date
-    training_data_start_date = str(train_dates[0])
-    # training data end date
-    training_data_end_date = str(train_dates[-1])
-    # training data number of trading days
-    training_data_number_of_trading_days = float(train_dataset_length / to_trading_days_divisor)
+    # number of features ... backtests will give None for x_train_shape_before_balancing_classes
+    number_of_features = int(x_train_shape_before_balancing_classes[1]) if x_train_shape_before_balancing_classes != None else 'N/A in Backtests'
+    # training data start date ... backtests will give None for train_dates
+    training_data_start_date = str(train_dates[0]) if train_dates != None else 'N/A in Backtests'
+    # training data end date ... backtests will give None for train_dates
+    training_data_end_date = str(train_dates[-1]) if train_dates != None else 'N/A in Backtests'
+    # training data number of trading days ... backtests will give None for train_dataset_length
+    training_data_number_of_trading_days = float(train_dataset_length / to_trading_days_divisor) if train_dataset_length != None else 'N/A in Backtests'
     # test data start date
     test_data_start_date = str(test_dates[0])
     # test data end date
