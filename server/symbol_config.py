@@ -12,7 +12,7 @@ symbols_and_their_config = {
     # Forex Pairs ***************************************************************************************************************
     'EURUSD': {
         'type': 'Forex Pair',
-        'target': 0.15, # manual = 0.25 ... statistical = 0.23
+        'target': 0.23, # manual = 0.25 ... statistical = 0.23
         'risk_target_divisor': default_risk_target_divisor,
         'forecast_period': default_forecast_period,
         'holding_period': default_holding_period

@@ -164,7 +164,7 @@ def get_trade_outcomes(
         # ***************************************************************************************************
 
         # if the actual trade is a buy or sell **************************************************************
-        if actual != Nothing:
+        if actual != 'Nothing':
             # if actual trade is a buy ************************************************************
             if actual == 'Buy':
                 # actual buy price
@@ -482,8 +482,6 @@ def get_predicted_trades_statistics(
     takeprofit_misses = int(len(np.where(takeprofit_missed_statuses == True)[0]))
     # overall win rate
     overall_win_rate = float((len(np.where(win_lose_results == 'win')[0]) / len(win_lose_results)) * 100)
-    # win rates for each quarter
-    win_rates_for_each_quarter = win_rates_for_each_quarter
     # maximum number of consecutive wins
     maximum_number_of_consecutive_wins = int(np.max(consecutive_wins))
     # number of times the maximum number of consecutive wins occured
@@ -505,9 +503,9 @@ def get_predicted_trades_statistics(
     # number of features ... backtests will give None for x_train_shape_before_balancing_classes
     number_of_features = int(x_train_shape_before_balancing_classes[1]) if x_train_shape_before_balancing_classes != None else 'N/A in Backtests'
     # training data start date ... backtests will give None for train_dates
-    training_data_start_date = str(train_dates[0]) if train_dates != None else 'N/A in Backtests'
+    training_data_start_date = str(train_dates[0]) if train_dates is not None else 'N/A in Backtests'
     # training data end date ... backtests will give None for train_dates
-    training_data_end_date = str(train_dates[-1]) if train_dates != None else 'N/A in Backtests'
+    training_data_end_date = str(train_dates[-1]) if train_dates is not None else 'N/A in Backtests'
     # training data number of trading days ... backtests will give None for train_dataset_length
     training_data_number_of_trading_days = float(train_dataset_length / to_trading_days_divisor) if train_dataset_length != None else 'N/A in Backtests'
     # test data start date
@@ -545,7 +543,9 @@ def get_predicted_trades_statistics(
     print('Trades lost:', trades_lost)
     print('Trades still open on training completion:', trades_still_open_on_training_completion)
     print('Overall Win Rate %:', overall_win_rate)
-    print('% Win Rates for each quarter in the test data', win_rates_for_each_quarter)
+    print('% Win Rates for each quarter in the test data:', win_rates_for_each_quarter)
+    print('Risk %:', risk)
+    print('Reward %:', reward)
     print('Risk:Reward:', risk_to_reward_ratio)
     print('Stoploss Hits:', stoploss_hits)
     print('Stoploss Misses:', stoploss_misses)
@@ -573,6 +573,6 @@ def get_predicted_trades_statistics(
     if print_balances_array == True: print('Balances ($):', balances)
     # ***************************************************************************************************************************
 
-    # return maximum_trade_holding_time_in_hours_and_minutes, symbol, symbol_type, starting_account_balance, account_balance_after_trades, number_of_trades_taken, maximum_trade_holding_time_in_hours_and_minutes, trades_won, trades_lost, trades_still_open_on_training_completion, overall_win_rate, risk_to_reward_ratio, stoploss_hits, stoploss_misses, takeprofit_misses, average_number_of_consecutive_wins, average_number_of_consecutive_losses, maximum_number_of_consecutive_wins, number_of_times_the_maximum_number_of_consecutive_wins_occured, maximum_number_of_consecutive_losses, number_of_times_the_maximum_number_of_consecutive_losses_occured, maximum_waiting_time_without_a_trade_in_hours_and_minutes, average_waiting_time_without_a_trade_in_hours_and_minutes, minimum_waiting_time_without_a_trade_in_hours_and_minutes, number_of_features, training_data_start_date, training_data_end_date, training_data_number_of_trading_days, test_data_start_date, test_data_end_date, test_data_number_of_trading_days, win_lose_results, consecutive_wins, consecutive_losses, waiting_times_in_minutes, balances
-    return maximum_trade_holding_time_in_hours_and_minutes, symbol, symbol_type, starting_account_balance, account_balance_after_trades, number_of_trades_taken, maximum_trade_holding_time_in_hours_and_minutes, trades_won, trades_lost, trades_still_open_on_training_completion, overall_win_rate, risk_to_reward_ratio, stoploss_hits, stoploss_misses, takeprofit_misses, average_number_of_consecutive_wins, average_number_of_consecutive_losses, maximum_number_of_consecutive_wins, number_of_times_the_maximum_number_of_consecutive_wins_occured, maximum_number_of_consecutive_losses, number_of_times_the_maximum_number_of_consecutive_losses_occured, maximum_waiting_time_without_a_trade_in_hours_and_minutes, average_waiting_time_without_a_trade_in_hours_and_minutes, minimum_waiting_time_without_a_trade_in_hours_and_minutes, number_of_features, training_data_start_date, training_data_end_date, training_data_number_of_trading_days, test_data_start_date, test_data_end_date, test_data_number_of_trading_days, win_lose_results, consecutive_wins, consecutive_losses, waiting_times_in_minutes, balances
+    # return maximum_trade_holding_time_in_hours_and_minutes, symbol, symbol_type, starting_account_balance, account_balance_after_trades, number_of_trades_taken, maximum_trade_holding_time_in_hours_and_minutes, trades_won, trades_lost, trades_still_open_on_training_completion, overall_win_rate, win_rates_for_each_quarter, risk_to_reward_ratio, stoploss_hits, stoploss_misses, takeprofit_misses, average_number_of_consecutive_wins, average_number_of_consecutive_losses, maximum_number_of_consecutive_wins, number_of_times_the_maximum_number_of_consecutive_wins_occured, maximum_number_of_consecutive_losses, number_of_times_the_maximum_number_of_consecutive_losses_occured, maximum_waiting_time_without_a_trade_in_hours_and_minutes, average_waiting_time_without_a_trade_in_hours_and_minutes, minimum_waiting_time_without_a_trade_in_hours_and_minutes, number_of_features, training_data_start_date, training_data_end_date, training_data_number_of_trading_days, test_data_start_date, test_data_end_date, test_data_number_of_trading_days, win_lose_results, consecutive_wins, consecutive_losses, waiting_times_in_minutes, balances
+    return maximum_trade_holding_time_in_hours_and_minutes, symbol, symbol_type, starting_account_balance, account_balance_after_trades, number_of_trades_taken, maximum_trade_holding_time_in_hours_and_minutes, trades_won, trades_lost, trades_still_open_on_training_completion, overall_win_rate, win_rates_for_each_quarter, risk_to_reward_ratio, stoploss_hits, stoploss_misses, takeprofit_misses, average_number_of_consecutive_wins, average_number_of_consecutive_losses, maximum_number_of_consecutive_wins, number_of_times_the_maximum_number_of_consecutive_wins_occured, maximum_number_of_consecutive_losses, number_of_times_the_maximum_number_of_consecutive_losses_occured, maximum_waiting_time_without_a_trade_in_hours_and_minutes, average_waiting_time_without_a_trade_in_hours_and_minutes, minimum_waiting_time_without_a_trade_in_hours_and_minutes, number_of_features, training_data_start_date, training_data_end_date, training_data_number_of_trading_days, test_data_start_date, test_data_end_date, test_data_number_of_trading_days, win_lose_results, consecutive_wins, consecutive_losses, waiting_times_in_minutes, balances
 # *****************************************************************************************************************************************

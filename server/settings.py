@@ -380,7 +380,7 @@ def get_manage_expired_open_trades_object_path():
 
 # encrypted backtesting object path
 def get_backtesting_object_path():
-    path = 'backtesting' + encrypted_code_files_extension()
+    path = 'backtest' + encrypted_code_files_extension()
 
     return path
 
