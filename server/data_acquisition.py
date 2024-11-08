@@ -5,8 +5,10 @@ from datetime import timedelta
 import pytz
 from settings import system_timezone
 from symbol_config import get_symbol_config
+import numpy as np
 
-def acquire_data(symbol, timeframes, call_module): # call module = training / prediction
+# data acquisition function ***************************************************************************************************************
+def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_window): # call module = training / prediction / backtesting
     # initialize ohlc data dict
     ohlc_data_dict = {}
 
@@ -24,16 +26,18 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
     # set time zone
     timezone = pytz.timezone(system_timezone())
 
-    # loop through timeframes
+    # loop through timeframes ***************************************************************************************************
     for timeframe in timeframes:
         # get data collection days, and the number of bars needed per timeframe, according to call module and current timeframe
         data_collection_days, number_of_bars_needed = get_data_collection_days_by_intended_purpose(call_module, timeframe, data_source)
+        # *************************************************************************************************************
 
         # create 'datetime' range objects in system's time zone to avoid the implementation of a local time zone offset
         start_date = datetime.now() - timedelta(days=+data_collection_days)
         end_date = datetime.now() + timedelta(minutes=+6) # some additional time to make sure all current data is included
         timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
         timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
+        # *************************************************************************************************************
 
         """
             MT5 brings in even forming candles, ie ones that haven't closed yet. It's candlestick timestamps marks the candlestick's 
@@ -42,19 +46,60 @@ def acquire_data(symbol, timeframes, call_module): # call module = training / pr
             investigation needed.
         """
 
-        # get data according to data source ... csv / yahoo / mt5 ... and add it to ohlc data dict according to number_of_bars_needed (for predictions only)
+        # get data according to data source ... csv / yahoo / mt5 *****************************************************
         if data_source == 'csv': 
             from csv_data import csv_fetch_data
             ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
-            if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'yahoo': 
             from yahoo_finance_data import yahoo_fetch_data
             ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to).head(-1) # removing the last row since its a bar still forming, as stated above
-            if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
         elif data_source == 'mt5': 
             from mt5_data import mt5_fetch_data
             ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type).head(-1) # removing the last row since its a bar still forming, as stated above
-            if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
+        # *************************************************************************************************************
+
+        # modify ohlc data to match number_of_bars_needed in ohlc data dict ... (for predictions only) ****************
+        if call_module == 'prediction': ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].tail(number_of_bars_needed)
+        # *************************************************************************************************************
+
+        # if backtest_start_date != None ******************************************************************************
+        if backtest_start_date != None:
+            """if calling module is not the backtesting module, it will give a backtest_start_date of None"""
+            # get the current timeframe's dates array *******************************************************
+            timeframe_dates = ohlc_data_dict[timeframe]['time'].values
+            # ***********************************************************************************************
+            # get the x main loop's starting index **********************************************************
+            x_main_loop_starting_index = view_window + 3  # we start from index = view_window+3 (there's a part in the x engineering loop where we need to consider the 2 last candlesticks as well)
+            # ***********************************************************************************************
+            # indexes of dates on or after backtest start date **********************************************
+            # indexes
+            index_of_dates_on_or_after_backtest_start_date = np.where(timeframe_dates >= backtest_start_date)[0]
+            # if no indexes were found
+            if len(index_of_dates_on_or_after_backtest_start_date) == 0: 
+                # notify user
+                print('\n\nNo data was found on or after', backtest_start_date, 'for', symbol, timeframe, '.')
+                # stop the program
+                quit()
+            # ***********************************************************************************************
+            # get the first matching index ******************************************************************
+            first_matching_index = index_of_dates_on_or_after_backtest_start_date[0]
+            # ***********************************************************************************************
+            # get the backtest start index ******************************************************************
+            """there has to be enough data before first_matching_index for it to match or exceed x_main_loop_start_index"""
+            backtest_start_index = first_matching_index - x_main_loop_start_index
+            # if backtest_start_index is negative, it means data before backtest_start_date is not enough
+            if backtest_start_index < 0: 
+                # notify user
+                print('\n\nData before', backtest_start_date, 'is insufficient for feature engineering on', symbol, timeframe, '.')
+                # stop the program
+                quit()
+            # ***********************************************************************************************
+            # remain only with data relevant to the backtest ************************************************
+            ohlc_data_dict[timeframe] = ohlc_data_dict[timeframe].iloc[backtest_start_index:]
+            # ***********************************************************************************************
+        # *************************************************************************************************************
+    # ***************************************************************************************************************************
 
     # return ohlc data dict
     return ohlc_data_dict
+# *****************************************************************************************************************************************

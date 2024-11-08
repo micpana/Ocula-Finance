@@ -82,6 +82,17 @@ def get_trade_outcomes(
     # ***************************************************************************************************************************
 
     # get insights on the predicted trades **************************************************************************************
+    # initialize variables for actual trades **************************************************************************
+    # initialize array to store actual buy prices
+    actual_buy_prices = deque([])
+    # initialize array to store actual sell prices
+    actual_sell_prices = deque([])
+    # initialize array to store takeprofits for actual trades
+    actual_takeprofits = deque([])
+    # initialize array to store stoplosses for actual trades
+    actual_stoplosses = deque([])
+    # *****************************************************************************************************************
+    # initialize variables for predicted trades ***********************************************************************
     # state risk amount ... eg risking a dollar on each trade
     risk_amount = 1 # dollar(s)
     # state initial account balance
@@ -109,33 +120,71 @@ def get_trade_outcomes(
     # initialize array to store predicted sell prices
     predicted_sell_prices = deque([])
     # initialize array to store takeprofits for predicted trades
-    takeprofits = deque([])
+    predicted_takeprofits = deque([])
     # initialize array to store stoplosses for predicted trades
-    stoplosses = deque([])
+    predicted_stoplosses = deque([])
     # initialize array to store stoploss hit statuses
     stoploss_hit_statuses = deque([])
     # initialize array to store stoploss missed statuses
     stoploss_missed_statuses = deque([])
     # initialize array to store takeprofit missed statuses
     takeprofit_missed_statuses = deque([])
+    # *****************************************************************************************************************
     # compare actual vs predicted and get wanted win / lose results ***************************************************
     for i in tqdm(range(len(y_test)), desc="Predicted Trades Insight Generation", unit="row"):
-        # get actual value and predicted value, plus the predicted probabilities, and the max predicted probability (max predicted probability is the probability of the predicted class)
-        actual = y_test[i]; predicted = y_predicted[i]; predicted_probabilities = y_predicted_probabilities[i]; max_predicted_probability = np.max(predicted_probabilities)
+        # initialize loop's actual trades variables *********************************************************
+        # initialize actual buy price with NaN
+        actual_buy_price = np.nan
+        # initialize actual sell price with NaN
+        actual_sell_price = np.nan
+        # initialize actual takeprofit price with NaN
+        actual_takeprofit = np.nan
+        # initialize actual stoploss price with NaN
+        actual_stoploss = np.nan
+        # ***************************************************************************************************
+        # initialize loop's predicted trades variables ******************************************************
         # initialize predicted buy price with NaN
         predicted_buy_price = np.nan
         # initialize predicted sell price with NaN
         predicted_sell_price = np.nan
-        # initialize takeprofit price with NaN
-        takeprofit = np.nan
-        # initialize stoploss price with NaN
-        stoploss = np.nan
+        # initialize predicted takeprofit price with NaN
+        predicted_takeprofit = np.nan
+        # initialize predicted stoploss price with NaN
+        predicted_stoploss = np.nan
         # initialize stoploss hit variable
         stoploss_hit = False
         # initialize stoploss missed variable
         stoploss_missed = False
         # initialize takeprofit missed variable
         takeprofit_missed = False
+        # ***************************************************************************************************
+
+        # get actual value and predicted value, plus the predicted probabilities, and the max predicted probability (max predicted probability is the probability of the predicted class)
+        actual = y_test[i]; predicted = y_predicted[i]; predicted_probabilities = y_predicted_probabilities[i]; max_predicted_probability = np.max(predicted_probabilities)
+        # ***************************************************************************************************
+
+        # if the actual trade is a buy or sell **************************************************************
+        if actual != Nothing:
+            # if actual trade is a buy ************************************************************
+            if actual == 'Buy':
+                # actual buy price
+                actual_buy_price = test_closes[i]
+                # actual takeprofit
+                actual_takeprofit = actual_buy_price + ((reward / 100) * actual_buy_price)
+                # actual stoploss
+                actual_stoploss = actual_buy_price - ((risk / 100) * actual_buy_price)
+            # *************************************************************************************
+            # if actual trade is a sell ***********************************************************
+            elif actual == 'Sell':
+                # actual sell price
+                actual_sell_price = test_closes[i]
+                # actual takeprofit
+                actual_takeprofit = actual_sell_price - ((reward / 100) * actual_sell_price)
+                # actual stoploss
+                actual_stoploss = actual_sell_price + ((risk / 100) * actual_sell_price)
+            # *************************************************************************************
+        # ***************************************************************************************************
+
         # if a buy or sell was predicted, and its probability matches our criteria **************************
         if predicted != 'Nothing' and ((filter_predictions_using_a_probability_threshold == False) or (filter_predictions_using_a_probability_threshold == True and max_predicted_probability >= prediction_probability_threshold)):
             # win / lose determination ************************************************************
@@ -158,10 +207,10 @@ def get_trade_outcomes(
             if predicted == 'Buy': 
                 # predicted buy price
                 predicted_buy_price = test_closes[i]
-                # takeprofit
-                takeprofit = predicted_buy_price + ((reward / 100) * predicted_buy_price)
-                # stoploss
-                stoploss = predicted_buy_price - ((risk / 100) * predicted_buy_price)
+                # predicted takeprofit
+                predicted_takeprofit = predicted_buy_price + ((reward / 100) * predicted_buy_price)
+                # predicted stoploss
+                predicted_stoploss = predicted_buy_price - ((risk / 100) * predicted_buy_price)
                 # check if stoploss was hit *********************************************
                 # if trade was a loss *****************************************
                 if result == 'lose':
@@ -199,10 +248,10 @@ def get_trade_outcomes(
             elif predicted == 'Sell': 
                 # predicted sell price
                 predicted_sell_price = test_closes[i]
-                # takeprofit
-                takeprofit = predicted_sell_price - ((reward / 100) * predicted_sell_price)
-                # stoploss
-                stoploss = predicted_sell_price + ((risk / 100) * predicted_sell_price)
+                # predicted takeprofit
+                predicted_takeprofit = predicted_sell_price - ((reward / 100) * predicted_sell_price)
+                # predicted stoploss
+                predicted_stoploss = predicted_sell_price + ((risk / 100) * predicted_sell_price)
                 # check if stoploss was hit *********************************************
                 # if trade was a loss *****************************************
                 if result == 'lose':
@@ -284,16 +333,24 @@ def get_trade_outcomes(
                 waiting_time_count_in_minutes = 0
             # *************************************************************************************
         # *****************************************************************************************
+        # append actual buy and sell prices to their respective arrays ****************************
+        actual_buy_prices.append(actual_buy_price)
+        actual_sell_prices.append(actual_sell_price)
+        # *****************************************************************************************
+        # append actual takeprofits and stoplosses to their respective arrays *********************
+        actual_takeprofits.append(actual_takeprofit)
+        actual_stoplosses.append(actual_stoploss)
+        # *****************************************************************************************
         # append current balance ******************************************************************
         current_balances.append(current_balance)
         # *****************************************************************************************
-        # append actions to their respective arrays ***********************************************
+        # append predicted buy and sell prices to their respective arrays *************************
         predicted_buy_prices.append(predicted_buy_price)
         predicted_sell_prices.append(predicted_sell_price)
         # *****************************************************************************************
-        # append takeprofits and stoplosses to their respective arrays ****************************
-        takeprofits.append(takeprofit)
-        stoplosses.append(stoploss)
+        # append predicted takeprofits and stoplosses to their respective arrays ******************
+        predicted_takeprofits.append(predicted_takeprofit)
+        predicted_stoplosses.append(predicted_stoploss)
         # *****************************************************************************************
         # append stoploss hit status **************************************************************
         stoploss_hit_statuses.append(stoploss_hit)
@@ -309,26 +366,30 @@ def get_trade_outcomes(
     # ***************************************************************************************************************************
 
     # arrays to numpy arrays ****************************************************************************************************
+    actual_buy_prices = np.array(actual_buy_prices)
+    actual_sell_prices = np.array(actual_sell_prices)
+    actual_takeprofits = np.array(actual_takeprofits)
+    actual_stoplosses = np.array(actual_stoplosses)
     current_balances = np.array(current_balances)
     win_lose_results = np.array(win_lose_results)
     consecutive_wins = np.array(consecutive_wins)
     consecutive_losses = np.array(consecutive_losses)
     predicted_buy_prices = np.array(predicted_buy_prices)
     predicted_sell_prices = np.array(predicted_sell_prices)
-    takeprofits = np.array(takeprofits)
-    stoplosses = np.array(stoplosses)
+    predicted_takeprofits = np.array(predicted_takeprofits)
+    predicted_stoplosses = np.array(predicted_stoplosses)
     stoploss_hit_statuses = np.array(stoploss_hit_statuses)
     stoploss_missed_statuses = np.array(stoploss_missed_statuses)
     takeprofit_missed_statuses = np.array(takeprofit_missed_statuses)
     waiting_times_in_minutes = np.array(waiting_times_in_minutes)
     # ***************************************************************************************************************************
 
-    # return initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
-    return initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
+    # return actual_buy_prices, actual_sell_prices, actual_takeprofits, actual_stoplosses, filter_predictions_using_a_probability_threshold, prediction_probability_threshold, initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, predicted_takeprofits, predicted_stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
+    return actual_buy_prices, actual_sell_prices, actual_takeprofits, actual_stoplosses, filter_predictions_using_a_probability_threshold, prediction_probability_threshold, initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, predicted_takeprofits, predicted_stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
 # *****************************************************************************************************************************************
 
-# trade statistics ************************************************************************************************************************
-def get_trade_statistics(
+# predicted trades statistics *************************************************************************************************************
+def get_predicted_trades_statistics(
         symbol, entry_timeframe, entry_timeframe_minutes_in_a_single_bar, train_dates, test_dates, x_train_shape_before_balancing_classes, 
         train_dataset_length, test_dataset_length, initial_balance, current_balance, current_balances, win_lose_results, consecutive_wins, 
         consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, stoploss_hit_statuses, stoploss_missed_statuses, 
@@ -378,6 +439,28 @@ def get_trade_statistics(
     elif entry_timeframe == 'M1': to_trading_days_divisor = 1440
     # ***************************************************************************************************************************
 
+    # win rates for each quarter ************************************************************************************************
+    # number of quarters
+    number_of_quarters = 4
+    # quarter length /  number of items in a quarter
+    quarter_length = len(win_lose_results) // number_of_quarters # perform floor division
+    # initialize string for storing combined win rates for each quarter
+    win_rates_for_each_quarter = ''
+    # calculate win rate for each quarter *****************************************************************************
+    for i in range(number_of_quarters):
+        # quarter data
+        quarter_data = win_lose_results[i * quarter_length: (i + 1) * quarter_length]
+        # number of wins
+        win_count = np.count_nonzero(quarter_data == 'win')
+        # win rate
+        win_rate = (win_count / quarter_length) * 100
+        # string append value
+        string_append_value = " | " if i < number_of_quarters-1 else ''
+        # add quater data to win_rates_for_each_quarter string
+        win_rates_for_each_quarter = win_rates_for_each_quarter + f"Q{i+1} -> {win_rate:.2f}%" + string_append_value
+    # *****************************************************************************************************************
+    # ***************************************************************************************************************************
+
     # insights, with Python native data types ***********************************************************************************
     # starting account balance
     starting_account_balance = float(initial_balance)
@@ -399,6 +482,8 @@ def get_trade_statistics(
     takeprofit_misses = int(len(np.where(takeprofit_missed_statuses == True)[0]))
     # overall win rate
     overall_win_rate = float((len(np.where(win_lose_results == 'win')[0]) / len(win_lose_results)) * 100)
+    # win rates for each quarter
+    win_rates_for_each_quarter = win_rates_for_each_quarter
     # maximum number of consecutive wins
     maximum_number_of_consecutive_wins = int(np.max(consecutive_wins))
     # number of times the maximum number of consecutive wins occured
@@ -450,6 +535,8 @@ def get_trade_statistics(
     # print out insight on the predicted trades *********************************************************************************
     print('\n\nSymbol:', symbol)
     print('Symbol Type:', symbol_type)
+    print('Filter predictions using probability threshold:', filter_predictions_using_a_probability_threshold)
+    print('Probability Threshold:',  prediction_probability_threshold)
     print('Starting account balance (example in $):', starting_account_balance)
     print('Account balance after trades ($):', account_balance_after_trades)
     print('Number of trades taken:', number_of_trades_taken)
@@ -458,6 +545,7 @@ def get_trade_statistics(
     print('Trades lost:', trades_lost)
     print('Trades still open on training completion:', trades_still_open_on_training_completion)
     print('Overall Win Rate %:', overall_win_rate)
+    print('% Win Rates for each quarter in the test data', win_rates_for_each_quarter)
     print('Risk:Reward:', risk_to_reward_ratio)
     print('Stoploss Hits:', stoploss_hits)
     print('Stoploss Misses:', stoploss_misses)
