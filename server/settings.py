@@ -109,11 +109,17 @@ def prediction_data_source(): # yahoo will be overridden to mt5 for synthetic in
 
     return source
 
+# source for backtesting data ...  csv / yahoo (will be overidden if symbol is a synthetic index) / mt5
+def backtesting_data_source(): # yahoo will be overridden to mt5 for synthetic indices
+    source = 'mt5'
+
+    return source
+
 # mt5 program path according to symbol type ... a program path of None or '' means use the system's default installed mt5 program
 def get_mt5_program_path_according_to_symbol_type(symbol_type): # Forex Pair / Crypto Pair / Synthetic Index
     # eg "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
     if symbol_type == 'Forex Pair' or symbol_type == 'Crypto Pair': 
-        path = None
+        path = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe' # default = None
     elif symbol_type == 'Synthetic Index':
         path = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
 
@@ -148,6 +154,8 @@ def predictions_filter_config():
 
 # config for printing test predictions result arrays
 def test_predictions_result_arrays_printing_config():
+    # predicted actions' outcomes array
+    print_predicted_actions_outcomes_array = False
     # win / lose results
     print_win_lose_results_array = False
     # consecutive wins
@@ -159,7 +167,7 @@ def test_predictions_result_arrays_printing_config():
     # balances array
     print_balances_array = False
 
-    return print_win_lose_results_array, print_consecutive_wins_array, print_consecutive_losses_array, print_waiting_times_array, print_balances_array
+    return print_predicted_actions_outcomes_array, print_win_lose_results_array, print_consecutive_wins_array, print_consecutive_losses_array, print_waiting_times_array, print_balances_array
 
 # whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
 def remove_last_n_values_without_full_forecast():
@@ -235,7 +243,7 @@ def get_data_length_by_number_of_days_and_timeframe(days, timeframe):
         
         return data_length
 
-# get data collection days + trading days needed by intended purpose / call module = training / prediction, the timeframe, and the datasource
+# get data collection days + trading days needed by intended purpose / call module = training / prediction / backtesting, the timeframe, and the datasource
 def get_data_collection_days_by_intended_purpose(purpose, timeframe, data_source):
     """
         For symbols / instruments that don't trade 7 days a week eg forex pairs and stocks, data retrieved via data_collection_days will not 
@@ -247,6 +255,7 @@ def get_data_collection_days_by_intended_purpose(purpose, timeframe, data_source
 
     if purpose == 'training': data_collection_days = 1020; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
     elif purpose == 'prediction': data_collection_days = 500; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
+    elif purpose == 'backtesting': data_collection_days = 1020; trading_days_needed = None # None if parameter is not in use ... number_of_bars_needed will be used
 
     # yahoo finance has low data collection n days limits depending on the timeframe... limit max days when using yahoo finance
     if data_source == 'yahoo': data_collection_days = yahoo_finance_n_days_limitor(timeframe, data_collection_days)

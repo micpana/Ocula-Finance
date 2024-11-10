@@ -1,5 +1,5 @@
 from pandas import read_csv
-from settings import get_data_collection_days_by_intended_purpose, training_data_source, prediction_data_source, get_data_length_by_number_of_days_and_timeframe
+from settings import get_data_collection_days_by_intended_purpose, training_data_source, prediction_data_source, backtesting_data_source, get_data_length_by_number_of_days_and_timeframe
 from datetime import datetime
 from datetime import timedelta
 import pytz
@@ -15,6 +15,7 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
     # get data source according to call module ... csv / yahoo / mt5
     if call_module == 'training':  data_source = training_data_source(); yahoo_override_synthetic_source = 'csv'
     elif call_module == 'prediction': data_source = prediction_data_source(); yahoo_override_synthetic_source = 'mt5'
+    elif call_module == 'backtesting': data_source = backtesting_data_source(); yahoo_override_synthetic_source = 'mt5'
 
     # get the symbol's symbol type ... Forex Pair / Crypto Pair / Synthetic Index
     symbol_type = get_symbol_config(symbol)['type']
@@ -63,7 +64,7 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
         # *************************************************************************************************************
 
         # if backtest_start_date != None ******************************************************************************
-        if backtest_start_date != None:
+        if backtest_start_date != None and timeframe == 'M15':
             """if calling module is not the backtesting module, it will give a backtest_start_date of None"""
             # get the current timeframe's dates array *******************************************************
             timeframe_dates = ohlc_data_dict[timeframe]['time'].values
@@ -71,22 +72,23 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
             # get the x main loop's starting index **********************************************************
             x_main_loop_starting_index = view_window + 3  # we start from index = view_window+3 (there's a part in the x engineering loop where we need to consider the 2 last candlesticks as well)
             # ***********************************************************************************************
-            # indexes of dates on or after backtest start date **********************************************
+            # indexes of dates on or before backtest start date *********************************************
             # indexes
-            index_of_dates_on_or_after_backtest_start_date = np.where(timeframe_dates >= backtest_start_date)[0]
+            index_of_dates_on_or_before_backtest_start_date = np.where(timeframe_dates <= backtest_start_date)[0]
             # if no indexes were found
-            if len(index_of_dates_on_or_after_backtest_start_date) == 0: 
+            if len(index_of_dates_on_or_before_backtest_start_date) == 0: 
                 # notify user
-                print('\n\nNo data was found on or after', backtest_start_date, 'for', symbol, timeframe, '.')
+                print('\n\nNo data was found on or before', backtest_start_date, 'for', symbol, timeframe, '.')
                 # stop the program
                 quit()
             # ***********************************************************************************************
             # get the first matching index ******************************************************************
-            first_matching_index = index_of_dates_on_or_after_backtest_start_date[0]
+            # pick the last one, thats the current timeframe's first matching index
+            first_matching_index = index_of_dates_on_or_before_backtest_start_date[-1]
             # ***********************************************************************************************
             # get the backtest start index ******************************************************************
-            """there has to be enough data before first_matching_index for it to match or exceed x_main_loop_start_index"""
-            backtest_start_index = first_matching_index - x_main_loop_start_index
+            """there has to be enough data before first_matching_index for it to match or exceed x_main_loop_starting_index"""
+            backtest_start_index = first_matching_index - x_main_loop_starting_index
             # if backtest_start_index is negative, it means data before backtest_start_date is not enough
             if backtest_start_index < 0: 
                 # notify user
