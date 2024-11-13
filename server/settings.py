@@ -56,6 +56,18 @@ def get_number_of_free_trial_days():
 
     return days
 
+# number of days from expiry to send free trial expiring soon alert
+def get_number_of_days_from_expiry_to_send_free_trial_expiring_soon_alert():
+    days = 1
+
+    return days
+
+# number of days from expiry to send subscription expiring soon alert
+def get_number_of_days_from_expiry_to_send_subscription_expiring_soon_alert():
+    days = 3
+
+    return days
+
 # list of user roles
 def get_user_roles():
     user_roles = [

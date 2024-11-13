@@ -46,12 +46,15 @@ Regards, <br/><br/>
     
     # email text content
     email_content_text = """
-Hi {firstname}, \n\n
-Thank you for registering with us. Use the following link to verify your email address. \n
-{link} (Link expires: {token_expiration_date}). \n
-If you did not signup on {platform_brand_name} please ignore this message. \n\n
-Regards, \n\n
-{platform_brand_name} Team \n\n
+Hi {firstname},
+
+Thank you for registering with us. Use the following link to verify your email address.
+{link} (Link expires: {token_expiration_date}).
+If you did not signup on {platform_brand_name} please ignore this message.
+
+Regards,
+
+{platform_brand_name} Team
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('verification', verification_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
 
     # send crafted email
@@ -75,12 +78,15 @@ Regards, <br/><br/>
     
     # email content text
     email_content_text = """
-Hi {firstname}, \n\n
-You recently requested a password reset, use the following link to reset your password. \n
-{link} (Link expires: {token_expiration_date}). \n
-If you did not request a password reset please ignore this message. \n\n
-Regards, \n\n
-{platform_brand_name} Team \n\n
+Hi {firstname},
+
+You recently requested a password reset, use the following link to reset your password.
+{link} (Link expires: {token_expiration_date}).
+If you did not request a password reset please ignore this message.
+
+Regards,
+
+{platform_brand_name} Team
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('password recovery', recovery_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, recovery_token = recovery_token, token_expiration_date = token_expiration_date)
 
     # send crafted email
@@ -104,12 +110,15 @@ Regards, <br/><br/>
 
     # email content text
     email_content_text = """
-Hi {firstname}, \n\n
-You recently requested an email change, use the following link to verify your new email address. \n
-{link} (Link expires: {token_expiration_date}). \n
-If you did not request an email change please ignore this message. \n\n
-Regards, \n\n
-{platform_brand_name} Team \n\n
+Hi {firstname},
+
+You recently requested an email change, use the following link to verify your new email address.
+{link} (Link expires: {token_expiration_date}).
+If you did not request an email change please ignore this message.
+
+Regards,
+
+{platform_brand_name} Team
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('verification', verification_token), user_email = user_email, username = username, firstname = firstname, lastname = lastname, verification_token = verification_token, token_expiration_date = token_expiration_date)
 
     # send crafted email
@@ -135,14 +144,16 @@ Regards, <br/><br/>
     
     # email content text
     email_content_text = """
-Hi {firstname}, \n\n
-We detected a login into your account from a new device on {date_and_time}. \n
-Device used: {user_device}, {user_browser}, {user_os}. \n
-IP address: {user_ip_address}. \n
-If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard, 
-this will also log out all devices currently logged into your account. \n\n
-Regards, \n\n
-{platform_brand_name} Team \n\n
+Hi {firstname},
+
+We detected a login into your account from a new device on {date_and_time}.
+Device used: {user_device}, {user_browser}, {user_os}.
+IP address: {user_ip_address}.
+If it wasn't you, please consider setting a new account password via the Settings tab inside your user dashboard, this will also log out all devices currently logged into your account.
+
+Regards,
+
+{platform_brand_name} Team
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('contact us', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, date_and_time = date_and_time, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
 
     # send crafted email
@@ -165,12 +176,139 @@ Regards, <br/><br/>
     
     # email content text
     email_content_text = """
-Hi {firstname}, \n\n
-Your account's new email address has been verified successfully, use the following link to access your account. \n
-{link} \n\n
-Regards, \n\n
-{platform_brand_name} Team \n\n
+Hi {firstname},
+
+Your account's new email address has been verified successfully, use the following link to access your account.
+{link}
+
+Regards,
+
+{platform_brand_name} Team
     """.format(platform_brand_name = platform_brand_name, link = get_link_to_follow('signin', None), user_email = user_email, username = username, firstname = firstname, lastname = lastname, user_os = user_os, user_device = user_device, user_ip_address = user_ip_address, user_browser = user_browser)
+
+    # send crafted email
+    send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
+
+# account role change email notification ****************************************************************************************
+def send_account_role_change_email_notification(user_email, username, firstname, lastname, old_role, new_role): # roles = user / admin / free user
+    # email subject ***************************************************************************************************
+    subject = platform_brand_name + ' Account Access Change Notification'
+    # *****************************************************************************************************************
+
+    # notification text ***********************************************************************************************
+    if old_role == 'admin' and new_role == 'user':
+        notification_text = "Your account's access level has been downgraded. You now have ordinary user level access only."
+    elif old_role == 'admin' and new_role == 'free user':
+        notification_text = "Your account's access level has been downgraded. You now have ordinary user level access only. However, you have been given free access until further notice. We hope you enjoy your free access period and find it valuable. Happy trading."
+    elif (old_role == 'user' or old_role == 'free user') and new_role == 'admin':
+        notification_text = 'Your account now has admin access.'
+    elif old_role == 'free user' and new_role == 'user':
+        notification_text = 'Your account no longer has free access. We really hope you enjoyed your free access period and found it valuable.'
+    elif old_role == 'user' and new_role == 'free user':
+        notification_text = 'Your account has been given free access until further notice. We hope you enjoy your free access period and find it valuable. Happy trading.'
+    # *****************************************************************************************************************
+
+    # email content html **********************************************************************************************
+    email_content_html = """
+Hi {firstname}, <br/><br/>
+{notification_text} <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+    
+    # email content text **********************************************************************************************
+    email_content_text = """
+Hi {firstname},
+
+{notification_text}
+
+Regards,
+
+{platform_brand_name} Team
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # send crafted email
+    send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
+
+# payment confirmation email ****************************************************************************************************
+def send_payment_confirmation_email(user_email, username, firstname, lastname, amount, subcription, subscription_package):
+    # email subject ***************************************************************************************************
+    subject = platform_brand_name + ' Payment Confirmation'
+    # *****************************************************************************************************************
+
+    # notification text ***********************************************************************************************
+    if subcription == True:
+        notification_text = f'Your payment of ${amount} for our {subscription_package} was successful. Thank you for your continued support.' 
+    else:
+        notification_text = f'Your payment of ${amount} was successful. Thank you for your continued support.'
+    # *****************************************************************************************************************
+
+    # email content html **********************************************************************************************
+    email_content_html = """
+Hi {firstname}, <br/><br/>
+{notification_text} <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # email content text **********************************************************************************************
+    email_content_text = """
+Hi {firstname},
+
+{notification_text}
+
+Regards,
+
+{platform_brand_name} Team
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # send crafted email
+    send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)
+# *******************************************************************************************************************************
+
+# subscription expiration notification email ************************************************************************************
+def send_subscription_expiration_notification_email(user_email, username, firstname, lastname, free_trial, expired, days_till_expiry):
+    # email subject ***************************************************************************************************
+    subject = platform_brand_name + ' Subscription Expiration'
+    # *****************************************************************************************************************
+
+    # notification text ***********************************************************************************************
+    if free_trial == True and expired == False:
+        notification_text = f'Your free trial will be expiring in {days_till_expiry} days.' 
+    elif free_trial == True and expired == True:
+        notification_text = f'Your free trial has expired. We really hope you enjoyed your free access period and found it valuable.' 
+    elif free_trial == False and expired == False:
+        notification_text = f'Your subscription will be expiring in {days_till_expiry} days. To avoid service interruption, you need to top up your subscription.' 
+    elif free_trial == False and expired == True:
+        notification_text = f'Your subscription has expired. We really hope you found your subscription period valuable.' 
+    # *****************************************************************************************************************
+
+    # email content html **********************************************************************************************
+    email_content_html = """
+Hi {firstname}, <br/><br/>
+{notification_text} <br/><br/>
+Regards, <br/><br/>
+{platform_brand_name} Team <br/><br/>
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # email content text **********************************************************************************************
+    email_content_text = """
+Hi {firstname},
+
+{notification_text}
+
+Regards,
+
+{platform_brand_name} Team
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
 
     # send crafted email
     send_crafted_email(user_email, firstname, subject, email_content_html, email_content_text)

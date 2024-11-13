@@ -1,13 +1,6 @@
-import pandas as pd
+import numpy as np
 
-# Sample DataFrame
-data = {'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]}
-df = pd.DataFrame(data)
+ls = np.array([1, 2, 4, -6, 3, 9])
 
-# Column list with an extra column 'D'
-column_list = ['A', 'B', 'D', 'J']
 
-# Filter the DataFrame
-filtered_df = df.filter(column_list)
-
-print(filtered_df)
+print(np.argmin(ls))

@@ -618,6 +618,8 @@ class AllUsers extends Component{
                             Notification("You've entered an incorrect password.", 'error')
                         }else if(result === 'invalid role'){
                             Notification("You've entered an invalid user role.", 'error')
+                        }else if(result == 'email not verified'){
+
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')

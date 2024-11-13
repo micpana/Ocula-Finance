@@ -97,11 +97,96 @@ def send_trade_signal_alerts_via_telegram(predictions_string, users_with_their_t
         user_role = user['role']
 
         # get user subscription status
-        user_subscribed = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if a user is subscribed or is exempted from subscribing because of their role
         if user_subscribed == True or user_role in user_roles_exempted_from_subscribing():
             # send a telegram trade signal(s) alert
             send_message(user_telegram_id, predictions_string)
     # *****************************************************************************************************************
+# *******************************************************************************************************************************
+
+# account role change telegram notification *************************************************************************************
+def send_account_role_change_telegram_notification(telegram_id, username, firstname, lastname, old_role, new_role): # roles = user / admin / free user
+    # notification text ***********************************************************************************************
+    if old_role == 'admin' and new_role == 'user':
+        notification_text = "Your account's access level has been downgraded. You now have ordinary user level access only."
+    elif old_role == 'admin' and new_role == 'free user':
+        notification_text = "Your account's access level has been downgraded. You now have ordinary user level access only. However, you have been given free access until further notice. We hope you enjoy your free access period and find it valuable. Happy trading."
+    elif (old_role == 'user' or old_role == 'free user') and new_role == 'admin':
+        notification_text = 'Your account now has admin access.'
+    elif old_role == 'free user' and new_role == 'user':
+        notification_text = 'Your account no longer has free access. We really hope you enjoyed your free access period and found it valuable.'
+    elif old_role == 'user' and new_role == 'free user':
+        notification_text = 'Your account has been given free access until further notice. We hope you enjoy your free access period and find it valuable. Happy trading.'
+    # *****************************************************************************************************************
+
+    # message content text ********************************************************************************************
+    message_content_text = """
+Hi {firstname},
+
+{notification_text}
+
+Regards,
+
+{platform_brand_name} Team
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # send crafted message
+    send_message(telegram_id, message_content_text)
+# *******************************************************************************************************************************
+
+# payment confirmation telegram notification ************************************************************************************
+def send_payment_confirmation_telegram_notification(telegram_id, username, firstname, lastname, amount, subcription, subscription_package):
+    # notification text ***********************************************************************************************
+    if subcription == True:
+        notification_text = f'Your payment of ${amount} for our {subscription_package} was successful. Thank you for your continued support.' 
+    else:
+        notification_text = f'Your payment of ${amount} was successful. Thank you for your continued support.'
+    # *****************************************************************************************************************
+
+    # message content text ********************************************************************************************
+    message_content_text = """
+Hi {firstname},
+
+{notification_text}
+
+Regards,
+
+{platform_brand_name} Team
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # send crafted email
+    send_message(telegram_id, message_content_text)
+# *******************************************************************************************************************************
+
+# subscription expiration telegram notification *********************************************************************************
+def send_subscription_expiration_telegram_notification(telegram_id, username, firstname, lastname, free_trial, expired, days_till_expiry):
+    # notification text ***********************************************************************************************
+    if free_trial == True and expired == False:
+        notification_text = f'Your free trial will be expiring in {days_till_expiry} days.' 
+    elif free_trial == True and expired == True:
+        notification_text = f'Your free trial has expired. We really hope you enjoyed your free access period and found it valuable.' 
+    elif free_trial == False and expired == False:
+        notification_text = f'Your subscription will be expiring in {days_till_expiry} days. To avoid service interruption, you need to top up your subscription.' 
+    elif free_trial == False and expired == True:
+        notification_text = f'Your subscription has expired. We really hope you found your subscription period valuable.' 
+    # *****************************************************************************************************************
+
+    # message content text ********************************************************************************************
+    message_content_text = """
+Hi {firstname},
+
+{notification_text}
+
+Regards,
+
+{platform_brand_name} Team
+    """.format(platform_brand_name = platform_brand_name, firstname = firstname, notification_text = notification_text)
+    # *****************************************************************************************************************
+
+    # send crafted email
+    send_message(telegram_id, message_content_text)
 # *******************************************************************************************************************************

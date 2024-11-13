@@ -14,8 +14,8 @@ from datetime import datetime, timedelta
 from database import init_db
 from models import Users, EmailVerifications, UserAccessTokens, PasswordRecoveries, MarketAnalysis, LoginTrials, Payments
 from encryption import encrypt_password, verify_encrypted_password
-from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification
-from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message
+from emails import send_registration_email_confirmation, send_password_recovery_email, send_email_change_confirmation, send_login_on_new_device_email_notification, send_account_email_change_email_notification, send_account_role_change_email_notification, send_payment_confirmation_email
+from telegram import search_for_user_submitted_telegram_connect_code, send_user_successful_telegram_connection_message, send_account_role_change_telegram_notification, send_payment_confirmation_telegram_notification
 from user_subscription_check import validate_subscription
 from settings import frontend_client_url, platform_name, verification_token_expiration_minutes, access_token_expiration_days, token_send_on_user_request_retry_period_in_minutes, get_user_roles, get_payment_methods, get_payment_purposes, get_client_load_more_increment, get_number_of_free_trial_days, system_timezone, user_roles_exempted_from_subscribing
 from paynow_payments import paynow_payment, paynow_status
@@ -276,7 +276,9 @@ def signup():
         unbanned_by = '',
         ban_time = '',
         unban_time = '',
-        telegram_connected = False
+        telegram_connected = False,
+        subscription_expiring_soon_notification_issued = False,
+        subscription_expired_notification_issued = False
     )
     user_details.save()
     account_id = str(user_details.id)
@@ -1261,7 +1263,7 @@ def getMarketAnalysis():
     else:
         # user subscription test ********************************************************
         # get user subscription status and subscription expiry date (free trial counts)
-        user_subscribed, subcription_expiry_date = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if a user is not subscribed and is not exempted from subscribing because of their role
         if user_subscribed == False and user_role not in user_roles_exempted_from_subscribing():
@@ -1996,13 +1998,46 @@ def changeUserRole():
     # proceed to get admin name and username
     admin_name_and_username = admin.firstname + ' ' + admin.lastname + ' (' + admin.username + ')'
 
+    # user details
+    user = Users.objects.filter(id = account_id)[0]
+
+    # check if user hasn't verified their email yet
+    if user.verified != True: response = make_response('email not verified'); response.status = 404; return response
+
     # check if user account exists and change user role
     try:
+        # old user role
+        old_role = user.role
+
         # change user role
         Users.objects(id = account_id).update(
             role = new_role,
             role_issued_by  = admin_name_and_username
         )
+
+        # notify user of role change **********************************************************************************
+        # via email *****************************************************************************************
+        send_account_role_change_email_notification(
+            user.email, # email
+            user.username,  # username
+            user.firstname, # firstname
+            user.lastname, # lastname
+            old_role, # old role
+            new_role # new role
+        )
+        # ***************************************************************************************************
+        # via telegram **************************************************************************************
+        if user.telegram_connected == True:
+            send_account_role_change_telegram_notification(
+                user.telegram_id, # telegram id
+                user.username,  # username
+                user.firstname, # firstname
+                user.lastname, # lastname
+                old_role, # old role
+                new_role # new role
+            )
+        # ***************************************************************************************************
+        # *************************************************************************************************************
 
         # return response
         response = make_response('ok'); response.status = 200; return response
@@ -2103,7 +2138,7 @@ def manuallyEnterUserPayment():
         subscription_weeks = subscription_months * 4
 
         # get user subscription status and subscription expiry date (free trial counts)
-        user_subscribed, subcription_expiry_date = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if user has an active subscription or free trial
         if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
@@ -2111,11 +2146,14 @@ def manuallyEnterUserPayment():
         else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
         # ***********************************************************************************************************************
         
-        # set new subscription and subscription expiry dates to the user's account
+        # set new subscription and subscription expiry dates to the user's account **********************************************
         Users.objects(id = account_id).update(
             subscription_date = current_datetime,
-            subscription_expiry = expiry_date
+            subscription_expiry = expiry_date,
+            subscription_expiring_soon_notification_issued = False,
+            subscription_expired_notification_issued = False
         )
+        # ***********************************************************************************************************************
 
     # add user payment
     payment_details = Payments(
@@ -2418,7 +2456,7 @@ def initiatePaynowPayment():
         subscription_weeks = subscription_months * 4
 
         # get user subscription status and subscription expiry date (free trial counts)
-        user_subscribed, subcription_expiry_date = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if user has an active subscription or free trial
         if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
@@ -2472,7 +2510,7 @@ def checkPaynowTransactionStatus():
     date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # user details
-    user = Users.objects.filter(id = user_id)
+    user = Users.objects.filter(id = user_id)[0]
 
     # if user's most recent transaction has been verified already ***************************************************************
     # get all user payments
@@ -2520,7 +2558,7 @@ def checkPaynowTransactionStatus():
         subscription_weeks = subscription_months * 4
 
         # get user subscription status and subscription expiry date (free trial counts)
-        user_subscribed, subcription_expiry_date = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if user has an active subscription or free trial
         if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
@@ -2528,11 +2566,46 @@ def checkPaynowTransactionStatus():
         else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
         # ***********************************************************************************************************************
 
-        # set new subscription and subscription expiry dates to the user's account
+        # set new subscription and subscription expiry dates to the user's account **********************************************
         Users.objects(id = user_id).update(
             subscription_date = current_datetime,
-            subscription_expiry = expiry_date
+            subscription_expiry = expiry_date,
+            subscription_expiring_soon_notification_issued = False,
+            subscription_expired_notification_issued = False
         )
+        # ***********************************************************************************************************************
+
+        # mark payment as verified **********************************************************************************************
+        Payments.object(id = str(most_recent_pending_payment.id)).update(
+            verified = True
+        )
+        # ***********************************************************************************************************************
+
+        # send payment confirmation messages to user ****************************************************************************
+        # email *******************************************************************************************************
+        send_payment_confirmation_email(
+            user.email, # email
+            user.username, # username
+            user.firstname, # firstname
+            user.lastname, # lastname
+            most_recent_pending_payment.amount, # amount
+            True, # subscription -> true or false
+            most_recent_pending_payment.purpose # subscription package
+        )
+        # *************************************************************************************************************
+        # telegram ****************************************************************************************************
+        if user.telegram_connected == True:
+            send_payment_confirmation_telegram_notification(
+                user.telegram_id, # telegram id
+                user.username, # username
+                user.firstname, # firstname
+                user.lastname, # lastname
+                most_recent_pending_payment.amount, # amount
+                True, # subscription -> true or false
+                most_recent_pending_payment.purpose # subscription package
+            )
+        # *************************************************************************************************************
+        # ***********************************************************************************************************************
 
         # return response 
         response = make_response('paid'); response.status = 200; return response
@@ -2588,7 +2661,7 @@ def initiateOxapayPayment():
         subscription_weeks = subscription_months * 4
 
         # get user subscription status and subscription expiry date (free trial counts)
-        user_subscribed, subcription_expiry_date = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if user has an active subscription or free trial
         if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
@@ -2642,7 +2715,7 @@ def checkOxapayTransactionStatus():
     date_format = '%Y-%m-%d %H:%M:%S.%f%z'
 
     # user details
-    user = Users.objects.filter(id = user_id)
+    user = Users.objects.filter(id = user_id)[0]
 
     # if user's most recent transaction has been verified already ***************************************************************
     # get all user payments
@@ -2684,7 +2757,7 @@ def checkOxapayTransactionStatus():
         subscription_weeks = subscription_months * 4
 
         # get user subscription status and subscription expiry date (free trial counts)
-        user_subscribed, subcription_expiry_date = validate_subscription(user)
+        user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
         # if user has an active subscription or free trial
         if user_subscribed == True: expiry_date = str(datetime.strptime(subcription_expiry_date, date_format) + timedelta(weeks = subscription_weeks))
@@ -2692,11 +2765,46 @@ def checkOxapayTransactionStatus():
         else: expiry_date = str(current_datetime_object + timedelta(weeks = subscription_weeks))
         # ***********************************************************************************************************************
 
-        # set new subscription and subscription expiry dates to the user's account
+        # set new subscription and subscription expiry dates to the user's account **********************************************
         Users.objects(id = user_id).update(
             subscription_date = current_datetime,
-            subscription_expiry = expiry_date
+            subscription_expiry = expiry_date,
+            subscription_expiring_soon_notification_issued = False,
+            subscription_expired_notification_issued = False
         )
+        # ***********************************************************************************************************************
+
+        # mark payment as verified **********************************************************************************************
+        Payments.object(id = str(most_recent_pending_payment.id)).update(
+            verified = True
+        )
+        # ***********************************************************************************************************************
+
+        # send payment confirmation messages to user ****************************************************************************
+        # email *******************************************************************************************************
+        send_payment_confirmation_email(
+            user.email, # email
+            user.username, # username
+            user.firstname, # firstname
+            user.lastname, # lastname
+            most_recent_pending_payment.amount, # amount
+            True, # subscription -> true or false
+            most_recent_pending_payment.purpose # subscription package
+        )
+        # *************************************************************************************************************
+        # telegram ****************************************************************************************************
+        if user.telegram_connected == True:
+            send_payment_confirmation_telegram_notification(
+                user.telegram_id, # telegram id
+                user.username, # username
+                user.firstname, # firstname
+                user.lastname, # lastname
+                most_recent_pending_payment.amount, # amount
+                True, # subscription -> true or false
+                most_recent_pending_payment.purpose # subscription package
+            )
+        # *************************************************************************************************************
+        # ***********************************************************************************************************************
 
         # return response 
         response = make_response('paid'); response.status = 200; return response

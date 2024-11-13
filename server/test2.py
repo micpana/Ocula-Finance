@@ -1,1 +1,2 @@
-print(5//3)
+a = True
+print(not a)

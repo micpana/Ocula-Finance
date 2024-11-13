@@ -31,6 +31,8 @@ class Users(Document):
     telegram_connected = BooleanField(required=True)
     telegram_id = StringField(required=False)
     date_of_telegram_verification = StringField(required=False)
+    subscription_expiring_soon_notification_issued = BooleanField(required=False)
+    subscription_expired_notification_issued = BooleanField(required=False)
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}
