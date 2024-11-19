@@ -259,6 +259,10 @@ class ContactUs extends Component{
                                         </Col>
                                     </Row> */}
                                     <br/>
+                                    <h6 style={{}}>
+                                        You can also get in touch with us via our social media profiles
+                                    </h6>
+                                    <br/>
                                     <Row style={{margin: '0px'}}>
                                         <Col xs=''>
                                             <a href={Facebook} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
