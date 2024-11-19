@@ -7,6 +7,9 @@ datasets/
 # logs
 logs/
 
+# model cards in server folder
+"server/model cards"
+
 # model performance visual insights
 "model performance visual insights"/
 
