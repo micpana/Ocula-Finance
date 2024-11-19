@@ -160,7 +160,7 @@ def predictions_filter_config():
     # whether to filter or not
     filter_predictions_using_a_probability_threshold = True
     # probability threshold
-    prediction_probability_threshold = 0.95 # 1.0 is 100 %
+    prediction_probability_threshold = 0.65 # 1.0 is 100 % ... default is 0.65
 
     return filter_predictions_using_a_probability_threshold, prediction_probability_threshold
 
