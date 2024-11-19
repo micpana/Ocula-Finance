@@ -95,19 +95,19 @@ class Footer extends Component{
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold', color: '#000000'}}>Social Media</h6>
                             <br/>
-                            <FaFacebook /> <a href={Facebook} target='_blank' style={{color: 'inherit'}}>
+                            <FaFacebook /> <a href={Facebook} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                 Facebook
                             </a>
                             <br/><br/>
-                            <FaTwitter /> <a href={X} target='_blank' style={{color: 'inherit'}}>
+                            <FaTwitter /> <a href={X} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                 X
                             </a>
                             <br/><br/>
-                            <FaInstagram /> <a href={Instagram} target='_blank' style={{color: 'inherit'}}>
+                            <FaInstagram /> <a href={Instagram} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                 Instagram
                             </a>
                             <br/><br/>
-                            <FaLinkedin /> <a href={LinkedIn} target='_blank' style={{color: 'inherit'}}>
+                            <FaLinkedin /> <a href={LinkedIn} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                 LinkedIn
                             </a>
                         </Col>

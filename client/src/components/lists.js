@@ -2,7 +2,11 @@
 
 // symbols ... all symbols listed here should have a model performance dict listed in model_cards.js
 export const Symbols = [
-    'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR', 'Volatility 75 (1s) Index'
+    // Forex Pairs
+    'EURUSD', 'GBPUSD', 'USDJPY', 'USDCHF', 'AUDUSD', 'USDCAD', 'USDZAR', 
+    // Crypto Pairs
+    // Synthetic Indices
+    'Volatility 75 (1s) Index', 'Boom 1000 Index', 'Crash 1000 Index'
 ]
 
 // user roles

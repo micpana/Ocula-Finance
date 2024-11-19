@@ -199,7 +199,7 @@ class TermsOfService extends Component{
                             <br/>
                             <p>
                                 To understand what data we collect from you, how we collect it, and why we collect it, refer to our
-                                Privacy Policy: <a href='/privacy-policy' target='_blank' style={{color: 'inherit'}}>Privacy Policy</a>
+                                Privacy Policy: <a href='/privacy-policy' target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>Privacy Policy</a>
                             </p>
                             <br/><br/>
                             <h6 style={{fontWeight: 'bold'}}>4. Disclaimer</h6>

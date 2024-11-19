@@ -144,6 +144,11 @@ class AboutUs extends Component{
                                             Loading image...
                                         </div>
                                         <img src={AboutUs1} onError={(e) => e.target.src = AboutUs1} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        <a href='https://unsplash.com/photos/U2BI3GMnSSE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                            style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank'  rel='noreferrer'
+                                        >
+                                            Image by LYCS Architecture on Unsplash
+                                        </a>
                                     </div>
                                     <br/><br/><br/>
                                 </Col>

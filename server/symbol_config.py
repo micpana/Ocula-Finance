@@ -5,78 +5,85 @@ default_risk_target_divisor = 2
 default_forecast_period = 7
 
 # default holding period
-default_holding_period = 14 # default = default_forecast_period
+default_holding_period = 14 # default = default_forecast_period * 2
 
 # symbols and their config ... targets should be based on the next 7 or 8 candles on the entry timeframe, ours is M15 by default
 symbols_and_their_config = {
     # Forex Pairs ***************************************************************************************************************
     'EURUSD': {
         'type': 'Forex Pair',
-        'target': 0.23, # manual = 0.25 ... statistical = 0.23
+        'target': 0.15, # manual = 0.25 ... statistical = 0.15
         'risk_target_divisor': default_risk_target_divisor,
         'forecast_period': default_forecast_period,
         'holding_period': default_holding_period
     },
-    # 'GBPUSD': {
-    #     'type': 'Forex Pair',
-    #     'target': 0.18, # manual = 0.30 ... statistical = 0.18
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # }, 
-    # 'USDJPY': {
-    #     'type': 'Forex Pair',
-    #     'target': 0.28, # manual = 0.55 ... statistical = 0.28
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # }, 
-    # 'USDCHF': {
-    #     'type': 'Forex Pair',
-    #     'target': 0.23, # manual = 0.30 ... statistical = 0.23
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # }, 
-    # 'AUDUSD': {
-    #     'type': 'Forex Pair',
-    #     'target': 0.24, # manual = 0.40 ... statistical = 0.24
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # }, 
-    # 'USDCAD': {
-    #     'type': 'Forex Pair',
-    #     'target': 0.13, # manual = 0.20 ... statistical = 0.13
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # }, 
-    # 'USDZAR': {
-    #     'type': 'Forex Pair',
-    #     'target': 0.39, # manual = 0.50 ... statistical = 0.39
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # },
+    'GBPUSD': {
+        'type': 'Forex Pair',
+        'target': 0.12, # manual = 0.30 ... statistical = 0.12
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    }, 
+    'USDJPY': {
+        'type': 'Forex Pair',
+        'target': 0.17, # manual = 0.55 ... statistical = 0.17
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    }, 
+    'USDCHF': {
+        'type': 'Forex Pair',
+        'target': 0.16, # manual = 0.30 ... statistical = 0.16
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    }, 
+    'AUDUSD': {
+        'type': 'Forex Pair',
+        'target': 0.17, # manual = 0.40 ... statistical = 0.17
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    }, 
+    'USDCAD': {
+        'type': 'Forex Pair',
+        'target': 0.09, # manual = 0.20 ... statistical = 0.09
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    }, 
+    'USDZAR': {
+        'type': 'Forex Pair',
+        'target': 0.27, # manual = 0.50 ... statistical = 0.27
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    },
     # ***************************************************************************************************************************
     # Crypto Pairs **************************************************************************************************************
     # ***************************************************************************************************************************
     # Synthentic Indices ********************************************************************************************************
-    # 'Volatility 75 (1s) Index': {
-    #     'type': 'Synthetic Index',
-    #     'target': 1.9, # manual = 1.9 ... statistical = (symbol was used as statistical sample)
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # },
-    # 'Boom 1000 Index': {
-    #     'type': 'Synthetic Index',
-    #     'target': 0.51, # manual = (no manual target analysis done) ... statistical = 0.51
-    #     'risk_target_divisor': default_risk_target_divisor,
-    #     'forecast_period': default_forecast_period,
-    #     'holding_period': default_holding_period
-    # },
+    'Volatility 75 (1s) Index': {
+        'type': 'Synthetic Index',
+        'target': 1.44, # manual = 1.9 ... statistical = 1.44
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    },
+    'Boom 1000 Index': {
+        'type': 'Synthetic Index',
+        'target': 0.39, # manual = (no manual target analysis done) ... statistical = 0.39
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    },
+    'Crash 1000 Index': {
+        'type': 'Synthetic Index',
+        'target': 0.38, # manual = (no manual target analysis done) ... statistical = 0.38
+        'risk_target_divisor': default_risk_target_divisor,
+        'forecast_period': default_forecast_period,
+        'holding_period': default_holding_period
+    },
     # ***************************************************************************************************************************
 }
 

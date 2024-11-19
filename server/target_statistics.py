@@ -5,12 +5,12 @@ from data_acquisition import acquire_data
 from symbol_config import get_symbol_list, get_symbol_config
 
 # percentile value to investigate *********************************************************************************************************
-percentile_value_to_investigate = 90.7205 # to be selected from the percentile of the best performing symbol's set target and forecast period, as per desired/chosen performance metrics
+percentile_value_to_investigate = 79.71129206201581 # to be selected from the percentile of the best performing symbol's set target and forecast period, as per desired/chosen performance metrics
 # *****************************************************************************************************************************************
 
 # get list of symbols *********************************************************************************************************************
 list_of_symbols = get_symbol_list()
-# list_of_symbols = ['Volatility 75 (1s) Index'] # override ... comment it out when not in use
+# list_of_symbols = ['EURUSD'] # override ... comment it out when not in use
 # printout the list of symbols being used
 print('\n\nRunning target statistics for the following symbols:', list_of_symbols)
 # *****************************************************************************************************************************************
@@ -45,7 +45,7 @@ for symbol in list_of_symbols:
     # ***************************************************************************************************************************
 
     # get symbol's ohlc data dict with every stated timeframe's ohlc df *********************************************************
-    ohlc_data_dict = acquire_data(symbol, timeframes, call_module)
+    ohlc_data_dict = acquire_data(symbol, timeframes, call_module, None, None)
     # ***************************************************************************************************************************
 
     # get numpy arrays for dates, opens, highs, lows, and closes ****************************************************************

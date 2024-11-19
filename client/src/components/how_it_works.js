@@ -146,6 +146,11 @@ class HowItWorks extends Component{
                                             Loading image...
                                         </div>
                                         <img src={HowItWorks1} onError={(e) => e.target.src = HowItWorks1} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        <a href='https://unsplash.com/photos/faEfWCdOKIg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                            style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank'  rel='noreferrer'
+                                        >
+                                            Image by Christina @ wocintechchat.com on Unsplash
+                                        </a>
                                     </div>
                                 </Col>
                                 <Col>
@@ -191,6 +196,11 @@ class HowItWorks extends Component{
                                             Loading image...
                                         </div>
                                         <img src={HowItWorks2} onError={(e) => e.target.src = HowItWorks2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        <a href='https://unsplash.com/photos/MkxWUzCuYkE?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                            style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank'  rel='noreferrer'
+                                        >
+                                            Image by Christina @ wocintechchat.com on Unsplash
+                                        </a>
                                     </div>
                                 </Col>
                                 <Col>

@@ -195,6 +195,11 @@ class Signin extends Component{
                         <Row style={{margin: '0px'}}>
                             <Col sm='6'>
                                 <img src={Signin1} onError={(e) => e.target.src = Signin1} style={{width: '100%'}} />
+                                <a href='https://storyset.com/user'
+                                    style={{marginTop: '10px', color: 'grey', fontSize: '13px'}} target='_blank'  rel='noreferrer'
+                                >
+                                    User illustrations by Storyset
+                                </a>
                             </Col>
                             <Col>
                                 <Container>

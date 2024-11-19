@@ -231,6 +231,11 @@ class Signup extends Component{
                         <Row>
                             <Col sm='6'>
                                 <img src={Signup1} onError={(e) => e.target.src = Signup1} style={{width: '100%'}} />
+                                <a href='https://storyset.com/user'
+                                    style={{marginTop: '10px', color: 'grey', fontSize: '13px'}} target='_blank'  rel='noreferrer'
+                                >
+                                    User illustrations by Storyset
+                                </a>
                             </Col>
                             <Col>
                                 <Container>
@@ -369,8 +374,8 @@ class Signup extends Component{
                                         </Row>
                                         <br/>
                                         <h6>
-                                            By signing up, you're agreeing to {Platform_Name}'s <a href='/terms-of-service' target='_blank'>
-                                            Terms of Service</a> and acknowledge its <a href='/privacy-policy' target='_blank'>Privacy Policy</a>.
+                                            By signing up, you're agreeing to {Platform_Name}'s <a href='/terms-of-service' target='_blank'  rel='noreferrer'>
+                                            Terms of Service</a> and acknowledge its <a href='/privacy-policy' target='_blank'  rel='noreferrer'>Privacy Policy</a>.
                                         </h6>
                                         <br/>
                                         <a>Click the highlighted text for further information.</a>

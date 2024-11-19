@@ -399,7 +399,7 @@ def get_trade_outcomes(
 
 # predicted trades statistics *************************************************************************************************************
 def get_predicted_trades_statistics(
-        symbol, entry_timeframe, entry_timeframe_minutes_in_a_single_bar, train_dates, test_dates, x_train_shape_before_balancing_classes, 
+        symbol, entry_timeframe, entry_timeframe_minutes_in_a_single_bar, train_dates, test_dates, x_test_shape, 
         train_dataset_length, test_dataset_length, initial_balance, current_balance, current_balances, predicted_actions_outcomes, 
         win_lose_results, consecutive_wins, consecutive_losses, predicted_buy_prices, predicted_sell_prices, takeprofits, stoplosses, 
         stoploss_hit_statuses, stoploss_missed_statuses, takeprofit_missed_statuses, waiting_times_in_minutes
@@ -466,7 +466,7 @@ def get_predicted_trades_statistics(
         # number of wins
         win_count = np.count_nonzero(quarter_win_lose_results == 'win')
         # win rate
-        win_rate = (win_count / quater_number_of_trades) * 100
+        win_rate = (win_count / quater_number_of_trades) * 100 if quater_number_of_trades > 0 else 0
         # string append value
         string_append_value = " | " if i < number_of_quarters-1 else ''
         # add quater data to win_rates_for_each_quarter string
@@ -494,27 +494,27 @@ def get_predicted_trades_statistics(
     # number of takeprofit misses
     takeprofit_misses = int(len(np.where(takeprofit_missed_statuses == True)[0]))
     # overall win rate
-    overall_win_rate = float((len(np.where(win_lose_results == 'win')[0]) / len(win_lose_results)) * 100)
+    overall_win_rate = float((len(np.where(win_lose_results == 'win')[0]) / len(win_lose_results)) * 100) if len(win_lose_results) > 0 else 0
     # maximum number of consecutive wins
-    maximum_number_of_consecutive_wins = int(np.max(consecutive_wins))
+    maximum_number_of_consecutive_wins = int(np.max(consecutive_wins)) if len(consecutive_wins) > 0 else 0
     # number of times the maximum number of consecutive wins occured
     number_of_times_the_maximum_number_of_consecutive_wins_occured = int(len(np.where(consecutive_wins == maximum_number_of_consecutive_wins)[0]))
     # maximum number of consecutive losses
-    maximum_number_of_consecutive_losses = int(np.max(consecutive_losses))
+    maximum_number_of_consecutive_losses = int(np.max(consecutive_losses)) if len(consecutive_losses) > 0 else 0
     # number of times the maximum number of consecutive losses occured
     number_of_times_the_maximum_number_of_consecutive_losses_occured = int(len(np.where(consecutive_losses == maximum_number_of_consecutive_losses)[0]))
     # average number of consecutive wins
-    average_number_of_consecutive_wins = float(np.mean(consecutive_wins))
+    average_number_of_consecutive_wins = float(np.mean(consecutive_wins)) if len(consecutive_wins) > 0 else 0
     # average number of consecutive losses
-    average_number_of_consecutive_losses = float(np.mean(consecutive_losses))
+    average_number_of_consecutive_losses = float(np.mean(consecutive_losses)) if len(consecutive_losses) > 0 else 0
     # maximum waiting time without a trade, in hours and minutes
-    maximum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.max(waiting_times_in_minutes))
+    maximum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.max(waiting_times_in_minutes) if len(waiting_times_in_minutes) > 0 else 0)
     # average waiting time without a trade, in hours and minutes
-    average_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.mean(waiting_times_in_minutes))
+    average_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.mean(waiting_times_in_minutes) if len(waiting_times_in_minutes) > 0 else 0)
     # minimum waiting time without a trade, in hours and minutes
-    minimum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.min(waiting_times_in_minutes))
-    # number of features ... backtests will give None for x_train_shape_before_balancing_classes
-    number_of_features = int(x_train_shape_before_balancing_classes[1]) if x_train_shape_before_balancing_classes != None else 'N/A in Backtests'
+    minimum_waiting_time_without_a_trade_in_hours_and_minutes = minutes_to_hours_and_minutes(np.min(waiting_times_in_minutes) if len(waiting_times_in_minutes) > 0 else 0)
+    # number of features
+    number_of_features = int(x_test_shape[1])
     # training data start date ... backtests will give None for train_dates
     training_data_start_date = str(train_dates[0]) if train_dates is not None else 'N/A in Backtests'
     # training data end date ... backtests will give None for train_dates

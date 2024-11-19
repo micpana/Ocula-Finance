@@ -123,7 +123,7 @@ def prediction_data_source(): # yahoo will be overridden to mt5 for synthetic in
 
 # source for backtesting data ...  csv / yahoo (will be overidden if symbol is a synthetic index) / mt5
 def backtesting_data_source(): # yahoo will be overridden to mt5 for synthetic indices
-    source = 'mt5'
+    source = 'csv'
 
     return source
 
@@ -312,6 +312,12 @@ def get_training_price_data_csvs_folder_path():
 # get training logs path
 def get_training_log_path(symbol):
     path = 'logs/training logs/' + symbol + '-Training-Log.json'
+
+    return path
+
+# get model card path ... more like a condensed training log with insight data to be seen by the users on the UI 
+def get_model_card_path(symbol):
+    path = 'model cards/' + symbol + '-Model-Card.json'
 
     return path
 

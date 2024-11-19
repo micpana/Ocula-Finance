@@ -197,6 +197,11 @@ class ContactUs extends Component{
                             <Row style={{margin: '0px'}}>
                                 <Col sm='6'>
                                     <img src={ContactUs1} onError={(e) => e.target.src = ContactUs1} style={{width: '100%', minHeight: '400px', backgroundColor: '#D0DFE9', border: '1px solid #F9C961', borderRadius: '10px'}}/>
+                                    <a href='https://storyset.com/business'
+                                        style={{marginTop: '10px', color: 'grey', fontSize: '13px'}} target='_blank'  rel='noreferrer'
+                                    >
+                                        Business illustrations by Storyset
+                                    </a>
                                     <br/><br/>
                                 </Col>
                                 <Col>
@@ -256,22 +261,22 @@ class ContactUs extends Component{
                                     <br/>
                                     <Row style={{margin: '0px'}}>
                                         <Col xs=''>
-                                            <a href={Facebook} target='_blank' style={{color: 'inherit'}}>
+                                            <a href={Facebook} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                                 <FaFacebook />
                                             </a>
                                         </Col>
                                         <Col xs=''>
-                                            <a href={X} target='_blank' style={{color: 'inherit'}}>
+                                            <a href={X} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                                 <FaTwitter /> 
                                             </a>
                                         </Col>
                                         <Col xs=''>
-                                            <a href={Instagram} target='_blank' style={{color: 'inherit'}}>
+                                            <a href={Instagram} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                                 <FaInstagram /> 
                                             </a>
                                         </Col>
                                         <Col xs=''>
-                                            <a href={LinkedIn} target='_blank' style={{color: 'inherit'}}>
+                                            <a href={LinkedIn} target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                                 <FaLinkedin /> 
                                             </a>
                                         </Col>

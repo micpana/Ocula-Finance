@@ -138,6 +138,11 @@ class Home extends Component{
                                         </Col>
                                     </Row>
                                 </Container>
+                                <a href='https://unsplash.com/photos/DfjJMVhwH_8?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                    style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank' rel='noreferrer'
+                                >
+                                    Image by Austin Distel on Unsplash
+                                </a>
                             </div>
                         </Row>
                         <Container>
@@ -153,6 +158,11 @@ class Home extends Component{
                                             Loading image...
                                         </div>
                                         <img src={Home1} onError={(e) => e.target.src = Home1} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        <a href='https://unsplash.com/photos/EMPZ7yRZoGw?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                            style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank' rel='noreferrer'
+                                        >
+                                            Image by Austin Distel on Unsplash
+                                        </a>
                                     </div>
                                     {
                                         this.state.on_mobile === true
@@ -198,6 +208,11 @@ class Home extends Component{
                                                     Loading image...
                                                 </div>
                                                 <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                                <a href='https://unsplash.com/photos/amLfrL8LGls?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                                    style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank' rel='noreferrer'
+                                                >
+                                                    Image by Jason Briscoe on Unsplash
+                                                </a>
                                             </div>
                                         </Col>
                                         : <></>
@@ -237,6 +252,11 @@ class Home extends Component{
                                                     Loading image...
                                                 </div>
                                                 <img src={Home2} onError={(e) => e.target.src = Home2} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                                <a href='https://unsplash.com/photos/amLfrL8LGls?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                                    style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank' rel='noreferrer'
+                                                >
+                                                    Image by Jason Briscoe on Unsplash
+                                                </a>
                                             </div>
                                             <br/><br/><br/><br/>
                                         </Col>
@@ -258,6 +278,11 @@ class Home extends Component{
                                             Loading image...
                                         </div>
                                         <img src={Home3} onError={(e) => e.target.src = Home3} style={{position: 'absolute', right: 0, width: 'auto', minWidth: '100%', height: 'auto', minHeight: '400px'}} />
+                                        <a href='https://unsplash.com/photos/VkRq5w3asCA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink'
+                                            style={{position: 'absolute', bottom: '10px', right: '10px', color: '#ffffff', fontSize: '13px'}} target='_blank' rel='noreferrer'
+                                        >
+                                            Image by Adam Nowakowski on Unsplash
+                                        </a>
                                     </div>
                                 </Col>
                                 <Col>

@@ -35,7 +35,6 @@ import NotificationAlert from './notification_alert';
 import NetworkErrorScreen from './network_error_screen';
 import { Symbols } from './lists'
 import Modal from './modal';
-import { Model_Cards } from './model_cards'
 import ModelCardRender from './model_card_render'
 import SymbolIconsRender from './symbol_icons_render';
 import DateTimeDisplay from './timezone_conversion'
@@ -84,6 +83,9 @@ class Analysis extends Component{
 
             // check if value is a symbol, or ALL, if so load data for selected symbol
             if (Symbols.includes(e.target.value) || e.target.value === 'ALL'){
+                // reset market analysis markers
+                this.ResetMarketAnalysisMarkers()
+                // get market analysis for selected symbol
                 this.GetCurrentMarketAnalysis(e.target.value, false, true, true)
             }
         };
@@ -178,12 +180,9 @@ class Analysis extends Component{
                     }else{
                         var market_analysis = this.state.market_analysis
                     }
-                    if (get_all === true || initial_request === true){
+                    if (get_all === true){
                         // set market analysis to state
                         this.setState({market_analysis: result})
-
-                        // set initial request to false
-                        initial_request = false
                     }else{
                         // add market analysis to state ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
                         this.setState({market_analysis: result.concat(market_analysis)})
@@ -197,11 +196,13 @@ class Analysis extends Component{
                         }
 
                         // trade signal(s) browser notification ... only if we have new signals, this is not the initial request, and this is a function recall for the same symbol
-                        if (result.length > 0 && symbol === this.state.queried_symbol){
+                        if (result.length > 0 && symbol === this.state.queried_symbol && initial_request === false){
                             // show browser notifications
                             this.ShowTradeSignalsNotification(result)
                         }
                     }
+                    // set initial request to false
+                    initial_request = false
                     // update queried_symbol to symbol
                     this.setState({queried_symbol: symbol})
                     this.LoadingOff()
@@ -534,6 +535,23 @@ class Analysis extends Component{
                 const notification = new Notification(title, {body: text, icon: img, tag: 'new_signals_alert'});
             }
         }
+
+        this.PeriodicallyGetCurrentMarketAnalysis = () => {
+            // only run if the initial request has already been done and successfully completed, ie, initial_request = false
+            if (initial_request === false){
+                // get current market analysis
+                this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false)
+            }
+        }
+
+        this.ResetMarketAnalysisMarkers = () => {
+            // set initial request to true
+            initial_request = true
+            // set timestamp of the most recent signal received to ''
+            timestamp_of_most_recent_signal_received = ''
+            // set symbol of the most recent signal received to ''
+            symbol_of_most_recent_signal_received = ''
+        }
     }
 
     componentDidMount() {
@@ -542,12 +560,8 @@ class Analysis extends Component{
                 on_mobile: true
             })
         }
-        // set initial request to true
-        initial_request = true
-        // set timestamp of the most recent signal received to ''
-        timestamp_of_most_recent_signal_received = ''
-        // set symbol of the most recent signal received to ''
-        symbol_of_most_recent_signal_received = ''
+        // reset market analysis markers
+        this.ResetMarketAnalysisMarkers()
         // get user device's datetime data, and run the function every 3 seconds
         setInterval(this.GetUserTimeByDeviceClock, 3000);
         // get user ip address' datetime data, and run the function every 3 seconds
@@ -555,9 +569,9 @@ class Analysis extends Component{
         // check if the user has granted us permission to show notifications
         this.CheckIfNotificationPermissionsAreGranted()
         // initial request for market analysis data
-        this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true)
+        if (initial_request === true){ this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true) }
         // run the market analysis retrieval function every 3 seconds
-        setInterval(() => this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false), 3000);
+        setInterval(() => this.PeriodicallyGetCurrentMarketAnalysis(), 3000);
     }
 
     render() {
@@ -767,7 +781,7 @@ class Analysis extends Component{
                                         </h6>
                                         <br/>
                                         <p style={{textAlign: 'justify'}}>
-                                            Click on the following link: <a href='https://t.me/OculaFinanceBot' target='_blank' style={{color: 'inherit'}}>
+                                            Click on the following link: <a href='https://t.me/OculaFinanceBot' target='_blank'  rel='noreferrer' style={{color: 'inherit'}}>
                                                 https://t.me/OculaFinanceBot
                                             </a>, once you're inside the chat, click on the start button, then send the telegram connect code 
                                             you've received above.

@@ -99,10 +99,11 @@ def send_trade_signal_alerts_via_telegram(predictions_string, users_with_their_t
         # get user subscription status
         user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
 
-        # if a user is subscribed or is exempted from subscribing because of their role
+        # if a user is subscribed or is exempted from subscribing because of their role *********************
         if user_subscribed == True or user_role in user_roles_exempted_from_subscribing():
             # send a telegram trade signal(s) alert
             send_message(user_telegram_id, predictions_string)
+        # ***************************************************************************************************
     # *****************************************************************************************************************
 # *******************************************************************************************************************************
 

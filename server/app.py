@@ -1283,8 +1283,9 @@ def getMarketAnalysis():
     # from mongo object to json object to python object
     market_analysis = json.loads(market_analysis.to_json())
 
-    # reverse market_analysis list ... we want the most recent signals to appear first
+    # reverse market_analysis list ... we want the most recent signals to appear first ************
     market_analysis = list(reversed(market_analysis))
+    # *********************************************************************************************
 
     # if client did not request all data
     if get_all == False:
@@ -1306,33 +1307,53 @@ def getMarketAnalysis():
             if data_length_difference < 0: response = make_response('invalid length of data received'); response.status = 409; return response
 
             # only return signals client hasn't received yet **********************************************************
-            # if timestamp_of_most_recent_signal_received and symbol_of_most_recent_signal_received are not ''
-            if timestamp_of_most_recent_signal_received != '' and symbol_of_most_recent_signal_received != '':
+            # if timestamp_of_most_recent_signal_received and symbol_of_most_recent_signal_received are not '' or None or null(JS) or undefined (JS)
+            if (
+                (
+                    timestamp_of_most_recent_signal_received != '' and
+                    timestamp_of_most_recent_signal_received != None and
+                    timestamp_of_most_recent_signal_received != 'undefined' and
+                    timestamp_of_most_recent_signal_received != 'null'
+                ) and 
+                (
+                    symbol_of_most_recent_signal_received != '' and
+                    symbol_of_most_recent_signal_received != None and
+                    symbol_of_most_recent_signal_received != 'undefined' and
+                    symbol_of_most_recent_signal_received != 'null'
+                )
+            ):
                 # find the index of the timestamp in market_analysis list, index of first occurance
                 timestamp_index = next((i for i, signal in enumerate(market_analysis) if signal['timestamp'] == timestamp_of_most_recent_signal_received and signal['symbol'] == symbol_of_most_recent_signal_received), None)
-                # if index has been found
+                # *********************************************************************************
+                # if index has been found *********************************************************
                 if timestamp_index != None:
-                    # make its the end index
+                    # make timestamp_index the end index and generate start_index *******
                     end_index = timestamp_index; start_index = end_index - client_load_more_increment
-                    # if the start index happens to be negative, make it 0
+                    # *******************************************************************
+                    # if the start_index happens to be negative, make it 0 **************
                     if start_index < 0: start_index = 0
-                # if index has not been found, use default indexing for data fetch
+                    # *******************************************************************
+                # *********************************************************************************
+                # if index has not been found, use default indexing for data fetch ****************
                 else:
                     start_index = 0; end_index = start_index + client_load_more_increment
-            # if timestamp_of_most_recent_signal_received is ''
+                # *********************************************************************************
+            # ***********************************************************************************************
+            # if timestamp_of_most_recent_signal_received is '' or None or or null (JS) or undefined (JS) ***
             else:
                 # use default indexing for data fetch
                 start_index = 0; end_index = start_index + client_load_more_increment
+            # ***********************************************************************************************
             
             # perform data fetch by supplied indexes
             market_analysis = market_analysis[start_index:end_index]
             # *********************************************************************************************************
-
         # if client has not received any data yet
         else:
-            # only return the first "client_load_more_increment" number of signals
+            # only return the first "client_load_more_increment" number of signals ************************************
             start_index = 0; end_index = start_index + client_load_more_increment
             market_analysis = market_analysis[start_index:end_index]
+            # *********************************************************************************************************
 
     # return market analysis list (signals)
     response = make_response(jsonify(market_analysis)); response.status = 200; return response
