@@ -143,7 +143,7 @@ class ContactUs extends Component{
                 }
         
                 // send email
-                emailjs.send(EmailJsServiceID, EmailJsTemplateID, templateParams, options).then(
+                emailjs.send(EmailJsServiceID, EmailJsTemplateID, templateParams, { publicKey: EmailJsAPIKey, }).then(
                     (response) => {
                         console.log('SUCCESS!', response.status, response.text);
                         Notification('Your message has been submitted successfully.', 'success')
