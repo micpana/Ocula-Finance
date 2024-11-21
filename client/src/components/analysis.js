@@ -134,10 +134,11 @@ class Analysis extends Component{
             const now = new Date();
             const current_minutes = String(now.getMinutes());
 
-            // if there's a time check bypass or the current minutes represent a 15 minute candle close, ie 00, 15, 30, 45
+            // if there's a time check bypass or the current minutes represent a 15 minute candle close, ie 0 / 00, 15, 30, 45
             if (
                 (bypass_time_check === true) ||
                 (
+                    (current_minutes === '0') ||
                     (current_minutes === '00') ||
                     (current_minutes === '15') ||
                     (current_minutes === '30') ||

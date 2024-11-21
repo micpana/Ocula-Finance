@@ -1,6 +1,6 @@
 import dns.resolver
 
-domain = "yourdomain.com"
+domain = "oculafinance.com"
 record_types = ["A", "CNAME", "MX", "TXT", "NS"]
 
 for record_type in record_types:
