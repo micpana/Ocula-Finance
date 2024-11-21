@@ -36,28 +36,29 @@ def validate_subscription(user):
         subscription_valid = False
     # ***************************************************************************************************************************
 
-    # initialize variable to show whether the user is still on free trial or not as false ***************************************
-    on_free_trial = False
-    # ***************************************************************************************************************************
-
     # subscription expiry date ... pick the most recent date between user_subscription_expiration_date and user_free_trial_expiration_date
     # actual subscription expiry date *********************************************************************************
-    if user_subscription_expiration_date > str(user_free_trial_expiration_date): subcription_expiry_date = user_subscription_expiration_date
+    if user_subscription_expiration_date > str(user_free_trial_expiration_date):  # most recent date was the actual subscription's expiration date
+        subcription_expiry_date = user_subscription_expiration_date
+        # set on free trial variable to false ***************************************************************
+        on_free_trial = False
+        # ***************************************************************************************************
     # *****************************************************************************************************************
     # free trial expiry date ******************************************************************************************
     else: # most recent date was the free trial's expiration date
         subcription_expiry_date = str(user_free_trial_expiration_date)
-        # if subscription is still valid, set on free trial variable to true ********************************
+        # if subscription is still valid, set on free trial variable to true, else set it to false **********
         if subscription_valid == True: on_free_trial = True
+        else: on_free_trial = False
         # ***************************************************************************************************
     # *****************************************************************************************************************
     # ***************************************************************************************************************************
 
     # days left till expiration ... return -1 if subscription is nolonger valid *************************************************
-    # subcription is still valid **************************************************************************************
+    # subcription is no longer valid **********************************************************************************
     if subscription_valid == False: days_till_expiry = -1
     # *****************************************************************************************************************
-    # subscription is no longer valid *********************************************************************************
+    # subscription is still valid *************************************************************************************
     else: 
         # date difference
         date_difference = datetime.strptime(current_datetime, date_format) - datetime.strptime(subcription_expiry_date, date_format)

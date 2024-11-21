@@ -60,15 +60,15 @@ while True:
             # ***********************************************************************************************
             # via telegram **********************************************************************************
             if user['telegram_connected'] == True:
-            send_subscription_expiration_telegram_notification(
-                user['telegram_id'], # telegram id
-                user['username'], # username
-                user['firstname'], # firstname
-                user['lastname'], # lastname
-                on_free_trial, # free trial ... whether the user is still on free trial or is now on a paid subscription
-                not user_subscribed, # expired ... whether the user's free trial / paid subscription has expired or not
-                days_till_expiry # days till free trial / subscription expiry
-            )
+                send_subscription_expiration_telegram_notification(
+                    user['telegram_id'], # telegram id
+                    user['username'], # username
+                    user['firstname'], # firstname
+                    user['lastname'], # lastname
+                    on_free_trial, # free trial ... whether the user is still on free trial or is now on a paid subscription
+                    not user_subscribed, # expired ... whether the user's free trial / paid subscription has expired or not
+                    days_till_expiry # days till free trial / subscription expiry
+                )
             # ***********************************************************************************************
         # *************************************************************************************************************
 

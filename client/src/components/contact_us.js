@@ -36,7 +36,7 @@ import NetworkErrorScreen from './network_error_screen';
 import { IsEmailStructureValid, IsPasswordStructureValid } from './input_syntax_checks'
 import ContactUs1 from '../images/contact_us_1.svg'
 import { FaUserAlt, FaAt, FaRegFolderOpen, FaEnvelopeOpenText } from 'react-icons/fa';
-import * as emailjs from 'emailjs-com'
+import emailjs from '@emailjs/browser';
 import { EmailJsServiceID, EmailJsTemplateID, EmailJsAPIKey } from '../credentials'
 import {Facebook, X, Instagram, LinkedIn, Telegram } from '../social_links'
 import { FaMailBulk, Whatsapp, FaTelegram, FaPhone, FaSearchLocation, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaWhatsapp, FaLocationArrow, FaPhoneAlt } from 'react-icons/fa';
@@ -138,19 +138,19 @@ class ContactUs extends Component{
                 }
         
                 // send email
-                try{
-                    emailjs.send(
-                        EmailJsServiceID,
-                        EmailJsTemplateID,
-                        templateParams,
-                        EmailJsAPIKey
-                    )
-                    Notification('Your message has been submitted successfully.', 'success')
-                    window.location.reload()
-                }catch(err){
-                    console.log(err)
-                    Notification('Something went wrong while trying to submit your message. Please try again.', 'error')
-                }
+                emailjs.send(EmailJsServiceID, EmailJsTemplateID, templateParams, EmailJsAPIKey).then(
+                    (response) => {
+                        console.log('SUCCESS!', response.status, response.text);
+                        Notification('Your message has been submitted successfully.', 'success')
+                        window.location.reload()
+                    },
+                    (error) => {
+                        console.log('FAILED...', error);
+                        Notification('Something went wrong while trying to submit your message. Please try again.', 'error')
+                    },
+                );
+
+                // loading off
                 this.LoadingOff()
             }
         }
