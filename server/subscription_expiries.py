@@ -15,14 +15,14 @@ init_db()
 # always on loop ... will pause for 1 hour at its end, meaning it will be running hourly **************************************************
 print('\n\nSubscription expiries module on.')
 while True:
-    # get all email verified users **********************************************************************************************
-    all_users_with_their_emails_verified = Users.objects.filter(verified = True)
-    all_users_with_their_emails_verified = json.loads(all_users_with_their_emails_verified.to_json())
-    all_users_with_their_emails_verified = deque(all_users_with_their_emails_verified) # conversion to deque array for faster looping
+    # get all email verified and telegram verified users ************************************************************************
+    all_users_with_their_emails_and_telegram_verified = Users.objects.filter(verified = True, telegram_connected = True)
+    all_users_with_their_emails_and_telegram_verified = json.loads(all_users_with_their_emails_and_telegram_verified.to_json())
+    all_users_with_their_emails_and_telegram_verified = deque(all_users_with_their_emails_and_telegram_verified) # conversion to deque array for faster looping
     # ***************************************************************************************************************************
 
     # loop through users ********************************************************************************************************
-    for user in all_users_with_their_emails_verified:
+    for user in all_users_with_their_emails_and_telegram_verified:
         # user subscription status and info check *********************************************************************
         user_subscribed, subcription_expiry_date, on_free_trial, days_till_expiry = validate_subscription(user)
         # *************************************************************************************************************
