@@ -26,7 +26,7 @@ symbols_and_their_config = {
     }, 
     'USDJPY': {
         'type': 'Forex Pair',
-        'target': 0.12, # manual = 0.30 (formerly 0.55) ... statistical = 0.17 (statistical is not performing well)
+        'target': 0.12, # manual = 0.12 (formerly 0.55) ... statistical = 0.17 (statistical is not performing well)
         'risk_target_divisor': default_risk_target_divisor,
         'forecast_period': default_forecast_period,
         'holding_period': default_holding_period
