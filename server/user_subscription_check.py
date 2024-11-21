@@ -47,9 +47,8 @@ def validate_subscription(user):
     # free trial expiry date ******************************************************************************************
     else: # most recent date was the free trial's expiration date
         subcription_expiry_date = str(user_free_trial_expiration_date)
-        # if subscription is still valid, set on free trial variable to true, else set it to false **********
-        if subscription_valid == True: on_free_trial = True
-        else: on_free_trial = False
+        # set on free trial variable to false ***************************************************************
+        on_free_trial = True
         # ***************************************************************************************************
     # *****************************************************************************************************************
     # ***************************************************************************************************************************
