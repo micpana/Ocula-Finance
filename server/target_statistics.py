@@ -10,7 +10,7 @@ percentile_value_to_investigate = 79.71129206201581 # to be selected from the pe
 
 # get list of symbols *********************************************************************************************************************
 list_of_symbols = get_symbol_list()
-# list_of_symbols = ['EURUSD'] # override ... comment it out when not in use
+list_of_symbols = ['USDJPY'] # override ... comment it out when not in use
 # printout the list of symbols being used
 print('\n\nRunning target statistics for the following symbols:', list_of_symbols)
 # *****************************************************************************************************************************************
