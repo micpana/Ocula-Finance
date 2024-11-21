@@ -294,7 +294,7 @@ class ContactUs extends Component{
                                 </Col>
                             </Row>
                             <br/>
-                            <h6 style={{fontWeight: 'bold'}}>
+                            {/* <h6 style={{fontWeight: 'bold'}}>
                                 Get In Touch
                             </h6>
                             <br/><br/>
@@ -369,7 +369,7 @@ class ContactUs extends Component{
                                 >
                                     Submit
                                 </Button>
-                            </Form>
+                            </Form> */}
                         </Container>
                     </div>
                 }
