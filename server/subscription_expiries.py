@@ -30,9 +30,9 @@ while True:
         # check if user's subscription is about to expire *************************************************************
         if (
             # free trial about to expire
-            (user_subscribed == True and on_free_trial == True and user['subscription_expiring_soon_notification_issued'] != True and days_till_expiry <= get_number_of_days_from_expiry_to_send_free_trial_expiring_soon_alert()) or
+            (user_subscribed == True and on_free_trial == True and user.get('subscription_expiring_soon_notification_issued') != True and days_till_expiry <= get_number_of_days_from_expiry_to_send_free_trial_expiring_soon_alert()) or
             # paid subscription about to expire
-            (user_subscribed == True and on_free_trial == False and user['subscription_expiring_soon_notification_issued'] != True and days_till_expiry <= get_number_of_days_from_expiry_to_send_subscription_expiring_soon_alert())
+            (user_subscribed == True and on_free_trial == False and user.get('subscription_expiring_soon_notification_issued') != True and days_till_expiry <= get_number_of_days_from_expiry_to_send_subscription_expiring_soon_alert())
         ): user_subscription_is_about_to_expire = True
         else: user_subscription_is_about_to_expire = False
         # *************************************************************************************************************
@@ -40,7 +40,7 @@ while True:
         # check if user's subscription has expired ********************************************************************
         if (
             # expired
-            (user_subscribed == False and user['subscription_expired_notification_issued'] != True)
+            (user_subscribed == False and user.get('subscription_expired_notification_issued') != True)
         ): user_subscription_has_expired = True
         else: user_subscription_has_expired = False
         # *************************************************************************************************************
