@@ -5,25 +5,25 @@ node_modules/
 datasets/
 
 # backtesting logs
-logs/"backtesting logs"
+logs/backtesting logs/
 
 # error logs
-logs/"error logs"
+logs/error logs/
 
 # training logs
-logs/"training logs"
+logs/training logs/
 
 # model cards in server folder
-"server/model cards"
+server/model cards/
 
 # model performance visual insights
-"model performance visual insights"/
+model performance visual insights/
 
 # models
 models/
 
 # model checkpoints
-"model checkpoints"/
+model checkpoints/
 
 # scalers
 scalers/
