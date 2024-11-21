@@ -1,1 +1,2 @@
-export const Backend_Server_Address = 'https://ocula-finance.onrender.com/'
+export const Backend_Server_Address = 'https://api.oculafinance.com/' // Main ... Comment out if not in use
+// export const Backend_Server_Address = 'https://ocula-finance.onrender.com/' // Backup ... Comment out if not in use
