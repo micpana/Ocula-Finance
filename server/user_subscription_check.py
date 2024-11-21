@@ -60,7 +60,7 @@ def validate_subscription(user):
     # subscription is still valid *************************************************************************************
     else: 
         # date difference
-        date_difference = datetime.strptime(current_datetime, date_format) - datetime.strptime(subcription_expiry_date, date_format)
+        date_difference = datetime.strptime(subcription_expiry_date, date_format) - datetime.strptime(current_datetime, date_format)
         # number of days left till expiry
         days_till_expiry = date_difference.days
     # *****************************************************************************************************************

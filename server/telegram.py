@@ -114,11 +114,11 @@ def send_account_role_change_telegram_notification(telegram_id, username, firstn
         notification_text = "Your account's access level has been downgraded. You now have ordinary user level access only."
     elif old_role == 'admin' and new_role == 'free user':
         notification_text = "Your account's access level has been downgraded. You now have ordinary user level access only. However, you have been given free access until further notice. We hope you enjoy your free access period and find it valuable. Happy trading."
-    elif (old_role == 'user' or old_role == 'free user') and new_role == 'admin':
+        elif ((old_role == 'user' or old_role == 'free user') and new_role == 'admin') or (old_role == 'admin' and new_role == 'admin'):
         notification_text = 'Your account now has admin access.'
-    elif old_role == 'free user' and new_role == 'user':
+    elif (old_role == 'free user' and new_role == 'user') or (old_role == 'user' and new_role == 'user'):
         notification_text = 'Your account no longer has free access. We really hope you enjoyed your free access period and found it valuable.'
-    elif old_role == 'user' and new_role == 'free user':
+    elif (old_role == 'user' and new_role == 'free user') or (old_role == 'free user' and new_role == 'free user'):
         notification_text = 'Your account has been given free access until further notice. We hope you enjoy your free access period and find it valuable. Happy trading.'
     # *****************************************************************************************************************
 
