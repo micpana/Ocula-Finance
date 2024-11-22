@@ -27,6 +27,20 @@ def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
             else: break
     # ***************************************************************************************************************************
 
+    # get broker's company name *************************************************************************************************
+    # retrieve terminal information ***********************************************************************************
+    terminal_info = mt5.terminal_info()
+    # *****************************************************************************************************************
+    # check if the information was retrieved successfully *************************************************************
+    if terminal_info is not None:
+        broker_company_name = terminal_info.company
+        print(f"Broker's Company Name: {broker_company_name}")
+    else:
+        broker_company_name = 'Failed to retrieve'
+        print(f"Failed to retrieve terminal info, error code: {mt5.last_error()}")
+    # *****************************************************************************************************************
+    # ***************************************************************************************************************************
+
     # get data for each stated timeframe ****************************************************************************************
     if timeframe == 'Monthly': rates = mt5.copy_rates_range(str(symbol), mt5.TIMEFRAME_MN1, timezone_from, timezone_to)
     elif timeframe == 'Weekly': rates = mt5.copy_rates_range(str(symbol), mt5.TIMEFRAME_W1, timezone_from, timezone_to)
@@ -57,6 +71,6 @@ def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
 
     print('MT5 data fetched.\n\n')
 
-    # return timeframe ohlc df
-    return timeframe_ohlc_df
+    # return timeframe ohlc df, broker_company_name
+    return timeframe_ohlc_df, broker_company_name
 # *****************************************************************************************************************************************

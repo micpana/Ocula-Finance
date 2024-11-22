@@ -54,13 +54,13 @@ class App extends Component {
         <div className="App" style={{backgroundColor: '#FAFAFA', color: '#383838'}}>
             <BrowserRouter>
                 <NavBar />
-                {/* <div>
+                <div>
                     <br/>
                     <Container>
                         <span style={{fontWeight: 'bold'}}>Note:</span> This platform is still under construction and testing, but we will be done soon.
                     </Container>
                     <br/>
-                </div> */}
+                </div>
                 <Routes>
                     <Route path='/' element={<Home />}/>
                     <Route path='/how-it-works' element={<HowItWorks />}/>

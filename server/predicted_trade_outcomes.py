@@ -38,7 +38,7 @@ def get_trade_outcome(
             else: stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage
         # *****************************************************************************************
         # for sells *******************************************************************************
-        if predicted_trade_action == 'Sell': 
+        elif predicted_trade_action == 'Sell': 
             if trade_maximum_percentage_up >= predicted_trade_stoploss_percentage: stoploss_hit = True; trade_close_percentage = predicted_trade_stoploss_percentage
             else: stoploss_hit = False; trade_close_percentage = trade_session_closing_percentage
         # *****************************************************************************************

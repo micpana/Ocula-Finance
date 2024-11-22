@@ -51,6 +51,9 @@ def yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to):
 
     print('Yahoo Finance data fetched.\n\n')
 
-    # return timeframe ohlc df
-    return timeframe_ohlc_df
+    # set broker_company_name
+    broker_company_name = 'Unavailable (Yahoo Finance)'
+
+    # return timeframe ohlc df, broker_company_name
+    return timeframe_ohlc_df, broker_company_name
 # *****************************************************************************************************************************************

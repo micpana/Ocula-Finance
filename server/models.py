@@ -75,6 +75,7 @@ class MarketAnalysis(Document):
     meta = {'collection': 'marketanalysis'}
     timestamp = StringField(required=True)
     entry_timeframe_timestamp = StringField(required=True)
+    broker_company_name = StringField(required=True)
     symbol = StringField(required=True)
     action = StringField(required=True)
     stoploss_percentage = FloatField(required=True)

@@ -145,7 +145,7 @@ def y_features_type():
 
 # whether to send out prediction alerts via telegram or not
 def send_out_prediction_alerts_via_telegram():
-    send = True
+    send = False
 
     return send
 
@@ -195,7 +195,7 @@ def save_backtests_to_database():
 
 # whether to save live predictions to the database or not
 def save_live_predictions_to_database():
-    save = True
+    save = False
 
     return save
 

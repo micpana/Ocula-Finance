@@ -35,7 +35,7 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
 
         # create 'datetime' range objects in system's time zone to avoid the implementation of a local time zone offset
         start_date = datetime.now() - timedelta(days=+data_collection_days)
-        end_date = datetime.now() + timedelta(minutes=+6) # some additional time to make sure all current data is included
+        end_date = datetime.now() + timedelta(days=+7) # some additional days to make sure all current data is included
         timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
         timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
         # *************************************************************************************************************
@@ -50,13 +50,16 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
         # get data according to data source ... csv / yahoo / mt5 *****************************************************
         if data_source == 'csv': 
             from csv_data import csv_fetch_data
-            ohlc_data_dict[timeframe] = csv_fetch_data(symbol, timeframe)
+            timeframe_ohlc_df, broker_company_name = csv_fetch_data(symbol, timeframe)
+            ohlc_data_dict[timeframe] = timeframe_ohlc_df
         elif data_source == 'yahoo': 
             from yahoo_finance_data import yahoo_fetch_data
-            ohlc_data_dict[timeframe] = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to).head(-1) # removing the last row since its a bar still forming, as stated above
+            timeframe_ohlc_df, broker_company_name = yahoo_fetch_data(symbol, timeframe, timezone_from, timezone_to)
+            ohlc_data_dict[timeframe] = timeframe_ohlc_df.head(-1) # removing the last row since its a bar still forming, as stated above
         elif data_source == 'mt5': 
             from mt5_data import mt5_fetch_data
-            ohlc_data_dict[timeframe] = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type).head(-1) # removing the last row since its a bar still forming, as stated above
+            timeframe_ohlc_df, broker_company_name = mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type)
+            ohlc_data_dict[timeframe] = timeframe_ohlc_df.head(-1) # removing the last row since its a bar still forming, as stated above
         # *************************************************************************************************************
 
         # modify ohlc data to match number_of_bars_needed in ohlc data dict ... (for predictions only) ****************
@@ -102,6 +105,6 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
         # *************************************************************************************************************
     # ***************************************************************************************************************************
 
-    # return ohlc data dict
-    return ohlc_data_dict
+    # return ohlc data dict, broker_company_name
+    return ohlc_data_dict, broker_company_name
 # *****************************************************************************************************************************************
