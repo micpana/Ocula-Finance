@@ -46,6 +46,8 @@ var initial_request = true
 var timestamp_of_most_recent_signal_received = ''
 // initialize variable for symbol of the most recent signal received
 var symbol_of_most_recent_signal_received = ''
+// initialize variable for length of data received
+var length_of_data_received = 0
 
 class Analysis extends Component{
     static propTypes = {
@@ -152,12 +154,12 @@ class Analysis extends Component{
                 this.NetworkErrorScreenOff()
 
                 if (symbol != this.state.queried_symbol || initial_request === true){ // current selected symbol is not the one that one previously queried / this is the initial request
-                    var length_of_data_received = 0
+                    length_of_data_received = 0
                     var clear_market_analysis_state_first = true
                     timestamp_of_most_recent_signal_received = ''
                     symbol_of_most_recent_signal_received = ''
                 }else{ // same symbol selection
-                    var length_of_data_received = this.state.market_analysis.length
+                    length_of_data_received = length_of_data_received
                     var clear_market_analysis_state_first = false
                     timestamp_of_most_recent_signal_received = timestamp_of_most_recent_signal_received
                     symbol_of_most_recent_signal_received = symbol_of_most_recent_signal_received
@@ -184,9 +186,18 @@ class Analysis extends Component{
                     if (get_all === true){
                         // set market analysis to state
                         this.setState({market_analysis: result})
+
+                        // set length of data received
+                        length_of_data_received = result.length
                     }else{
-                        // add market analysis to state ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
-                        this.setState({market_analysis: result.concat(market_analysis)})
+                        // updated market analysis add new market analysis to existing market analysis ... all arrays have the syntax = newer data first ... so append existing data to new data to respect the existing order
+                        var updated_market_analysis = result.concat(market_analysis)
+                        
+                        // set updated market analysis to state
+                        this.setState({market_analysis: updated_market_analysis})
+
+                        // set length of data received
+                        length_of_data_received = updated_market_analysis.length
 
                         // set the timestamp and symbol of the most recent signal received
                         if (result.length > 0){
@@ -552,6 +563,8 @@ class Analysis extends Component{
             timestamp_of_most_recent_signal_received = ''
             // set symbol of the most recent signal received to ''
             symbol_of_most_recent_signal_received = ''
+            // set length of data received to 0
+            length_of_data_received = 0
         }
     }
 
