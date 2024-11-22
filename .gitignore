@@ -4,14 +4,8 @@ node_modules/
 # datasets
 datasets/
 
-# backtesting logs
-logs/backtesting logs/
-
-# error logs
-logs/error logs/
-
-# training logs
-logs/training logs/
+# logs
+logs/
 
 # model cards in server folder
 server/model cards/

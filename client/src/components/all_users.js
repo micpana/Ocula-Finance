@@ -53,7 +53,7 @@ class AllUsers extends Component{
             end_of_list: false,
             on_mobile: false,
             screen: 'users', // users / user / selected user payments
-            to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified', 'Verified Telegram', 'Unverified Telegram'],
+            to_show_list: ['All', 'Subscribed', 'Not subscribed', 'Banned', 'Verified', 'Not verified', 'Verified Telegram', 'Unverified Telegram', 'Admins', 'Free Users'],
             users_showing: 'All', // All / Subscribed / Not subscribed / Banned / Verified / Not verified
             all_users: [],
             user: null,
@@ -618,8 +618,10 @@ class AllUsers extends Component{
                             Notification("You've entered an incorrect password.", 'error')
                         }else if(result === 'invalid role'){
                             Notification("You've entered an invalid user role.", 'error')
-                        }else if(result == 'email not verified'){
-
+                        }else if (result === 'email not verified'){
+                            Notification("User hasn't verified their email yet.", 'error')
+                        }else if (result === 'telegram not verified'){
+                            Notification("User hasn't verified their Telegram yet.", 'error')
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             Notification(notification_message, 'error')
@@ -705,6 +707,10 @@ class AllUsers extends Component{
                             // redirect to sign in
                             let port = (window.location.port ? ':' + window.location.port : '');
                             window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if (result === 'email not verified'){
+                            Notification("User hasn't verified their email yet.", 'error')
+                        }else if (result === 'telegram not verified'){
+                            Notification("User hasn't verified their Telegram yet.", 'error')
                         }else if(result === 'enter sufficient amount for a subscription'){
                             Notification("Enter a sufficient amount for a subscription.", 'error')
                         }else if(result === 'subscription amount cannot be more than max subscription'){
@@ -901,6 +907,8 @@ class AllUsers extends Component{
         if (to_show === 'Not verified'){ users_to_show = all_users.filter(item => item.verified === false) }
         if (to_show === 'Verified Telegram'){ users_to_show = all_users.filter(item => item.telegram_connected === true) }
         if (to_show === 'Unverified Telegram'){ users_to_show = all_users.filter(item => item.telegram_connected === false) }
+        if (to_show === 'Admins'){ users_to_show = all_users.filter(item => item.role === 'admin') }
+        if (to_show === 'Free Users'){ users_to_show = all_users.filter(item => item.role === 'free user') }
 
         var users_to_show_map = users_to_show.map((item, index) => {
             return <tr onClick={() => {this.setState({user: item, screen: 'user'}); window.scrollTo(0, 0)}}
@@ -991,6 +999,12 @@ class AllUsers extends Component{
                                     </Col>
                                     <Col sm=''>
                                         <span style={{fontWeight: 'bold'}}>Telegram Not verified:</span> {user_metrics.users_not_verified_telegram}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Admins:</span> {user_metrics.admins}
+                                    </Col>
+                                    <Col sm=''>
+                                        <span style={{fontWeight: 'bold'}}>Free Users:</span> {user_metrics.free_users}
                                     </Col>
                                 </Row>
                                 <br/><br/>
@@ -1374,6 +1388,20 @@ class AllUsers extends Component{
                                                         user.telegram_connected === true
                                                         ? <DateTimeDisplay datetimeString={user.date_of_telegram_verification} />
                                                         : <></>
+                                                    }
+                                                    <br/>
+                                                </Col>
+                                            </Row>
+                                            <br/>
+                                            <Row style={{margin: '0px', textAlign: 'left'}}>
+                                                <Col xs='6' style={{fontWeight: 'bold'}}>
+                                                    Last access token usage date:
+                                                    <br/>
+                                                </Col>
+                                                <Col>
+                                                    {   user.last_access_token_usage_date === null || user.last_access_token_usage_date === undefined || user.last_access_token_usage_date === ''
+                                                        ? <></>
+                                                        : <DateTimeDisplay datetimeString={user.last_access_token_usage_date} />
                                                     }
                                                     <br/>
                                                 </Col>

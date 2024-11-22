@@ -141,6 +141,7 @@ def check_user_access_token_validity(request_data, expected_user_roles):
 
         # show that access token was last used now
         UserAccessTokens.objects(id = str(token_details.id)).update(last_used_on_date = current_datetime)
+        Users.objects(id = user_id).update(last_access_token_usage_date = current_datetime)
 
         # return access_token_status, user_id, user_role
         return access_token_status, user_id, user_role
@@ -1874,7 +1875,9 @@ def getUserMetrics():
         'verified_users': len([i for i in all_users if i['verified'] == True]),
         'users_not_verified': len([i for i in all_users if i['verified'] == False]),
         'verified_users_telegram': len([i for i in all_users if i['telegram_connected'] == True]),
-        'users_not_verified_telegram': len([i for i in all_users if i['telegram_connected'] == False])
+        'users_not_verified_telegram': len([i for i in all_users if i['telegram_connected'] == False]),
+        'admins': len([i for i in all_users if i['role'] == 'admin']),
+        'free_users': len([i for i in all_users if i['role'] == 'free user'])
     }
 
     # return statistics
@@ -2022,8 +2025,16 @@ def changeUserRole():
     # user details
     user = Users.objects.filter(id = account_id)[0]
 
-    # check if user hasn't verified their email yet
-    if user.verified != True: response = make_response('email not verified'); response.status = 404; return response
+    # verifications *************************************************************************************************************
+    # check if user has verified email ********************************************************************************
+    if user.verified == False:
+        response = make_response('email not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # check if user has verified telegram *****************************************************************************
+    if user.telegram_connected == False:
+        response = make_response('telegram not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # ***************************************************************************************************************************
 
     # check if user account exists and change user role
     try:
@@ -2138,6 +2149,17 @@ def manuallyEnterUserPayment():
         user = Users.objects.filter(id = account_id)[0]
     except:
         response = make_response('invalid account id'); response.status = 404; return response
+
+    # verifications *************************************************************************************************************
+    # check if user has verified email ********************************************************************************
+    if user.verified == False:
+        response = make_response('email not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # check if user has verified telegram *****************************************************************************
+    if user.telegram_connected == False:
+        response = make_response('telegram not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # ***************************************************************************************************************************
 
     # if purpose is a Monthly Subscription / Yearly Subscription
     expiry_date = ''
@@ -2444,6 +2466,17 @@ def initiatePaynowPayment():
     # user details
     user = Users.objects.filter(id = user_id)[0]
 
+    # verifications *************************************************************************************************************
+    # check if user has verified email ********************************************************************************
+    if user.verified == False:
+        response = make_response('email not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # check if user has verified telegram *****************************************************************************
+    if user.telegram_connected == False:
+        response = make_response('telegram not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # ***************************************************************************************************************************
+
     # determine amount by subscription_type
     if subscription_type == 'Monthly Subscription': amount = 10.00; discount_applied = 0
     elif subscription_type == 'Yearly Subscription': amount = 96.00; discount_applied = 0
@@ -2654,6 +2687,17 @@ def initiateOxapayPayment():
 
     # user details
     user = Users.objects.filter(id = user_id)[0]
+
+    # verifications *************************************************************************************************************
+    # check if user has verified email ********************************************************************************
+    if user.verified == False:
+        response = make_response('email not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # check if user has verified telegram *****************************************************************************
+    if user.telegram_connected == False:
+        response = make_response('telegram not verified'); response.status = 403; return response
+    # *****************************************************************************************************************
+    # ***************************************************************************************************************************
 
     # determine amount by subscription_type
     if subscription_type == 'Monthly Subscription': amount = 10.00; discount_applied = 0

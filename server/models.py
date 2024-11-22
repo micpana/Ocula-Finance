@@ -33,6 +33,7 @@ class Users(Document):
     date_of_telegram_verification = StringField(required=False)
     subscription_expiring_soon_notification_issued = BooleanField(required=False)
     subscription_expired_notification_issued = BooleanField(required=False)
+    last_access_token_usage_date = StringField(required=False)
 
 class EmailVerifications(Document):
     meta = {'collection': 'emailverifications'}

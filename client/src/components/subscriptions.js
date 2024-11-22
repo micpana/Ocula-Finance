@@ -199,6 +199,10 @@ class Subscriptions extends Component{
                         // redirect to sign in
                         let port = (window.location.port ? ':' + window.location.port : '');
                         window.location.href = '//' + window.location.hostname + port + '/signin';
+                    }else if (result === 'email not verified'){
+                        Notification("You haven't verified your email yet.", 'error')
+                    }else if (result === 'telegram not verified'){
+                        Notification("You haven't verified your Telegram yet.", 'error')
                     }else if(result === 'unknown subscription type'){
                         notification_message = 'Unknown subscription type.'
                         Notification(notification_message, 'error')
@@ -330,6 +334,10 @@ class Subscriptions extends Component{
                             // redirect to sign in
                             let port = (window.location.port ? ':' + window.location.port : '');
                             window.location.href = '//' + window.location.hostname + port + '/signin';
+                        }else if (result === 'email not verified'){
+                            Notification("You haven't verified your email yet.", 'error')
+                        }else if (result === 'telegram not verified'){
+                            Notification("You haven't verified your Telegram yet.", 'error')
                         }else if(result === 'unknown subscription type'){
                             notification_message = 'Unknown subscription type.'
                             Notification(notification_message, 'error')
