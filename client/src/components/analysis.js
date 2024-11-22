@@ -48,6 +48,8 @@ var timestamp_of_most_recent_signal_received = ''
 var symbol_of_most_recent_signal_received = ''
 // initialize variable for length of data received
 var length_of_data_received = 0
+// initialize variable for stating whether we have a pending request or not
+var pending_request = false
 
 class Analysis extends Component{
     static propTypes = {
@@ -147,11 +149,15 @@ class Analysis extends Component{
                     (current_minutes === '45')
                 )
             ){
+                // set pending request to true
+                pending_request = true
+                
                 const { cookies } = this.props;
                 if (show_loading_screen == true){
                     this.LoadingOn()
                 }
                 this.NetworkErrorScreenOff()
+                
 
                 if (symbol != this.state.queried_symbol || initial_request === true){ // current selected symbol is not the one that one previously queried / this is the initial request
                     length_of_data_received = 0
@@ -215,6 +221,8 @@ class Analysis extends Component{
                     }
                     // set initial request to false
                     initial_request = false
+                    // set pending request to false
+                    pending_request = false
                     // update queried_symbol to symbol
                     this.setState({queried_symbol: symbol})
                     this.LoadingOff()
@@ -237,14 +245,22 @@ class Analysis extends Component{
                             window.location.href = '//' + window.location.hostname + port + '/signin';
                         }else if(result === 'end of list'){
                             this.setState({end_of_list: true})
+                            // set pending request to false
+                            pending_request = false
                         }else if(result === 'invalid length of data received'){
                             notification_message = 'Invalid length of data received'
                             NotificationAlert(notification_message, 'error')
                             this.NetworkErrorScreenOn(notification_message, () => this.GetUserPastPayments(get_all))
+                            // set pending request to false
+                            pending_request = false
                         }else if (result === 'not subscribed'){
                             this.setState({user_subscribed: false})
+                            // set pending request to false
+                            pending_request = false
                         }else if (result === 'telegram not verified'){
                             this.setState({telegram_verified: false})
+                            // set pending request to false
+                            pending_request = false
                         }else{
                             notification_message = Unknown_Non_2xx_Message + ' (Error '+status_code.toString()+': '+result+')'
                             // NotificationAlert(notification_message, 'error')
@@ -551,8 +567,11 @@ class Analysis extends Component{
         this.PeriodicallyGetCurrentMarketAnalysis = () => {
             // only run if the initial request has already been done and successfully completed, ie, initial_request = false
             if (initial_request === false){
-                // get current market analysis
-                this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false)
+                // only proceed if there's no pending request
+                if (pending_request === false){
+                    // get current market analysis
+                    this.GetCurrentMarketAnalysis(this.state.symbol, false, false, false)
+                }
             }
         }
 
@@ -565,6 +584,8 @@ class Analysis extends Component{
             symbol_of_most_recent_signal_received = ''
             // set length of data received to 0
             length_of_data_received = 0
+            // set pending request to false
+            pending_request = false
         }
     }
 
