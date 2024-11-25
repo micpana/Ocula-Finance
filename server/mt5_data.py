@@ -1,9 +1,10 @@
+import gc
 import pandas as pd
-import MetaTrader5 as mt5
 from settings import get_mt5_program_path_according_to_symbol_type
 
 # get data ********************************************************************************************************************************
 def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
+    import MetaTrader5 as mt5
     print('Fetching', symbol, timeframe, 'data from MT5 ...')
     
     # display data on the MetaTrader 5 package **********************************************************************************
@@ -60,6 +61,14 @@ def mt5_fetch_data(symbol, timeframe, timezone_from, timezone_to, symbol_type):
     # create dataframe out of the obtained data *********************************************************************************
     timeframe_ohlc_df = pd.DataFrame(rates)
     # print('df head:\n', timeframe_ohlc_df.head(10))
+    # ***************************************************************************************************************************
+
+    # release memory used by symbol's loops in terms of large variables, that haven't been cleared in the code already ... for ensuring efficient use of resources
+    del mt5_program_path; del terminal_info; del mt5; del rates
+    # ***************************************************************************************************************************
+    
+    # manually trigger garbage collection ***************************************************************************************
+    gc.collect()
     # ***************************************************************************************************************************
 
     # convert time in seconds into the 'datetime' format ************************************************************************

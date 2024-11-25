@@ -34,8 +34,8 @@ def acquire_data(symbol, timeframes, call_module, backtest_start_date, view_wind
         # *************************************************************************************************************
 
         # create 'datetime' range objects in system's time zone to avoid the implementation of a local time zone offset
-        start_date = datetime.now() - timedelta(days=+data_collection_days)
-        end_date = datetime.now() + timedelta(days=+7) # some additional days to make sure all current data is included
+        start_date = datetime.now(timezone) - timedelta(days=+data_collection_days)
+        end_date = datetime.now(timezone) + timedelta(days=+7) # some additional days to make sure all current data is included
         timezone_from = datetime(start_date.year, start_date.month, start_date.day, hour=00, minute=00, second=00, tzinfo=timezone)
         timezone_to = datetime(end_date.year, end_date.month, end_date.day, hour=end_date.hour, minute=end_date.minute, second=end_date.second, tzinfo=timezone)
         # *************************************************************************************************************

@@ -1,25 +1,14 @@
-import MetaTrader5 as mt5
-from datetime import datetime, timedelta
+import numpy as np
 
-# Initialize MT5 connection
-if not mt5.initialize():
-    print(f"Initialization failed, error code: {mt5.last_error()}")
-    exit()
+trade_entry_timeframe_timestamp = '2024.11.23 12:00'
+trade_action = 'Buy'
 
-# Get the server time
-server_time = mt5.time()
+timestamps = np.array(['2024.11.23 10:00', '2024.11.23 12:00', '2024.11.23 14:00'])
+actual_trading_actions = np.array(['Sell', 'Buy', 'Sell'])
 
-if server_time is not None:
-    # Convert the server time to a datetime object
-    server_time_dt = datetime.utcfromtimestamp(server_time)
-    local_time = datetime.utcnow()
+trade_index_array = np.where(
+    (timestamps == trade_entry_timeframe_timestamp) & 
+    (actual_trading_actions == trade_action)
+)[0]
 
-    # Calculate the broker's timezone offset
-    timezone_offset = (server_time_dt - local_time).total_seconds() / 3600
-
-    print(f"Broker's Timezone Offset (in hours from UTC): {timezone_offset}")
-else:
-    print(f"Failed to retrieve server time, error code: {mt5.last_error()}")
-
-# Shutdown MT5 connection
-mt5.shutdown()
+print(trade_index_array[0])

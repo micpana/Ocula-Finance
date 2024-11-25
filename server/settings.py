@@ -1,6 +1,7 @@
 from datetime import datetime
 from pytz import timezone
 
+# system **********************************************************************************************************************************
 # platform name
 def platform_name():
     name = 'Ocula Finance'
@@ -14,18 +15,65 @@ def frontend_client_url():
 
     return url
 
+# increment number for client load more feature
+def get_client_load_more_increment():
+    client_load_more_increment = 50
+
+    return client_load_more_increment
+# *****************************************************************************************************************************************
+
+# related to off-platform communication channels ******************************************************************************************
 # sending emails via ... zoho mail / gmail test smtp
 def sending_emails_via():
     send_via = 'zoho mail'
 
     return send_via
 
+# whether to send out prediction alerts via telegram or not
+def send_out_prediction_alerts_via_telegram():
+    send = True
+
+    return send
+# *****************************************************************************************************************************************
+
+
+# database related ************************************************************************************************************************
 # database selection ... mock / test / live
 def database_selection():
     selection = 'live'
 
     return selection
 
+# whether to backtests to the database or not
+def save_backtests_to_database():
+    save = False
+
+    return save
+
+# whether to save live predictions to the database or not
+def save_live_predictions_to_database():
+    save = True
+
+    return save
+# *****************************************************************************************************************************************
+
+# related to user roles *******************************************************************************************************************
+# list of user roles
+def get_user_roles():
+    user_roles = [
+        'user', 'admin', 'free user'
+    ]
+
+    return user_roles
+
+# list of user roles exempted from subscribing
+def user_roles_exempted_from_subscribing():
+    roles = ['admin', 'free user']
+
+    return roles
+# *****************************************************************************************************************************************
+
+# date and time related *******************************************************************************************************************
 # system timezone ... pytz compatible
 def system_timezone():
     sys_timezone = 'Africa/Harare'
@@ -67,21 +115,9 @@ def get_number_of_days_from_expiry_to_send_subscription_expiring_soon_alert():
     days = 3
 
     return days
+# *****************************************************************************************************************************************
 
-# list of user roles
-def get_user_roles():
-    user_roles = [
-        'user', 'admin', 'free user'
-    ]
-
-    return user_roles
-
-# list of user roles exempted from subscribing
-def user_roles_exempted_from_subscribing():
-    roles = ['admin', 'free user']
-
-    return roles
-
+# payment related *************************************************************************************************************************
 # list of payment purposes
 def get_payment_purposes():
     payment_purposes = ['Monthly Subscription', 'Yearly Subscription']
@@ -102,13 +138,9 @@ def one_usd_to_zwg():
     one_usd_to_zwg = 35.00
 
     return one_usd_to_zwg
+# *****************************************************************************************************************************************
 
-# increment number for client load more feature
-def get_client_load_more_increment():
-    client_load_more_increment = 50
-
-    return client_load_more_increment
-
+# data sources ****************************************************************************************************************************
 # source for training data ... csv / yahoo (will be overridden if symbol is a synthetic index) / mt5
 def training_data_source(): # yahoo will be overridden to csv for synthetic indices
     source = 'csv'
@@ -126,34 +158,14 @@ def backtesting_data_source(): # yahoo will be overridden to mt5 for synthetic i
     source = 'csv'
 
     return source
+# *****************************************************************************************************************************************
 
-# mt5 program path according to symbol type ... a program path of None or '' means use the system's default installed mt5 program
-def get_mt5_program_path_according_to_symbol_type(symbol_type): # Forex Pair / Crypto Pair / Synthetic Index
-    # eg "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
-    if symbol_type == 'Forex Pair' or symbol_type == 'Crypto Pair': 
-        path = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe' # default = None
-    elif symbol_type == 'Synthetic Index':
-        path = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
-
-    return path
-
+# to do with features and predictions *****************************************************************************************************
 # y features type ... buy or sell / minimum maximum
 def y_features_type():
     y_type = 'buy or sell'
 
     return y_type
-
-# whether to send out prediction alerts via telegram or not
-def send_out_prediction_alerts_via_telegram():
-    send = False
-
-    return send
-
-# whether to trim excessive data from other timeframes before feature engineering or not
-def trim_excessive_data_from_other_timeframes_before_feature_engineering():
-    trim = True
-
-    return trim
 
 # predictions filter config ... filtering predictions using a probability threshold
 def predictions_filter_config():
@@ -163,42 +175,9 @@ def predictions_filter_config():
     prediction_probability_threshold = 0.65 # 1.0 is 100 % ... default is 0.65
 
     return filter_predictions_using_a_probability_threshold, prediction_probability_threshold
+# *****************************************************************************************************************************************
 
-# config for printing test predictions result arrays
-def test_predictions_result_arrays_printing_config():
-    # predicted actions' outcomes array
-    print_predicted_actions_outcomes_array = False
-    # win / lose results
-    print_win_lose_results_array = False
-    # consecutive wins
-    print_consecutive_wins_array = False
-    # consecutive losses
-    print_consecutive_losses_array = False
-    # waiting times array
-    print_waiting_times_array = False
-    # balances array
-    print_balances_array = False
-
-    return print_predicted_actions_outcomes_array, print_win_lose_results_array, print_consecutive_wins_array, print_consecutive_losses_array, print_waiting_times_array, print_balances_array
-
-# whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
-def remove_last_n_values_without_full_forecast():
-    remove = False
-
-    return remove
-
-# whether to backtests to the database or not
-def save_backtests_to_database():
-    save = True
-
-    return save
-
-# whether to save live predictions to the database or not
-def save_live_predictions_to_database():
-    save = False
-
-    return save
-
+# printouts *******************************************************************************************************************************
 # whether to print live predictions to the console or not
 def print_live_predictions_to_console():
     print_ = True
@@ -223,6 +202,39 @@ def number_of_timestamps_to_printout_for_alignment_verification():
 
     return number
 
+# config for printing test predictions result arrays
+def test_predictions_result_arrays_printing_config():
+    # predicted actions' outcomes array
+    print_predicted_actions_outcomes_array = False
+    # win / lose results
+    print_win_lose_results_array = False
+    # consecutive wins
+    print_consecutive_wins_array = False
+    # consecutive losses
+    print_consecutive_losses_array = False
+    # waiting times array
+    print_waiting_times_array = False
+    # balances array
+    print_balances_array = False
+
+    return print_predicted_actions_outcomes_array, print_win_lose_results_array, print_consecutive_wins_array, print_consecutive_losses_array, print_waiting_times_array, print_balances_array
+# *****************************************************************************************************************************************
+
+# model data length trimming **************************************************************************************************************
+# whether to trim excessive data from other timeframes before feature engineering or not
+def trim_excessive_data_from_other_timeframes_before_feature_engineering():
+    trim = True
+
+    return trim
+
+# whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
+def remove_last_n_values_without_full_forecast():
+    remove = False
+
+    return remove
+# *****************************************************************************************************************************************
+
+# data collection days ********************************************************************************************************************
 # if we're using yahoo finance, limit number of days for data collection according to yahoo finance's limits
 def yahoo_finance_n_days_limitor(timeframe, days):
     # if timeframe == 'Monthly': if days > : days = # can go back several decades
@@ -278,7 +290,9 @@ def get_data_collection_days_by_intended_purpose(purpose, timeframe, data_source
     else: number_of_bars_needed = get_data_length_by_number_of_days_and_timeframe(trading_days_needed, timeframe)
 
     return data_collection_days, number_of_bars_needed
+# *****************************************************************************************************************************************
 
+# plots ***********************************************************************************************************************************
 # whether to show plots during training or not
 def show_plots_during_training():
     show = False
@@ -296,12 +310,32 @@ def show_ohlc_graph_during_backtesting():
     show = True
 
     return show
+# *****************************************************************************************************************************************
 
+# extensions ******************************************************************************************************************************
 # get custom system extension for saving objects as files
 def custom_system_extension():
     extension = '.ocula_finance'
 
     return extension
+
+# extension for encrypted code files
+def encrypted_code_files_extension():
+    extension = custom_system_extension() + '_code'
+
+    return extension
+# *****************************************************************************************************************************************
+
+# paths ***********************************************************************************************************************************
+# mt5 program path according to symbol type ... a program path of None or '' means use the system's default installed mt5 program
+def get_mt5_program_path_according_to_symbol_type(symbol_type): # Forex Pair / Crypto Pair / Synthetic Index
+    # eg "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+    if symbol_type == 'Forex Pair' or symbol_type == 'Crypto Pair': 
+        path = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe' # default = None
+    elif symbol_type == 'Synthetic Index':
+        path = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
+
+    return path
 
 # get training price data csvs folder path
 def get_training_price_data_csvs_folder_path():
@@ -363,12 +397,6 @@ def get_cookies_path(name):
 
     return path
 
-# extension for encrypted code files
-def encrypted_code_files_extension():
-    extension = custom_system_extension() + '_code'
-
-    return extension
-
 # encypted x y feature engineering object path
 def get_x_y_feature_engineering_object_path():
     path = 'x_y_feature_engineering' + encrypted_code_files_extension()
@@ -416,4 +444,5 @@ def get_unknown_object_path():
     path = 'encrypted_code' + encrypted_code_files_extension()
 
     return path
+# *****************************************************************************************************************************************
 
