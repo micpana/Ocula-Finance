@@ -138,6 +138,15 @@ class Analysis extends Component{
             const now = new Date();
             const current_minutes = String(now.getMinutes());
 
+            /// ****************************** AWS free tier AI server issue
+            // Our current AI server is a bit slow especially given the number of symbols being analysed, due to the ram and processor in use.
+            // Its taking up to 2 minutes and a few seconds at times just to analyse all pairs, therefore the current_minutes === .. logic isn't 
+            // working well because some signals are being added to the database after the frontend has already queried the database, which means 
+            // they won't reach the UI till the next fetch.
+            // To overcome this, we are now overriding the bypass_time_check parameter so that its always true, until we get a faster AI server.
+            var bypass_time_check = true
+            /// ******************************
+
             // if there's a time check bypass or the current minutes represent a 15 minute candle close, ie 0 / 00, 15, 30, 45
             if (
                 (bypass_time_check === true) ||
@@ -605,8 +614,8 @@ class Analysis extends Component{
         this.CheckIfNotificationPermissionsAreGranted()
         // initial request for market analysis data
         if (initial_request === true){ this.GetCurrentMarketAnalysis(this.state.symbol, false, true, true) }
-        // run the market analysis retrieval function every 3 seconds
-        setInterval(() => this.PeriodicallyGetCurrentMarketAnalysis(), 3000);
+        // run the market analysis retrieval function every 5 seconds
+        setInterval(() => this.PeriodicallyGetCurrentMarketAnalysis(), 5000);
     }
 
     render() {
