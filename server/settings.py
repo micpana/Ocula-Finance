@@ -154,7 +154,7 @@ def prediction_data_source(): # yahoo will be overridden to mt5 for synthetic in
 
 # source for backtesting data ...  csv / yahoo (will be overidden if symbol is a synthetic index) / mt5
 def backtesting_data_source(): # yahoo will be overridden to mt5 for synthetic indices
-    source = 'csv'
+    source = 'mt5'
 
     return source
 # *****************************************************************************************************************************************
