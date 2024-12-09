@@ -15,7 +15,7 @@ def get_trade_outcome(
         actual_trade_action, trade_maximum_percentage_up, trade_maximum_percentage_down, trade_session_closing_percentage
     ):
     # if trade was a win **********************************************************************************************
-    if predicted_trade_action == actual_trade_action:
+    if str(predicted_trade_action) == str(actual_trade_action):
         # set takeprofit hit to true
         takeprofit_hit = True
         # set stoploss hit to false
