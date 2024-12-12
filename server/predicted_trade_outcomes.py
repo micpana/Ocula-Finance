@@ -15,7 +15,7 @@ def get_trade_outcome(
         actual_trade_action, trade_maximum_percentage_up, trade_maximum_percentage_down, trade_session_closing_percentage
     ):
     # if trade was a win **********************************************************************************************
-    if str(predicted_trade_action) == str(actual_trade_action):
+    if predicted_trade_action == actual_trade_action:
         # set takeprofit hit to true
         takeprofit_hit = True
         # set stoploss hit to false
@@ -52,7 +52,7 @@ def get_trade_outcome(
 
 # get trade outcomes **********************************************************************************************************************
 def get_trade_outcomes(
-        symbol, entry_timeframe_minutes_in_a_single_bar, test_closes, test_trade_closing_percentages, test_max_percentages_down, 
+        symbol, entry_timeframe_minutes_in_a_single_bar, test_opens, test_closes, test_trade_closing_percentages, test_max_percentages_down, 
         test_max_percentages_up, y_test, y_predicted, y_predicted_probabilities
     ):
     # get symbol data ***********************************************************************************************************
@@ -132,8 +132,14 @@ def get_trade_outcomes(
     # initialize array to store takeprofit missed statuses
     takeprofit_missed_statuses = deque([])
     # *****************************************************************************************************************
+    # data length *****************************************************************************************************
+    data_length = len(y_test)
+    # *****************************************************************************************************************
+    # last data index *************************************************************************************************
+    last_data_index = data_length - 1
+    # *****************************************************************************************************************
     # compare actual vs predicted and get wanted win / lose results ***************************************************
-    for i in tqdm(range(len(y_test)), desc="Predicted Trades Insight Generation", unit="row"):
+    for i in tqdm(range(data_length), desc="Predicted Trades Insight Generation", unit="row"):
         # initialize loop's actual trades variables *********************************************************
         # initialize actual buy price with NaN
         actual_buy_price = np.nan
@@ -167,10 +173,13 @@ def get_trade_outcomes(
 
         # if the actual trade is a buy or sell **************************************************************
         if actual != 'Nothing':
+            # entry price *************************************************************************
+            entry_price = test_opens[i+1] if i < last_data_index else test_closes[i]
+            # *************************************************************************************
             # if actual trade is a buy ************************************************************
             if actual == 'Buy':
                 # actual buy price
-                actual_buy_price = test_closes[i]
+                actual_buy_price = entry_price
                 # actual takeprofit
                 actual_takeprofit = actual_buy_price + ((reward / 100) * actual_buy_price)
                 # actual stoploss
@@ -179,7 +188,7 @@ def get_trade_outcomes(
             # if actual trade is a sell ***********************************************************
             elif actual == 'Sell':
                 # actual sell price
-                actual_sell_price = test_closes[i]
+                actual_sell_price = entry_price
                 # actual takeprofit
                 actual_takeprofit = actual_sell_price - ((reward / 100) * actual_sell_price)
                 # actual stoploss
@@ -208,7 +217,7 @@ def get_trade_outcomes(
             # if predicted trade is a buy *********************************************************
             if predicted == 'Buy': 
                 # predicted buy price
-                predicted_buy_price = test_closes[i]
+                predicted_buy_price = entry_price
                 # predicted takeprofit
                 predicted_takeprofit = predicted_buy_price + ((reward / 100) * predicted_buy_price)
                 # predicted stoploss
@@ -249,7 +258,7 @@ def get_trade_outcomes(
             # if predicted trade is a sell ********************************************************
             elif predicted == 'Sell': 
                 # predicted sell price
-                predicted_sell_price = test_closes[i]
+                predicted_sell_price = entry_price
                 # predicted takeprofit
                 predicted_takeprofit = predicted_sell_price - ((reward / 100) * predicted_sell_price)
                 # predicted stoploss
@@ -300,7 +309,7 @@ def get_trade_outcomes(
                     if previous_result == 'win': consecutive_wins.append(wins_counter); wins_counter = 0
                     elif previous_result == 'lose': consecutive_losses.append(losses_counter); losses_counter = 0
                 # if we are on the last item
-                if i == len(y_test)-1:
+                if i == last_data_index:
                     # add current result to consecutive wins/losses array using its counter, then reset the counter
                     if result == 'win': consecutive_wins.append(wins_counter); wins_counter = 0
                     elif result == 'lose': consecutive_losses.append(losses_counter); losses_counter = 0
@@ -322,7 +331,7 @@ def get_trade_outcomes(
         else:
             # consecutive wins and losses *********************************************************
             # if we are on the last item
-            if i == len(y_test)-1:
+            if i == last_data_index:
                 # if we have an active wins / losses counter, add the counter result to consecutive wins/losses array, then reset the counter
                 if wins_counter > 0: consecutive_wins.append(wins_counter); wins_counter = 0
                 elif losses_counter > 0: consecutive_losses.append(losses_counter); losses_counter = 0
@@ -334,7 +343,7 @@ def get_trade_outcomes(
             # add current bar's time in mutes to waiting_time_count_in_minutes
             waiting_time_count_in_minutes = waiting_time_count_in_minutes + entry_timeframe_minutes_in_a_single_bar
             # if we are on the last item
-            if i == len(y_test)-1:
+            if i == last_data_index:
                 # add current waiting_time_count_in_minutes to waiting_times_in_minutes
                 waiting_times_in_minutes.append(waiting_time_count_in_minutes)
                 # reset waiting_time_count_in_minutes

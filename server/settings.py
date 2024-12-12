@@ -226,9 +226,9 @@ def trim_excessive_data_from_other_timeframes_before_feature_engineering():
 
     return trim
 
-# whether to remove last n (n = forecast value) rows without full forecast or not .. Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
+# whether to remove last n (n = forecast value) rows without full forecast or not (for training only) ... Removing them returns a dataset with true forecast values on the last n rows, which is equal to a good dataset
 def remove_last_n_values_without_full_forecast():
-    remove = False
+    remove = True
 
     return remove
 # *****************************************************************************************************************************************
