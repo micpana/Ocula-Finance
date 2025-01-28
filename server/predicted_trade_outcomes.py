@@ -171,11 +171,12 @@ def get_trade_outcomes(
         actual = y_test[i]; predicted = y_predicted[i]; predicted_probabilities = y_predicted_probabilities[i]; max_predicted_probability = np.max(predicted_probabilities)
         # ***************************************************************************************************
 
+        # entry price ***************************************************************************************
+        entry_price = test_opens[i+1] if i < last_data_index else test_closes[i]
+        # ***************************************************************************************************
+
         # if the actual trade is a buy or sell **************************************************************
         if actual != 'Nothing':
-            # entry price *************************************************************************
-            entry_price = test_opens[i+1] if i < last_data_index else test_closes[i]
-            # *************************************************************************************
             # if actual trade is a buy ************************************************************
             if actual == 'Buy':
                 # actual buy price

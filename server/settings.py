@@ -154,7 +154,7 @@ def prediction_data_source(): # yahoo will be overridden to mt5 for synthetic in
 
 # source for backtesting data ...  csv / yahoo (will be overidden if symbol is a synthetic index) / mt5
 def backtesting_data_source(): # yahoo will be overridden to mt5 for synthetic indices
-    source = 'mt5'
+    source = 'csv'
 
     return source
 # *****************************************************************************************************************************************
@@ -171,7 +171,7 @@ def predictions_filter_config():
     # whether to filter or not
     filter_predictions_using_a_probability_threshold = True
     # probability threshold
-    prediction_probability_threshold = 0.65 # 1.0 is 100 % ... default is 0.65
+    prediction_probability_threshold = 0.5 # 1.0 is 100 % ... default is 0.65
 
     return filter_predictions_using_a_probability_threshold, prediction_probability_threshold
 # *****************************************************************************************************************************************

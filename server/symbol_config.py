@@ -1,5 +1,5 @@
 # default risk target divisor
-default_risk_target_divisor = 2
+default_risk_target_divisor = 3
 
 # default forecast period
 default_forecast_period = 7
@@ -12,7 +12,7 @@ symbols_and_their_config = {
     # Forex Pairs ***************************************************************************************************************
     'EURUSD': {
         'type': 'Forex Pair',
-        'target': 0.15, # manual = 0.25 ... statistical = 0.15
+        'target': 0.25, # manual = 0.25 ... statistical = 0.15
         'risk_target_divisor': default_risk_target_divisor,
         'forecast_period': default_forecast_period,
         'holding_period': default_holding_period

@@ -132,7 +132,7 @@ class Footer extends Component{
                             </Col>
                         </Col>
                         <Col>
-                            Copyright 2024 &copy; {Platform_Name}
+                            Copyright 2025 &copy; {Platform_Name}
                         </Col>
                     </Row>
                     <br/>
